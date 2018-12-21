@@ -1,11 +1,11 @@
 <?php
-namespace Usuarios\Controller\Factory;
+namespace Autenticacion\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
-use Usuarios\Service\UserSessionManager;
+use Autenticacion\Service\UserSessionManager;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Usuarios\Controller\RolesController;
-use Usuarios\Service\RolesManager;
+use Autenticacion\Controller\RolesController;
+use Autenticacion\Service\RolesManager;
 use Application\Service\PermisosManager;
 
 /**

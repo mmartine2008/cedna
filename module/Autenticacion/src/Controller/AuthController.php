@@ -9,17 +9,18 @@
 
 namespace Autenticacion\Controller;
 
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Mvc\Exception;
+use Zend\Mvc\MvcEvent;
+
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\Result;
-use Application\Controller\AjaxController;
-use Application\Controller\GiroController;
 
 /**
  * This controller is responsible for letting the user to log in and log out.
  */
-class AuthController extends GiroController
+class AuthController extends AbstractActionController
 {
-    use AjaxController;
     
     /**
      * Auth manager.
@@ -39,7 +40,7 @@ class AuthController extends GiroController
     public function __construct($permisosManager, $authManager, $userManager, 
                                         $userSessionManager, $empresasManager)
     {
-        parent::__construct($permisosManager, $userSessionManager);
+        // parent::__construct($permisosManager, $userSessionManager);
         
         $this->empresasManager = $empresasManager;
         $this->authManager = $authManager;
@@ -217,12 +218,12 @@ class AuthController extends GiroController
     public function indexAction()
     {
         
-        if (! $this->isLogged() )
-        {
-            $this->redirect()->toRoute('login');
-        }        
+        // if (! $this->isLogged() )
+        // {
+        //     $this->redirect()->toRoute('login');
+        // }        
         
-        $this->procesarIngresoUsuario();
+        // $this->procesarIngresoUsuario();
     }    
     
     /**

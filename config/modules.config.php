@@ -13,6 +13,10 @@
 return [
     'Zend\Router',
     'Zend\Validator',
+    'Zend\Session',
+    'Zend\Db',
+    'DoctrineModule',
+    'DoctrineORMModule',
     'Application',
     'Autenticacion',
     'DBAL'

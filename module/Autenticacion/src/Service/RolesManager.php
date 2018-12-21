@@ -8,7 +8,7 @@
  */
 
 
-namespace Usuarios\Service;
+namespace Autenticacion\Service;
 
 use DBAL\Entity\Roles;
 use DBAL\Entity\CategoriasRoles;

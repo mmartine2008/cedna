@@ -9,7 +9,9 @@ namespace Autenticacion;
 
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\SessionManager;
 use Autenticacion\Service\AuthManager;
+
 
 class Module
 {
@@ -33,6 +35,7 @@ class Module
         // Register the event listener method. 
         $sharedEventManager->attach(AbstractActionController::class, 
                 MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch'], 100);
+              
     }
     
     /**

@@ -1,8 +1,8 @@
 <?php
-namespace Usuarios\Service\Factory;
+namespace Autenticacion\Service\Factory;
 
 use Interop\Container\ContainerInterface;
-use Usuarios\Service\RolesManager;
+use Autenticacion\Service\RolesManager;
 
 
 class RolesManagerFactory

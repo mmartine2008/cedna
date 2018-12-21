@@ -7,7 +7,6 @@ use Autenticacion\Controller\AuthController;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Autenticacion\Service\AuthManager;
 use Autenticacion\Service\UserManager;
-use Empresas\Service\EmpresasManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -20,7 +19,7 @@ class AuthControllerFactory implements FactoryInterface
         $permisosManager = null; //$container->get(PermisosManager::class);
         $authManager = $container->get(AuthManager::class);
         $userManager = $container->get(UserManager::class);
-        $empresasManager = $container->get(EmpresasManager::class);
+        $empresasManager = null; //$container->get(EmpresasManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         
         return new AuthController($permisosManager, $authManager, $userManager, $userSessionManager, $empresasManager);

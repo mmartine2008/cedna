@@ -57,4 +57,9 @@ return [
             __DIR__ . '/../view',
         ],
     ],
+
+    'session_containers' => [
+        'RegistroUsuario'
+    ],
+
 ];
