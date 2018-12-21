@@ -1,0 +1,72 @@
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <form method="post" id="formIntercambio" name="formIntercambio">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Descripción del Rol</label> 
+                            <input required="true"
+                                   id="descrRol" 
+                                   name="descrRol"
+                                   type="text"
+                                   class="form-control"
+                                   <?php if ((isset($rol)) && ($rol->getDescripcion()) != '') : ?> 
+                                               value="<?= trim($rol->getDescripcion()) ?>"
+                                   <?php endif; ?>>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <label>Categoría</label> 
+                        <div id="categRol" name="categRol">
+                            <select class="form-control m-b" name="CategoriaRol" id="CategoriaRol">
+                                <option value="-1">--Seleccione--</option>
+                                <?php
+                                foreach ($categorias as $cat) {
+                                    $id = $cat->getId();
+                                    $descripcion = $cat->getDescripcion();
+                                    if (isset($rol) && $rol->getCategoriaRol() != null
+                                     &&($rol->getCategoriaRol()->getId() == $cat->getId())) {
+                                        $selected = 'selected="true"';
+                                    } else {
+                                        $selected = '';
+                                    }
+                                    echo ("<option value=$id $selected>" . $descripcion . "</option>");
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h1></h1>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="btn-group">
+                            <a href="<?=$this->url('roles', array('action' => 'index'))?>">
+                                <button class="btn btn-white" type="button">Candelar</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pull-right">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-traz margin-vertical-25" type="submit">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+<script>
+    
+    
+</script>
+  

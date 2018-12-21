@@ -1,0 +1,231 @@
+<?php
+
+$url = $this->serverUrl();
+
+// This is for the "url" catch
+echo ('<script>' . PHP_EOL);
+echo ('  var url = "' . $url . '";' . PHP_EOL);
+echo ('</script>' . PHP_EOL);
+?>
+
+<script>
+    
+    function pasarTipo(tipo){
+    
+        if (tipo === 'empresa'){
+            $('#tipoChofer').prop('checked', false);
+        }
+        else{
+            $('#tipoEmpresa').prop('checked', false);
+        }
+    }
+    
+    function getEmpresa(){
+        cuit = $('#Usuario').val();
+        datosEmpresa = obtenerEmpresa(cuit);
+        
+        if(datosEmpresa != null){
+            if(datosEmpresa != ''){
+                if(datosEmpresa.razonSocial != null)
+                    $('#RazonSocial').val(datosEmpresa.razonSocial);
+                else
+                    $('#RazonSocial').val(datosEmpresa.apellido 
+                        + ',' + datosEmpresa.nombre);
+                $('#idJurisdiccion').val(datosEmpresa.idJurisdiccion);
+                $('#IdLocalidad').val(datosEmpresa.idLocalidad);
+                $('#email').val(datosEmpresa.email.direccion);
+            }
+            else{
+                $('#RazonSocial').val('');
+                $('#idJurisdiccion').val('');
+                $('#IdLocalidad').val('');
+                $('#email').val('');
+                swal('Cuit/Cuil inválido!',
+                'El Cuit ingresado no se encuentra registrado en Afip.',
+                'warning'
+            );
+            }
+        }
+        else{
+            $('#RazonSocial').val('');
+            $('#idJurisdiccion').val('');
+            $('#IdLocalidad').val('');
+            $('#email').val('');
+            swal(
+                'Usuario existente!',
+                'El Cuit ingresado corresponde a un usuario ya existente.',
+                'warning'
+            );
+        }
+    }
+    
+    function obtenerEmpresa(cuit) {
+            var result = null;
+            $.ajax({
+                url: url + '/empresas/ajax/getDatosEmpresa/' + cuit,
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    result = data;
+                }
+            });
+            return result;
+        }
+        
+    function enviar() {
+        if($('#RazonSocial').val() != null && $('#RazonSocial').val() != ''){
+            if ($('#Clave').val() !== $('#claveConfirma').val())
+            {
+                mostrarError("Las claves deben ser iguales");
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else{
+            mostrarError("Debe seleccionar una empresa");
+            return false;
+        }
+    }
+    
+    function mostrarError(message){
+        $("#error").text(message);
+        $( '#divErrorClaves' ).toggle(500, null);
+        $( "#clave" ).focus();
+    }
+    
+    
+</script>
+
+<div class="container margin-top-15">
+    <div class="card border-panel-gestion">
+        <div class="card-header heading-gestion">
+            Registrar Usuario
+        </div>
+        <div class="card-body">
+            <form method="post" onsubmit="return enviar()" id="formRegistro"
+                    name="formRegistro">
+                <div class="form-row">
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-lg-5">
+                        <label><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>CUIT/CUIL</label> 
+                        <div class="form-row input-group date col-md-12 ">
+                            <div class="col-lg-10 ">
+                                <input id="Usuario" name="Usuario" type="text" required="true" class="form-control" onkeypress="return valida(event)">
+                            </div>
+                            <div class="col-lg-2">
+                                <button class="btn btn-default btn-circle btn-outline" id="btnFindGenerador" title="Buscar Empresa" onclick="getEmpresa()"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                        <br>
+                        <label for="Clave">Apellido, Nombre </label>
+                        <div class="input-group date col-lg-11">
+                            <div class="col-lg-11 ">
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    id="RazonSocial" name="RazonSocial"
+                                    required="true"
+                                    readonly="true">
+                            </div>
+                        </div>
+                        <br>
+                        <label for="Clave"><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Email </label>
+                        <div class="input-group date col-lg-11">
+                            <div class="col-lg-11 ">
+                                <input 
+                                    type="email"
+                                    maxlength="50"
+                                    data-error="Formato de correo electrónico inválido"         
+                                    placeholder="Ej: nombre@dominio.com"  
+                                    class="form-control" 
+                                    id="email" name="email"
+                                    required="true">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span><input type="checkbox" value="true" id="terminos" name="terminos" required="true">&nbsp;<label for="terminos">Acepto los términos de uso de correo electrónico</label>
+                        </div>
+
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="form-row">
+                            <br>
+                            <div class="col-lg-4">
+                                <label for="TipoUsuario"><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Tipo de Usuario:</label>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="form-group"> 
+                                    <label class="radio-inline"><input type="radio" id="tipoEmpresa" name="tipoEmpresa" onclick="pasarTipo('empresa')" checked="true">Empresa</label>
+                                    <label class="radio-inline"><input type="radio" id="tipoChofer" name="tipoChofer" onclick="pasarTipo('chofer')">Chofer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <label for="Clave"><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Ingresar clave </label>
+                                <div class="input-group date col-lg-11">
+                                    <div class="col-lg-11 ">
+                                        <input 
+                                            type="password" 
+                                            class="form-control" 
+                                            id="Clave" name="Clave"
+                                            required="true">
+                                    </div>
+                                </div>
+                                <br>
+                                <label for="Clave"><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Repetir clave </label>
+                                <div class="input-group date col-lg-11">
+                                    <div class="col-lg-11 ">
+                                        <input 
+                                            type="password" 
+                                            class="form-control" 
+                                            id="claveConfirma" name="claveConfirma"
+                                            required="true">
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                    </div>     
+
+                </div>
+                <div>
+                    <div class="col-md-1">
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="form-row" id="divErrorClaves" style="display:none">
+                            <div class="alert alert-danger alert-dismissable">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Atención:</strong> <label id="error"> Las claves deben ser iguales </label>
+                            </div>    
+                        </div>  
+                    </div>
+                </div>
+                
+                <div id="intercambio">
+                    <input type="hidden" id="calle" name="calle">
+                    <input type="hidden" id="idJurisdiccion" name="idJurisdiccion">
+                    <input type="hidden" id="IdLocalidad" name="IdLocalidad">
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="col-lg-6">
+                        <button class="btn btn-white pull-right" type="button" >CANCELAR</button>
+                    </div>
+                    <div class="col-lg-4">
+                        <button type="submit" class="btn btn-traz">REGISTRAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>      
+
+
+

@@ -1,0 +1,42 @@
+<?php
+$name       = $smtp_options['name'];
+$host       = $smtp_options['host'];
+$port       = $smtp_options['port'];
+$ssl        = $smtp_options['connection_config']['ssl'];
+$username   = $smtp_options['connection_config']['username'];
+$password   = $smtp_options['connection_config']['password'];
+?>
+<html>
+    <body>
+        <h1><?php echo($mensaje); ?> </h1>
+        <form action="/sendmail" method="post"> 
+            <input name="name" value="<?php echo($name); ?>">
+            <input name="host" value="<?php echo($host); ?>">
+            <input name="port" value="<?php echo($port); ?>">
+            <input name="ssl" value="<?php echo($ssl); ?>">
+            <input name="username" value="<?php echo($username); ?>">
+            <input name="password" value="<?php echo($password); ?>">
+            
+            <br>
+            <br>
+            <label>From:<input name="mailfrom" 
+                               value="support@mayds.gob.ar"
+                               size="100"></label>
+            <br>
+            <label>To:<input name="mailto" 
+                             value="mariano.andres.martinez@gmail.com"
+                             size="100"></label>
+            <br>
+            <label>Subject:<input name="mailsubject" 
+                                  value="Ministerio de Ambiente y Desarrollo Sustentable" 
+                                  size="100"></label>
+            <br>
+            <label>Body:<input name="mailbody" 
+                               value="Este es un correo de prueba"
+                               size="100"></label>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>
+

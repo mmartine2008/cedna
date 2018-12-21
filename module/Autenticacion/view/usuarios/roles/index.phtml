@@ -1,0 +1,143 @@
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <form method="post" id="formIntercambio" name="formIntercambio">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Descripción del Rol</label> 
+                            <input id="descrRol" 
+                                   name="descrRol"
+                                   type="text"
+                                   class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <label>Categoría</label> 
+                        <div id="categRol" name="categRol">
+                            <select class="form-control m-b" name="CategoriaRol" id="CategoriaRol">
+                                <option value="-1">--Seleccione--</option>
+                                <?php
+                                foreach ($categorias as $cat) {
+                                    $id = $cat->getId();
+                                    $descripcion = $cat->getDescripcion();
+                                    echo ("<option value=$id $selected>" . $descripcion . "</option>");
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pull-right">
+                        <div class="btn-group pull-right">
+                            <div class="row">
+                                <div class="col-sm-6">
+                            <button class="btn btn-traz btn-block  margin-vertical-25" type="submit"><span class="fa fa-search"></span>&nbsp;Buscar</button>
+                                </div>
+                                <div class="col-sm-6">
+                            <a href="<?= $this->url('roles/alta',array('action' => 'alta')) ?>">
+                                <button class="btn btn-primary btn-block " type="button"><span  class="fa fa-plus-square"></span> &nbsp;Alta Rol</button>
+                             </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
+                    <thead>
+                        <tr>
+                            <th>Rol</th>
+                            <th>Categoría</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyRoles">
+                        <?php foreach ($roles as $rol) {
+                            $descripcion = $rol->getDescripcion();
+                            $idRol = $rol->getId();
+                            if($rol->getCategoriaRol() != null){
+                                $categoria = $rol->getCategoriaRol()->getDescripcion();
+                            }
+                            else{
+                                $categoria = '';
+                            }
+                        ?>
+                        <tr>
+                            <td style="width: 50%">
+                                    <?php echo($descripcion); ?>
+                            </td>
+                            <td style="width: 40%">
+                                    <?php echo($categoria); ?>
+                            </td>
+                            <td class="text-right padding-vertical-5">
+                                <div class="btn-group padding-vertical-5" title="Editar">
+                                    <a href="<?=$this->url("roles/editar", array('action' => 'editar', 'id'=>$idRol))?>" 
+                                           class="btn btn-warning btn-circle btn-outline">
+                                            <i class="fa p16 fa-pencil-alt"></i>
+                                        </a>
+                                </div>
+
+                                    <div class="btn-group" title="Borrar">
+                                        <a onclick="borrarRol(<?= $idRol?>)" class="btn btn-primary btn-circle btn-outline"><i
+                                                class="fa p16 fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                          
+                        <?php  }  ?>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+        function borrarRol(id){
+            swal({
+            title: 'Eliminar Rol',
+            width: 600,
+            text: "Esta seguro que desea eliminar el rol?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Confirmar'
+        }).then((result) => {
+            if (result.value) {
+                eliminarRol(id);
+                swal(
+                    'Eliminado!',
+                    'El rol ha sido eliminado correctamente.',
+                    'success'
+                ).then((result) => {
+                        $("#formIntercambio").submit();
+                    })
+            }
+        }) 
+        }
+        
+        function eliminarRol(id){
+            $.ajax({
+                url: url + '/roles/deleteRol/' + id,
+                type: 'get',
+                dataType: 'json',
+                async: false,
+            });
+        }
+</script>

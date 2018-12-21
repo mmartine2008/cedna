@@ -1,0 +1,355 @@
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <form method="post" id="formIntercambio" name="formIntercambio">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Nombre del Perfil</label> 
+                            <input required="true"
+                                   id="nomPerfil" 
+                                   name="nomPerfil"
+                                   type="text"
+                                   class="form-control"
+                                   <?php if ((isset($perfil)) && ($perfil->getNombre()) != '') : ?> 
+                                               value="<?= trim($perfil->getNombre()) ?>"
+                                   <?php endif; ?>>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="form-group">
+                            <label><span style="color: #f00;font-weight: bold; font-size: 8pt;">(*) </span>Descripción del Perfil</label> 
+                            <input required="true"
+                                   id="descrPerfil" 
+                                   name="descrPerfil"
+                                   type="text"
+                                   class="form-control"
+                                   <?php if ((isset($perfil)) && ($perfil->getDescripcion()) != '') : ?> 
+                                               value="<?= trim($perfil->getDescripcion()) ?>"
+                                   <?php endif; ?>>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card border-panel-gestion">
+                            <div class="card-header heading-gestion">
+                                Roles
+                            </div>
+                            <div class="card-body">
+                                <div class="col-lg-2">
+                                </div>
+                                <div class="col-lg-10" id="arbolOperaciones">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    
+                    <?php if (isset($perfil)): ?>
+                    <input type="hidden" name="idPerfil" id="idPerfil" value="<?= $perfil->getId() ?>">
+                    <?php endif; ?>
+                    <input type="hidden" name="rolesTexto" id="rolesTexto">
+                    <h1></h1>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="btn-group">
+                            <a href="<?=$this->url('perfiles', array('action' => 'index'))?>">
+                                <button class="btn btn-white" type="button">Cancelar</button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pull-right">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-traz margin-vertical-25" type="submit" onclick="enviarForm()">Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+
+<script>
+    var operacionesJSON = <?= $perfilesJSON ?>;
+    var accionesJSON  = <?= $accionesJSON ?>;
+    var seleccionadas = <?= $seleccionadas ?>;
+    
+    /**
+     * Formateo las accciones para visualizacion
+     * @returns {undefined}
+     */
+    function preparaAcciones() {
+        for (var i = 0; i < accionesJSON.acciones.length; i++)
+        {
+            accionesJSON.acciones[i].childs = [];
+            accionesJSON.acciones[i].seleccionado = false;
+            accionesJSON.acciones[i].esAccion = true;
+        }
+    }
+    
+    /**
+     * Esta operacion anexa a las operaciones las acciones, para tratarlas todo igual
+     * @returns {undefined}
+     */
+    function prepareArbol(nodo) {
+        var childs = nodo.childs;
+        var accion;
+        
+        if (childs.length == 0)
+        {
+            nodo.esAccion = false;
+            nodo.childs = JSON.parse(JSON.stringify(accionesJSON.acciones));;
+            
+        } else
+        {
+            for (var i = 0; i < childs.length; i++)
+            {
+                prepareArbol(childs[i]);
+            }
+        }
+    }
+
+    /**
+     * Dado el IdOperacion, retorna el item completo
+     * @param {type} idOperacion
+     * @param {type} childs
+     * @returns {buscarOperacion.childs|buscarOperacion.item}
+     */
+    function buscarOperacion(idOperacion, childs)
+    {
+        var item;
+        for (var i = 0; i < childs.length; i++) {
+            item = childs[i];
+            if (item.id == idOperacion)
+            {
+                return item;
+            }
+        }
+        
+        return null;            
+    }
+
+    /**
+     * Devuelve lo que corresponde seleccionar o no
+     */
+    function procesarSeleccion(item)
+    {
+        if (!item.hasOwnProperty('seleccionado'))
+        {
+            return true;
+        }
+        
+        //Tiene propiedad de seleccionado:
+        if (!item.seleccionado)
+        {
+            return true;
+        }
+        
+        // Esta seleccionado, cambia solo si no tiene hijos.
+        if (item.childs.length == 0)
+        {
+            return false;
+        }
+        
+    }
+    
+    function marcarHijos(item, estado)
+    {
+        var hijo;
+        if (item.childs.length > 0) {
+
+            for (var i = 0; i < item.childs.length; i++) {
+                hijo = item.childs[i];
+                hijo.seleccionado = estado;
+                marcarHijos(hijo, estado);
+            }
+        }
+    }
+    
+    function marcarAncestros(childs, codificacion, pos)
+    {
+        var item;
+        index = pos -1;
+        if (pos > 0)
+        {
+            idOperacion = codificacion[index];
+            item = buscarOperacion(idOperacion, childs)
+            
+            marcarAncestros(codificacion, pos-1)
+        }
+    }
+    
+    function marcar(nodo, codificacion, pos)
+    {
+        var childs = nodo.childs;
+        
+        var idOperacion = codificacion[pos];
+        var item = buscarOperacion(idOperacion, childs);
+        var marcarPadre = false;
+        
+        if (pos == (codificacion.length -1))
+        {
+            item.seleccionado = procesarSeleccion(item);
+            marcarHijos(item, item.seleccionado);
+            return item.seleccionado;
+        } else {
+            marcarPadre = marcar(item, codificacion, pos+1);
+        } 
+
+        if (!item.seleccionado && marcarPadre)
+        {
+            item.seleccionado = marcarPadre;
+        }
+        return item.seleccionado;
+        
+    }
+    
+    function evaluar(element)
+    {
+        var identificador = element.id;
+        var codificacion = identificador.split('_');
+        codificacion.splice(0, 1);
+         
+
+        marcar(operacionesJSON, codificacion, 0);
+        
+        document.getElementById('arbolOperaciones').
+                removeChild(document.getElementById('id_0'));
+        document.getElementById('arbolOperaciones').
+            appendChild(crearMenu(operacionesJSON, 0, 'chk'));        
+    }
+
+    function crearItemLista(item, separacion_vertical, prefijo)
+    {
+        var itemList = document.createElement("LI");
+        itemList.setAttribute('class', separacion_vertical);
+        
+        var icono = document.createElement("I");
+        icono.setAttribute('class', "fa "+item.icono);
+        icono.setAttribute('aria-hidden', "true");
+        itemList.appendChild(icono);
+        
+        var texto = document.createTextNode(' '+item.titulo);
+        itemList.appendChild(texto);
+
+        var check = document.createElement("INPUT");
+        check.setAttribute("type", "checkbox");
+        check.setAttribute("onchange", "evaluar(this)");
+        check.setAttribute("id", prefijo + '_'+ item.id);
+        
+        if(item.hasOwnProperty('seleccionado') && item.seleccionado){
+            check.setAttribute("checked", true);
+        } 
+        
+        
+        itemList.appendChild(check);
+
+        return itemList;
+    }
+
+
+    // Recibe un nodo de arbol y un contenedor donde creara la lista
+    function crearMenu(nodo, level, prefijo) {
+    
+        var childs = nodo.childs;
+        
+        var lista = document.createElement("UL");
+        lista.setAttribute('id', 'id_'+level);
+        lista.setAttribute('class', "unstyled");
+        
+        for (var i = 0; i < childs.length; i++)
+        {
+            var item = childs[i];
+
+            var itemList = crearItemLista(item, "m-t", prefijo);
+            lista.appendChild(itemList);
+            
+            if (item.childs.length > 0)
+            {
+                var subMenu = crearMenu(item, level+1, prefijo+'_'+item.id);
+                lista.appendChild(subMenu);
+            } 
+
+        }
+        
+        return lista;
+    }
+  
+    /**
+     * Recorre el arbol nodo, buscando el item para seleccionarlo
+     * @param {type} nodo
+     * @param {type} item
+     * @returns {undefined}
+     */
+    function prepareSeleccionado (nodo, item) {
+        
+        if (!nodo.esAccion && (nodo.id == item.Operacion)) 
+        {
+            nodo.seleccionado = true;
+            
+            for (var i = 0; i < item.Acciones.length; i++)
+            {
+                var accionId = item.Acciones[i];
+                for (var j = 0; j < nodo.childs.length; j++)
+                {
+                    var child = nodo.childs[j];
+                    if (child.esAccion && (child.id == accionId))
+                    {
+                        child.seleccionado = true;
+                    }
+                }
+            }
+            
+            return ;
+        } 
+
+        var childs = nodo.childs;
+        for (var i = 0; i < childs.length; i++)
+        {
+            var hijo = childs[i];
+            if (!hijo.esAccion) 
+            {
+                prepareSeleccionado(hijo, item);
+            }
+        }
+    }
+    
+    function prepareSeleccionadas() {
+        var item;
+        for (var i = 0; i < seleccionadas.length; i++) {
+            item = seleccionadas[i];
+            prepareSeleccionado(operacionesJSON, item);
+        }
+        
+    }
+  
+    preparaAcciones();
+    prepareArbol(operacionesJSON);
+    
+    if (seleccionadas != null) {
+        prepareSeleccionadas();
+    }
+    
+    document.getElementById('arbolOperaciones').
+        appendChild(crearMenu(operacionesJSON, 0, 'chk'));
+
+    
+    function enviarForm(){
+        rolesTexto = JSON.stringify(operacionesJSON);
+
+        $("#rolesTexto").val(rolesTexto);
+        
+    }
+
+</script>
+  

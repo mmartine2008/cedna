@@ -1,0 +1,122 @@
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <form method="post" id="formIntercambio" name="formIntercambio">
+    <div class="row" >
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label>Nombre del Perfil</label> 
+                            <input id="nomPerfil" name="nomPerfil" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="form-group">
+                            <label>Descripción del Perfil</label> 
+                            <input id="descrPerfil" name="descrPerfil" type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pull-right">
+                        <div class="btn-group pull-right">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <button class="btn btn-traz btn-block margin-vertical-25" type="submit"><span class="fa fa-search"></span> &nbsp; Buscar</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <a href="<?= $this->url('perfiles/alta', array('action' => 'alta')) ?>">
+                                        <button class="btn btn-primary btn-block " type="button"><span  class="fa fa-plus-square"></span>&nbsp; Alta Perfil</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="payment-card border-panel-gestion">
+                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyPerfiles">
+                        <?php foreach($perfiles as $perfil) :?>
+                        <tr>
+                            <td style="width: 50%"><?= $perfil->getNombre(); ?></td>
+                            <td style="width: 40%"><?= $perfil->getDescripcion(); ?></td>
+                            <td class="text-right padding-vertical-5">
+                                <div class="btn-group padding-vertical-5" title="Editar">
+                                    <a href="<?=$this->url("perfiles/editar", array('action' => 'editar', 'id' => $perfil->getId()))?>"
+                                       class="btn btn-warning btn-circle btn-outline">
+                                        <i class="fa p16 fa-pencil-alt"></i>
+                                    </a>
+                                </div>
+                                <div class="btn-group" title="Borrar">
+                                    <a onclick="borrarPerfil(<?= $perfil->getId()?>)" class="btn btn-primary btn-circle btn-outline">
+                                        <i class="fa p16 fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+        function borrarPerfil(id){
+            swal({
+            title: 'Eliminar Perfil',
+            width: 600,
+            text: "Esta seguro que desea eliminar el perfil?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Confirmar'
+        }).then((result) => {
+            if (result.value) {
+                eliminarPerfil(id);
+//                swal(
+//                    'Atención!',
+//                    respuesta,
+//                    'success'
+//                ).then((result) => {
+//                        $("#formIntercambio").submit();
+//                    })
+            }
+        }) 
+        }
+        
+        function eliminarPerfil(id){
+            var response;
+            $.ajax({
+                url: url + '/perfiles/deletePerfil/' + id,
+                type: 'get',
+                dataType: 'json',
+                async: false,
+                success : function(text)
+                {
+                    response = text;
+                }
+            });
+            return response;
+        }
+</script>
