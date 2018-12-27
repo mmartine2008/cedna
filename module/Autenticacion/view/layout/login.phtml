@@ -1,104 +1,60 @@
-<!DOCTYPE html>
-<html>
+<?= $this->doctype() ?>
 
-<head>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('Cedna')->setSeparator(' - ')->setAutoEscape(false) ?>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <!-- Le styles -->
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+                        ->prependStylesheet($this->basePath('css/style.css'))
+                        ->prependStylesheet($this->basePath('css/skel.css'))
+                        ->prependStylesheet($this->basePath('css/login/login.css'))
+                        ->prependStylesheet($this->basePath('css/modules/modules.css'))
+                        ->prependStylesheet($this->basePath('css/operation/permits/cold.css'))
+                        ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+                        ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+                        ->prependStylesheet($this->basePath('css/flexboxgrid.min.css'))
+                        ->prependStylesheet($this->basePath('css/operation/permits/forms/multi-select.css'))
+        
+        ?>
 
-    <title>Trazabilidad de Residuos Peligrosos</title>
+        <!-- Scripts -->
+        <?= $this->headScript()
+            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+        ?>
 
-<!--  Mainly scripts  -->
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-   
-    <!-- Para los flash de mensajes -->
-    <script src="js/sweetalert.js"></script>
-    <link rel="stylesheet" href="css/sweetalert.css">
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/all.css" rel="stylesheet">
-
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-    <link href="css/custom.css" rel="stylesheet">
-    <link href="css/util.css" rel="stylesheet">
-
-    <script>
-        var url = '<?= $this->serverUrl(); ?>';
-    </script>    
-</head>
-
-<body class="bg-blanco login-gm">
-  
-    <div class="container">
-    <nav class="navbar bg-blanco">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <a class="" href="#">
-                    <img src="img/logo_presidencia_ministerio.svg" class="img-responsive"
-                         style="margin-top: 16px; width: 300px; ">
-                </a>
+    </head>
+    <body>
+        <div class="flex">
+            <div class="flex">
+                <!-- Page header -->
+                <div class="flex">
+                    <div class="jumbotron">
+			<h1>CEDNA</h1>
+			<p>Sistema de Permiso de Trabajo</p>
+		    </div>
+                </div>                
             </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-</div>
-
-<div class="panel-pane pane-imagen-destacada">
-    <div class="pane-content">
-        <section class="jumbotron"
-                 style="background-image: url(img/ambiente_1920x1080.jpg);">
-
-            <div class="jumbotron_body">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12 text-center">
-                            <h1>Trazabilidad de Residuos Peligrosos</h1>
-                        </div>
-                    </div>
+       
+            <div class="row">
+                <div id="content" class="col-md-12">
+                    <!-- Page content placeholder -->
+                    <?= $this->content; ?>
                 </div>
             </div>
-            <div class="overlay"></div>
-        </section>
-    </div>
-
-
-</div>
-
-<!--
-<section style="background: url(img/img-login.jpg) 50% 0 no-repeat; height: 40%;">
-</section>
--->
-<div class="container">
-    <?= $this->content ?>
-</div>
-
-<footer>
-    <div class="container">
-        <div class="form-row">
-            <div class="col-md-6">
-                <p> Ministerio de Ambiente y Desarrollo Sustentable de la
-                    Nación<br>
-                    San Martín 451 • C1004AAI C.A.B.A • Argentina <br>
-                    Tel (54) (11) 4348-8200 • Fax (54) (11) 4348-8300
-                </p>
-            </div>
-            <div class="col-md-6">
-                <img class="logofooter" src="img/logo_presidencia_ministerio_banco.svg">
-            </div>
+       
+            
+            <footer>
+                <!-- <p>&copy; 2005 - <?= date('Y') ?>  Argosoft </p> -->
+            </footer>
         </div>
-    </div>
-</footer>
-      
-
-</body>
-
+        <?= $this->inlineScript() ?>
+    </body>
 </html>

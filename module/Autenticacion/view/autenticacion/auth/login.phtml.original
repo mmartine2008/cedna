@@ -1,0 +1,129 @@
+<script>
+    function recuperarClave() {
+        userPass = $('#userPass').val();
+        userPass = userPass.replace('/', '_');
+        
+        $.ajax({
+            url: url + '/reset-password/'+userPass,
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $('#myModal5').modal('hide');
+                console.log(data);
+                swal(data.mensaje);
+            }
+        });
+    }
+</script>
+<div class="container margin-top-15">
+    
+    <div class="form-row ">
+
+        <div class="col-sm-4 pull-right">
+            <div class="log">
+            <h2><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</h2>
+            <form method="post">
+                <div class="form-group">
+                    <label for="Usuario">Usuario</label>
+                    <div class="input-group m-b">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="Usuario" 
+                            name="Usuario" 
+                            size="15"
+                            maxlength="15"
+                            placeholder="Usuario" required="true">
+                        <span class="input-group-addon" style="background: none">
+                                <div class="tooltip-login">
+                                  <i class="fa fa-info text-azul" 
+                                     aria-hidden="true" 
+                                     data-toggle="tooltip" 
+                                     data-placement="top" ></i>
+                                </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Clave">Clave </label>
+                    <div class="input-group m-b">
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="Clave" name="Clave" placeholder="Clave"
+                        pattern="([A-Z,a-z,0-9,\_,\-])+"
+                        required="true">
+                    <span class="input-group-addon" style="background: none">
+                                <div class="tooltip-login">
+                                  <i class="fa fa-info text-azul" 
+                                     aria-hidden="true" 
+                                     data-toggle="tooltip" 
+                                     data-placement="top" ></i>
+                                </div>
+                        </span>
+                    </div>
+                </div>
+               <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="checkbox">
+                            <label>
+                                <input id="Recordar" name="Recordar" type="checkbox"> Recordar usuario
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-right margin-top-10">
+                        <a href="#" data-toggle="modal" data-target="#myModal5">Recuperar clave</a>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-lg-4">
+                    </div>
+                    <div class="col-lg-5">
+                    <button type="submit" class="btn btn-traz">INGRESAR</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" class="form-horizontal">
+<div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
+                <h4 class="modal-title">Recuperar clave</h4>
+                <h5 class="font-bold">Usted Recibirá una clave nueva en su cuenta de email. Por favor, ingrese su usuario</h5>
+            </div>
+            <div class="modal-body">
+                <label for="Usuario">CUIT/Usuario</label>
+                    <div class="input-group m-b">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="userPass" 
+                            name="userPass" 
+                            placeholder="CUIT/Usuario" required="true">
+                        <span class="input-group-addon">
+                                <div class="tooltip-login">
+                                  <i class="fa fa-info text-azul" 
+                                     aria-hidden="true" 
+                                     data-toggle="tooltip" 
+                                     data-placement="top" 
+                                     title="Ingrese su CUIT si es empresa o su nombre de usuario"></i>
+                                </div>
+                        </span>
+                    </div>                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">CANCELAR</button>
+                <button onclick="recuperarClave();" type="button" class="btn btn-traz">CONFIRMAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>

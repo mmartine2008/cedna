@@ -55,7 +55,7 @@ class UserManager
      */
     public function getUser($userName) {
         $user = $this->entityManager->getRepository(Usuarios::class)
-                ->findOneByFullName($userName);
+                ->findOneBy(["NombreUsuario" => $userName]);
 
         return $user;
     }

@@ -1,0 +1,60 @@
+.button{
+		background-image: -webkit-linear-gradient(top, #f4f1ee, #fff);
+		background-image: linear-gradient(top, #f0eef4, #fff);	
+		box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, .3), inset 0px 4px 1px 1px white, inset 0px -3px 1px 1px rgba(204,198,197,.5);
+		float:left;
+		height: 70px;
+		margin: 0 30px 30px 0;
+		position: relative;
+		width: 70px;			
+		-webkit-transition: all .1s linear;
+		transition: all .1s linear;
+		border-radius: 10px;
+	}
+
+		.button:active{
+		background-image: -webkit-linear-gradient(top, #efedec, #f7f4f4);
+		background-image: linear-gradient(top, #efedec, #f7f4f4);
+		box-shadow: 0 3px 5px 0 rgba(0,0,0,.4),
+				    inset 0px -3px 1px 1px 
+				    rgba(204,198,197,.5);
+	}
+
+	.button:active:after{
+		color:#dbd2d2;
+		text-shadow: 0px -1px 1px #bdb5b4, 0px 1px 1px white;
+	}
+
+	.glyphicon{
+		color:#007bff!important;
+	}
+
+	.glyphicon-off{
+		color:#dc3545!important; 
+	}
+
+	.flex-container {
+		padding-top: 5%;
+		margin: 0;
+		list-style: none;
+		flex: 1 1 auto;
+		
+		display: -webkit-box;
+		display: -moz-box;
+		display: -ms-flexbox;
+		display: -webkit-flex;
+		display: flex;
+		
+		-webkit-flex-flow: row wrap;
+		justify-content: center;
+	}
+	
+	.flex-item {	
+		line-height: 150px;
+		font-weight: bold;
+		font-size: 3em;
+		text-align: center;
+	}	
+	.h1 {
+		text-align: center;
+	}

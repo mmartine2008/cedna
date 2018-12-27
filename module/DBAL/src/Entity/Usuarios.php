@@ -32,9 +32,9 @@ class Usuarios
 
 
     /**
-     * @ORM\Column(name="IdEstado")
+     * @ORM\Column(name="Bloqueado")
      */
-    protected $IdEstado;
+    protected $Bloqueado;
 
 
     /**
@@ -47,13 +47,6 @@ class Usuarios
      * @ORM\Column(name="Email")
      */
     protected $Email;
-
-
-    /**
-     * @ORM\Column(name="TipoUsuario")
-     */
-    protected $TipoUsuario;
-
 
     /**
      * @ORM\Column(name="Nombre")

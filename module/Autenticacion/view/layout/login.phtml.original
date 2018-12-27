@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trazabilidad de Residuos Peligrosos</title>
+
+<!--  Mainly scripts  -->
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+   
+    <!-- Para los flash de mensajes -->
+    <script src="js/sweetalert.js"></script>
+    <link rel="stylesheet" href="css/sweetalert.css">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/all.css" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/util.css" rel="stylesheet">
+
+    <script>
+        var url = '<?= $this->serverUrl(); ?>';
+    </script>    
+</head>
+
+<body class="bg-blanco login-gm">
+  
+<div class="panel-pane pane-imagen-destacada">
+    <div class="pane-content">
+        <section class="jumbotron"
+                 style="background-image: url(img/ambiente_1920x1080.jpg);">
+
+            <div class="jumbotron_body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 text-center">
+                            <h2>Sistema de Permisos de Trabajo</h2>
+                            <h1>CEDNA</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="overlay"></div>
+        </section>
+    </div>
+
+
+</div>
+
+<!--
+<section style="background: url(img/img-login.jpg) 50% 0 no-repeat; height: 40%;">
+</section>
+-->
+<div class="container">
+    <?= $this->content ?>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="form-row">
+        Desarrollos Tecnológicos<br>
+                    Tandil - Provincia de Buenos Aires <br>
+                    Tel (54) (294) 4600102
+                
+
+        </div>
+    </div>
+</footer>
+      
+
+</body>
+
+</html>
