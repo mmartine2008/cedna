@@ -98,7 +98,7 @@ class AuthController extends AbstractActionController
         }
 
         // Tiene que cargar los mensajes que tenga pendientes, porque puede venir de un rechazo
-        $this->cargarMensajes(); 
+        // $this->cargarMensajes(); 
         $view = new ViewModel();
         
         return $view;

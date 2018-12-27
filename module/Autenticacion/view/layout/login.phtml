@@ -97,25 +97,7 @@
         </div>
     </div>
 </footer>
-<?php  
-    $flash = $this->flashMessenger();
-
-    if (((count($flash->getMessages())>0) || (count($flash->getCurrentMessages()))>0)) 
-    {
-        $mensajes = implode ('</p>', $flash->getMessages());
-        $mensajes .= implode ('</p>', $flash->getCurrentMessages());  
-        
-?>
-<script>
-        swal('<?= $mensajes ?>', '', 'success');
-</script>
-<?php
-        $flash->clearMessages();
-        $flash->clearCurrentMessages();
-        $flash->clearMessagesFromContainer();
-    } 
-
-?>        
+      
 
 </body>
 
