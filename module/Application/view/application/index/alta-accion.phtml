@@ -5,13 +5,13 @@
                 <h3 class="panel-title">Nueva Acción</h3>
             </div>
             <div class="panel-body">
-                <form action="post" name="formAltaAccion">
+                <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "alta"])?>" name="formAltaAccion" onsubmit="preSubmit()">
                     <div class="row">
                         <div class="col-md-3">
                             <label for="nombreAccion">Nombre:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="nombreAccion">
+                            <input type="text" name="nombreAccion" class="form-control">
                         </div>
                     </div>
                     <div class="row">
@@ -19,7 +19,7 @@
                             <label for="tituloAccion">Titulo:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="tituloAccion">
+                            <input type="text" name="tituloAccion" class="form-control">
                         </div>
                     </div>
                     <div class="row">
@@ -27,11 +27,12 @@
                             <label for="iconoAccion">Icono:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="iconoAccion">
+                            <input type="text" name="iconoAccion" class="form-control">
                         </div>
                     </div>
                     <div class="row">
-                        <a href="<?=$this->url("abm/entidad",["entidad" => "acciones", "action" => "acciones"])?>">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/entidad",["entidad" => "acciones", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>
                         </a>
                         <button type="submit">Confirmar</button>
@@ -42,3 +43,27 @@
     </div>
 
 </div>
+<script>
+function FormAltaAccionToJson(){
+    var formData = {
+        nombre: $('#nombreAccion').val(), 
+        titulo: $('#tituloAccion').val(), 
+        icono: $('#iconoAccion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaAccionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formAltaAccion")[0].checkValidity()){
+        $("#formAltaAccion").submit();
+    }else{
+        $("#formAltaAccion")[0].reportValidity();
+    }
+}
+</script>

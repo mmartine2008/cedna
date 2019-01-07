@@ -49,7 +49,20 @@ class IndexController extends AbstractActionController
         return $view;
     }
 
-    public function altaAccionAction(){
-        return new ViewModel();        
+    public function altaAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $nombreEntidad = $parametros['entidad'];
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            var_dump($data);
+            die;
+        }
+
+        $view = new ViewModel();
+
+        $view->setTemplate('application/index/alta-'.$nombreEntidad.'.phtml');
+        return $view;      
     }
 }

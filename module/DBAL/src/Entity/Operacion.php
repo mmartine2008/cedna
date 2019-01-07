@@ -33,9 +33,10 @@ class Operacion
     protected $icono;
 
     /**
-     * @ORM\Column(name="grupoId")
+     * @ORM\ManyToOne(targetEntity="Operacion")
+     * @ORM\JoinColumn(name="grupoId", referencedColumnName="Id")
      */
-    protected $grupoId;
+    protected $grupo;
 
     /**
      * @ORM\Column(name="orden")
@@ -57,9 +58,9 @@ class Operacion
         $this->icono = $icono;
     }
 
-    public function setGrupoId($grupoId)
+    public function setGrupo($grupo)
     {
-        $this->grupoId = $grupoId;
+        $this->grupo = $grupo;
     }
 
     public function setOrden($orden)
@@ -87,9 +88,9 @@ class Operacion
         return $this->icono;
     }
 
-    public function getGrupoId()
+    public function getGrupo()
     {
-        return $this->grupoId;
+        return $this->grupo;
     }
 
     public function getOrden()

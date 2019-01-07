@@ -22,11 +22,11 @@
                     <tbody id="">
                     <?php foreach($arrEntidades as $Usuario) : ?>
                         <tr>
-                            <td><?= $Perfil->getNombreUsuario() ?></td>
-                            <td><?= $Perfil->getNombre() ?></td>
-                            <td><?= $Perfil->getApellido() ?></td>
-                            <td><?= $Perfil->getEmail() ?></td>
-                            <td><?= $Perfil->getBloqueado() ?></td>
+                            <td><?= $Usuario->getNombreUsuario() ?></td>
+                            <td><?= $Usuario->getNombre() ?></td>
+                            <td><?= $Usuario->getApellido() ?></td>
+                            <td><?= $Usuario->getEmail() ?></td>
+                            <td><?= $Usuario->getBloqueado() ?></td>
                             <td></td>
                         </tr>
                     <?php endforeach; ?>
