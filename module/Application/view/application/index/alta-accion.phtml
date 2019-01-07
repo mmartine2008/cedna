@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Acción</h3>
+            </div>
+            <div class="panel-body">
+                <form action="post" name="formAltaAccion">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="nombreAccion">Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="nombreAccion">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="tituloAccion">Titulo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="tituloAccion">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="iconoAccion">Icono:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" name="iconoAccion">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="<?=$this->url("abm/entidad",["entidad" => "acciones", "action" => "acciones"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

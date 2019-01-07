@@ -1,0 +1,35 @@
+<div class="form-row">
+    <div class="col-md-3">
+        <a href="<?=$this->url("abm/entidad",["entidad" => "acciones", "action" => "altaAccion"])?>">Nueva Acción</a>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Acciones</h3>
+            </div>
+            <div class="panel-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Titulo</th>
+                            <th>Icono</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                    <?php foreach($arrEntidades as $Accion) : ?>
+                        <tr>
+                            <td><?= $Accion->getNombre() ?></td>
+                            <td><?= $Accion->getTitulo() ?></td>
+                            <td><?= $Accion->getIcono() ?></td>
+                            <td></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

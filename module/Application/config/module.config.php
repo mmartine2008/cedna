@@ -34,11 +34,41 @@ return [
                     ],
                 ],
             ],
+            'abm' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/abm',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'abm',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'entidad' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/:entidad[/:action[/:id]]',
+                        ],
+                        'constraints' => [
+                            'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
         ],
     ],
     'view_manager' => [
