@@ -53,11 +53,16 @@ class IndexController extends AbstractActionController
         $parametros = $this->params()->fromRoute();
 
         $nombreEntidad = $parametros['entidad'];
+        $manager = $nombreEntidad.'Manager';
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
-            var_dump($data);
-            die;
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->$manager->procesarAlta($JsonData);
+
+            $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
         }
 
         $view = new ViewModel();

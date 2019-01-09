@@ -49,6 +49,9 @@ return [
                         'type' => Segment::class,
                         'options' => [
                             'route' => '/:entidad[/:action[/:id]]',
+                            'defaults' => [
+                                'action'     => 'listar',
+                            ],
                         ],
                         'constraints' => [
                             'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',

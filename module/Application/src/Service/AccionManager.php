@@ -45,4 +45,20 @@ class AccionManager {
         return $Accion;
     }
 
+    /**
+     * Procesa el alta de una nueva entidad Accion.
+     *
+     * @param [JSON] $jsonData
+     * @return void
+     */
+    public function procesarAlta($jsonData){
+        $Accion = new Accion();
+
+        $Accion->setNombre($jsonData->nombre);
+        $Accion->setTitulo($jsonData->titulo);
+        $Accion->setIcono($jsonData->icono);
+
+        $this->entityManager->persist($Accion);
+        $this->entityManager->flush();
+    }
 }

@@ -126,3 +126,9 @@ table tbody td.icon-column {
 h4, h1 {text-align:center;}
 .ms-container .ms-selectable li.ms-elem-selectable,
 .ms-container .ms-selection li.ms-elem-selection {padding:10px;}
+
+.obligatorio {
+    color: #f00;
+    font-weight: bold;
+    font-size: 8pt;
+}

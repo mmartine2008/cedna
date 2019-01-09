@@ -8,18 +8,18 @@
                 <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "alta"])?>" name="formAltaAccion" onsubmit="preSubmit()">
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="nombreAccion">Nombre:</label>
+                            <label for="nombreAccion"><span class="obligatorio">(*) </span>Nombre:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="nombreAccion" class="form-control">
+                            <input type="text" id="nombreAccion" name="nombreAccion" class="form-control" required="true">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label for="tituloAccion">Titulo:</label>
+                            <label for="tituloAccion"><span class="obligatorio">(*) </span>Titulo:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="tituloAccion" class="form-control">
+                            <input type="text" id="tituloAccion" name="tituloAccion" class="form-control" required="true">
                         </div>
                     </div>
                     <div class="row">
@@ -27,7 +27,7 @@
                             <label for="iconoAccion">Icono:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" name="iconoAccion" class="form-control">
+                            <input type="text" id="iconoAccion" name="iconoAccion" class="form-control">
                         </div>
                     </div>
                     <div class="row">
