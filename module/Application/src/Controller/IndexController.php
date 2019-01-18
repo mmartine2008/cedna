@@ -13,11 +13,12 @@ use Zend\View\Model\ViewModel;
 class IndexController extends AbstractActionController
 {
     private $accionManager;
+    private $operacionManager;
 
-    public function __construct($accionManager)
+    public function __construct($accionManager, $operacionManager)
     {
         $this->accionManager = $accionManager;
-
+        $this->operacionManager = $operacionManager;
     }
 
     public function indexAction()
@@ -66,8 +67,10 @@ class IndexController extends AbstractActionController
         }
 
         $view = new ViewModel();
-
+        
+        $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
         $view->setTemplate('application/index/alta-'.$nombreEntidad.'.phtml');
+        
         return $view;      
     }
 }

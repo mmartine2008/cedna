@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Operación</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "Operacion", "action" => "alta"])?>" name="formAltaOperacion" onsubmit="preSubmit()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="nombreOperacion"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreOperacion" name="nombreOperacion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="tituloOperacion"><span class="obligatorio">(*) </span>Titulo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="tituloOperacion" name="tituloOperacion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="iconoOperacion">Icono:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="iconoOperacion" name="iconoOperacion" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="iconoOperacion">Grupo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="grupoOperacion" name="grupoOperacion" class="form-control">
+                                <option>-- Seleccione --</option>
+                            <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
+                                <option value="<?= $Operacion->getId() ?>"><?= $Operacion->getTitulo() ?></option>
+                            <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="iconoOperacion">Orden:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="ordenOperacion" name="ordenOperacion" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/entidad",["entidad" => "Operaciones", "action" => "listar"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormAltaOperacionToJson(){
+    var formData = {
+        nombre: $('#nombreOperacion').val(), 
+        titulo: $('#tituloOperacion').val(), 
+        icono: $('#iconoOperacion').val(),
+        id_grupo: $('#grupoOperacion').val(),
+        orden: $('#ordenOperacion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaOperacionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formAltaOperacion")[0].checkValidity()){
+        $("#formAltaOperacion").submit();
+    }else{
+        $("#formAltaOperacion")[0].reportValidity();
+    }
+}
+</script>

@@ -61,4 +61,14 @@ class AccionManager {
         $this->entityManager->persist($Accion);
         $this->entityManager->flush();
     }
+
+    /**
+     * Funcion que retorna un arreglo con todas las variables
+     * necesarias en el template de alta de la entidad.
+     *
+     * @return array
+     */
+    public function getArrVariablesAltaEntidad(){
+        return [];
+    }
 }

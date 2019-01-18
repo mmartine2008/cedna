@@ -72,6 +72,7 @@ return [
     'service_manager' => [
         'factories' => [
             Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
+            Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
         ],
     ],
     'view_manager' => [
