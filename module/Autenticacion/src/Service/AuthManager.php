@@ -71,13 +71,13 @@ class AuthManager
 
         if ($result->getCode()==Result::SUCCESS) {
 
-            // La cookie de sesión caducará en 1 mes (30 días).
-            if ($rememberMe) {
-                // La cookie de sesión caducará en 1 mes (30 días).
-                $this->sessionManager->rememberMe(60*60*24*30);
-            }
+            // // La cookie de sesión caducará en 1 mes (30 días).
+            // if ($rememberMe) {
+            //     // La cookie de sesión caducará en 1 mes (30 días).
+            //     $this->sessionManager->rememberMe(60*60*24*30);
+            // }
             
-            $this->registrarPerfil();
+            // $this->registrarPerfil();
         }
     }
 
