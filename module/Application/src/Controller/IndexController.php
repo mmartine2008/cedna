@@ -53,7 +53,7 @@ class IndexController extends AbstractActionController
     public function altaAction(){
         $parametros = $this->params()->fromRoute();
 
-        $nombreEntidad = $parametros['entidad'];
+        $nombreEntidad = strtolower($parametros['entidad']);
         $manager = $nombreEntidad.'Manager';
 
         if ($this->getRequest()->isPost()) {

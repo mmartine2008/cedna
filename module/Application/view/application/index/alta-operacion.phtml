@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-md-4">
                             <select id="grupoOperacion" name="grupoOperacion" class="form-control">
-                                <option>-- Seleccione --</option>
+                                <option value="">-- Seleccione --</option>
                             <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
                                 <option value="<?= $Operacion->getId() ?>"><?= $Operacion->getTitulo() ?></option>
                             <?php endforeach;?>
