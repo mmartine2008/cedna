@@ -24,7 +24,7 @@
                             <td><?= $Operacion->getNombre() ?></td>
                             <td><?= $Operacion->getTitulo() ?></td>
                             <td><?= $Operacion->getIcono() ?></td>
-                            <td><?= $Operacion->getGrupo()->getTitulo() ?></td>
+                            <td><?= ($Operacion->getGrupo()) ? $Operacion->getGrupo()->getTitulo() : '' ?></td>
                             <td></td>
                         </tr>
                     <?php endforeach; ?>
