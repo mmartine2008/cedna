@@ -7,6 +7,7 @@ use Application\Controller\IndexController;
 
 use Application\Service\AccionManager;
 use Application\Service\OperacionManager;
+use Application\Service\UsuariosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -18,7 +19,8 @@ class IndexControllerFactory implements FactoryInterface
     {
         $accionManager = $container->get(AccionManager::class);
         $operacionManager = $container->get(OperacionManager::class);
+        $usuariosManager = $container->get(UsuariosManager::class);
         
-        return new IndexController($accionManager, $operacionManager);
+        return new IndexController($accionManager, $operacionManager, $usuariosManager);
     }
 }

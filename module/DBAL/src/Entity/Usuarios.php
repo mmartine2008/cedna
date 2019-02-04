@@ -75,9 +75,9 @@ class Usuarios
         $this->Clave = $Clave;
     }
 
-    public function setIdEstado($IdEstado)
+    public function setBloqueado($Bloqueado)
     {
-        $this->IdEstado = $IdEstado;
+        $this->Bloqueado = $Bloqueado;
     }
 
     public function setFechaAlta($FechaAlta)
@@ -125,9 +125,9 @@ class Usuarios
         return $this->Clave;
     }
 
-    public function getIdEstado()
+    public function getBloqueado()
     {
-        return $this->IdEstado;
+        return $this->Bloqueado;
     }
 
     public function getFechaAlta()

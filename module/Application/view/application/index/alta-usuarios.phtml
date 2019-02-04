@@ -1,0 +1,87 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Usuario</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "usuarios", "action" => "alta"])?>" name="formAltaUsuario" onsubmit="preSubmit()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="userName" name="userName" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="emailUsuario" name="emailUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/entidad",["entidad" => "usuarios", "action" => "listar"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormAltaUsuarioToJson(){
+    var formData = {
+        username: $('#userName').val(), 
+        clave: $('#contraseniaUsuario').val(), 
+        nombre: $('#nombreUsuario').val(),
+        apellido: $('#apellidoUsuario').val(),
+        email: $('#emailUsuario').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaUsuarioToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formAltaUsuario")[0].checkValidity()){
+        $("#formAltaUsuario").submit();
+    }else{
+        $("#formAltaUsuario")[0].reportValidity();
+    }
+}
+</script>
