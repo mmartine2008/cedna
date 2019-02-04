@@ -124,23 +124,23 @@ class AuthAdapter implements AdapterInterface
      */
     private function resultadoValidaciones($Usuario)
     {
-        $Resultado = $this->autenticarIdentidad($Usuario);
-        if ($Resultado)
-        {
-            return $Resultado;
-        } 
+        // $Resultado = $this->autenticarIdentidad($Usuario);
+        // if ($Resultado)
+        // {
+        //     return $Resultado;
+        // } 
 
-        $Resultado = $this->autenticarBloqueo($Usuario);
-        if ($Resultado)
-        {
-            return $Resultado;
-        } 
+        // $Resultado = $this->autenticarBloqueo($Usuario);
+        // if ($Resultado)
+        // {
+        //     return $Resultado;
+        // } 
 
-        $Resultado = $this->autenticarPassword($Usuario);
-        if ($Resultado)
-        {
-            return $Resultado;
-        }             
+        // $Resultado = $this->autenticarPassword($Usuario);
+        // if ($Resultado)
+        // {
+        //     return $Resultado;
+        // }             
 
         return new Result(
                     Result::SUCCESS, 

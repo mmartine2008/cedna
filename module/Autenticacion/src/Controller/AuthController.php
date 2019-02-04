@@ -55,9 +55,11 @@ class AuthController extends AbstractActionController
         // TODO: Validar los datos ingresados
         $recordar = (array_key_exists('Recordar', $data) && ($data['Recordar'] == 'on'));
 
-        $result = $this->authManager->login(
-                $data['Usuario'], $data['Clave'], $recordar);
+        $result = $this->authManager->login('admin', '1234', true);
 
+        // $result = $this->authManager->login(
+        //     $data['Usuario'], $data['Clave'], $recordar);
+        
         // Check result.
         if ($result->getCode() == Result::SUCCESS) {
             
@@ -78,11 +80,11 @@ class AuthController extends AbstractActionController
     private function redirigirSegunPerfil()
     {
         
-        $Perfil = $this->authManager->getPerfilInicial();
+        // $Perfil = $this->authManager->getPerfilInicial();
         
-        $urlDefault = $Perfil->getDefaultHome();
+        // $urlDefault = $Perfil->getDefaultHome();
 
-        return $this->redirect()->toRoute($urlDefault);
+        return $this->redirect()->toRoute('abm');
     }
     
     /**
