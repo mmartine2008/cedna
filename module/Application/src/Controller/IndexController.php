@@ -15,12 +15,14 @@ class IndexController extends AbstractActionController
     private $accionManager;
     private $operacionManager;
     private $usuariosManager;
+    private $perfilesManager;
 
-    public function __construct($accionManager, $operacionManager, $usuariosManager)
+    public function __construct($accionManager, $operacionManager, $usuariosManager, $perfilesManager)
     {
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;
         $this->usuariosManager = $usuariosManager;
+        $this->perfilesManager = $perfilesManager;
     }
 
     public function indexAction()

@@ -74,6 +74,7 @@ return [
             Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
             Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
+            Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
         ],
     ],
     'view_manager' => [
