@@ -19,17 +19,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            'application' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/application[/:action]',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\ABMController::class, //Cambiar por un nuevo indexController
                         'action'     => 'index',
                     ],
                 ],
@@ -39,7 +29,7 @@ return [
                 'options' => [
                     'route'    => '/abm',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\ABMController::class,
                         'action'     => 'abm',
                     ],
                 ],
@@ -66,7 +56,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
+            Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
         ],
     ],
     'service_manager' => [

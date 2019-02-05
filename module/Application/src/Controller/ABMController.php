@@ -10,7 +10,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class ABMController extends AbstractActionController
 {
     private $accionManager;
     private $operacionManager;
@@ -50,7 +50,7 @@ class IndexController extends AbstractActionController
 
         $view->setVariable('arrEntidades', $arrEntidades);
 
-        $view->setTemplate('application/index/'.$nombreEntidad.'.phtml');
+        $view->setTemplate('application/abm/'.$nombreEntidad.'.phtml');
         return $view;
     }
 
@@ -73,7 +73,7 @@ class IndexController extends AbstractActionController
         $view = new ViewModel();
         
         $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('application/index/alta-'.$nombreEntidad.'.phtml');
+        $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
         
         return $view;      
     }
