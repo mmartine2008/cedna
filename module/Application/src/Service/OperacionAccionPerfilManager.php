@@ -67,6 +67,9 @@ class OperacionAccionPerfilManager {
         $OperacionAccionPerfil->setOperacion($Operacion);
         $OperacionAccionPerfil->setAccion($Accion);
         $OperacionAccionPerfil->setPerfil($Perfil);
+        $OperacionAccionPerfil->setControllerName($jsonData->controllerName);
+        $OperacionAccionPerfil->setControllerAction($jsonData->controllerAction);
+        $OperacionAccionPerfil->setJsFunction($jsonData->jsFunction);
 
         $this->entityManager->persist($OperacionAccionPerfil);
         $this->entityManager->flush();

@@ -60,7 +60,6 @@ class ABMController extends AbstractActionController
     public function altaAction(){
         $parametros = $this->params()->fromRoute();
 
-        //$nombreEntidad = strtolower($parametros['entidad']);
         $nombreEntidad = $parametros['entidad'];
 
         $manager = $nombreEntidad.'Manager';

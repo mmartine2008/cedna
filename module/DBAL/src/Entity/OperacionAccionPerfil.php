@@ -35,6 +35,21 @@ class OperacionAccionPerfil
      */
     protected $Perfil;
 
+    /**
+     * @ORM\Column(name="controllerName")
+     */
+    protected $controllerName;
+
+    /**
+     * @ORM\Column(name="controllerAction")
+     */
+    protected $controllerAction;
+    
+    /**
+     * @ORM\Column(name="jsFunction")
+     */
+    protected $jsFunction;
+
     public function setOperacion($Operacion)
     {
         $this->Operacion = $Operacion;
@@ -48,6 +63,21 @@ class OperacionAccionPerfil
     public function setPerfil($Perfil)
     {
         $this->Perfil = $Perfil;
+    }
+
+    public function setControllerName($controllerName)
+    {
+        $this->controllerName = $controllerName;
+    }
+
+    public function setControllerAction($controllerAction)
+    {
+        $this->controllerAction = $controllerAction;
+    }
+
+    public function setJsFunction($jsFunction)
+    {
+        $this->jsFunction = $jsFunction;
     }
 
     public function getId()
@@ -70,4 +100,18 @@ class OperacionAccionPerfil
         return $this->Perfil;
     }
 
+    public function getControllerName()
+    {
+        return $this->controllerName;
+    }
+
+    public function getControllerAction()
+    {
+        return $this->controllerAction;
+    }
+    
+    public function getJsFunction()
+    {
+        return $this->jsFunction;
+    }
 }

@@ -46,6 +46,30 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-3">
+                            <label for="controllerName">Nombre Controlador:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="controllerName" name="controllerName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="controllerAction">ControllerAction:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="controllerAction" name="controllerAction" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="jsFunction">Función JS:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="jsFunction" name="jsFunction" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>
@@ -63,7 +87,10 @@ function FormAltaOperacionAccionPerfilToJson(){
     var formData = {
         idOperacion: $('#idOperacion').val(), 
         idAccion: $('#idAccion').val(), 
-        idPerfil: $('#idPerfil').val()
+        idPerfil: $('#idPerfil').val(),
+        controllerName: $('#controllerName').val(),
+        controllerAction: $('#controllerAction').val(),
+        jsFunction: $('#jsFunction').val()
     };
     
     var JsonData = JSON.stringify(formData);
