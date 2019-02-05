@@ -16,13 +16,16 @@ class ABMController extends AbstractActionController
     private $operacionManager;
     private $usuariosManager;
     private $perfilesManager;
+    private $operacionAccionPerfilManager;
 
-    public function __construct($accionManager, $operacionManager, $usuariosManager, $perfilesManager)
+    public function __construct($accionManager, $operacionManager, $usuariosManager,
+                                    $perfilesManager, $operacionAccionPerfilManager)
     {
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;
         $this->usuariosManager = $usuariosManager;
         $this->perfilesManager = $perfilesManager;
+        $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
     }
 
     public function indexAction()
@@ -57,7 +60,9 @@ class ABMController extends AbstractActionController
     public function altaAction(){
         $parametros = $this->params()->fromRoute();
 
-        $nombreEntidad = strtolower($parametros['entidad']);
+        //$nombreEntidad = strtolower($parametros['entidad']);
+        $nombreEntidad = $parametros['entidad'];
+
         $manager = $nombreEntidad.'Manager';
 
         if ($this->getRequest()->isPost()) {

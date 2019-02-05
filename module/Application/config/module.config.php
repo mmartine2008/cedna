@@ -65,6 +65,7 @@ return [
             Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
             Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
+            Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
         ],
     ],
     'view_manager' => [

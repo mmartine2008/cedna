@@ -9,6 +9,7 @@ use Application\Service\AccionManager;
 use Application\Service\OperacionManager;
 use Application\Service\UsuariosManager;
 use Application\Service\PerfilesManager;
+use Application\Service\OperacionAccionPerfilManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -22,7 +23,9 @@ class ABMControllerFactory implements FactoryInterface
         $operacionManager = $container->get(OperacionManager::class);
         $usuariosManager = $container->get(UsuariosManager::class);
         $perfilesManager = $container->get(PerfilesManager::class);
+        $operacionAccionPerfilManager = $container->get(OperacionAccionPerfilManager::class);
         
-        return new ABMController($accionManager, $operacionManager, $usuariosManager, $perfilesManager);
+        return new ABMController($accionManager, $operacionManager, 
+                $usuariosManager, $perfilesManager, $operacionAccionPerfilManager);
     }
 }
