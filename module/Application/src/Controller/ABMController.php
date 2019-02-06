@@ -10,19 +10,22 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class ABMController extends AbstractActionController
 {
     private $accionManager;
     private $operacionManager;
     private $usuariosManager;
     private $perfilesManager;
+    private $operacionAccionPerfilManager;
 
-    public function __construct($accionManager, $operacionManager, $usuariosManager, $perfilesManager)
+    public function __construct($accionManager, $operacionManager, $usuariosManager,
+                                    $perfilesManager, $operacionAccionPerfilManager)
     {
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;
         $this->usuariosManager = $usuariosManager;
         $this->perfilesManager = $perfilesManager;
+        $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
     }
 
     public function indexAction()
@@ -50,14 +53,15 @@ class IndexController extends AbstractActionController
 
         $view->setVariable('arrEntidades', $arrEntidades);
 
-        $view->setTemplate('application/index/'.$nombreEntidad.'.phtml');
+        $view->setTemplate('application/abm/'.$nombreEntidad.'.phtml');
         return $view;
     }
 
     public function altaAction(){
         $parametros = $this->params()->fromRoute();
 
-        $nombreEntidad = strtolower($parametros['entidad']);
+        $nombreEntidad = $parametros['entidad'];
+
         $manager = $nombreEntidad.'Manager';
 
         if ($this->getRequest()->isPost()) {
@@ -73,7 +77,7 @@ class IndexController extends AbstractActionController
         $view = new ViewModel();
         
         $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('application/index/alta-'.$nombreEntidad.'.phtml');
+        $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
         
         return $view;      
     }

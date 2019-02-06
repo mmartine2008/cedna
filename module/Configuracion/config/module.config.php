@@ -5,7 +5,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application;
+namespace Configuracion;
 
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
@@ -14,31 +14,21 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
-            'home' => [
-                'type' => Literal::class,
-                'options' => [
-                    'route'    => '/',
-                    'defaults' => [
-                        'controller' => Controller\ABMController::class, //Cambiar por un nuevo indexController
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            'abm' => [
+            'configuracion' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/abm',
+                    'route'    => '/configuracion',
                     'defaults' => [
-                        'controller' => Controller\ABMController::class,
-                        'action'     => 'abm',
+                        'controller' => Controller\ConfiguracionController::class,
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'entidad' => [
+                    'tipo-pregunta' => [
                         'type' => Segment::class,
                         'options' => [
-                            'route' => '/:entidad[/:action[/:id]]',
+                            'route' => '/tipo-pregunta[/:action[/:id]]',
                             'defaults' => [
                                 'action'     => 'listar',
                             ],
@@ -56,16 +46,12 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
+            Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'factories' => [
-            Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
-            Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
-            Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
-            Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
-            Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
+            Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
         ],
     ],
     'view_manager' => [

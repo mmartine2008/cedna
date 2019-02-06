@@ -6,19 +6,25 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="TipoPregunta")
+ * @ORM\Table(name="Formulario")
  */
-class TipoPregunta
+class Formulario
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="IdTipoPregunta", type="integer")
+     * @ORM\Column(name="IdFormulario", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
+     /**
+     * @ORM\ManyToOne(targetEntity="Permiso")
+     * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
+     */
+    protected $permiso;
+
     /**
-     * @ORM\Column(name="Descripcion",  nullable=false, type="string", length=1000)
+     * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
      */
     protected $descripcion;
 
@@ -62,4 +68,23 @@ class TipoPregunta
         return $this;
     }
 
+    /**
+     * Get the value of permiso
+     */ 
+    public function getPermiso()
+    {
+        return $this->permiso;
+    }
+
+    /**
+     * Set the value of permiso
+     *
+     * @return  self
+     */ 
+    public function setPermiso($permiso)
+    {
+        $this->permiso = $permiso;
+
+        return $this;
+    }
 }

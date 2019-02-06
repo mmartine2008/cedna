@@ -57,10 +57,9 @@
      }
      
      process([
-        'Id', 
-        'IdOperacion', 
-        'IdAccion',  
-        'IdPerfil',
+        'IdFormulario', 
+        'IdPermiso', 
+        'Descripcion', 
 ]);
      
      /*

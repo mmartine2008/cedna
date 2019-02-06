@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Relación Operación - Accion - Perfil</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "alta"])?>" name="formAltaAccion" onsubmit="preSubmit()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="idOperacion">Operación:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="idOperacion" name="idOperacion" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                                <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
+                                    <option value="<?= $Operacion->getId() ?>"><?= $Operacion->getTitulo() ?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="idAccion">Acción:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="idAccion" name="idAccion" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                                <?php foreach($arrVariables['Acciones'] as $Accion) :?>
+                                    <option value="<?= $Accion->getId() ?>"><?= $Accion->getNombre() ?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="idPerfil">Perfil:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="idPerfil" name="idPerfil" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                                <?php foreach($arrVariables['Perfiles'] as $Perfil) :?>
+                                    <option value="<?= $Perfil->getId() ?>"><?= $Perfil->getNombre() ?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="controllerName">Nombre Controlador:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="controllerName" name="controllerName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="controllerAction">ControllerAction:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="controllerAction" name="controllerAction" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="jsFunction">Función JS:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="jsFunction" name="jsFunction" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormAltaOperacionAccionPerfilToJson(){
+    var formData = {
+        idOperacion: $('#idOperacion').val(), 
+        idAccion: $('#idAccion').val(), 
+        idPerfil: $('#idPerfil').val(),
+        controllerName: $('#controllerName').val(),
+        controllerAction: $('#controllerAction').val(),
+        jsFunction: $('#jsFunction').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaOperacionAccionPerfilToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formAltaAccion")[0].checkValidity()){
+        $("#formAltaAccion").submit();
+    }else{
+        $("#formAltaAccion")[0].reportValidity();
+    }
+}
+</script>
