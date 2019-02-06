@@ -30,7 +30,8 @@ return [
                         'options' => [
                             'route' => '/tipo-pregunta[/:action[/:id]]',
                             'defaults' => [
-                                'action'     => 'listar',
+                                'controller' => Controller\ConfigTipoPreguntaController::class,
+                                'action'     => 'index',
                             ],
                         ],
                         'constraints' => [
@@ -47,6 +48,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
+            Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
         ],
     ],
     'service_manager' => [

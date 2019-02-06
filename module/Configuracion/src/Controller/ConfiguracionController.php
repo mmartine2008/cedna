@@ -12,7 +12,7 @@ use Zend\View\Model\ViewModel;
 
 class ConfiguracionController extends AbstractActionController
 {
-    private $configuracionManager;
+    protected $configuracionManager;
 
     public function __construct($configuracionManager)
     {

@@ -1,0 +1,31 @@
+<div class="form-row">
+    <div class="col-md-3">
+        <a href="">Nuevo Tipo Pregunta</a>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Tipos de Preguntas</h3>
+            </div>
+            <div class="panel-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Descripcion</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                    <?php foreach($arrTipoPreguntas as $TipoPregunta) : ?>
+                        <tr>
+                            <td><?= $TipoPregunta->getDescripcion() ?></td>
+                            <td></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
