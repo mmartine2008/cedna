@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a registered user.
@@ -22,7 +23,24 @@ class Permiso
      */
     protected $descripcion;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Formulario", mappedBy="Permiso")
+     */
+    protected $formularios;
+    
+    public function __construct()
+    {
+        $this->formularios = new ArrayCollection();
+    }
 
+    public function getFormularios()
+    {
+        if ($this->formularios){
+            return $this->formularios->toArray();
+        }else{
+            return null;
+        }
+    }
 
     /**
      * Get the value of id
@@ -70,8 +88,16 @@ class Permiso
 
     public function getJSON(){
         $output = "";
+
+        $formularios = [];
+        foreach ($this->getFormularios() as $formulario) {
+            $formularios[] = $formulario->getJSON();
+        }
+        $formularios = implode(", ", $formularios);
+
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"formularios": ['.$formularios.']';
         return '{' . $output . '}';
     }
 }

@@ -2,25 +2,45 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Pregunta")
+ * @ORM\Table(name="Permiso")
  */
-class Pregunta
+class Permiso
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="IdPregunta", type="integer")
+     * @ORM\Column(name="IdPermiso", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
 
     /**
-     * @ORM\Column(name="Descripcion",  nullable=false, type="string", length=1000)
+     * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
      */
     protected $descripcion;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Formulario", mappedBy="Permiso")
+     */
+    protected $formularios;
+    
+    public function __construct()
+    {
+        $this->formularios = new ArrayCollection();
+    }
+
+    public function getFormularios()
+    {
+        if ($this->formularios){
+            return $this->formularios->toArray();
+        }else{
+            return null;
+        }
+    }
 
     /**
      * Get the value of id
@@ -47,7 +67,11 @@ class Pregunta
      */ 
     public function getDescripcion()
     {
-        return $this->descripcion;
+        if ($this->descripcion){
+            return $this->descripcion;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -64,8 +88,16 @@ class Pregunta
 
     public function getJSON(){
         $output = "";
+
+        $formularios = [];
+        foreach ($this->getFormularios() as $formulario) {
+            $formularios[] = $formulario->getJSON();
+        }
+        $formularios = implode(", ", $formularios);
+
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"formularios": ['.$formularios.']';
         return '{' . $output . '}';
     }
 }
