@@ -22,3 +22,6 @@ ADD IdTipoPregunta int not null;
 
 ALTER TABLE Pregunta 
 ADD CONSTRAINT FK_Pregunta_TipoPregunta FOREIGN KEY (IdTipoPregunta) REFERENCES TipoPregunta (IdTipoPregunta);
+
+ALTER TABLE Pregunta 
+ADD Opciones int not null;

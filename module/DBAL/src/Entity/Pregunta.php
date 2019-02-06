@@ -31,6 +31,11 @@ class Pregunta
     protected $tipoPregunta;
 
     /**
+     * @ORM\Column(name="Opciones",  nullable=false, type="integer", length=1)
+     */
+    protected $tieneOpciones;
+
+    /**
      *
      * @ORM\ManyToMany(targetEntity="Opcion", inversedBy="Pregunta", cascade={"persist"})
      * @ORM\JoinTable(name="PreguntaOpcion",
@@ -146,11 +151,42 @@ class Pregunta
         return $this;
     }
 
+    /**
+     * Get the value of tieneOpciones
+     */ 
+    public function getTieneOpciones()
+    {
+        return $this->tieneOpciones ;
+    }
+
+     /**
+     * Get the value of tieneOpciones
+     */ 
+    public function tieneOpciones()
+    {
+        if($this->tieneOpciones == 0){
+            return true;
+        }
+        else return false;
+    }
+
+    /**
+     * Set the value of tieneOpciones
+     *
+     * @return  self
+     */ 
+    public function setTieneOpciones($tieneOpciones)
+    {
+        $this->tieneOpciones = $tieneOpciones;
+
+        return $this;
+    }
+
     public function getJSON(){
         $output = "";
 
         $opciones = [];
-        if($this->getOpciones()){
+        if($this->tieneOpciones()){
             foreach ($this->getOpciones() as $opcion) {
                 $opciones[] = $opcion->getJSON();
             }
@@ -167,4 +203,5 @@ class Pregunta
         
         return '{' . $output . '}';
     }
+
 }
