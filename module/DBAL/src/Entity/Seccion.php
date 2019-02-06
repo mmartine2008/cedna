@@ -160,9 +160,9 @@ class Seccion
         if ($this->getTipoSeccion()) {
             $output .= '"tipoSeccion": "' . $this->getTipoSeccion()->getJSON() .'", ';
         }
-        if ($this->getFormulario()) {
-            $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';
-        }
+        // if ($this->getFormulario()) {
+        //     $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';
+        // }
         $output .= '"preguntas": ['.$preguntas.']';
 
         return '{' . $output . '}';

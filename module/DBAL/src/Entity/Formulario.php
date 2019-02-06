@@ -123,9 +123,9 @@ class Formulario
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        if ($this->getPermiso()) {
-            $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
-        }
+        // if ($this->getPermiso()) {
+        //     $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
+        // }
         $output .= '"secciones": ['.$secciones.']';
         return '{' . $output . '}';
     }
