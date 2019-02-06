@@ -6,16 +6,21 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Formulario")
+ * @ORM\Table(name="Respuesta")
  */
-class Formulario
+class Respuesta
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="IdFormulario", type="integer")
+     * @ORM\Column(name="IdRespuesta", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+    /**
+     * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=2000)
+     */
+    protected $descripcion;
 
      /**
      * @ORM\ManyToOne(targetEntity="Permiso")
@@ -24,9 +29,16 @@ class Formulario
     protected $permiso;
 
     /**
-     * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
+     * @ORM\ManyToOne(targetEntity="Pregunta")
+     * @ORM\JoinColumn(name="IdPregunta", nullable=true, referencedColumnName="IdPregunta")
      */
-    protected $descripcion;
+    protected $pregunta;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Opcion")
+     * @ORM\JoinColumn(name="IdOpcion", nullable=true, referencedColumnName="IdOpcion")
+     */
+    protected $opcion;
 
     /**
      * Get the value of id
@@ -92,6 +104,46 @@ class Formulario
         return $this;
     }
 
+    /**
+     * Get the value of pregunta
+     */ 
+    public function getPregunta()
+    {
+        return $this->pregunta;
+    }
+
+    /**
+     * Set the value of pregunta
+     *
+     * @return  self
+     */ 
+    public function setPregunta($pregunta)
+    {
+        $this->pregunta = $pregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of opcion
+     */ 
+    public function getOpcion()
+    {
+        return $this->opcion;
+    }
+
+    /**
+     * Set the value of opcion
+     *
+     * @return  self
+     */ 
+    public function setOpcion($opcion)
+    {
+        $this->opcion = $opcion;
+
+        return $this;
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
@@ -99,7 +151,9 @@ class Formulario
         if ($this->getPermiso()) {
             $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
         }
+        if ($this->getOpcion()) {
+            $output .= '"opcion": "' . $this->getOpcion()->getJSON() .'", ';
+        }
         return '{' . $output . '}';
     }
- 
 }

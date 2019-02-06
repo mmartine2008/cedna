@@ -6,23 +6,27 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Permiso")
+ * @ORM\Table(name="Formulario")
  */
-class Permiso
+class Formulario
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="IdPermiso", type="integer")
+     * @ORM\Column(name="IdFormulario", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
+
+     /**
+     * @ORM\ManyToOne(targetEntity="Permiso")
+     * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
+     */
+    protected $permiso;
 
     /**
      * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
      */
     protected $descripcion;
-
-
 
     /**
      * Get the value of id
@@ -49,11 +53,7 @@ class Permiso
      */ 
     public function getDescripcion()
     {
-        if ($this->descripcion){
-            return $this->descripcion;
-        } else {
-            return "";
-        }
+        return $this->descripcion;
     }
 
     /**
@@ -68,10 +68,23 @@ class Permiso
         return $this;
     }
 
-    public function getJSON(){
-        $output = "";
-        $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        return '{' . $output . '}';
+    /**
+     * Get the value of permiso
+     */ 
+    public function getPermiso()
+    {
+        return $this->permiso;
+    }
+
+    /**
+     * Set the value of permiso
+     *
+     * @return  self
+     */ 
+    public function setPermiso($permiso)
+    {
+        $this->permiso = $permiso;
+
+        return $this;
     }
 }

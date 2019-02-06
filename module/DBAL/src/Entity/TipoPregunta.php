@@ -18,22 +18,54 @@ class TipoPregunta
     protected $id;
 
     /**
-     * @ORM\Column(name="Descripcion")
+     * @ORM\Column(name="Descripcion",  nullable=false, type="string", length=1000)
      */
-    protected $Descripcion;
+    protected $descripcion;
 
-    public function setDescripcion($Descripcion)
-    {
-        $this->Descripcion = $Descripcion;
-    }
-
+    /**
+     * Get the value of id
+     */ 
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of descripcion
+     */ 
     public function getDescripcion()
     {
-        return $this->Descripcion;
+        return $this->descripcion;
+    }
+
+    /**
+     * Set the value of descripcion
+     *
+     * @return  self
+     */ 
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        return '{' . $output . '}';
     }
 }
