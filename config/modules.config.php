@@ -19,5 +19,6 @@ return [
     'DoctrineORMModule',
     'Application',
     'Autenticacion',
-    'DBAL'
+    'DBAL',
+    'Configuracion'
 ];
