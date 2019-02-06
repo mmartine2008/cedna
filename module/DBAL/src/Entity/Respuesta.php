@@ -65,7 +65,11 @@ class Respuesta
      */ 
     public function getDescripcion()
     {
-        return $this->descripcion;
+        if ($this->descripcion){
+            return $this->descripcion;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -138,5 +142,18 @@ class Respuesta
         $this->opcion = $opcion;
 
         return $this;
+    }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        if ($this->getPermiso()) {
+            $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
+        }
+        if ($this->getOpcion()) {
+            $output .= '"opcion": "' . $this->getOpcion()->getJSON() .'", ';
+        }
+        return '{' . $output . '}';
     }
 }

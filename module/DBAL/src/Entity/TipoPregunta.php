@@ -61,4 +61,11 @@ class TipoPregunta
 
         return $this;
     }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        return '{' . $output . '}';
+    }
 }

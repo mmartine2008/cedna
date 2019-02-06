@@ -49,7 +49,11 @@ class Permiso
      */ 
     public function getDescripcion()
     {
-        return $this->descripcion;
+        if ($this->descripcion){
+            return $this->descripcion;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -62,5 +66,12 @@ class Permiso
         $this->descripcion = $descripcion;
 
         return $this;
+    }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        return '{' . $output . '}';
     }
 }

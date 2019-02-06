@@ -53,7 +53,11 @@ class Formulario
      */ 
     public function getDescripcion()
     {
-        return $this->descripcion;
+        if ($this->descripcion){
+            return $this->descripcion;
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -87,4 +91,15 @@ class Formulario
 
         return $this;
     }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        if ($this->getPermiso()) {
+            $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
+        }
+        return '{' . $output . '}';
+    }
+ 
 }

@@ -49,8 +49,6 @@ class PreguntaAbierta
         return $this;
     }
 
-    
-
     /**
      * Get the value of pregunta
      */ 
@@ -89,5 +87,15 @@ class PreguntaAbierta
         $this->tipoPregunta = $tipoPregunta;
 
         return $this;
+    }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"pregunta": "' . $this->getPregunta()->getJSON() .'", ';
+        if ($this->getTipoPregunta()) {
+            $output .= '"tipoPregunta": "' . $this->getTipoPregunta()->getJSON() .'", ';
+        }
+        return '{' . $output . '}';
     }
 }

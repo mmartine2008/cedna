@@ -90,4 +90,16 @@ class Seccion
 
         return $this;
     }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        if ($this->getTipoSeccion()) {
+            $output .= '"tipoSeccion": "' . $this->getTipoSeccion()->getJSON() .'", ';
+        }
+        if ($this->getFormulario()) {
+            $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';
+        }
+        return '{' . $output . '}';
+    }
 }
