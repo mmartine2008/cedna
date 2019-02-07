@@ -157,8 +157,9 @@ class Seccion
         $preguntas = implode(", ", $preguntas);
 
         $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"nombre": " nombre seccion", ';
         if ($this->getTipoSeccion()) {
-            $output .= '"tipoSeccion": "' . $this->getTipoSeccion()->getJSON() .'", ';
+            $output .= '"tipoSeccion": ' . $this->getTipoSeccion()->getJSON() .', ';
         }
         // if ($this->getFormulario()) {
         //     $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';

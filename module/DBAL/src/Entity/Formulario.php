@@ -30,7 +30,7 @@ class Formulario
     protected $descripcion;
 
     /**
-     * @ORM\OneToMany(targetEntity="Seccion", mappedBy="Formulario")
+     * @ORM\OneToMany(targetEntity="Seccion", mappedBy="formulario")
      */
     protected $secciones;
     
@@ -123,9 +123,6 @@ class Formulario
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        // if ($this->getPermiso()) {
-        //     $output .= '"permiso": "' . $this->getPermiso()->getJSON() .'", ';
-        // }
         $output .= '"secciones": ['.$secciones.']';
         return '{' . $output . '}';
     }

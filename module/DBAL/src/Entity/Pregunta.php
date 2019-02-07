@@ -163,7 +163,7 @@ class Pregunta
      * Get the value of tieneOpciones
      */ 
     public function tieneOpciones()
-    {
+    {   
         if($this->tieneOpciones == 0){
             return true;
         }
@@ -195,11 +195,17 @@ class Pregunta
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"tipoPregunta": "' . $this->getTipoPregunta() .'", ';
-
-        if($opciones){
-            $output .= '"opciones": ['.$opciones.']';
+        $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
+        if ($this->tieneOpciones()) {
+            $output .= '"cerrada": "' . 0 .'", ';
+        } else {
+            $output .= '"cerrada": "' . 1 .'", ';
         }
+        
+        
+        if($this->tieneOpciones()){
+            $output .= '"opciones": ['.$opciones.']';
+        } 
         
         return '{' . $output . '}';
     }

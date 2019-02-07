@@ -2,6 +2,8 @@
 
 namespace Formulario\Service;
 
+use DBAL\Entity\Formulario;
+
 class FormularioManager {
     
     /**
@@ -18,6 +20,12 @@ class FormularioManager {
     {
         $this->entityManager = $entityManager;
         
+    }
+
+    public function getFormularioJSON($id){
+        $formulario = $this->entityManager->getRepository(Formulario::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $formulario->getJSON();
     }
 
     

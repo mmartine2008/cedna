@@ -23,24 +23,6 @@ return [
                         'action'     => 'index',
                     ],
                 ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'tipo-pregunta' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/tipo-pregunta[/:action[/:id]]',
-                            'defaults' => [
-                                'action'     => 'listar',
-                            ],
-                        ],
-                        'constraints' => [
-                            'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'id' => '[a-zA-Z0-9_-]*',
-                        ],
-                        'may_terminate' => true,
-                    ],
-                ],
             ],
         ],
     ],
