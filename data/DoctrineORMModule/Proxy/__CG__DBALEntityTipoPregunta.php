@@ -191,17 +191,6 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
-    public function setId($id)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setId', [$id]);
-
-        return parent::setId($id);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getDescripcion()
     {
 

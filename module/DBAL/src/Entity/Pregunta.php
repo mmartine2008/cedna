@@ -197,11 +197,10 @@ class Pregunta
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
         if ($this->tieneOpciones()) {
-            $output .= '"cerrada": "' . 0 .'", ';
-        } else {
             $output .= '"cerrada": "' . 1 .'", ';
+        } else {
+            $output .= '"cerrada": "' . 0 .'", ';
         }
-        
         
         if($this->tieneOpciones()){
             $output .= '"opciones": ['.$opciones.']';
