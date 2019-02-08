@@ -157,7 +157,7 @@ class Seccion
         $preguntas = implode(", ", $preguntas);
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"nombre": " nombre seccion", ';
+        $output .= '"nombre": "Nombre seccion", ';
         if ($this->getTipoSeccion()) {
             $output .= '"tipoSeccion": ' . $this->getTipoSeccion()->getJSON() .', ';
         }
