@@ -43,6 +43,13 @@
         createListFromJSONLista(selector, opciones, divElement);
 
     }
+
+    function createMultipleSelector(opciones, divElement) {
+        var selector = document.createElement("select");
+        selector.multiple = true;
+        createListFromJSONLista(selector, opciones, divElement);
+    }
+
     function createInput(divElement){
         ele = document.createElement('input');
         ele.type = 'text';
@@ -50,18 +57,12 @@
         divElement.appendChild(ele);
     } 
 
-    function createMultipleSelector(opciones, divElement) {
-        var selector = document.createElement("select");
-        selector.multiple = true;
-        createListFromJSONLista(selector, opciones, divElement);
-    }
-    
     function createOptions(item, divElement){
-        
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
             createSimpleSelector(opciones, divElement);
         } else if(item.tipoPregunta.destinos == 1) {
+            var opciones = item.opciones;
             createMultipleSelector(opciones, divElement);
         } else {
             //luego

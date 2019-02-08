@@ -22,7 +22,9 @@ class FormularioController extends AbstractActionController
 
     public function indexAction()
     {
-        $formularioJSON = $this->FormularioManager->getFormularioJSON(1);
+        // $idFormulario = 1;
+        $idFormulario = 3;
+        $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
         return new ViewModel([
             "formulario" => $formularioJSON
         ]);

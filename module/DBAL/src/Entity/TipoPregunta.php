@@ -61,7 +61,7 @@ class TipoPregunta
     public function getCantDestinos()
     {
         if($this->cantDestinos){
-            $this->cantDestinos;
+            return $this->cantDestinos;
         }
         return 0;
     }
