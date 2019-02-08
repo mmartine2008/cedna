@@ -21,10 +21,10 @@ INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (2, 2);
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (1,1);
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (1,2);
 
-INSERT Opcion(idOpcion, Descripcion) VALUES ('Primaria');
-INSERT Opcion(idOpcion, Descripcion) VALUES ('Secundaria');
-INSERT Opcion(idOpcion, Descripcion) VALUES ('Universitario');
-INSERT Opcion(idOpcion, Descripcion) VALUES ('Terciario');
+INSERT Opcion(Descripcion) VALUES ('Primaria');
+INSERT Opcion(Descripcion) VALUES ('Secundaria');
+INSERT Opcion(Descripcion) VALUES ('Universitario');
+INSERT Opcion(Descripcion) VALUES ('Terciario');
 
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Estudios', 2, 1);
 
