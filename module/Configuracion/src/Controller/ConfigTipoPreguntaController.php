@@ -24,7 +24,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $arrAccionesDisponibles = $this->configuracionManager->getAccionesPorPerfil('Configuracion Tipo Pregunta', 'Administrador');
 
-        var_dump($arrAccionesDisponibles[0]->getAccion());
+        $this->layout()->arrAccionesDisponibles = $arrAccionesDisponibles;
 
         return new ViewModel([
             'arrTipoPreguntas' => $arrTipoPreguntas
