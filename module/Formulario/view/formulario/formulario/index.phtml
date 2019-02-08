@@ -1,0 +1,72 @@
+<script>
+    var formulario = <?= $formulario ?>;
+    
+    function crearPreguntas(item, divElement){
+        preguntas = item.preguntas;
+        for (var i = 0; i < preguntas.length; i++){
+            var item = preguntas[i];
+            var pregunta = document.createElement("P");
+            var text = document.createTextNode(item.descripcion);
+            pregunta.appendChild(text);
+            divElement.appendChild(pregunta);
+            if (item.cerrada == '0'){
+                var opciones = item.opciones;
+                for (var i = 0; i < opciones.length; i++){
+                    var item = opciones[i];
+                    var opcion = document.createElement("P");
+                    var text = document.createTextNode(item.descripcion);
+                    opcion.appendChild(text);
+                    divElement.appendChild(opcion);
+                }
+            }
+        }
+    }
+
+    function crearItemSeccion(item){
+
+        // Creating a div element
+        var divElement = document.createElement("Div");
+        divElement.id = "divID";
+
+        // Styling it
+        divElement.style.textAlign = "lefth";
+        // divElement.style.fontWeight = "bold";
+        // divElement.style.fontSize = "smaller";
+        divElement.style.paddingTop = "15px";
+
+        // Adding a paragraph to it
+        var paragraph = document.createElement("P");
+        var text = document.createTextNode(item.nombre);
+        paragraph.appendChild(text);
+        divElement.appendChild(paragraph);
+
+        crearPreguntas(item, divElement);
+
+        // Appending the div element to body
+        document.getElementsByTagName("div")[0].appendChild(divElement);
+            
+        return divElement;
+    }
+
+    function construirSecciones(childs, contenedor){
+        var paragraph = document.createElement("P");
+        var text = document.createTextNode(formulario.descripcion);
+        paragraph.appendChild(text);
+        document.getElementsByTagName("div")[0].appendChild(paragraph);
+
+        for (var i = 0; i < childs.length; i++){
+            var item = childs[i];
+
+            var itemSeccion = crearItemSeccion(item);
+            contenedor.appendChild(itemSeccion);
+        }
+        
+    }
+
+    function crearFormulario(){
+        construirSecciones(formulario.secciones, document.getElementsByTagName("div")[0]);
+            
+    }
+
+    crearFormulario();
+</script>

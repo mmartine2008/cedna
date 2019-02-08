@@ -38,7 +38,8 @@
             "Application\\": "module/Application/src/",
             "Autenticacion\\": "module/Autenticacion/src/",
             "DBAL\\": "module/DBAL/src/",
-            "Configuracion\\": "module/Configuracion/src/"
+            "Configuracion\\": "module/Configuracion/src/",
+            "Formulario\\": "module/Formulario/src/"
         }
     },
     "autoload-dev": {

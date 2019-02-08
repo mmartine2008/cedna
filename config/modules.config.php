@@ -20,5 +20,6 @@ return [
     'Application',
     'Autenticacion',
     'DBAL',
-    'Configuracion'
+    'Configuracion',
+    'Formulario'
 ];

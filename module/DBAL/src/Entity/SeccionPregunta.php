@@ -93,10 +93,10 @@ class SeccionPregunta
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         if ($this->getSeccion()) {
-            $output .= '"seccion": "' . $this->getSeccion()->getJSON() .'", ';
+            $output .= '"seccion": ' . $this->getSeccion()->getJSON() .', ';
         }
         if ($this->getPregunta()) {
-            $output .= '"pregunta": "' . $this->getPregunta()->getJSON() .'", ';
+            $output .= '"pregunta": ' . $this->getPregunta()->getJSON() .', ';
         }
         return '{' . $output . '}';
     }

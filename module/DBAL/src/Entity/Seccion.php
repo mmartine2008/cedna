@@ -2,6 +2,8 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use DBAL\Entity\Pregunta;
 
 /**
  * This class represents a registered user.
@@ -29,6 +31,19 @@ class Seccion
      */
     protected $tipoSeccion;
 
+    /**
+     *
+     * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
+     * @ORM\JoinTable(name="SeccionPregunta",
+     *      joinColumns={@ORM\JoinColumn(name="IdSeccion", referencedColumnName="IdSeccion")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")}
+     *      )
+     */
+    protected $preguntas;
+
+    public function __construct() {
+        $this->preguntas = new ArrayCollection();
+    }
     
 
     /**
@@ -49,6 +64,47 @@ class Seccion
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * @param Pregunta|null $preguntas
+     */
+    public function addPreguntas(Pregunta $preguntas = null)
+    {
+        if (!$this->preguntas->contains($preguntas)) {
+            $this->preguntas->add($preguntas);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPreguntas()
+    {
+        if ($this->preguntas){
+            return $this->preguntas->toArray();
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * @param Pregunta $preguntas
+     */
+    public function removePreguntas($preguntas)
+    {
+        if (!$this->preguntas->contains($preguntas)) {
+            return;
+        }
+        $this->preguntas->removeElement($preguntas);
+    }
+
+    /**
+     * @desc Remove all tags for this article
+     */
+    public function removeAllPreguntas()
+    {
+        $this->preguntas->clear();
     }
 
     /**
@@ -93,13 +149,23 @@ class Seccion
 
     public function getJSON(){
         $output = "";
+
+        $preguntas = [];
+        foreach ($this->getPreguntas() as $pregunta) {
+            $preguntas[] = $pregunta->getJSON();
+        }
+        $preguntas = implode(", ", $preguntas);
+
         $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"nombre": " nombre seccion", ';
         if ($this->getTipoSeccion()) {
-            $output .= '"tipoSeccion": "' . $this->getTipoSeccion()->getJSON() .'", ';
+            $output .= '"tipoSeccion": ' . $this->getTipoSeccion()->getJSON() .', ';
         }
-        if ($this->getFormulario()) {
-            $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';
-        }
+        // if ($this->getFormulario()) {
+        //     $output .= '"formulario": "' . $this->getFormulario()->getJSON() .'", ';
+        // }
+        $output .= '"preguntas": ['.$preguntas.']';
+
         return '{' . $output . '}';
     }
 }
