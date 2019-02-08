@@ -44,9 +44,35 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $view = new ViewModel();
         
+        $view->setVariable('TipoPreguntaJson', '');
         $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
         
         return $view;
     }
+
+    public function editarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $idTipoPregunta = $parametros['id'];
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->configuracionManager->altaEdicionTipoPregunta($JsonData, $idTipoPregunta);
+
+            $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
+        }
+
+        $view = new ViewModel();
+        
+        $TipoPregunta = $this->configuracionManager->getTipoPregunta($idTipoPregunta);
+
+        $view->setVariable('TipoPreguntaJson', $TipoPregunta->getJSON());
+        $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
+        
+        return $view;
+    } 
 
 }

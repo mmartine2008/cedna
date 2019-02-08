@@ -19,7 +19,10 @@
                     <?php foreach($arrTipoPreguntas as $TipoPregunta) : ?>
                         <tr>
                             <td><?= $TipoPregunta->getDescripcion() ?></td>
-                            <td></td>
+                            <td>
+                                <a href="<?=$this->url("configuracion/tipo-pregunta",
+                                                    ["action" => "editar", "id" => $TipoPregunta->getId()])?>">editar</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
