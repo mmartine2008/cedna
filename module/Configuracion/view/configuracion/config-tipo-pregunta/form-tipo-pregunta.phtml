@@ -29,6 +29,8 @@
 
 </div>
 <script>
+var tipoPreguntaJson = <?= $TipoPreguntaJson ?>;
+
 function FormTipoPreguntaToJson(){
     var formData = {
         descripcion: $('#tipoPreguntaDescripcion').val()
@@ -49,4 +51,10 @@ function preSubmit(){
         $("#formTipoPregunta")[0].reportValidity();
     }
 }
+
+$( document ).ready(function() {
+    if (tipoPreguntaJson !== ''){
+        $('#tipoPreguntaDescripcion').val(tipoPreguntaJson.descripcion);
+    }
+});
 </script>
