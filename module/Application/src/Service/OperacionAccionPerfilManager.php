@@ -67,6 +67,7 @@ class OperacionAccionPerfilManager {
         $OperacionAccionPerfil->setOperacion($Operacion);
         $OperacionAccionPerfil->setAccion($Accion);
         $OperacionAccionPerfil->setPerfil($Perfil);
+        $OperacionAccionPerfil->setUrlDestino($jsonData->urlDestino);
         $OperacionAccionPerfil->setControllerName($jsonData->controllerName);
         $OperacionAccionPerfil->setControllerAction($jsonData->controllerAction);
         $OperacionAccionPerfil->setJsFunction($jsonData->jsFunction);

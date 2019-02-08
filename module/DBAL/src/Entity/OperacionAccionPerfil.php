@@ -44,6 +44,11 @@ class OperacionAccionPerfil
      * @ORM\Column(name="controllerAction")
      */
     protected $controllerAction;
+
+    /**
+     * @ORM\Column(name="urlDestino")
+     */
+    protected $urlDestino;
     
     /**
      * @ORM\Column(name="jsFunction")
@@ -73,6 +78,11 @@ class OperacionAccionPerfil
     public function setControllerAction($controllerAction)
     {
         $this->controllerAction = $controllerAction;
+    }
+
+    public function setUrlDestino($urlDestino)
+    {
+        $this->urlDestino = $urlDestino;
     }
 
     public function setJsFunction($jsFunction)
@@ -108,6 +118,11 @@ class OperacionAccionPerfil
     public function getControllerAction()
     {
         return $this->controllerAction;
+    }
+
+    public function getUrlDestino()
+    {
+        return $this->urlDestino;
     }
     
     public function getJsFunction()

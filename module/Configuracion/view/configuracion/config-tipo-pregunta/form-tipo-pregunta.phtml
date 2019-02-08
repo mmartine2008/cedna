@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Tipo de Pregunta</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formTipoPregunta" onsubmit="preSubmit()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="tipoPreguntaDescripcion"><span class="obligatorio">(*) </span>Descripción:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="tipoPreguntaDescripcion" name="tipoPreguntaDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("configuracion/tipo-pregunta",["action" => "index"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormTipoPreguntaToJson(){
+    var formData = {
+        descripcion: $('#tipoPreguntaDescripcion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormTipoPreguntaToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formTipoPregunta")[0].checkValidity()){
+        $("#formTipoPregunta").submit();
+    }else{
+        $("#formTipoPregunta")[0].reportValidity();
+    }
+}
+</script>
