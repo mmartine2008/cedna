@@ -1,24 +1,24 @@
 <script>
     var formulario = <?= $formulario ?>;
 
-    function dibujarTratamientosMultiSelect(arreglo, idSelect){
-    $('#'+idSelect).empty();
-    arreglo.forEach(function (datos) {
-        $('#'+idSelect)
-            .append($("<option></option>")
-                .attr("value",datos.IdTratamiento)
-                .text(datos.CodigoTrat + ' - ' + datos.DescripcionTrat)); 
+//     function dibujarTratamientosMultiSelect(arreglo, idSelect){
+//     $('#'+idSelect).empty();
+//     arreglo.forEach(function (datos) {
+//         $('#'+idSelect)
+//             .append($("<option></option>")
+//                 .attr("value",datos.IdTratamiento)
+//                 .text(datos.CodigoTrat + ' - ' + datos.DescripcionTrat)); 
 
-    });
-}
+//     });
+// }
 
-    function cargarMultiSelects(IdRRPPEstablecimiento, tratamientosSeleccionados){
-    //Primero tengo q inicializar el multiselect y luego cargar los options
-        $('#MultiSelectDisp').multiselect({sort: 'sort'});
+//     function cargarMultiSelects(IdRRPPEstablecimiento, tratamientosSeleccionados){
+//     //Primero tengo q inicializar el multiselect y luego cargar los options
+//         $('#MultiSelectDisp').multiselect({sort: 'sort'});
         
-        dibujarTratamientosMultiSelect(tratamientosDisponibles, 'MultiSelectDisp');
-        dibujarTratamientosMultiSelect(tratamientosSeleccionados, 'MultiSelectDisp_to');
-    }
+//         dibujarTratamientosMultiSelect(tratamientosDisponibles, 'MultiSelectDisp');
+//         dibujarTratamientosMultiSelect(tratamientosSeleccionados, 'MultiSelectDisp_to');
+//     }
 
     function createListFromJSONLista(selector, lista, divElement) {
         var option = document.createElement("option");
