@@ -20,7 +20,7 @@ return [
                     'route'    => '/',
                     'defaults' => [
                         'controller' => Controller\ABMController::class, //Cambiar por un nuevo indexController
-                        'action'     => 'index',
+                        'action'     => 'login',
                     ],
                 ],
             ],

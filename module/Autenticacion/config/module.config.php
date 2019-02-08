@@ -15,7 +15,7 @@ return [
                     'route'    => '/',
                     'defaults' => [
                         'controller' => Controller\AuthController::class,
-                        'action'     => 'index',
+                        'action'     => 'login',
                     ],
                 ],
     
