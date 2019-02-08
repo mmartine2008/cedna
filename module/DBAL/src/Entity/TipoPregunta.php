@@ -23,6 +23,11 @@ class TipoPregunta
     protected $descripcion;
 
     /**
+     * @ORM\Column(name="NroDestinos",  nullable=true, type="integer")
+     */
+    protected $cantDestinos;
+
+    /**
      * Get the value of id
      */ 
     public function getId()
@@ -50,10 +55,43 @@ class TipoPregunta
         return $this;
     }
 
+    /**
+     * Get the value of cantDestinos
+     */ 
+    public function getCantDestinos()
+    {
+        if($this->cantDestinos){
+            $this->cantDestinos;
+        }
+        return 0;
+    }
+
+    /**
+     * Set the value of cantDestinos
+     *
+     * @return  self
+     */ 
+    public function setCantDestinos($cantDestinos)
+    {
+        $this->cantDestinos = $cantDestinos;
+
+        return $this;
+    }
+
+    public function esPeguntaMultiple(){
+        if($this->descripcion == 'Multiple'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"destinos": "' . $this->getCantDestinos() .'", ';
         return '{' . $output . '}';
     }
+
 }

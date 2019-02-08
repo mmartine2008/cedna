@@ -1,7 +1,82 @@
 <script>
     var formulario = <?= $formulario ?>;
+
+//     function dibujarTratamientosMultiSelect(arreglo, idSelect){
+//     $('#'+idSelect).empty();
+//     arreglo.forEach(function (datos) {
+//         $('#'+idSelect)
+//             .append($("<option></option>")
+//                 .attr("value",datos.IdTratamiento)
+//                 .text(datos.CodigoTrat + ' - ' + datos.DescripcionTrat)); 
+
+//     });
+// }
+
+//     function cargarMultiSelects(IdRRPPEstablecimiento, tratamientosSeleccionados){
+//     //Primero tengo q inicializar el multiselect y luego cargar los options
+//         $('#MultiSelectDisp').multiselect({sort: 'sort'});
+        
+//         dibujarTratamientosMultiSelect(tratamientosDisponibles, 'MultiSelectDisp');
+//         dibujarTratamientosMultiSelect(tratamientosSeleccionados, 'MultiSelectDisp_to');
+//     }
+
+    function createListFromJSONLista(selector, lista, divElement) {
+        var option = document.createElement("option");
+        option.value =  -1;
+        option.text = 'Seleccione';
+        selector.appendChild(option);
+
+        for (var i=0; i < lista.length; i++) {
+            var item = lista[i];
+            var option = document.createElement("option");
+            option.value = item.descripcion;
+            option.text = item.descripcion;
+            selector.appendChild(option);
+        }
+        divElement.appendChild(selector);
+    }
+
+    function createSimpleSelector(opciones, divElement) {
+        
+        var selector = document.createElement("select");
+
+        createListFromJSONLista(selector, opciones, divElement);
+
+    }
+    function createInput(divElement){
+        ele = document.createElement('input');
+        ele.type = 'text';
+        ele.name = 'respuesta'.i;
+        divElement.appendChild(ele);
+    } 
+
+    function createMultipleSelector(opciones, divElement) {
+        var selector = document.createElement("select");
+        selector.multiple = true;
+        createListFromJSONLista(selector, opciones, divElement);
+    }
     
-    function crearPreguntas(item, divElement){
+    function createOptions(item, divElement){
+        
+        if(item.tipoPregunta.descripcion == 'simple'){
+            var opciones = item.opciones;
+            createSimpleSelector(opciones, divElement);
+        } else if(item.tipoPregunta.destinos == 1) {
+            createMultipleSelector(opciones, divElement);
+        } else {
+            //luego
+        }
+    }
+    
+    function createAnswer(item, divElement){
+        if (item.cerrada == '1'){
+            createOptions(item, divElement);
+        } else {
+            createInput(divElement);
+        }
+    }
+
+    function createQuestions(item, divElement){
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
             var item = preguntas[i];
@@ -9,24 +84,15 @@
             var text = document.createTextNode(item.descripcion);
             pregunta.appendChild(text);
             divElement.appendChild(pregunta);
-            if (item.cerrada == '0'){
-                var opciones = item.opciones;
-                for (var i = 0; i < opciones.length; i++){
-                    var item = opciones[i];
-                    var opcion = document.createElement("P");
-                    var text = document.createTextNode(item.descripcion);
-                    opcion.appendChild(text);
-                    divElement.appendChild(opcion);
-                }
-            }
+            createAnswer(item, divElement);
         }
     }
 
-    function crearItemSeccion(item){
+    function crearItemSeccion(item, contenedor){
 
         // Creating a div element
         var divElement = document.createElement("Div");
-        divElement.id = "divID";
+        divElement.id = "secciones";
 
         // Styling it
         divElement.style.textAlign = "lefth";
@@ -40,10 +106,10 @@
         paragraph.appendChild(text);
         divElement.appendChild(paragraph);
 
-        crearPreguntas(item, divElement);
+        createQuestions(item, divElement);
 
         // Appending the div element to body
-        document.getElementsByTagName("div")[0].appendChild(divElement);
+        contenedor.appendChild(divElement);
             
         return divElement;
     }
@@ -52,21 +118,20 @@
         var paragraph = document.createElement("P");
         var text = document.createTextNode(formulario.descripcion);
         paragraph.appendChild(text);
-        document.getElementsByTagName("div")[0].appendChild(paragraph);
+        contenedor.appendChild(paragraph);
 
         for (var i = 0; i < childs.length; i++){
             var item = childs[i];
 
-            var itemSeccion = crearItemSeccion(item);
+            var itemSeccion = crearItemSeccion(item, contenedor);
             contenedor.appendChild(itemSeccion);
         }
-        
     }
 
     function crearFormulario(){
         construirSecciones(formulario.secciones, document.getElementsByTagName("div")[0]);
-            
     }
 
     crearFormulario();
 </script>
+

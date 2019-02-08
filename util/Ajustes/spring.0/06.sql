@@ -2,12 +2,14 @@ DROP TABLE PreguntaOpcion;
 DROP TABLE SeccionPregunta;
 DROP TABLE Respuesta;
 DROP TABLE Opcion;
-DROP TABLE Pregunta;
-DROP TABLE TipoPregunta;
 DROP TABLE Seccion;
 DROP TABLE TipoSeccion;
 DROP TABLE Formulario;
 DROP TABLE Permiso;
+DROP TABLE PreguntaAbierta;
+DROP TABLE PreguntaCerrada;
+DROP TABLE Pregunta;
+DROP TABLE TipoPregunta;
 
 CREATE TABLE Permiso (
 	IdPermiso INT IDENTITY(1,1),
