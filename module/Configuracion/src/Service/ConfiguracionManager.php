@@ -46,5 +46,18 @@ class ConfiguracionManager {
 
         return $OperacionAccionPerfil;
     }
+
+    public function altaEdicionTipoPregunta($jsonData, $idTipoPregunta = null){
+        if ($idTipoPregunta){
+            $TipoPregunta = $this->getTipoPregunta($idTipoPregunta);
+        }else{
+            $TipoPregunta = new TipoPregunta();
+        }
+
+        $TipoPregunta->setDescripcion($jsonData->descripcion);
+
+        $this->entityManager->persist($TipoPregunta);
+        $this->entityManager->flush();
+    }
     
 }

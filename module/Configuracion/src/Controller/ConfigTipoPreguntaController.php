@@ -31,4 +31,22 @@ class ConfigTipoPreguntaController extends ConfiguracionController
         ]);
     }
 
+    public function altaAction(){
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->configuracionManager->altaEdicionTipoPregunta($JsonData);
+
+            $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
+        }
+
+        $view = new ViewModel();
+        
+        $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
+        
+        return $view;
+    }
+
 }
