@@ -164,7 +164,7 @@ class Pregunta
      */ 
     public function tieneOpciones()
     {   
-        if($this->tieneOpciones == 0){
+        if ($this->getTieneOpciones()){
             return true;
         }
         else return false;
