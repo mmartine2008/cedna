@@ -64,10 +64,10 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'descripcion'];
+            return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos'];
         }
 
-        return ['__isInitialized__', 'id', 'descripcion'];
+        return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos'];
     }
 
     /**
@@ -219,6 +219,39 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDescripcion', [$descripcion]);
 
         return parent::setDescripcion($descripcion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCantDestinos()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCantDestinos', []);
+
+        return parent::getCantDestinos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCantDestinos($cantDestinos)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCantDestinos', [$cantDestinos]);
+
+        return parent::setCantDestinos($cantDestinos);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function esPeguntaMultiple()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'esPeguntaMultiple', []);
+
+        return parent::esPeguntaMultiple();
     }
 
     /**

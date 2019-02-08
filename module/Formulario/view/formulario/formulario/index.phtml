@@ -1,6 +1,25 @@
 <script>
     var formulario = <?= $formulario ?>;
 
+    function dibujarTratamientosMultiSelect(arreglo, idSelect){
+    $('#'+idSelect).empty();
+    arreglo.forEach(function (datos) {
+        $('#'+idSelect)
+            .append($("<option></option>")
+                .attr("value",datos.IdTratamiento)
+                .text(datos.CodigoTrat + ' - ' + datos.DescripcionTrat)); 
+
+    });
+}
+
+    function cargarMultiSelects(IdRRPPEstablecimiento, tratamientosSeleccionados){
+    //Primero tengo q inicializar el multiselect y luego cargar los options
+        $('#MultiSelectDisp').multiselect({sort: 'sort'});
+        
+        dibujarTratamientosMultiSelect(tratamientosDisponibles, 'MultiSelectDisp');
+        dibujarTratamientosMultiSelect(tratamientosSeleccionados, 'MultiSelectDisp_to');
+    }
+
     function createListFromJSONLista(selector, lista, divElement) {
         var option = document.createElement("option");
         option.value =  -1;
@@ -17,7 +36,7 @@
         divElement.appendChild(selector);
     }
 
-    function createSelector(opciones, divElement) {
+    function createSimpleSelector(opciones, divElement) {
         
         var selector = document.createElement("select");
 
@@ -29,9 +48,35 @@
         ele.type = 'text';
         ele.name = 'respuesta'.i;
         divElement.appendChild(ele);
-    }    
+    } 
 
-    function crearPreguntas(item, divElement){
+    function createMultipleSelector(opciones, divElement) {
+        var selector = document.createElement("select");
+        selector.multiple = true;
+        createListFromJSONLista(selector, opciones, divElement);
+    }
+    
+    function createOptions(item, divElement){
+        
+        if(item.tipoPregunta.descripcion == 'simple'){
+            var opciones = item.opciones;
+            createSimpleSelector(opciones, divElement);
+        } else if(item.tipoPregunta.destinos == 1) {
+            createMultipleSelector(opciones, divElement);
+        } else {
+            //luego
+        }
+    }
+    
+    function createAnswer(item, divElement){
+        if (item.cerrada == '0'){
+            createOptions(item, divElement);
+        } else {
+            createInput(divElement);
+        }
+    }
+
+    function createQuestions(item, divElement){
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
             var item = preguntas[i];
@@ -39,12 +84,7 @@
             var text = document.createTextNode(item.descripcion);
             pregunta.appendChild(text);
             divElement.appendChild(pregunta);
-            if (item.cerrada == '0'){
-                var opciones = item.opciones;
-                createSelector(opciones, divElement);
-            } else {
-                createInput(divElement);
-            }
+            createAnswer(item, divElement);
         }
     }
 
@@ -66,7 +106,7 @@
         paragraph.appendChild(text);
         divElement.appendChild(paragraph);
 
-        crearPreguntas(item, divElement);
+        createQuestions(item, divElement);
 
         // Appending the div element to body
         contenedor.appendChild(divElement);
@@ -94,3 +134,4 @@
 
     crearFormulario();
 </script>
+
