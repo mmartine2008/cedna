@@ -98,3 +98,5 @@ CREATE TABLE PreguntaOpcion (
 	CONSTRAINT PK_PreguntaOpcion PRIMARY KEY (IdPreguntaOpcion),
 	CONSTRAINT FK_PreguntaOpcion_Pregunta FOREIGN KEY (IdPregunta) REFERENCES Pregunta (IdPregunta)
 );
+
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('06.sql', GETDATE ( ), 0, 6);

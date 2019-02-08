@@ -8,6 +8,6 @@ CREATE TABLE dbo.ajustes (
 ) ;
 
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 0, 1);
-INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 0, 2);
-INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 0, 3);
-INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 0, 4);
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('02.sql', GETDATE ( ), 0, 2);
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('03.sql', GETDATE ( ), 0, 3);
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('04.sql', GETDATE ( ), 0, 4);
