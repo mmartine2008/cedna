@@ -31,7 +31,10 @@
             <footer>
                 <?php if ($arrAccionesDisponibles) :?>
                 <div class="row">
-                    <a href="<?=$this->url("configuracion",["action" => $arrAccionesDisponibles[0]->getControllerAction()])?>"><?= $arrAccionesDisponibles[0]->getAccion()->getTitulo() ?></a>
+                    <a href="<?=$this->url($arrAccionesDisponibles[0]->getUrlDestino(),
+                                            ["action" => $arrAccionesDisponibles[0]->getControllerAction()])?>">
+                        <?= $arrAccionesDisponibles[0]->getAccion()->getTitulo() ?>
+                    </a>
                 </div>
                 <?php endif; ?>
             </footer>

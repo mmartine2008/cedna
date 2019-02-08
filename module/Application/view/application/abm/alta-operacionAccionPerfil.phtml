@@ -47,6 +47,14 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
+                            <label for="urlDestino">URL Destino:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="urlDestino" name="urlDestino" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
                             <label for="controllerName">Nombre Controlador:</label>
                         </div>
                         <div class="col-md-4">
@@ -88,6 +96,7 @@ function FormAltaOperacionAccionPerfilToJson(){
         idOperacion: $('#idOperacion').val(), 
         idAccion: $('#idAccion').val(), 
         idPerfil: $('#idPerfil').val(),
+        urlDestino: $('#urlDestino').val(),
         controllerName: $('#controllerName').val(),
         controllerAction: $('#controllerAction').val(),
         jsFunction: $('#jsFunction').val()
