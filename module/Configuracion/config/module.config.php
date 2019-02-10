@@ -35,7 +35,21 @@ return [
                             ],
                         ],
                         'constraints' => [
-                            'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'perfiles' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/perfiles[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigPerfilesController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
                             'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             'id' => '[a-zA-Z0-9_-]*',
                         ],
@@ -49,6 +63,7 @@ return [
         'factories' => [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
+            Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
         ],
     ],
     'service_manager' => [

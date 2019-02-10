@@ -44,7 +44,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $view->setVariable('TipoPreguntaJson', '');
+        $view->setVariable('TipoPreguntaJson', '""');
         $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
         
         return $view;

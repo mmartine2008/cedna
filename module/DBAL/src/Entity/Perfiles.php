@@ -51,4 +51,12 @@ class Perfiles
     {
         return $this->Nombre;
     }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        return '{' . $output . '}';
+    }
 }
