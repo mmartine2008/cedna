@@ -55,9 +55,30 @@ class ConfiguracionManager {
         }
 
         $TipoPregunta->setDescripcion($jsonData->descripcion);
+        $TipoPregunta->setCantDestinos($jsonData->cantDestinos);
 
         $this->entityManager->persist($TipoPregunta);
         $this->entityManager->flush();
+    }
+
+    public function borrarTipoPregunta($idTipoPregunta){
+        $TipoPregunta = $this->getTipoPregunta($idTipoPregunta);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($TipoPregunta);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado el tipo de pregunta correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'El tipo de pregunta no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
     
 }

@@ -12,6 +12,7 @@
                     <thead>
                         <tr>
                             <th>Descripcion</th>
+                            <th>Cant. Destinos</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
@@ -19,9 +20,12 @@
                     <?php foreach($arrTipoPreguntas as $TipoPregunta) : ?>
                         <tr>
                             <td><?= $TipoPregunta->getDescripcion() ?></td>
+                            <td><?= $TipoPregunta->getCantDestinos() ?></td>
                             <td>
                                 <a href="<?=$this->url("configuracion/tipo-pregunta",
-                                                    ["action" => "editar", "id" => $TipoPregunta->getId()])?>">editar</a>
+                                                    ["action" => "editar", "id" => $TipoPregunta->getId()])?>">editar</a> | 
+                                <a href="<?=$this->url("configuracion/tipo-pregunta",
+                                                    ["action" => "borrar", "id" => $TipoPregunta->getId()])?>">borrar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
