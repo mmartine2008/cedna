@@ -74,7 +74,7 @@
         for (var i = 0; i < select1.length; i++) {
             if (!select1.options[i].selected) notSelected.push(select1.options[i].value);
         }
-        createListFromJSONLista(selectIn, notSelected, false);
+        createListFromJSONLista(select1, notSelected, false);
     }
 
     function insertarElementInSelect(origin, destination){
@@ -83,7 +83,7 @@
         for (var i = 0; i < select1.length; i++) {
             if (select1.options[i].selected) selected1.push(select1.options[i].value);
         }
-        var optionOrigin = deleteOptions(origin);
+        // var optionOrigin = deleteOptions(origin);
         var selectIn = document.getElementById(destination);
         createListFromJSONLista(selectIn, selected1, false);
     }
