@@ -14,7 +14,14 @@
                             <input type="text" id="tipoPreguntaDescripcion" name="tipoPreguntaDescripcion" class="form-control" required="true">
                         </div>
                     </div>
-                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="cantDestinos"><span class="obligatorio">(*) </span>Cantidad de Destinos?</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" min="0" id="cantDestinos" name="cantDestinos" class="form-control" required="true">
+                        </div>
+                    </div>
                     <div class="row">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("configuracion/tipo-pregunta",["action" => "index"])?>">
@@ -33,7 +40,8 @@ var tipoPreguntaJson = <?= $TipoPreguntaJson ?>;
 
 function FormTipoPreguntaToJson(){
     var formData = {
-        descripcion: $('#tipoPreguntaDescripcion').val()
+        descripcion: $('#tipoPreguntaDescripcion').val(),
+        cantDestinos: $('#cantDestinos').val()
     };
     
     var JsonData = JSON.stringify(formData);
@@ -55,6 +63,7 @@ function preSubmit(){
 $( document ).ready(function() {
     if (tipoPreguntaJson !== ''){
         $('#tipoPreguntaDescripcion').val(tipoPreguntaJson.descripcion);
+        $('#cantDestinos').val(tipoPreguntaJson.destinos);
     }
 });
 </script>

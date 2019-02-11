@@ -1,0 +1,37 @@
+<div class="form-row">
+    <div class="col-md-3">
+        <a href="<?=$this->url("configuracion/perfiles",["action" => "alta"])?>">Nuevo Perfil</a>
+    </div>
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Perfiles</h3>
+            </div>
+            <div class="panel-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Descripcion</th>
+                            <th class="text-right">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="">
+                    <?php foreach($arrPerfiles as $Perfiles) : ?>
+                        <tr>
+                            <td><?= $Perfiles->getNombre() ?></td>
+                            <td><?= $Perfiles->getDescripcion() ?></td>
+                            <td>
+                                <a href="<?=$this->url("configuracion/perfiles",
+                                                    ["action" => "editar", "id" => $Perfiles->getId()])?>">editar</a> | 
+                                <a href="<?=$this->url("configuracion/perfiles",
+                                                    ["action" => "borrar", "id" => $Perfiles->getId()])?>">borrar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

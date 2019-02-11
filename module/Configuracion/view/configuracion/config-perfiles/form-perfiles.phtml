@@ -1,0 +1,69 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Perfil</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formPerfil" onsubmit="preSubmit()">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="perfilNombre"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="perfilNombre" name="perfilNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="perfilDescripcion"><span class="obligatorio">(*) </span>Descripción:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="perfilDescripcion" name="perfilDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("configuracion/perfiles",["action" => "index"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var perfilesJson = <?= $PerfilesJson ?>;
+
+function FormPerfilesToJson(){
+    var formData = {
+        descripcion: $('#perfilDescripcion').val(),
+        nombre: $('#perfilNombre').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormPerfilesToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formPerfil")[0].checkValidity()){
+        $("#formPerfil").submit();
+    }else{
+        $("#formPerfil")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    if (perfilesJson !== ''){
+        $('#perfilDescripcion').val(perfilesJson.descripcion);
+        $('#perfilNombre').val(perfilesJson.nombre);
+    }
+});
+</script>

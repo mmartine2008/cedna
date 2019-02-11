@@ -44,7 +44,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $view->setVariable('TipoPreguntaJson', '');
+        $view->setVariable('TipoPreguntaJson', '""');
         $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
         
         return $view;
@@ -73,6 +73,17 @@ class ConfigTipoPreguntaController extends ConfiguracionController
         $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
         
         return $view;
+    }
+    
+    public function borrarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $idTipoPregunta = $parametros['id'];
+
+        $mensaje = $this->configuracionManager->borrarTipoPregunta($idTipoPregunta);
+
+        //Todavia no hay para mostrar mensajes
+        return $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
     } 
 
 }
