@@ -159,4 +159,15 @@ class Usuarios
     {
         return $this->AceptaTerminosUso;
     }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"userName": "' . $this->getNombreUsuario() .'", ';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"apellido": "' . $this->getApellido() .'", ';
+        $output .= '"email": "' . $this->getEmail() .'", ';
+        $output .= '"clave": "' . $this->getClave() .'", ';
+        return '{' . $output . '}';
+    }
 }

@@ -55,6 +55,21 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'usuarios' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/usuarios[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigUsuariosController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -64,6 +79,7 @@ return [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
+            Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
         ],
     ],
     'service_manager' => [

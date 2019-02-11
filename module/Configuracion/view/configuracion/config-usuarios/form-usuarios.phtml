@@ -1,0 +1,121 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Usuario</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formUsuario" onsubmit="preSubmit()">
+                <div class="row">
+                        <div class="col-md-3">
+                            <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="userName" name="userName" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="password" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="contraseniaRepetida"><span class="obligatorio">(*) </span>Repetir Contraseña:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="password" id="contraseniaRepetida" name="contraseniaRepetida" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="emailUsuario" name="emailUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("configuracion/usuarios",["action" => "index"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var usuariosJson = <?= $UsuariosJson ?>;
+
+function FormUsuarioToJson(){
+    var formData = {
+        username: $('#userName').val(), 
+        clave: $('#contraseniaUsuario').val(), 
+        nombre: $('#nombreUsuario').val(),
+        apellido: $('#apellidoUsuario').val(),
+        email: $('#emailUsuario').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function controlarContrasenias(){
+    var contrasenia = $('#contraseniaUsuario').val();
+    var contraseniaRepetida = $('#contraseniaRepetida').val();
+
+    return (contrasenia == contraseniaRepetida);
+}
+
+function preSubmit(){
+    var contraseniasIguales = controlarContrasenias();
+
+    if (!contraseniasIguales){
+        alert('Las contraseñas no coinciden');
+        return;
+    }
+
+    var JsonData = FormUsuarioToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formPerfil")[0].checkValidity()){
+        $("#formPerfil").submit();
+    }else{
+        $("#formPerfil")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    if (usuariosJson !== ''){
+        $('#userName').val(usuariosJson.userName);
+        $('#contraseniaUsuario').val(usuariosJson.clave);
+        $('#nombreUsuario').val(usuariosJson.nombre);
+        $('#apellidoUsuario').val(usuariosJson.apellido);
+        $('#emailUsuario').val(usuariosJson.email);
+    }
+});
+</script>
