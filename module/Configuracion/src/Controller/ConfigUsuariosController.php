@@ -38,9 +38,12 @@ class ConfigUsuariosController extends ConfiguracionController
             $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
         }
 
+        $arrPerfiles = $this->configuracionManager->getPerfiles();
+
         $view = new ViewModel();
         
         $view->setVariable('UsuariosJson', '""');
+        $view->setVariable('arrPerfiles', $arrPerfiles);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         
         return $view;
@@ -60,11 +63,14 @@ class ConfigUsuariosController extends ConfiguracionController
             $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
         }
 
+        $arrPerfiles = $this->configuracionManager->getPerfiles();
+
         $view = new ViewModel();
         
         $Usuarios = $this->configuracionManager->getUsuarios($idUsuarios);
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
+        $view->setVariable('arrPerfiles', $arrPerfiles);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         
         return $view;

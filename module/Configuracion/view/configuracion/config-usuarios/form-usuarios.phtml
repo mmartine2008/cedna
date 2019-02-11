@@ -55,6 +55,22 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-1">
+                            <label for="idPerfil">Perfil:</label>
+                        </div>  
+                        <div class="col-md-5">
+                            <select id="idPerfil" name="idPerfil" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                                <?php foreach($arrPerfiles as $Perfil) :?>
+                                    <option value="<?= $Perfil->getId() ?>"><?= $Perfil->getNombre() ?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button onclick="">Agregar</button>
+                        </div>
+                    </div>
+                    <div class="row">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("configuracion/usuarios",["action" => "index"])?>">
                             <div class="btn">Cancelar</div>
