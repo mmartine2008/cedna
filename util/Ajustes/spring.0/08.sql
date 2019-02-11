@@ -1,12 +1,7 @@
-CREATE TABLE UsuariosxPerfiles (
-	IdUsuarioxPerfil INT IDENTITY(1,1),
-	IdUsuario int not null,
-	IdPerfil int not null,
+ALTER TABLE Seccion 
+ADD Nombre varchar(100) null;
 
-	CONSTRAINT PK_UsuariosxPerfiles PRIMARY KEY (IdUsuarioxPerfil),
-	CONSTRAINT FK_UsuariosxPerfiles_Usuarios FOREIGN KEY (IdUsuario) REFERENCES Usuarios (IdUsuario), 
-	CONSTRAINT FK_UsuariosxPerfiles_Perfiles FOREIGN KEY (IdPerfil) REFERENCES Perfiles (IdPerfil), 
-	CONSTRAINT UK_Usuarios_Perfiles UNIQUE(IdUsuario, IdPerfil)  
-);
+ALTER TABLE Formulario 
+ADD Nombre varchar(100) null;
 
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('08.sql', GETDATE ( ), 0, 8);
