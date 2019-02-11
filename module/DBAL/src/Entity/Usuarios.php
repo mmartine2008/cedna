@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 use Zend\Crypt\Password\Bcrypt;
 
 /**
@@ -18,30 +19,25 @@ class Usuarios
      */
     protected $id;
 
-
     /**
      * @ORM\Column(name="NombreUsuario")
      */
     protected $NombreUsuario;
-
 
     /**
      * @ORM\Column(name="Clave")
      */
     protected $Clave;
 
-
     /**
      * @ORM\Column(name="Bloqueado")
      */
     protected $Bloqueado;
 
-
     /**
      * @ORM\Column(name="FechaAlta")
      */
     protected $FechaAlta;
-
 
     /**
      * @ORM\Column(name="Email")
@@ -53,17 +49,28 @@ class Usuarios
      */
     protected $Nombre;
 
-
     /**
      * @ORM\Column(name="Apellido")
      */
     protected $Apellido;
 
-
     /**
      * @ORM\Column(name="AceptaTerminosUso")
      */
     protected $AceptaTerminosUso;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Perfiles", inversedBy="Usuario", cascade={"persist"})
+     * @ORM\JoinTable(name="UsuariosxPerfiles",
+     *      joinColumns={@ORM\JoinColumn(name="IdUsuario", referencedColumnName="IdUsuario")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdPerfil", referencedColumnName="IdPerfil")}
+     *      )
+     */
+    protected $Perfiles;
+
+    public function __construct() {
+        $this->Perfiles = new ArrayCollection();
+    }
 
     public function setNombreUsuario($NombreUsuario)
     {
@@ -161,6 +168,12 @@ class Usuarios
     }
 
     public function getJSON(){
+        $perfiles = [];
+        foreach ($this->getPerfiles() as $perfil) {
+            $perfiles[] = $perfil->getJSON();
+        }
+        $perfiles = implode(", ", $perfiles);
+
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"userName": "' . $this->getNombreUsuario() .'", ';
@@ -168,6 +181,19 @@ class Usuarios
         $output .= '"apellido": "' . $this->getApellido() .'", ';
         $output .= '"email": "' . $this->getEmail() .'", ';
         $output .= '"clave": "' . $this->getClave() .'", ';
+        $output .= '"perfiles": ['.$perfiles.']';
         return '{' . $output . '}';
+    }
+
+    /**
+     * @return array
+     */
+    public function getPerfiles()
+    {
+        if ($this->Perfiles){
+            return $this->Perfiles->toArray();
+        }else{
+            return null;
+        }
     }
 }
