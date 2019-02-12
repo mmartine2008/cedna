@@ -7,6 +7,7 @@ use DBAL\Entity\TipoPregunta;
 use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
+use DBAL\Entity\Usuarios;
 
 class ConfiguracionManager {
     
@@ -44,6 +45,16 @@ class ConfiguracionManager {
         }
 
         return $Perfiles;
+    }
+
+    public function getUsuarios($idUsuarios = null){
+        if ($idUsuarios){
+            $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['id' => $idUsuarios]);
+        }else{
+            $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findAll();
+        }
+
+        return $Usuarios;
     }
 
     public function getAccionesPorPerfil($OperacionNombre, $PerfilNombre){
@@ -85,6 +96,24 @@ class ConfiguracionManager {
         $this->entityManager->flush();
     }
 
+    public function altaEdicionUsuarios($jsonData, $idUsuarios = null){
+        if ($idUsuarios){
+            $Usuarios = $this->getUsuarios($idUsuarios);
+        }else{
+            $Usuarios = new Usuarios();
+        }
+
+        $Usuarios->setNombreUsuario($jsonData->username);
+        $Usuarios->setNombre($jsonData->nombre);
+        $Usuarios->setApellido($jsonData->apellido);
+        $Usuarios->setEmail($jsonData->email);
+        $Usuarios->setClave($jsonData->clave);
+        $Usuarios->setFechaAlta(new \DateTime('now'));
+
+        $this->entityManager->persist($Usuarios);
+        $this->entityManager->flush();
+    }
+
     public function borrarTipoPregunta($idTipoPregunta){
         $TipoPregunta = $this->getTipoPregunta($idTipoPregunta);
 
@@ -120,6 +149,26 @@ class ConfiguracionManager {
             $this->entityManager->rollBack();
 
             $mensaje = 'El perfil no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
+
+    public function borrarUsuarios($idUsuarios){
+        $Usuarios = $this->getUsuarios($idUsuarios);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Usuarios);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado el usuario correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'El usuario no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
         }
 
         return $mensaje;
