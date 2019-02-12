@@ -55,17 +55,24 @@
         return divClass;
     }
 
-    function createButton(id, title, divElement, icon){
+    function createButton(id, title, divElement, icon, disabled){
         var button = document.createElement("button");
         button.type = "button";
         button.id = id;
         button.title = title;
         button.className = "btn btn-primary";
         button.textContent = icon;
+        button.disabled = disabled;
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
         // button.appendChild(icono);
         divElement.appendChild(button);
+    }
+
+    function removeAllOptionSelector(origin){
+        $('#'+origin).find('option')
+            .remove()
+            .end();
     }
 
     function deleteOptions(origin) {
@@ -74,7 +81,28 @@
         for (var i = 0; i < select1.length; i++) {
             if (!select1.options[i].selected) notSelected.push(select1.options[i].value);
         }
+        removeAllOptionSelector(origin);
         createListFromJSONLista(select1, notSelected, false);
+    }
+
+    function manageButtons(){
+        if($('#MultiSelectDisp option').length == 0){
+            $("#Positive_rightSelected").prop('disabled', true);
+            $("#Negative_rightSelected").prop('disabled', true);
+        } else {
+            $("#Positive_rightSelected").prop('disabled', false);
+            $("#Negative_rightSelected").prop('disabled', false);
+        }
+        if($('#Positive_to option').length == 0){
+            $("#Positive_leftSelected").prop('disabled', true);
+        } else {
+            $("#Positive_leftSelected").prop('disabled', false);
+        }
+        if($('#Negative_to option').length == 0){
+            $("#Negative_leftSelected").prop('disabled', true);
+        } else {
+            $("#Negative_leftSelected").prop('disabled', false);
+        }
     }
 
     function insertarElementInSelect(origin, destination){
@@ -83,13 +111,16 @@
         for (var i = 0; i < select1.length; i++) {
             if (select1.options[i].selected) selected1.push(select1.options[i].value);
         }
-        // var optionOrigin = deleteOptions(origin);
+        
+        var optionOrigin = deleteOptions(origin);
         var selectIn = document.getElementById(destination);
         createListFromJSONLista(selectIn, selected1, false);
+        manageButtons();
     }
-
+    
     $(function() {$("#Positive_rightSelected").click(function() {
         insertarElementInSelect("MultiSelectDisp", "Positive_to"); });
+        var selectIn = document.getElementById("MultiSelectDisp");
     });
         
     $(function() {$("#Negative_rightSelected").click(function() {
@@ -104,6 +135,10 @@
         insertarElementInSelect("Negative_to", "MultiSelectDisp");});
     });
 
+    $(function() {
+
+    });
+
     function createMultipleSelectorSkeleton(opciones, opciones_in, opciones_out, divElement){
         var divForm = createDivClass("form-row", divElement);
 
@@ -111,10 +146,10 @@
         createMultipleSelector('MultiSelectDisp', 'MultiSelectDisp', opciones, div_class_lg_3, 10);
 
         var div_class_lg_1 = createDivClass("col-lg-1", divForm);
-        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_lg_1, ">");
-        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_lg_1, "<");
-        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_lg_1, ">");
-        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_lg_1, "<");
+        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
+        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
+        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
+        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
 
         var div_class_lg_3_2 = createDivClass("col-lg-3", divForm);
         createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_lg_3_2, 5);
