@@ -44,6 +44,7 @@ class ConfigUsuariosController extends ConfiguracionController
         
         $view->setVariable('UsuariosJson', '""');
         $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setVariable('nombreUsuarioValido', false);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         
         return $view;
@@ -71,6 +72,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
         $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setVariable('nombreUsuarioValido', true);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         
         return $view;
