@@ -196,4 +196,19 @@ class Usuarios
             return null;
         }
     }
+
+    /**
+     * @param Perfiles|null $perfil
+     */
+    public function addPerfil(Perfiles $perfil = null)
+    {
+        if (!$this->Perfiles->contains($perfil)) {
+            $this->Perfiles->add($perfil);
+        }
+    }
+
+    public function removeAllPerfiles()
+    {
+        $this->Perfiles->clear();
+    }
 }

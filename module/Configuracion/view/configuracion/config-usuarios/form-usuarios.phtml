@@ -107,7 +107,8 @@ function FormUsuarioToJson(){
         clave: $('#contraseniaUsuario').val(), 
         nombre: $('#nombreUsuario').val(),
         apellido: $('#apellidoUsuario').val(),
-        email: $('#emailUsuario').val()
+        email: $('#emailUsuario').val(),
+        perfiles: arrPerfiles
     };
     
     var JsonData = JSON.stringify(formData);
@@ -175,19 +176,19 @@ function agregarPerfil(){
             addPerfil(IdPerfilSeleccionado,NombrePerfilSeleccionado);
         }
         else{
-            // swal(
-            //     'Perfil duplicado!',
-            //     'El perfil que intenta agregar ya se encuentra cargado.',
-            //     'error'
-            // );
+            swal(
+                'Perfil duplicado!',
+                'El perfil que intenta agregar ya se encuentra cargado.',
+                'error'
+            );
         }
     }
     else{
-        // swal(
-        //     'Perfil No Seleccionado!',
-        //     'Seleccione un perfil.',
-        //     'error'
-        // );  
+        swal(
+            'Perfil No Seleccionado!',
+            'Seleccione un perfil.',
+            'error'
+        );  
     }
     actualizarPerfiles();
 }
@@ -259,7 +260,7 @@ function borrarPerfil(IdPerfil, nombre){
 function eliminarPerfil(IdPerfil){
     arrPerfiles.forEach(function(datosFila){
         if (datosFila.id == IdPerfil){
-            pos = arrperfiles.indexOf(datosFila);
+            pos = arrPerfiles.indexOf(datosFila);
             arrPerfiles.splice(pos, 1);
         }
     });
