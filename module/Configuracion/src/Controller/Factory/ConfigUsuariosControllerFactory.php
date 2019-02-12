@@ -5,7 +5,8 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Configuracion\Controller\ConfigUsuariosController;
 
-use Configuracion\Service\ConfiguracionManager;
+use DBAL\Service\CatalogoManager;
+use Configuracion\Service\ConfigUsuariosManager;
 
 
 /**
@@ -16,8 +17,9 @@ class ConfigUsuariosControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $configuracionManager = $container->get(ConfiguracionManager::class);
+        $catalogoManager = $container->get(CatalogoManager::class);
+        $configUsuariosManager = $container->get(ConfigUsuariosManager::class);
         
-        return new ConfigUsuariosController($configuracionManager);
+        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager);
     }
 }

@@ -13,16 +13,20 @@ use Configuracion\Controller\ConfiguracionController;
 class ConfigTipoPreguntaController extends ConfiguracionController
 {
 
-    public function __construct($configuracionManager)
+    private $configuracionManager;
+
+    public function __construct($catalogoManager, $configuracionManager)
     {
-        parent::__construct($configuracionManager);
+        parent::__construct($catalogoManager);
+
+        $this->configuracionManager = $configuracionManager;
     }
 
     public function indexAction()
     {
-        $arrTipoPreguntas = $this->configuracionManager->getTipoPregunta();
+        $arrTipoPreguntas = $this->catalogoManager->getTipoPregunta();
 
-        $arrAccionesDisponibles = $this->configuracionManager->getAccionesPorPerfil('Configuracion Tipo Pregunta', 'Administrador');
+        $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil('Configuracion Tipo Pregunta', 'Administrador');
 
         $this->layout()->arrAccionesDisponibles = $arrAccionesDisponibles;
 
@@ -67,7 +71,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $TipoPregunta = $this->configuracionManager->getTipoPregunta($idTipoPregunta);
+        $TipoPregunta = $this->catalogoManager->getTipoPregunta($idTipoPregunta);
 
         $view->setVariable('TipoPreguntaJson', $TipoPregunta->getJSON());
         $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');

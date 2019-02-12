@@ -85,6 +85,7 @@ return [
     'service_manager' => [
         'factories' => [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
+            Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
         ],
     ],
     'view_manager' => [

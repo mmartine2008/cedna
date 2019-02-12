@@ -3,18 +3,19 @@ namespace Configuracion\Service\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Configuracion\Service\ConfiguracionManager;
+use Configuracion\Service\ConfigUsuariosManager;
 use DBAL\Service\CatalogoManager;
 
 
-class ConfiguracionManagerFactory implements FactoryInterface
+class ConfigUsuariosManagerFactory implements FactoryInterface
 {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {        
         $entityManager = $container->get('doctrine.entitymanager.orm_default'); 
-        $catalogoManager = $container->get(CatalogoManager::class); 
+
+        $catalogoManager = $container->get(CatalogoManager::class);
                         
-        return new ConfiguracionManager($entityManager, $catalogoManager);
+        return new ConfigUsuariosManager($entityManager, $catalogoManager);
     }
 }

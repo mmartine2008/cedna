@@ -12,11 +12,11 @@ use Zend\View\Model\ViewModel;
 
 class ConfiguracionController extends AbstractActionController
 {
-    protected $configuracionManager;
+    protected $catalogoManager;
 
-    public function __construct($configuracionManager)
+    public function __construct($catalogoManager)
     {
-        $this->configuracionManager = $configuracionManager;
+        $this->catalogoManager = $catalogoManager;
         
     }
 

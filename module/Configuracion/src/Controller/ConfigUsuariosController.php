@@ -13,14 +13,18 @@ use Configuracion\Controller\ConfiguracionController;
 class ConfigUsuariosController extends ConfiguracionController
 {
 
-    public function __construct($configuracionManager)
+    private $configUsuariosManager;
+
+    public function __construct($catalogoManager, $configUsuariosManager)
     {
-        parent::__construct($configuracionManager);
+        parent::__construct($catalogoManager);
+
+        $this->configUsuariosManager = $configUsuariosManager;
     }
 
     public function indexAction()
     {
-        $arrUsuarios = $this->configuracionManager->getUsuarios();
+        $arrUsuarios = $this->catalogoManager->getUsuarios();
 
         return new ViewModel([
             'arrUsuarios' => $arrUsuarios
@@ -33,12 +37,12 @@ class ConfigUsuariosController extends ConfiguracionController
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionUsuarios($JsonData);
+            $this->configUsuariosManager->altaEdicionUsuarios($JsonData);
 
             $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
         }
 
-        $arrPerfiles = $this->configuracionManager->getPerfiles();
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
 
         $view = new ViewModel();
         
@@ -59,16 +63,16 @@ class ConfigUsuariosController extends ConfiguracionController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionUsuarios($JsonData, $idUsuarios);
+            $this->configUsuariosManager->altaEdicionUsuarios($JsonData, $idUsuarios);
 
             $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
         }
 
-        $arrPerfiles = $this->configuracionManager->getPerfiles();
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
 
         $view = new ViewModel();
         
-        $Usuarios = $this->configuracionManager->getUsuarios($idUsuarios);
+        $Usuarios = $this->configUsuariosManager->getUsuarios($idUsuarios);
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
         $view->setVariable('arrPerfiles', $arrPerfiles);
@@ -83,7 +87,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
         $idUsuarios = $parametros['id'];
 
-        $mensaje = $this->configuracionManager->borrarUsuarios($idUsuarios);
+        $mensaje = $this->configUsuariosManager->borrarUsuarios($idUsuarios);
 
         //Todavia no hay para mostrar mensajes
         return $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
