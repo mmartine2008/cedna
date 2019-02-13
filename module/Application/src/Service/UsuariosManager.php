@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use DBAL\Entity\Usuarios;
+use Zend\Crypt\Password\Bcrypt;
 
 class UsuariosManager {
     
@@ -55,7 +56,13 @@ class UsuariosManager {
         $Usuario = new Usuarios();
 
         $Usuario->setNombreUsuario($jsonData->username);
-        $Usuario->setClave($jsonData->clave);
+        
+        $bcrypt = new Bcrypt();
+        $passwordHash = $bcrypt->create($jsonData->clave);
+
+        $Usuario->setClave($passwordHash);
+
+
         $Usuario->setFechaAlta(new \DateTime('now'));
         $Usuario->setEmail($jsonData->email);
         $Usuario->setNombre($jsonData->nombre);

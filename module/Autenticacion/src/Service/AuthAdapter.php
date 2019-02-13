@@ -105,17 +105,26 @@ class AuthAdapter implements AdapterInterface
     {
 
         $bcrypt = new Bcrypt();
-        $passwordHash = $Usuario->getPassword();
+        $passwordHash = $Usuario->getClave();
         
-        if (!$bcrypt->verify($this->password, $passwordHash)) {
+        if ($bcrypt->verify($this->password, $passwordHash)) {
+            
+            return new Result(
+                Result::SUCCESS, 
+                $this->nombreUsuario, 
+                ['Autenticacion correcta.']);
 
-        return new Result(
+            echo("passwordHash: $passwordHash");
+            die(__file__.':'.__line__);
+        }
+        else {
+            return new Result(
                 Result::FAILURE_CREDENTIAL_INVALID, 
                 null, 
                 ['Clave incorrecta']);        
         }   
         
-        return null;
+        
     }
     
     /**
@@ -136,16 +145,12 @@ class AuthAdapter implements AdapterInterface
         //     return $Resultado;
         // } 
 
-        // $Resultado = $this->autenticarPassword($Usuario);
-        // if ($Resultado)
-        // {
-        //     return $Resultado;
-        // }             
+        return $this->autenticarPassword($Usuario);
 
-        return new Result(
-                    Result::SUCCESS, 
-                    $this->nombreUsuario, 
-                    ['Autenticacion correcta.']);        
+        // return new Result(
+        //             Result::SUCCESS, 
+        //             $this->nombreUsuario, 
+        //             ['Autenticacion correcta.']);        
     }
 
     public function authenticate()
