@@ -232,4 +232,15 @@ class Perfiles extends \DBAL\Entity\Perfiles implements \Doctrine\ORM\Proxy\Prox
         return parent::getNombre();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getJSON()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
+
+        return parent::getJSON();
+    }
+
 }

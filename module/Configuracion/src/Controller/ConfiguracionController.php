@@ -22,7 +22,14 @@ class ConfiguracionController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->cargarAccionesDisponibles('Configuracion', 'Administrador');
         return new ViewModel();
+    }
+
+    protected function cargarAccionesDisponibles($nombreOperacion, $nombrePerfil){
+        $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
+
+        $this->layout()->arrAccionesDisponibles = $arrAccionesDisponibles;
     }
 
 }

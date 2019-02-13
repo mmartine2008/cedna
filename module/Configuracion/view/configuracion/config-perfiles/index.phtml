@@ -8,20 +8,20 @@
                 <h3 class="panel-title">Listado de Perfiles</h3>
             </div>
             <div class="panel-body">
-                <table>
+                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Descripcion</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="">
                     <?php foreach($arrPerfiles as $Perfiles) : ?>
                         <tr>
-                            <td><?= $Perfiles->getNombre() ?></td>
-                            <td><?= $Perfiles->getDescripcion() ?></td>
-                            <td>
+                            <td class="text-left"><?= $Perfiles->getNombre() ?></td>
+                            <td class="text-left"><?= $Perfiles->getDescripcion() ?></td>
+                            <td class="text-left">
                                 <a href="<?=$this->url("configuracion/perfiles",
                                                     ["action" => "editar", "id" => $Perfiles->getId()])?>">editar</a> | 
                                 <a href="<?=$this->url("configuracion/perfiles",

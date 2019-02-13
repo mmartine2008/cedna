@@ -24,18 +24,18 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
     public function indexAction()
     {
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta', 'Administrador');
+
         $arrTipoPreguntas = $this->catalogoManager->getTipoPregunta();
-
-        $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil('Configuracion Tipo Pregunta', 'Administrador');
-
-        $this->layout()->arrAccionesDisponibles = $arrAccionesDisponibles;
-
+        
         return new ViewModel([
             'arrTipoPreguntas' => $arrTipoPreguntas
         ]);
     }
 
     public function altaAction(){
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Alta', 'Administrador');
+
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
@@ -55,6 +55,8 @@ class ConfigTipoPreguntaController extends ConfiguracionController
     }
 
     public function editarAction(){
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Edicion', 'Administrador');
+
         $parametros = $this->params()->fromRoute();
 
         $idTipoPregunta = $parametros['id'];

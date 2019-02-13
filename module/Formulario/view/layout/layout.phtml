@@ -32,9 +32,28 @@
             <?= $this->content ?>
             <hr>
             <footer>
-                
+                <div class="form-row">
+
+                <?php foreach ($arrAccionesDisponibles as $accionesDisponibles) :?>
+                    <div class="col-md-3">
+                        <?php if ($accionesDisponibles->getUrlDestino()) :?>
+                            <a href="<?=$this->url($accionesDisponibles->getUrlDestino(),
+                                                    ["action" => $accionesDisponibles->getControllerAction()])?>">
+                                <i class="<?= $accionesDisponibles->getAccion()->getIcono() ?>"></i><?= $accionesDisponibles->getAccion()->getTitulo() ?>
+                            </a>
+                        <?php else: ?>
+                            <button class="btn" onclick="<?= $accionesDisponibles->getJsFunction() ?>">
+                                <?= $accionesDisponibles->getAccion()->getTitulo() ?>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+                </div>
             </footer>
         </div>
         <?= $this->inlineScript() ?>
     </body>
 </html>
+<script>
+    var url = '<?= $this->serverUrl(); ?>';
+</script>
