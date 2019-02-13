@@ -55,10 +55,8 @@ class AuthController extends AbstractActionController
         // TODO: Validar los datos ingresados
         $recordar = (array_key_exists('Recordar', $data) && ($data['Recordar'] == 'on'));
 
-        $result = $this->authManager->login('admin', '1234', true);
-
-        // $result = $this->authManager->login(
-        //     $data['Usuario'], $data['Clave'], $recordar);
+        $result = $this->authManager->login(
+            $data['Usuario'], $data['Clave'], $recordar);
         
         // Check result.
         if ($result->getCode() == Result::SUCCESS) {
@@ -66,7 +64,9 @@ class AuthController extends AbstractActionController
             return $this->redirigirSegunPerfil();
         } else {
             $mensajes = $result->getMessages();
-            $this->userSessionManager->addMessage($mensajes[0]);
+            // $this->userSessionManager->addMessage($mensajes[0]);
+            $this->redirect()->toRoute('logout');
+
         }
         
     }
@@ -112,7 +112,7 @@ class AuthController extends AbstractActionController
     public function logoutAction()
     {
         $this->authManager->logout();
-        $this->userSessionManager->cerrar();
+       // $this->userSessionManager->cerrar();
         
         return $this->redirect()->toRoute('login');
     }

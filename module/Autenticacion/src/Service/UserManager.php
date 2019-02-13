@@ -427,7 +427,8 @@ class UserManager
      */
     public function getPerfilesActivos($Usuario){
         
-        $UsuarioXPerfil = $this->entityManager->getRepository(UsuariosxPerfiles::class)->findBy(['usuario' => $Usuario]);
+        $UsuarioXPerfil = $this->entityManager
+                    ->getRepository(UsuariosxPerfiles::class)->findBy(['Usuario' => $Usuario]);
         $output = [];
         
         foreach($UsuarioXPerfil as $UserxPerfil){
