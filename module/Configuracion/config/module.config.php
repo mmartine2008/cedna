@@ -55,6 +55,21 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'usuarios' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/usuarios[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigUsuariosController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -64,11 +79,13 @@ return [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
+            Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'factories' => [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
+            Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -79,7 +96,7 @@ return [
         'exception_template'       => 'error/index',
         'template_map' => [
             'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+            'configuracion/index/index' => __DIR__ . '/../view/configuracion/index/index.phtml',
             'error/404'               => __DIR__ . '/../view/error/404.phtml',
             'error/index'             => __DIR__ . '/../view/error/index.phtml',
         ],

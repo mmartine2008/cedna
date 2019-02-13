@@ -1,53 +1,159 @@
+<script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
 <script>
     var formulario = <?= $formulario ?>;
 
-//     function dibujarTratamientosMultiSelect(arreglo, idSelect){
-//     $('#'+idSelect).empty();
-//     arreglo.forEach(function (datos) {
-//         $('#'+idSelect)
-//             .append($("<option></option>")
-//                 .attr("value",datos.IdTratamiento)
-//                 .text(datos.CodigoTrat + ' - ' + datos.DescripcionTrat)); 
-
-//     });
-// }
-
-//     function cargarMultiSelects(IdRRPPEstablecimiento, tratamientosSeleccionados){
-//     //Primero tengo q inicializar el multiselect y luego cargar los options
-//         $('#MultiSelectDisp').multiselect({sort: 'sort'});
-        
-//         dibujarTratamientosMultiSelect(tratamientosDisponibles, 'MultiSelectDisp');
-//         dibujarTratamientosMultiSelect(tratamientosSeleccionados, 'MultiSelectDisp_to');
-//     }
-
-    function createListFromJSONLista(selector, lista, divElement) {
-        var option = document.createElement("option");
-        option.value =  -1;
-        option.text = 'Seleccione';
-        selector.appendChild(option);
-
-        for (var i=0; i < lista.length; i++) {
-            var item = lista[i];
+    function createListFromJSONLista(selector, lista, seleccione) {
+        if (seleccione){
             var option = document.createElement("option");
-            option.value = item.descripcion;
-            option.text = item.descripcion;
+            option.value =  -1;
+            option.text = 'Seleccione';
             selector.appendChild(option);
         }
-        divElement.appendChild(selector);
+        
+        for (var i=0; i < lista.length; i++) {
+            var option = document.createElement("option");
+            option.value = lista[i];
+            option.text = lista[i];
+            selector.appendChild(option);
+        }
+        return selector;
+    }
+
+    function obtenerListaOpciones(lista){
+        var output = [];
+        for (var i=0; i < lista.length; i++) {
+            var item = lista[i];
+            output.push(item.descripcion);
+        }
+        return output;
     }
 
     function createSimpleSelector(opciones, divElement) {
         
         var selector = document.createElement("select");
-
-        createListFromJSONLista(selector, opciones, divElement);
-
+        var opciones = obtenerListaOpciones(opciones);
+        var selector = createListFromJSONLista(selector, opciones, true);
+        divElement.appendChild(selector);
     }
 
-    function createMultipleSelector(opciones, divElement) {
+    function createMultipleSelector(id, name, opciones, divElement, size) {
         var selector = document.createElement("select");
+        selector.name = name;
+        selector.id = id;
         selector.multiple = true;
-        createListFromJSONLista(selector, opciones, divElement);
+        selector.size = size;
+        var opciones = obtenerListaOpciones(opciones);
+        var selector = createListFromJSONLista(selector, opciones, false);
+        divElement.appendChild(selector);
+    }
+
+    function createDivClass(info, div) {
+        var divClass = document.createElement("Div");
+        divClass.className = info;
+        divClass.style.paddingTop = "15px";
+        div.appendChild(divClass);
+        return divClass;
+    }
+
+    function createButton(id, title, divElement, icon, disabled){
+        var button = document.createElement("button");
+        button.type = "button";
+        button.id = id;
+        button.title = title;
+        button.className = "btn btn-primary";
+        button.textContent = icon;
+        button.disabled = disabled;
+        // var icono = document.createElement("i");
+        // icono.className = "fas fa-angle-left";
+        // button.appendChild(icono);
+        divElement.appendChild(button);
+    }
+
+    function removeAllOptionSelector(origin){
+        $('#'+origin).find('option')
+            .remove()
+            .end();
+    }
+
+    function deleteOptions(origin) {
+        var select1 = document.getElementById(origin);
+        var notSelected = [];
+        for (var i = 0; i < select1.length; i++) {
+            if (!select1.options[i].selected) notSelected.push(select1.options[i].value);
+        }
+        removeAllOptionSelector(origin);
+        createListFromJSONLista(select1, notSelected, false);
+    }
+
+    function manageButtons(){
+        if($('#MultiSelectDisp option').length == 0){
+            $("#Positive_rightSelected").prop('disabled', true);
+            $("#Negative_rightSelected").prop('disabled', true);
+        } else {
+            $("#Positive_rightSelected").prop('disabled', false);
+            $("#Negative_rightSelected").prop('disabled', false);
+        }
+        if($('#Positive_to option').length == 0){
+            $("#Positive_leftSelected").prop('disabled', true);
+        } else {
+            $("#Positive_leftSelected").prop('disabled', false);
+        }
+        if($('#Negative_to option').length == 0){
+            $("#Negative_leftSelected").prop('disabled', true);
+        } else {
+            $("#Negative_leftSelected").prop('disabled', false);
+        }
+    }
+
+    function insertarElementInSelect(origin, destination){
+        var select1 = document.getElementById(origin);
+        var selected1 = [];
+        for (var i = 0; i < select1.length; i++) {
+            if (select1.options[i].selected) selected1.push(select1.options[i].value);
+        }
+        
+        var optionOrigin = deleteOptions(origin);
+        var selectIn = document.getElementById(destination);
+        createListFromJSONLista(selectIn, selected1, false);
+        manageButtons();
+    }
+    
+    $(function() {$("#Positive_rightSelected").click(function() {
+        insertarElementInSelect("MultiSelectDisp", "Positive_to"); });
+        var selectIn = document.getElementById("MultiSelectDisp");
+    });
+        
+    $(function() {$("#Negative_rightSelected").click(function() {
+        insertarElementInSelect("MultiSelectDisp", "Negative_to");});
+    });
+
+    $(function() {$("#Positive_leftSelected").click(function(){
+        insertarElementInSelect("Positive_to", "MultiSelectDisp");});
+    });
+        
+    $(function() {$("#Negative_leftSelected").click(function(){
+        insertarElementInSelect("Negative_to", "MultiSelectDisp");});
+    });
+
+    $(function() {
+
+    });
+
+    function createMultipleSelectorSkeleton(opciones, opciones_in, opciones_out, divElement){
+        var divForm = createDivClass("form-row", divElement);
+
+        var div_class_lg_3 = createDivClass("col-lg-3", divForm);
+        createMultipleSelector('MultiSelectDisp', 'MultiSelectDisp', opciones, div_class_lg_3, 10);
+
+        var div_class_lg_1 = createDivClass("col-lg-1", divForm);
+        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
+        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
+        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
+        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
+
+        var div_class_lg_3_2 = createDivClass("col-lg-3", divForm);
+        createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_lg_3_2, 5);
+        createMultipleSelector('Negative_to', 'Negative_to', opciones_out, div_class_lg_3_2, 5);
     }
 
     function createInput(divElement){
@@ -63,7 +169,7 @@
             createSimpleSelector(opciones, divElement);
         } else if(item.tipoPregunta.destinos == 1) {
             var opciones = item.opciones;
-            createMultipleSelector(opciones, divElement);
+            createMultipleSelectorSkeleton(opciones, [],[], divElement);
         } else {
             //luego
         }

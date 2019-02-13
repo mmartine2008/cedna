@@ -1,0 +1,296 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Usuario</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formUsuario" onsubmit="preSubmit()">
+                <div class="row">
+                        <div class="col-md-3">
+                            <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="userName" name="userName" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="password" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="contraseniaRepetida"><span class="obligatorio">(*) </span>Repetir Contraseña:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="password" id="contraseniaRepetida" name="contraseniaRepetida" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="emailUsuario" name="emailUsuario" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label for="idPerfil">Perfil:</label>
+                        </div>  
+                        <div class="col-md-5">
+                            <select id="idPerfil" name="idPerfil" class="form-control">
+                                <option value="-1">-- Seleccione --</option>
+                                <?php foreach($arrPerfiles as $Perfil) :?>
+                                    <option value="<?= $Perfil->getId() ?>"><?= $Perfil->getNombre() ?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="btn" onclick="agregarPerfil();">Agregar</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <table class="footable table table-stripped toggle-arrow-tiny no-borders" data-page-size="15">
+                            <thead>
+                                <tr>
+                                    <th>Perfiles Asociados</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyPerfiles">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("configuracion/usuarios",["action" => "index"])?>">
+                            <div class="btn">Cancelar</div>
+                        </a>
+                        <button type="submit">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var usuariosJson = <?= $UsuariosJson ?>;
+var arrPerfiles = [];
+var nombreUsuarioValido = '<?= $nombreUsuarioValido ?>';
+
+function FormUsuarioToJson(){
+    var formData = {
+        username: $('#userName').val(), 
+        clave: $('#contraseniaUsuario').val(), 
+        nombre: $('#nombreUsuario').val(),
+        apellido: $('#apellidoUsuario').val(),
+        email: $('#emailUsuario').val(),
+        perfiles: arrPerfiles
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function controlarContrasenias(){
+    var contrasenia = $('#contraseniaUsuario').val();
+    var contraseniaRepetida = $('#contraseniaRepetida').val();
+
+    return (contrasenia == contraseniaRepetida);
+}
+
+function preSubmit(){
+    var contraseniasIguales = controlarContrasenias();
+
+    if (!contraseniasIguales){
+        alert('Las contraseñas no coinciden');
+        return;
+    }
+
+    var JsonData = FormUsuarioToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formPerfil")[0].checkValidity()){
+        $("#formPerfil").submit();
+    }else{
+        $("#formPerfil")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    if (usuariosJson !== ''){
+        $('#userName').val(usuariosJson.userName);
+        $('#contraseniaUsuario').val(usuariosJson.clave);
+        $('#nombreUsuario').val(usuariosJson.nombre);
+        $('#apellidoUsuario').val(usuariosJson.apellido);
+        $('#emailUsuario').val(usuariosJson.email);
+
+        arrPerfiles = usuariosJson.perfiles;
+        actualizarPerfiles();
+    }
+    
+    // $('#nombreUsuario').change(function (){
+    //     nombreUsuarioValido = getNombreUsuarioEsValido(this.value);
+        
+    //     if (!nombreUsuarioValido){
+    //         $('#divErrorNombreUsuario').show(500);
+    //     }else{
+    //         $('#divErrorNombreUsuario').hide(500);
+    //     }
+    // });
+
+});
+
+function agregarPerfil(){
+    var combo = document.getElementById("idPerfil");
+    
+    var IdPerfilSeleccionado = combo.value;
+    var NombrePerfilSeleccionado =  combo.options[combo.selectedIndex].text;
+    
+    if(IdPerfilSeleccionado > 0){
+        if(!existePerfil(IdPerfilSeleccionado)){
+            addPerfil(IdPerfilSeleccionado,NombrePerfilSeleccionado);
+        }
+        else{
+            swal(
+                'Perfil duplicado!',
+                'El perfil que intenta agregar ya se encuentra cargado.',
+                'error'
+            );
+        }
+    }
+    else{
+        swal(
+            'Perfil No Seleccionado!',
+            'Seleccione un perfil.',
+            'error'
+        );  
+    }
+    actualizarPerfiles();
+}
+
+function addPerfil(IdPerfilSeleccionado, NombrePerfilSeleccionado){    
+    
+    var nuevoPerfil = {
+        'id': IdPerfilSeleccionado,
+        'nombre' : NombrePerfilSeleccionado
+    };
+    
+    arrPerfiles.push(nuevoPerfil);
+}
+
+function agregarBotonBorrarPerfil(contenedor, idPerfil, nombrePerfil){
+    var icon = document.createElement('i');
+    icon.setAttribute('class','fa p16 fa-trash-alt');
+
+    var div = document.createElement('div');
+    div.setAttribute('class','btn btn-danger btn-circle btn-outline');
+    div.setAttribute('onclick', 'borrarPerfil(' + idPerfil + ', \'' + nombrePerfil + '\')');
+
+    div.appendChild(icon);
+
+    contenedor.appendChild(div);
+}
+
+function actualizarPerfiles(){
+   $('#bodyPerfiles').find('tr').remove();
+
+    for (var i = 0; i < arrPerfiles.length; i++)
+    {
+        var perfil = arrPerfiles[i];
+
+        var body = document.getElementById("bodyPerfiles");
+        var row = body.insertRow();
+
+        var nombre = row.insertCell(0);
+        var borrar = row.insertCell(1);
+
+        nombre.innerHTML = perfil.nombre;
+        agregarBotonBorrarPerfil(borrar, perfil.id, perfil.nombre);
+    }
+}
+
+function borrarPerfil(IdPerfil, nombre){
+    swal({
+        title: 'Eliminar Residuo',
+        width: 600,
+        text: "Esta seguro que desea eliminar el perfil: " + nombre + "?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar'
+    }).then((result) => {
+        if (result.value) {
+            eliminarPerfil(IdPerfil);
+            swal(
+                'Eliminado!',
+                'El perfil ha sido eliminado.',
+                'success'
+            )
+        }
+    })  
+};
+
+function eliminarPerfil(IdPerfil){
+    arrPerfiles.forEach(function(datosFila){
+        if (datosFila.id == IdPerfil){
+            pos = arrPerfiles.indexOf(datosFila);
+            arrPerfiles.splice(pos, 1);
+        }
+    });
+    actualizarPerfiles();
+}
+
+function existePerfil(IdPerfil){
+    var existe = false;
+    arrPerfiles.forEach(function(datosFila){
+        if (datosFila.id == IdPerfil){
+            existe = true;
+        }
+    });
+    return existe;
+}
+
+// function getNombreUsuarioEsValido(nombreUsuario) {
+//     var result = null;
+    
+//     $.ajax({
+//         url: url + '/usuarios/nombreusuariovalido/' + nombreUsuario,
+//         type: 'get',
+//         dataType: 'json',
+//         async: false,
+//         success: function (data) {
+//             result = data.esValido;
+//         }
+//     });
+    
+//     return result;
+// }
+
+</script>

@@ -12,15 +12,18 @@ use Configuracion\Controller\ConfiguracionController;
 
 class ConfigPerfilesController extends ConfiguracionController
 {
+    private $configuracionManager;
 
-    public function __construct($configuracionManager)
+    public function __construct($catalogoManager, $configuracionManager)
     {
-        parent::__construct($configuracionManager);
+        parent::__construct($catalogoManager);
+
+        $this->configuracionManager = $configuracionManager;
     }
 
     public function indexAction()
     {
-        $arrPerfiles = $this->configuracionManager->getPerfiles();
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
 
         return new ViewModel([
             'arrPerfiles' => $arrPerfiles
@@ -62,7 +65,7 @@ class ConfigPerfilesController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $Perfiles = $this->configuracionManager->getPerfiles($idPerfiles);
+        $Perfiles = $this->catalogoManager->getPerfiles($idPerfiles);
 
         $view->setVariable('PerfilesJson', $Perfiles->getJSON());
         $view->setTemplate('configuracion/config-perfiles/form-perfiles.phtml');

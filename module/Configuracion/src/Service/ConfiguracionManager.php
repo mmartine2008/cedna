@@ -7,6 +7,7 @@ use DBAL\Entity\TipoPregunta;
 use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
+use DBAL\Entity\Usuarios;
 
 class ConfiguracionManager {
     
@@ -16,50 +17,20 @@ class ConfiguracionManager {
      */
     private $entityManager; 
     
+    private $catalogoManager;
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager) 
+    public function __construct($entityManager, $catalogoManager) 
     {
         $this->entityManager = $entityManager;
-        
-    }
-
-    public function getTipoPregunta($idTipoPregunta = null){
-        if ($idTipoPregunta){
-            $TipoPregunta = $this->entityManager->getRepository(TipoPregunta::class)->findOneBy(['id' => $idTipoPregunta]);
-        }else{
-            $TipoPregunta = $this->entityManager->getRepository(TipoPregunta::class)->findAll();
-        }
-
-        return $TipoPregunta;
-    }
-
-    public function getPerfiles($idPerfil = null){
-        if ($idPerfil){
-            $Perfiles = $this->entityManager->getRepository(Perfiles::class)->findOneBy(['id' => $idPerfil]);
-        }else{
-            $Perfiles = $this->entityManager->getRepository(Perfiles::class)->findAll();
-        }
-
-        return $Perfiles;
-    }
-
-    public function getAccionesPorPerfil($OperacionNombre, $PerfilNombre){
-        $Perfil = $this->entityManager->getRepository(Perfiles::class)->findOneBy(['Nombre' => $PerfilNombre]);
-
-        $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $OperacionNombre]);
-
-        $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)
-                                                        ->findBy(['Operacion' => $Operacion, 'Perfil' => $Perfil]);
-
-        return $OperacionAccionPerfil;
+        $this->catalogoManager = $catalogoManager;   
     }
 
     public function altaEdicionTipoPregunta($jsonData, $idTipoPregunta = null){
         if ($idTipoPregunta){
-            $TipoPregunta = $this->getTipoPregunta($idTipoPregunta);
+            $TipoPregunta = $this->catalogoManager->getTipoPregunta($idTipoPregunta);
         }else{
             $TipoPregunta = new TipoPregunta();
         }
@@ -73,7 +44,7 @@ class ConfiguracionManager {
 
     public function altaEdicionPerfiles($jsonData, $idPerfiles = null){
         if ($idPerfiles){
-            $Perfiles = $this->getPerfiles($idPerfiles);
+            $Perfiles = $this->catalogoManager->getPerfiles($idPerfiles);
         }else{
             $Perfiles = new Perfiles();
         }
@@ -86,7 +57,7 @@ class ConfiguracionManager {
     }
 
     public function borrarTipoPregunta($idTipoPregunta){
-        $TipoPregunta = $this->getTipoPregunta($idTipoPregunta);
+        $TipoPregunta = $this->catalogoManager->getTipoPregunta($idTipoPregunta);
 
         $this->entityManager->beginTransaction();         
         try {
@@ -106,7 +77,7 @@ class ConfiguracionManager {
     }
 
     public function borrarPerfiles($idPerfiles){
-        $Perfiles = $this->getPerfiles($idPerfiles);
+        $Perfiles = $this->catalogoManager->getPerfiles($idPerfiles);
 
         $this->entityManager->beginTransaction();         
         try {
@@ -124,5 +95,4 @@ class ConfiguracionManager {
 
         return $mensaje;
     }
-    
 }

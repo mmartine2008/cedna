@@ -15,12 +15,15 @@
             ->prependStylesheet($this->basePath('css/style.css'))
             ->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
             ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
+            ->appendStylesheet($this->basePath('font-awesome/css/all.css'))
+            ->appendStylesheet($this->basePath('css/sweetalert.css'))
         ?>
 
         <!-- Scripts -->
         <?= $this->headScript()
             ->prependFile($this->basePath('js/bootstrap.min.js'))
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
+            ->appendFile($this->basePath('js/sweetalert2.all.js'))
         ?>
     </head>
     <body>
