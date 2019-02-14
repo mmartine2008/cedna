@@ -8,13 +8,13 @@
                 <h3 class="panel-title">Listado de Operaciones</h3>
             </div>
             <div class="panel-body">
-                <table>
+                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Titulo</th>
-                            <th>Icono</th>
-                            <th>Grupo</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Titulo</th>
+                            <th class="text-center">Icono</th>
+                            <th class="text-center">Grupo</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
@@ -25,7 +25,11 @@
                             <td><?= $Operacion->getTitulo() ?></td>
                             <td><?= $Operacion->getIcono() ?></td>
                             <td><?= ($Operacion->getGrupo()) ? $Operacion->getGrupo()->getTitulo() : '' ?></td>
-                            <td></td>
+                            <td>
+                                <a href="<?=$this->url("abm/entidad",
+                                        ["entidad" => "operacion", "action" => "editar", "id" => $Operacion->getId()]
+                                        )?>">Editar</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

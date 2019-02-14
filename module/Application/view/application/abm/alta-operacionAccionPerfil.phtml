@@ -14,7 +14,9 @@
                             <select id="idOperacion" name="idOperacion" class="form-control">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
-                                    <option value="<?= $Operacion->getId() ?>"><?= $Operacion->getTitulo() ?></option>
+                                    <option value="<?= $Operacion->getId() ?>"
+                                        <?= ($Entidad && $Entidad->getOperacion()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
+                                    ><?= $Operacion->getTitulo() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
@@ -27,7 +29,9 @@
                             <select id="idAccion" name="idAccion" class="form-control">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Acciones'] as $Accion) :?>
-                                    <option value="<?= $Accion->getId() ?>"><?= $Accion->getNombre() ?></option>
+                                    <option value="<?= $Accion->getId() ?>"
+                                    <?= ($Entidad && $Entidad->getAccion()->getId() == $Accion->getId()) ? 'selected' : '' ?>
+                                    ><?= $Accion->getNombre() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
@@ -40,7 +44,9 @@
                             <select id="idPerfil" name="idPerfil" class="form-control">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Perfiles'] as $Perfil) :?>
-                                    <option value="<?= $Perfil->getId() ?>"><?= $Perfil->getNombre() ?></option>
+                                    <option value="<?= $Perfil->getId() ?>"
+                                    <?= ($Entidad && $Entidad->getPerfil()->getId() == $Perfil->getId()) ? 'selected' : '' ?>
+                                    ><?= $Perfil->getNombre() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
@@ -50,7 +56,8 @@
                             <label for="urlDestino">URL Destino:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="urlDestino" name="urlDestino" class="form-control">
+                            <input type="text" id="urlDestino" name="urlDestino" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getUrlDestino() : '' ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -58,7 +65,8 @@
                             <label for="controllerName">Nombre Controlador:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="controllerName" name="controllerName" class="form-control">
+                            <input type="text" id="controllerName" name="controllerName" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getControllerName() : '' ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -66,7 +74,8 @@
                             <label for="controllerAction">ControllerAction:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="controllerAction" name="controllerAction" class="form-control">
+                            <input type="text" id="controllerAction" name="controllerAction" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getControllerAction() : '' ?>">
                         </div>
                     </div>
                     <div class="row">
@@ -74,7 +83,8 @@
                             <label for="jsFunction">Función JS:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="jsFunction" name="jsFunction" class="form-control">
+                            <input type="text" id="jsFunction" name="jsFunction" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getJsFunction() : '' ?>">
                         </div>
                     </div>
                     <div class="row">

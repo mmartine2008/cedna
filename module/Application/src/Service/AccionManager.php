@@ -51,9 +51,13 @@ class AccionManager {
      * @param [JSON] $jsonData
      * @return void
      */
-    public function procesarAlta($jsonData){
-        $Accion = new Accion();
-
+    public function procesarAlta($jsonData, $idAccion = null){
+        if ($idAccion){
+            $Accion = $this->getEntidadPorId($idAccion);
+        }else{
+            $Accion = new Accion();
+        }
+        
         $Accion->setNombre($jsonData->nombre);
         $Accion->setTitulo($jsonData->titulo);
         $Accion->setIcono($jsonData->icono);

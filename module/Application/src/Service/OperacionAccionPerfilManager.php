@@ -57,8 +57,12 @@ class OperacionAccionPerfilManager {
      * @param [JSON] $jsonData
      * @return void
      */
-    public function procesarAlta($jsonData){
-        $OperacionAccionPerfil = new OperacionAccionPerfil();
+    public function procesarAlta($jsonData, $idOperacionAccionPerfil = null){
+        if ($idOperacionAccionPerfil){
+            $OperacionAccionPerfil = $this->getEntidadPorId($idOperacionAccionPerfil);
+        }else{
+            $OperacionAccionPerfil = new OperacionAccionPerfil();
+        }
 
         $Operacion = $this->operacionManager->getEntidadPorId($jsonData->idOperacion);
         $Accion = $this->accionManager->getEntidadPorId($jsonData->idAccion);

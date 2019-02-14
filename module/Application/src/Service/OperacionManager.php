@@ -51,9 +51,13 @@ class OperacionManager {
      * @param [JSON] $jsonData
      * @return void
      */
-    public function procesarAlta($jsonData){
-        $Operacion = new Operacion();
-
+    public function procesarAlta($jsonData, $idOperacion = null){
+        if ($idOperacion){
+            $Operacion = $this->getEntidadPorId($idOperacion);
+        }else{
+            $Operacion = new Operacion();
+        }
+        
         $Operacion->setNombre($jsonData->nombre);
         $Operacion->setTitulo($jsonData->titulo);
         $Operacion->setIcono($jsonData->icono);
