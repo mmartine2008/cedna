@@ -6,7 +6,7 @@
             </div>
             <div class="panel-body">
                 <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "alta"])?>" name="formAltaAccion" onsubmit="preSubmit()">
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="idOperacion">Operación:</label>
                         </div>
@@ -21,7 +21,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="idAccion">Acción:</label>
                         </div>
@@ -36,7 +36,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="idPerfil">Perfil:</label>
                         </div>
@@ -51,7 +51,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="urlDestino">URL Destino:</label>
                         </div>
@@ -60,7 +60,7 @@
                             value="<?= ($Entidad) ? $Entidad->getUrlDestino() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="controllerName">Nombre Controlador:</label>
                         </div>
@@ -69,7 +69,7 @@
                             value="<?= ($Entidad) ? $Entidad->getControllerName() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="controllerAction">ControllerAction:</label>
                         </div>
@@ -78,7 +78,7 @@
                             value="<?= ($Entidad) ? $Entidad->getControllerAction() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="jsFunction">Función JS:</label>
                         </div>
@@ -87,7 +87,7 @@
                             value="<?= ($Entidad) ? $Entidad->getJsFunction() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>

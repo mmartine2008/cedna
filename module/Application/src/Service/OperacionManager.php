@@ -86,4 +86,24 @@ class OperacionManager {
             'Operaciones' => $Operaciones
         ];
     }
+
+    public function borrarEntidad($idOperacion){
+        $Operacion = $this->getEntidadPorId($idOperacion);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Operacion);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la operación correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La operación no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
 }

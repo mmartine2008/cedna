@@ -6,7 +6,7 @@
             </div>
             <div class="panel-body">
                 <form method="post" name="formAltaOperacion" onsubmit="preSubmit()">
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="nombreOperacion"><span class="obligatorio">(*) </span>Nombre:</label>
                         </div>
@@ -15,7 +15,7 @@
                             value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="tituloOperacion"><span class="obligatorio">(*) </span>Titulo:</label>
                         </div>
@@ -24,7 +24,7 @@
                             value="<?= ($Entidad) ? $Entidad->getTitulo() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="iconoOperacion">Icono:</label>
                         </div>
@@ -33,7 +33,7 @@
                             value="<?= ($Entidad) ? $Entidad->getIcono() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="iconoOperacion">Grupo:</label>
                         </div>
@@ -48,7 +48,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="iconoOperacion">Orden:</label>
                         </div>
@@ -57,7 +57,7 @@
                             value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("abm/entidad",["entidad" => "operacion", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>

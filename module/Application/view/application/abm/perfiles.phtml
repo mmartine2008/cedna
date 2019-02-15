@@ -8,11 +8,11 @@
                 <h3 class="panel-title">Listado de Perfiles</h3>
             </div>
             <div class="panel-body">
-                <table>
+                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Descripcion</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Descripcion</th>
                             <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
@@ -21,7 +21,14 @@
                         <tr>
                             <td><?= $Perfil->getNombre() ?></td>
                             <td><?= $Perfil->getDescripcion() ?></td>
-                            <td></td>
+                            <td>
+                                <a href="<?=$this->url("abm/entidad",
+                                        ["entidad" => "perfiles", "action" => "editar", "id" => $Perfil->getId()]
+                                        )?>">Editar</a> | 
+                                <a href="<?=$this->url("abm/entidad",
+                                        ["entidad" => "perfiles", "action" => "borrar", "id" => $Perfil->getId()]
+                                        )?>">Borrar</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

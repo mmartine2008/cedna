@@ -28,7 +28,10 @@
                             <td>
                                 <a href="<?=$this->url("abm/entidad",
                                         ["entidad" => "operacion", "action" => "editar", "id" => $Operacion->getId()]
-                                        )?>">Editar</a>
+                                        )?>">Editar</a> | 
+                                <a href="<?=$this->url("abm/entidad",
+                                        ["entidad" => "operacion", "action" => "borrar", "id" => $Operacion->getId()]
+                                        )?>">Borrar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -93,4 +93,24 @@ class OperacionAccionPerfilManager {
             'Perfiles' => $this->perfilesManager->getListado()
         ];
     }
+
+    public function borrarEntidad($idOperacionAccionPerfil){
+        $OperacionAccionPerfil = $this->getEntidadPorId($idOperacionAccionPerfil);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($OperacionAccionPerfil);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la relación correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La relación no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
 }
