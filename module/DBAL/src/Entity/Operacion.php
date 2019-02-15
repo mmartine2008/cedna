@@ -97,4 +97,17 @@ class Operacion
     {
         return $this->orden;
     }
+
+    public function getJSON(){
+        $output = "";
+
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"titulo": "' . $this->getTitulo() .'", ';
+        $output .= '"icono": "' . $this->getIcono() .'", ';
+        $output .= '"grupo": "' . $this->getGrupo()->getJSON() .'", ';
+        $output .= '"orden": "' . $this->getOrden() .'", ';
+        
+        return '{' . $output . '}';
+    }
 }
