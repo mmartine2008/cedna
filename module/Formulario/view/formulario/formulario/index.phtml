@@ -50,8 +50,6 @@
     function createDivClass(info, div) {
         var divClass = document.createElement("Div");
         divClass.className = info;
-        // divClass.className = "row";
-        // divClass.style.paddingTop = "15px";
         div.appendChild(divClass);
         return divClass;
     }
@@ -136,10 +134,6 @@
         insertarElementInSelect("Negative_to", "MultiSelectDisp");});
     });
 
-    $(function() {
-
-    });
-
     function createMultipleSelectorSkeleton(opciones, opciones_in, opciones_out, divElement){
         var divForm = createDivClass("form-row", divElement);
 
@@ -208,15 +202,11 @@
     }
 
     function createQuestions(item, divElement){
-        // var divQuestions = document.createElement("Div");
-        // divQuestions.className='form-row';
-        // divQuestions.style.paddingTop = "15px";
-        // divElement.appendChild(divQuestions);
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
             var div = document.createElement("Div");
             div.className='row';
-            div.style.paddingTop = "10px";
+            div.style.padding = "15px";
             divElement.appendChild(div);
             var item = preguntas[i];
             var pregunta = document.createElement("P");
