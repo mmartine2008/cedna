@@ -136,20 +136,20 @@
 
     function createMultipleSelectorSkeleton(opciones, opciones_in, opciones_out, divElement){
         var divForm = createDivClass("form-row", divElement);
+        var divRow = createDivClass("row", divForm);
+        var div_class_sm_3 = createDivClass("col-sm-3", divRow);
+        createMultipleSelector('MultiSelectDisp', 'MultiSelectDisp', opciones, div_class_sm_3, 10);
 
-        var div_class_lg_3 = createDivClass("col-lg-3", divForm);
-        createMultipleSelector('MultiSelectDisp', 'MultiSelectDisp', opciones, div_class_lg_3, 10);
+        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
+        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
+        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
+        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
+        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
 
-        var div_class_lg_1 = createDivClass("col-lg-1", divForm);
-        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
-        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
-        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_lg_1, ">", false);
-        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_lg_1, "<", true);
-
-        var div_class_lg_3_2 = createDivClass("col-lg-3", divForm);
-        createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_lg_3_2, 5);
-        createMultipleSelector('Negative_to', 'Negative_to', opciones_out, div_class_lg_3_2, 5);
-        var div_class_lg_5 = createDivClass("col-lg-5", divForm);
+        var div_class_sm_3_2 = createDivClass("col-sm-3", divRow);
+        createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_sm_3_2, 5);
+        createMultipleSelector('Negative_to', 'Negative_to', opciones_out, div_class_sm_3_2, 5);
+        var div_class_sm_5 = createDivClass("col-sm-5", divRow);
     }
 
     function createInput(item, divElement){
@@ -201,6 +201,13 @@
         }
     }
 
+    function createTextElement(type, div, info){
+        var element = document.createElement(type);
+        var text = document.createTextNode(info);
+        element.appendChild(text);
+        div.appendChild(element);
+    }
+
     function createQuestions(item, divElement){
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
@@ -209,10 +216,7 @@
             div.style.padding = "15px";
             divElement.appendChild(div);
             var item = preguntas[i];
-            var pregunta = document.createElement("P");
-            var text = document.createTextNode(item.descripcion);
-            pregunta.appendChild(text);
-            div.appendChild(pregunta);
+            createTextElement("P", div, item.descripcion);
             createAnswer(item, div);
         }
     }
@@ -225,18 +229,13 @@
         divElement.style.padding = "10px";
         divElement.className="form-row";
 
-        // Styling it
         divElement.style.textAlign = "lefth";
-        var divSeleccion = document.createElement("Div");
 
-        divSeleccion.classList="row";
-        divElement.appendChild(divSeleccion);
+        var divSeleccion = createDivClass("row", divElement);
 
-        var textH = document.createElement("h4");
-        
-        var text = document.createTextNode(item.nombre);
-        textH.appendChild(text);
-        divSeleccion.appendChild(textH);
+        var div_class_sm_1 = createDivClass("col-sm-1", divSeleccion);
+
+        createTextElement("h4", div_class_sm_1, item.nombre);
 
         createQuestions(item, divElement);
 
@@ -259,10 +258,8 @@
         var divFormulario = document.createElement("Div");
         divFormulario.id = "Formulario"+formulario.id;
         divFormulario.style.paddingTop = "15px";
-        var textH = document.createElement("h3");
-        var text = document.createTextNode(formulario.descripcion);
-        textH.appendChild(text);
-        divFormulario.appendChild(textH);
+
+        createTextElement("h3", divFormulario, formulario.descripcion);
 
         contenedor.appendChild(divFormulario);
 
