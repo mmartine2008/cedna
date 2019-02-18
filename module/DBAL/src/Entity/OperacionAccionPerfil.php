@@ -119,12 +119,12 @@ class OperacionAccionPerfil
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"Operacion": "' . $this->getOperacion()->getJSON() .'", ';
-        $output .= '"Accion": "' . $this->getAccion()->getJSON() .'", ';
-        $output .= '"Perfil": "' . $this->getPerfil()->getJSON() .'", ';
+        $output .= '"Operacion": ' . $this->getOperacion()->getJSON() .', ';
+        $output .= '"Accion": ' . $this->getAccion()->getJSON() .', ';
+        $output .= '"Perfil": ' . $this->getPerfil()->getJSON() .', ';
         $output .= '"jsFunction": "' . $this->getJsFunction() .'", ';
         $output .= '"ordenUbicacion": "' . $this->getOrdenUbicacion() .'", ';
-        
+        $output .= '"urlDestino": "' . $this->getUrlDestino() .'", ';
         return '{' . $output . '}';
     }
 }

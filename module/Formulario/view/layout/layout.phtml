@@ -33,8 +33,30 @@
             <hr>
             <footer>
                 <div class="form-row">
-
-                
+                    <div class="col-lg-1" id="col1">
+                    </div>
+                    <div class="col-lg-1" id="col2">
+                    </div>
+                    <div class="col-lg-1" id="col3">
+                    </div>
+                    <div class="col-lg-1" id="col4">
+                    </div>
+                    <div class="col-lg-1" id="col5">
+                    </div>
+                    <div class="col-lg-1" id="col6">
+                    </div>
+                    <div class="col-lg-1" id="col7">
+                    </div>
+                    <div class="col-lg-1" id="col8">
+                    </div>
+                    <div class="col-lg-1" id="col9">
+                    </div>
+                    <div class="col-lg-1" id="col10">
+                    </div>
+                    <div class="col-lg-1" id="col11">
+                    </div>
+                    <div class="col-lg-1" id="col12">
+                    </div>
                 </div>
             </footer>
         </div>
@@ -43,4 +65,96 @@
 </html>
 <script>
     var url = '<?= $this->serverUrl(); ?>';
+    var arrAccionesDisponibles = <?= $arrAccionesDisponibles; ?>;
+
+    function lugarEstaDisponible(lugar, lugaresOcupados){
+        if (jQuery.inArray(lugar, lugaresOcupados) !== -1){
+            return false;
+        }
+
+        return true;
+    }
+
+    function dibujarBotonConFuncionOnClick(accionBoton, lugaresOcupados){
+        var lugar = accionBoton.ordenUbicacion;
+        var lugarDisponible = false;
+
+        for (lugar; lugar <= 12; lugar++){
+            if (lugarEstaDisponible(lugar, lugaresOcupados)){
+                lugarDisponible = true;
+                break;
+            }
+        }
+
+        if (lugarDisponible){
+            var div = $('#col'+lugar);
+
+            var icono = $('<i></i>');
+            icono.attr('class', accionBoton.Accion.icono);
+            icono.text(accionBoton.Accion.titulo);
+
+            var boton = $('<button></button>');
+
+            boton.attr('onclick', accionBoton.jsFunction);
+            boton.attr('disabled', true);
+
+            boton.append(icono);
+            div.append(boton);
+
+            return lugar;
+        }
+
+        return -1;
+    }
+
+    function dibujarBotonConEnlace(accionBoton, lugaresOcupados){
+        var lugar = accionBoton.ordenUbicacion;
+        var lugarDisponible = false;
+
+        for (lugar; lugar <= 12; lugar++){
+            if (lugarEstaDisponible(lugar, lugaresOcupados)){
+                lugarDisponible = true;
+                break;
+            }
+        }
+
+        if (lugarDisponible){
+            var div = $('#col'+lugar);
+
+            var icono = $('<i></i>');
+            icono.attr('class', accionBoton.Accion.icono);
+            icono.text(accionBoton.Accion.titulo);
+
+            var a = $('<a></a>');
+
+            a.attr('href', url + '/' +accionBoton.urlDestino);
+
+            a.append(icono);
+            div.append(a);
+
+            return lugar;
+        }
+
+        return -1;
+    }
+
+    function ordenarBotonera(){
+        var lugaresOcupados = [];
+
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var accionBoton = arrAccionesDisponibles[i];
+
+            if (accionBoton.jsFunction !== ''){
+                var lugar = dibujarBotonConFuncionOnClick(accionBoton, lugaresOcupados);
+            }else{
+                var lugar = dibujarBotonConEnlace(accionBoton, lugaresOcupados);
+            }
+
+            if (lugar > 0){
+                lugaresOcupados.push(lugar);
+            }
+        }
+    }
+
+    ordenarBotonera();
 </script>

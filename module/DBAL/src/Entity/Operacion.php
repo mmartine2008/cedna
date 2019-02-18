@@ -105,7 +105,13 @@ class Operacion
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"titulo": "' . $this->getTitulo() .'", ';
         $output .= '"icono": "' . $this->getIcono() .'", ';
-        $output .= '"grupo": "' . $this->getGrupo()->getJSON() .'", ';
+        
+        if ($this->getGrupo()){
+            $output .= '"grupo": "' . $this->getGrupo()->getJSON() .'", ';
+        }else{
+            $output .= '"grupo": "' . null .'", ';
+        }
+
         $output .= '"orden": "' . $this->getOrden() .'", ';
         
         return '{' . $output . '}';

@@ -29,7 +29,15 @@ class ConfiguracionController extends AbstractActionController
     protected function cargarAccionesDisponibles($nombreOperacion, $nombrePerfil){
         $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
 
-        $this->layout()->arrAccionesDisponibles = $arrAccionesDisponibles;
+        $arrAccionesDisponiblesJSON = [];
+
+        foreach($arrAccionesDisponibles as $AccionDisponible){
+            $arrAccionesDisponiblesJSON[] = $AccionDisponible->getJSON();
+        }
+
+        $arrAccionesDisponiblesJSON = implode(", ", $arrAccionesDisponiblesJSON);
+
+        $this->layout()->arrAccionesDisponibles = '[' . $arrAccionesDisponiblesJSON . ']';
     }
 
 }

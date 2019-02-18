@@ -72,8 +72,7 @@ class OperacionAccionPerfilManager {
         $OperacionAccionPerfil->setAccion($Accion);
         $OperacionAccionPerfil->setPerfil($Perfil);
         $OperacionAccionPerfil->setUrlDestino($jsonData->urlDestino);
-        $OperacionAccionPerfil->setControllerName($jsonData->controllerName);
-        $OperacionAccionPerfil->setControllerAction($jsonData->controllerAction);
+        $OperacionAccionPerfil->setOrdenUbicacion($jsonData->ordenUbicacion);
         $OperacionAccionPerfil->setJsFunction($jsonData->jsFunction);
 
         $this->entityManager->persist($OperacionAccionPerfil);
