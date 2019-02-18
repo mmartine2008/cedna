@@ -26,6 +26,8 @@ class ABMController extends AbstractActionController
         $this->usuariosManager = $usuariosManager;
         $this->perfilesManager = $perfilesManager;
         $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
+
+        $this->layout()->arrAccionesDisponibles = null;
     }
 
     public function indexAction()
@@ -110,4 +112,17 @@ class ABMController extends AbstractActionController
         
         return $view;      
     }
+
+    public function borrarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $nombreEntidad = $parametros['entidad'];
+        $idEntidad = $parametros['id'];
+
+        $manager = $nombreEntidad.'Manager';
+
+        $mensaje = $this->$manager->borrarEntidad($idEntidad);
+
+        return $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
+    } 
 }

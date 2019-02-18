@@ -298,4 +298,15 @@ class Operacion extends \DBAL\Entity\Operacion implements \Doctrine\ORM\Proxy\Pr
         return parent::getOrden();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getJSON()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
+
+        return parent::getJSON();
+    }
+
 }

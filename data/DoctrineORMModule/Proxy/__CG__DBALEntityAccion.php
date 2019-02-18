@@ -254,4 +254,15 @@ class Accion extends \DBAL\Entity\Accion implements \Doctrine\ORM\Proxy\Proxy
         return parent::getIcono();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getJSON()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
+
+        return parent::getJSON();
+    }
+
 }

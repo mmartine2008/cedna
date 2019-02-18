@@ -6,23 +6,25 @@
             </div>
             <div class="panel-body">
                 <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "perfiles", "action" => "alta"])?>" name="formAltaPerfil" onsubmit="preSubmit()">
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="nombrePerfil"><span class="obligatorio">(*) </span>Nombre:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="nombrePerfil" name="nombrePerfil" class="form-control" required="true">
+                            <input type="text" id="nombrePerfil" name="nombrePerfil" class="form-control" required="true"
+                            value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="descripcionPerfil">Descripción:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="descripcionPerfil" name="descripcionPerfil" class="form-control" >
+                            <input type="text" id="descripcionPerfil" name="descripcionPerfil" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getDescripcion() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("abm/entidad",["entidad" => "perfiles", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>

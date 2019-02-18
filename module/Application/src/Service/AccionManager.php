@@ -75,4 +75,24 @@ class AccionManager {
     public function getArrVariablesAltaEntidad(){
         return [];
     }
+
+    public function borrarEntidad($idAccion){
+        $Accion = $this->getEntidadPorId($idAccion);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Accion);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la acción correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La acción no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
 }

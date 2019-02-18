@@ -72,9 +72,9 @@ class OperacionAccionPerfilManager {
         $OperacionAccionPerfil->setAccion($Accion);
         $OperacionAccionPerfil->setPerfil($Perfil);
         $OperacionAccionPerfil->setUrlDestino($jsonData->urlDestino);
-        $OperacionAccionPerfil->setControllerName($jsonData->controllerName);
-        $OperacionAccionPerfil->setControllerAction($jsonData->controllerAction);
+        $OperacionAccionPerfil->setOrdenUbicacion($jsonData->ordenUbicacion);
         $OperacionAccionPerfil->setJsFunction($jsonData->jsFunction);
+        $OperacionAccionPerfil->setIdHTMLElement($jsonData->idHTMLElement);
 
         $this->entityManager->persist($OperacionAccionPerfil);
         $this->entityManager->flush();
@@ -92,5 +92,25 @@ class OperacionAccionPerfilManager {
             'Operaciones' => $this->operacionManager->getListado(),
             'Perfiles' => $this->perfilesManager->getListado()
         ];
+    }
+
+    public function borrarEntidad($idOperacionAccionPerfil){
+        $OperacionAccionPerfil = $this->getEntidadPorId($idOperacionAccionPerfil);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($OperacionAccionPerfil);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la relación correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La relación no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }
