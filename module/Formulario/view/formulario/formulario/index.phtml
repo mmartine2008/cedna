@@ -41,7 +41,9 @@
         selector.name = name;
         selector.id = id;
         selector.multiple = true;
+        selector.className = "form-control";
         selector.size = size;
+        selector.style.marginBottom = "5px";
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, false);
         divElement.appendChild(selector);
@@ -54,14 +56,15 @@
         return divClass;
     }
 
-    function createButton(id, title, divElement, icon, disabled){
+    function createButton(infoType, id, title, divElement, icon, disabled){
         var button = document.createElement("button");
-        button.type = "button";
+        button.type = infoType;
         button.id = id;
         button.title = title;
         button.className = "btn btn-primary";
         button.textContent = icon;
         button.disabled = disabled;
+        button.style.marginTop = "15px";
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
         // button.appendChild(icono);
@@ -141,10 +144,10 @@
         createMultipleSelector('MultiSelectDisp', 'MultiSelectDisp', opciones, div_class_sm_3, 10);
 
         var div_class_sm_1 = createDivClass("col-sm-1", divRow);
-        createButton("Positive_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
-        createButton("Positive_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
-        createButton("Negative_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
-        createButton("Negative_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
+        createButton("button", "Positive_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
+        createButton("button", "Positive_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
+        createButton("button", "Negative_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
+        createButton("button", "Negative_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
 
         var div_class_sm_3_2 = createDivClass("col-sm-3", divRow);
         createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_sm_3_2, 5);
@@ -152,10 +155,11 @@
         var div_class_sm_5 = createDivClass("col-sm-5", divRow);
     }
 
-    function createInput(item, divElement){
+    function createInput(infoType, name, divElement){
         ele = document.createElement('input');
-        ele.type = item.tipoPregunta.descripcion;
-        ele.name = 'respuesta'+ item.id;
+        ele.type = infoType;
+        ele.name = name;
+        ele.id = name;
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
@@ -196,7 +200,7 @@
             } else if(item.tipoPregunta.descripcion == 'textarea'){
                 createTextArea(item, divElement);
             } else {
-                createInput(item, divElement);
+                createInput(item.tipoPregunta.descripcion, 'respuesta'+ item.id, divElement);
             }
         }
     }
@@ -252,7 +256,27 @@
         }
     }
 
-    function crearFormulario(){
+    function createHref(info, divElement){
+        ele = document.createElement('a');
+        ele.href = info;
+        divElement.appendChild(ele);
+
+        var div = document.createElement("Div");
+        div.className = "btn";
+
+        var text = document.createTextNode("Cancelar");
+        div.appendChild(text);
+        ele.appendChild(div);
+    }
+
+    function createCancelOkButtons(contenedor) {
+        var div = createDivClass("row", contenedor);
+        createInput("hidden", "JsonData", div);
+        createHref("#", div);
+        createButton("submit", "submit", "Enviar Formulario", div, "Confirmar", false);
+    }
+
+    function createForm(){
         var contenedor = document.getElementsByTagName("div")[0];
 
         var divFormulario = document.createElement("Div");
@@ -264,8 +288,10 @@
         contenedor.appendChild(divFormulario);
 
         construirSecciones(formulario.secciones, divFormulario);
+
+        createCancelOkButtons(contenedor);
+
     }
 
-    crearFormulario();
+    createForm();
 </script>
-
