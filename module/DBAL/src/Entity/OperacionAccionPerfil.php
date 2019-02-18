@@ -50,6 +50,11 @@ class OperacionAccionPerfil
      */
     protected $ordenUbicacion;
 
+    /**
+     * @ORM\Column(name="idHTMLElement")
+     */
+    protected $idHTMLElement;
+
     public function setOperacion($Operacion)
     {
         $this->Operacion = $Operacion;
@@ -78,6 +83,11 @@ class OperacionAccionPerfil
     public function setJsFunction($jsFunction)
     {
         $this->jsFunction = $jsFunction;
+    }
+
+    public function setIdHTMLElement($idHTMLElement)
+    {
+        $this->idHTMLElement = $idHTMLElement;
     }
 
     public function getId()
@@ -115,6 +125,11 @@ class OperacionAccionPerfil
         return $this->jsFunction;
     }
 
+    public function getIdHTMLElement()
+    {
+        return $this->idHTMLElement;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -125,6 +140,8 @@ class OperacionAccionPerfil
         $output .= '"jsFunction": "' . $this->getJsFunction() .'", ';
         $output .= '"ordenUbicacion": "' . $this->getOrdenUbicacion() .'", ';
         $output .= '"urlDestino": "' . $this->getUrlDestino() .'", ';
+        $output .= '"idHTMLElement": "' . $this->getIdHTMLElement() .'", ';
+        
         return '{' . $output . '}';
     }
 }

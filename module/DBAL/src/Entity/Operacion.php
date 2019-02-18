@@ -107,7 +107,7 @@ class Operacion
         $output .= '"icono": "' . $this->getIcono() .'", ';
         
         if ($this->getGrupo()){
-            $output .= '"grupo": "' . $this->getGrupo()->getJSON() .'", ';
+            $output .= '"grupo": ' . $this->getGrupo()->getJSON() .', ';
         }else{
             $output .= '"grupo": "' . null .'", ';
         }

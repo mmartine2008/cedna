@@ -71,6 +71,15 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">
+                            <label for="idHTMLElement">Id Elemento HTML:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="idHTMLElement" name="idHTMLElement" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getIdHTMLElement() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
                             <label for="ordenUbicacion"><span class="obligatorio">(*) </span>Ubicación en footer:</label>
                         </div>
                         <div class="col-md-2">
@@ -105,7 +114,8 @@ function FormAltaOperacionAccionPerfilToJson(){
         idPerfil: $('#idPerfil').val(),
         urlDestino: $('#urlDestino').val(),
         ordenUbicacion: $('#ordenUbicacion').val(),
-        jsFunction: $('#jsFunction').val()
+        jsFunction: $('#jsFunction').val(),
+        idHTMLElement: $('#idHTMLElement').val()
     };
     
     var JsonData = JSON.stringify(formData);

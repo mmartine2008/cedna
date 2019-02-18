@@ -1,7 +1,4 @@
 <div class="form-row">
-    <div class="col-md-3">
-        <a href="<?=$this->url("configuracion/tipo-pregunta",["action" => "alta"])?>">Nuevo Tipo Pregunta</a>
-    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -13,22 +10,10 @@
                         <tr>
                             <th class="text-center">Descripcion</th>
                             <th class="text-center">Cant. Destinos</th>
-                            <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="">
-                    <?php foreach($arrTipoPreguntas as $TipoPregunta) : ?>
-                        <tr id="<?= $TipoPregunta->getId() ?>">
-                            <td><?= $TipoPregunta->getDescripcion() ?></td>
-                            <td><?= $TipoPregunta->getCantDestinos() ?></td>
-                            <td>
-                                <a href="<?=$this->url("configuracion/tipo-pregunta",
-                                                    ["action" => "editar", "id" => $TipoPregunta->getId()])?>">editar</a> | 
-                                <a href="<?=$this->url("configuracion/tipo-pregunta",
-                                                    ["action" => "borrar", "id" => $TipoPregunta->getId()])?>">borrar</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                    <tbody id="bodyConfTipoPregunta">
+                    
                     </tbody>
                 </table>
             </div>
@@ -38,30 +23,59 @@
 </div>
 <script>
     var filaSeleccionada = -1;
+    var arrTipoPreguntasJSON = <?= $arrTipoPreguntasJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaTipoPreguntas();
+    });
+
+    function dibujarTablaTipoPreguntas(){
+        $('#bodyConfTipoPregunta').find('tr').remove();
+    
+        for (var i = 0; i < arrTipoPreguntasJSON.length; i++)
+        {
+            var tipoPregunta = arrTipoPreguntasJSON[i];
+
+            var body = document.getElementById("bodyConfTipoPregunta");
+            var row = body.insertRow();
+            row.id = i;
+
+            var descripcion = row.insertCell(0);
+            var cantDestinos = row.insertCell(1);
+
+            descripcion.innerHTML = tipoPregunta.descripcion;
+            cantDestinos.innerHTML = tipoPregunta.destinos;   
+        }
+    }
 
     $(function() {
         $('#tablaTipoPregunta').on('click', 'tbody tr', function(event) {
             if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
                 $(this).addClass('highlight').siblings();
                 filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
             }else{
                 $(this).removeClass('highlight');
                 filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
             }
         });
     });
 
     function borrarTipoPregunta() {
         var result = null;
-        
+        var tipoPregunta = arrTipoPreguntasJSON[filaSeleccionada];
+
         $.ajax({
-            url: url + '/configuracion/tipo-pregunta/borrar/' + filaSeleccionada,
+            url: url + '/configuracion/tipo-pregunta/borrar/' + tipoPregunta.id,
             type: 'post',
             dataType: 'json',
             async: false,
             success: function (data) {
-                location.reload(true);
-                // result = data.esValido;
+                
             }
         });
         
@@ -69,11 +83,13 @@
     }
 
     function preBorrar(){
-        if (filaSeleccionada > 0){
+        if (filaSeleccionada >= 0){
+            var tipoPregunta = arrTipoPreguntasJSON[filaSeleccionada];
+            
             swal({
                 title: 'Eliminar Tipo de Pregunta',
                 width: 600,
-                text: "Esta seguro que desea eliminar el tipo de pregunta?",
+                text: "Esta seguro que desea eliminar el tipo de pregunta: "+ tipoPregunta.descripcion +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -83,6 +99,7 @@
             }).then((result) => {
                 if (result.value) {
                     borrarTipoPregunta();
+                    window.location.replace(url + "/configuracion/tipo-pregunta");
                 }
             });
         }else{
@@ -90,6 +107,18 @@
                 'Por favor seleccione el tipo de pregunta que desea eliminar',
                 'error');
         }
-        
     }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var tipoPregunta = arrTipoPreguntasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/tipo-pregunta/editar/" + tipoPregunta.id);
+        }else{
+            swal('Tipo de Pregunta no seleccionada',
+                'Por favor seleccione el tipo de pregunta que desea eliminar',
+                'error');
+        }
+    }
+
   </script>

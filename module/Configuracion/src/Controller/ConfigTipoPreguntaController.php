@@ -26,10 +26,10 @@ class ConfigTipoPreguntaController extends ConfiguracionController
     {
         $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta', 'Administrador');
 
-        $arrTipoPreguntas = $this->catalogoManager->getTipoPregunta();
+        $arrTipoPreguntasJSON = $this->configuracionManager->getArrTipoPreguntasJSON();
         
         return new ViewModel([
-            'arrTipoPreguntas' => $arrTipoPreguntas
+            'arrTipoPreguntasJSON' => $arrTipoPreguntasJSON
         ]);
     }
 
