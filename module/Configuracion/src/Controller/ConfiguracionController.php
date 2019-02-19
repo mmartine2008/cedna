@@ -13,11 +13,12 @@ use Zend\View\Model\ViewModel;
 class ConfiguracionController extends AbstractActionController
 {
     protected $catalogoManager;
+    protected $userSessionManager;
 
-    public function __construct($catalogoManager)
+    public function __construct($catalogoManager, $userSessionManager)
     {
         $this->catalogoManager = $catalogoManager;
-        
+        $this->userSessionManager = $userSessionManager;
     }
 
     public function indexAction()
