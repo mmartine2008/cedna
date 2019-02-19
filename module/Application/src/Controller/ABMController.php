@@ -26,6 +26,8 @@ class ABMController extends AbstractActionController
         $this->usuariosManager = $usuariosManager;
         $this->perfilesManager = $perfilesManager;
         $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
+
+        $this->layout()->arrAccionesDisponibles = null;
     }
 
     public function indexAction()
@@ -76,9 +78,51 @@ class ABMController extends AbstractActionController
 
         $view = new ViewModel();
         
+        $view->setVariable('Entidad', null);
         $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
         $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
         
         return $view;      
     }
+
+    public function editarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $nombreEntidad = $parametros['entidad'];
+        $idEntidad = $parametros['id'];
+
+        $manager = $nombreEntidad.'Manager';
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->$manager->procesarAlta($JsonData, $idEntidad);
+
+            $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
+        }
+
+        $Entidad = $this->$manager->getEntidadPorId($idEntidad);
+        $view = new ViewModel();
+        
+        $view->setVariable('Entidad', $Entidad);
+        $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
+        $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
+        
+        return $view;      
+    }
+
+    public function borrarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $nombreEntidad = $parametros['entidad'];
+        $idEntidad = $parametros['id'];
+
+        $manager = $nombreEntidad.'Manager';
+
+        $mensaje = $this->$manager->borrarEntidad($idEntidad);
+
+        return $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
+    } 
 }

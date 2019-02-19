@@ -22,7 +22,22 @@ class ConfiguracionController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->cargarAccionesDisponibles('Configuracion', 'Administrador');
         return new ViewModel();
+    }
+
+    protected function cargarAccionesDisponibles($nombreOperacion, $nombrePerfil){
+        $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
+
+        $arrAccionesDisponiblesJSON = [];
+
+        foreach($arrAccionesDisponibles as $AccionDisponible){
+            $arrAccionesDisponiblesJSON[] = $AccionDisponible->getJSON();
+        }
+
+        $arrAccionesDisponiblesJSON = implode(", ", $arrAccionesDisponiblesJSON);
+
+        $this->layout()->arrAccionesDisponibles = '[' . $arrAccionesDisponiblesJSON . ']';
     }
 
 }

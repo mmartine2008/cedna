@@ -30,6 +30,11 @@ class Formulario
     protected $descripcion;
 
     /**
+     * @ORM\Column(name="Nombre",  nullable=true, type="string", length=100)
+     */
+    protected $nombre;
+
+    /**
      * @ORM\OneToMany(targetEntity="Seccion", mappedBy="formulario")
      */
     protected $secciones;
@@ -100,6 +105,26 @@ class Formulario
         return $this->permiso;
     }
 
+      /**
+     * Get the value of nombre
+     */ 
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set the value of nombre
+     *
+     * @return  self
+     */ 
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
     /**
      * Set the value of permiso
      *
@@ -122,6 +147,7 @@ class Formulario
         $secciones = implode(", ", $secciones);
 
         $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"secciones": ['.$secciones.']';
         return '{' . $output . '}';

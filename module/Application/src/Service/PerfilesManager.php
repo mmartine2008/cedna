@@ -70,4 +70,24 @@ class PerfilesManager {
     public function getArrVariablesAltaEntidad(){
         return [];
     }
+
+    public function borrarEntidad($idPerfiles){
+        $Perfil = $this->getEntidadPorId($idPerfiles);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Perfil);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado el perfil correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'El perfil no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
 }

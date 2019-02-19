@@ -50,7 +50,6 @@
     function createDivClass(info, div) {
         var divClass = document.createElement("Div");
         divClass.className = info;
-        divClass.style.paddingTop = "15px";
         div.appendChild(divClass);
         return divClass;
     }
@@ -135,10 +134,6 @@
         insertarElementInSelect("Negative_to", "MultiSelectDisp");});
     });
 
-    $(function() {
-
-    });
-
     function createMultipleSelectorSkeleton(opciones, opciones_in, opciones_out, divElement){
         var divForm = createDivClass("form-row", divElement);
 
@@ -154,12 +149,16 @@
         var div_class_lg_3_2 = createDivClass("col-lg-3", divForm);
         createMultipleSelector('Positive_to', 'Positive_to', opciones_in, div_class_lg_3_2, 5);
         createMultipleSelector('Negative_to', 'Negative_to', opciones_out, div_class_lg_3_2, 5);
+        var div_class_lg_5 = createDivClass("col-lg-5", divForm);
     }
 
-    function createInput(divElement){
+    function createInput(item, divElement){
         ele = document.createElement('input');
-        ele.type = 'text';
-        ele.name = 'respuesta'.i;
+        ele.type = item.tipoPregunta.descripcion;
+        ele.name = 'respuesta'+ item.id;
+        // accept = getInputAccept(item);
+        // ele.accept= accept;
+        // ele.accept="image/png, image/jpeg"
         divElement.appendChild(ele);
     } 
 
@@ -174,24 +173,47 @@
             //luego
         }
     }
+
+    function createTextArea(item, divElement){
+        ele = document.createElement('textarea');
+        ele.name = 'respuesta'+ item.id;
+        divElement.appendChild(ele);
+    }
+
+    function createImage(item, divElement){
+        ele = document.createElement('img');
+        ele.src = "documentacion/imagenes/20190204_170557.jpg"
+        ele.name = 'respuesta'+ item.id;
+        divElement.appendChild(ele);
+    }
     
     function createAnswer(item, divElement){
         if (item.cerrada == '1'){
             createOptions(item, divElement);
         } else {
-            createInput(divElement);
+            if(item.tipoPregunta.descripcion == 'image'){
+                createImage(item, divElement);
+            } else if(item.tipoPregunta.descripcion == 'textarea'){
+                createTextArea(item, divElement);
+            } else {
+                createInput(item, divElement);
+            }
         }
     }
 
     function createQuestions(item, divElement){
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
+            var div = document.createElement("Div");
+            div.className='row';
+            div.style.padding = "15px";
+            divElement.appendChild(div);
             var item = preguntas[i];
             var pregunta = document.createElement("P");
             var text = document.createTextNode(item.descripcion);
             pregunta.appendChild(text);
-            divElement.appendChild(pregunta);
-            createAnswer(item, divElement);
+            div.appendChild(pregunta);
+            createAnswer(item, div);
         }
     }
 
@@ -199,44 +221,52 @@
 
         // Creating a div element
         var divElement = document.createElement("Div");
-        divElement.id = "secciones";
+        divElement.id = "Seccion"+item.id;
+        divElement.style.padding = "10px";
+        divElement.className="form-row";
 
         // Styling it
         divElement.style.textAlign = "lefth";
-        // divElement.style.fontWeight = "bold";
-        // divElement.style.fontSize = "smaller";
-        divElement.style.paddingTop = "15px";
+        var divSeleccion = document.createElement("Div");
 
-        // Adding a paragraph to it
-        var paragraph = document.createElement("P");
+        divSeleccion.classList="row";
+        divElement.appendChild(divSeleccion);
+
+        var textH = document.createElement("h4");
+        
         var text = document.createTextNode(item.nombre);
-        paragraph.appendChild(text);
-        divElement.appendChild(paragraph);
+        textH.appendChild(text);
+        divSeleccion.appendChild(textH);
 
         createQuestions(item, divElement);
 
-        // Appending the div element to body
         contenedor.appendChild(divElement);
             
         return divElement;
     }
 
     function construirSecciones(childs, contenedor){
-        var paragraph = document.createElement("P");
-        var text = document.createTextNode(formulario.descripcion);
-        paragraph.appendChild(text);
-        contenedor.appendChild(paragraph);
-
         for (var i = 0; i < childs.length; i++){
             var item = childs[i];
-
             var itemSeccion = crearItemSeccion(item, contenedor);
             contenedor.appendChild(itemSeccion);
         }
     }
 
     function crearFormulario(){
-        construirSecciones(formulario.secciones, document.getElementsByTagName("div")[0]);
+        var contenedor = document.getElementsByTagName("div")[0];
+
+        var divFormulario = document.createElement("Div");
+        divFormulario.id = "Formulario"+formulario.id;
+        divFormulario.style.paddingTop = "15px";
+        var textH = document.createElement("h3");
+        var text = document.createTextNode(formulario.descripcion);
+        textH.appendChild(text);
+        divFormulario.appendChild(textH);
+
+        contenedor.appendChild(divFormulario);
+
+        construirSecciones(formulario.secciones, divFormulario);
     }
 
     crearFormulario();

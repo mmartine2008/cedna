@@ -51,9 +51,13 @@ class AccionManager {
      * @param [JSON] $jsonData
      * @return void
      */
-    public function procesarAlta($jsonData){
-        $Accion = new Accion();
-
+    public function procesarAlta($jsonData, $idAccion = null){
+        if ($idAccion){
+            $Accion = $this->getEntidadPorId($idAccion);
+        }else{
+            $Accion = new Accion();
+        }
+        
         $Accion->setNombre($jsonData->nombre);
         $Accion->setTitulo($jsonData->titulo);
         $Accion->setIcono($jsonData->icono);
@@ -70,5 +74,25 @@ class AccionManager {
      */
     public function getArrVariablesAltaEntidad(){
         return [];
+    }
+
+    public function borrarEntidad($idAccion){
+        $Accion = $this->getEntidadPorId($idAccion);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Accion);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la acción correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La acción no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }

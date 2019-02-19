@@ -36,16 +36,6 @@ class OperacionAccionPerfil
     protected $Perfil;
 
     /**
-     * @ORM\Column(name="controllerName")
-     */
-    protected $controllerName;
-
-    /**
-     * @ORM\Column(name="controllerAction")
-     */
-    protected $controllerAction;
-
-    /**
      * @ORM\Column(name="urlDestino")
      */
     protected $urlDestino;
@@ -54,6 +44,16 @@ class OperacionAccionPerfil
      * @ORM\Column(name="jsFunction")
      */
     protected $jsFunction;
+
+    /**
+     * @ORM\Column(name="ordenUbicacion")
+     */
+    protected $ordenUbicacion;
+
+    /**
+     * @ORM\Column(name="idHTMLElement")
+     */
+    protected $idHTMLElement;
 
     public function setOperacion($Operacion)
     {
@@ -70,14 +70,9 @@ class OperacionAccionPerfil
         $this->Perfil = $Perfil;
     }
 
-    public function setControllerName($controllerName)
+    public function setOrdenUbicacion($ordenUbicacion)
     {
-        $this->controllerName = $controllerName;
-    }
-
-    public function setControllerAction($controllerAction)
-    {
-        $this->controllerAction = $controllerAction;
+        $this->ordenUbicacion = $ordenUbicacion;
     }
 
     public function setUrlDestino($urlDestino)
@@ -88,6 +83,11 @@ class OperacionAccionPerfil
     public function setJsFunction($jsFunction)
     {
         $this->jsFunction = $jsFunction;
+    }
+
+    public function setIdHTMLElement($idHTMLElement)
+    {
+        $this->idHTMLElement = $idHTMLElement;
     }
 
     public function getId()
@@ -110,14 +110,9 @@ class OperacionAccionPerfil
         return $this->Perfil;
     }
 
-    public function getControllerName()
+    public function getOrdenUbicacion()
     {
-        return $this->controllerName;
-    }
-
-    public function getControllerAction()
-    {
-        return $this->controllerAction;
+        return $this->ordenUbicacion;
     }
 
     public function getUrlDestino()
@@ -128,5 +123,25 @@ class OperacionAccionPerfil
     public function getJsFunction()
     {
         return $this->jsFunction;
+    }
+
+    public function getIdHTMLElement()
+    {
+        return $this->idHTMLElement;
+    }
+
+    public function getJSON(){
+        $output = "";
+
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"Operacion": ' . $this->getOperacion()->getJSON() .', ';
+        $output .= '"Accion": ' . $this->getAccion()->getJSON() .', ';
+        $output .= '"Perfil": ' . $this->getPerfil()->getJSON() .', ';
+        $output .= '"jsFunction": "' . $this->getJsFunction() .'", ';
+        $output .= '"ordenUbicacion": "' . $this->getOrdenUbicacion() .'", ';
+        $output .= '"urlDestino": "' . $this->getUrlDestino() .'", ';
+        $output .= '"idHTMLElement": "' . $this->getIdHTMLElement() .'", ';
+        
+        return '{' . $output . '}';
     }
 }

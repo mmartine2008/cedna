@@ -426,17 +426,16 @@ class UserManager
      * @return array
      */
     public function getPerfilesActivos($Usuario){
+        // var_dump($Usuario);
+        return $Usuario->getPerfiles();
+        // $UsuarioXPerfil = $this->entityManager
+        //             ->getRepository(UsuariosxPerfiles::class)->findBy(['Usuario' => $Usuario]);
+        // $output = [];
         
-        $UsuarioXPerfil = $this->entityManager
-                    ->getRepository(UsuariosxPerfiles::class)->findBy(['Usuario' => $Usuario]);
-        $output = [];
-        
-        foreach($UsuarioXPerfil as $UserxPerfil){
-            if ($UserxPerfil->getActivo() == 1){
-                $output[] = $UserxPerfil->getPerfil();
-            }
-        }
+        // foreach($UsuarioXPerfil as $UserxPerfil){
+        //     $output[] = $UserxPerfil->getPerfil();
+        // }
 
-        return $output;
+        // return $output;
     }
 }

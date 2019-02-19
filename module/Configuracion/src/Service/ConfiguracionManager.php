@@ -95,4 +95,24 @@ class ConfiguracionManager {
 
         return $mensaje;
     }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Tipo Pregunta
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrTipoPreguntasJSON(){
+        $arrTipoPreguntas = $this->catalogoManager->getTipoPregunta();
+
+        $output = [];
+        
+        foreach($arrTipoPreguntas as $TipoPregunta){
+            $output[] = $TipoPregunta->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
 }

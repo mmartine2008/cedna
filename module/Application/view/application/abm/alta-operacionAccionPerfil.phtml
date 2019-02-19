@@ -5,79 +5,95 @@
                 <h3 class="panel-title">Nueva Relación Operación - Accion - Perfil</h3>
             </div>
             <div class="panel-body">
-                <form method="post" action="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "alta"])?>" name="formAltaAccion" onsubmit="preSubmit()">
-                    <div class="row">
+                <form method="post" name="formAltaAccion" onsubmit="preSubmit()">
+                    <div class="row form-group">
                         <div class="col-md-3">
-                            <label for="idOperacion">Operación:</label>
+                            <label for="idOperacion"><span class="obligatorio">(*) </span>Operación:</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="idOperacion" name="idOperacion" class="form-control">
+                            <select id="idOperacion" name="idOperacion" class="form-control" required="true">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
-                                    <option value="<?= $Operacion->getId() ?>"><?= $Operacion->getTitulo() ?></option>
+                                    <option value="<?= $Operacion->getId() ?>"
+                                        <?= ($Entidad && $Entidad->getOperacion()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
+                                    ><?= $Operacion->getTitulo() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
-                            <label for="idAccion">Acción:</label>
+                            <label for="idAccion"><span class="obligatorio">(*) </span>Acción:</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="idAccion" name="idAccion" class="form-control">
+                            <select id="idAccion" name="idAccion" class="form-control" required="true">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Acciones'] as $Accion) :?>
-                                    <option value="<?= $Accion->getId() ?>"><?= $Accion->getNombre() ?></option>
+                                    <option value="<?= $Accion->getId() ?>"
+                                    <?= ($Entidad && $Entidad->getAccion()->getId() == $Accion->getId()) ? 'selected' : '' ?>
+                                    ><?= $Accion->getTitulo() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
-                            <label for="idPerfil">Perfil:</label>
+                            <label for="idPerfil"><span class="obligatorio">(*) </span>Perfil:</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="idPerfil" name="idPerfil" class="form-control">
+                            <select id="idPerfil" name="idPerfil" class="form-control" required="true">
                                 <option value="">-- Seleccione --</option>
                                 <?php foreach($arrVariables['Perfiles'] as $Perfil) :?>
-                                    <option value="<?= $Perfil->getId() ?>"><?= $Perfil->getNombre() ?></option>
+                                    <option value="<?= $Perfil->getId() ?>"
+                                    <?= ($Entidad && $Entidad->getPerfil()->getId() == $Perfil->getId()) ? 'selected' : '' ?>
+                                    ><?= $Perfil->getNombre() ?></option>
                                 <?php endforeach;?>
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="urlDestino">URL Destino:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="urlDestino" name="urlDestino" class="form-control">
+                            <input type="text" id="urlDestino" name="urlDestino" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getUrlDestino() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="controllerName">Nombre Controlador:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="controllerName" name="controllerName" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="controllerAction">ControllerAction:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="controllerAction" name="controllerAction" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-3">
                             <label for="jsFunction">Función JS:</label>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="jsFunction" name="jsFunction" class="form-control">
+                            <input type="text" id="jsFunction" name="jsFunction" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getJsFunction() : '' ?>">
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="idHTMLElement">Id Elemento HTML:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="idHTMLElement" name="idHTMLElement" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getIdHTMLElement() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="ordenUbicacion"><span class="obligatorio">(*) </span>Ubicación en footer:</label>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="ordenUbicacion" name="ordenUbicacion" class="form-control" required="true">
+                                <option value="">-- Seleccione --</option>
+                                <?php for ($i = 1; $i <= 12; $i++) :?>
+                                    <option value="<?= $i ?>"
+                                    <?= ($Entidad && $Entidad->getOrdenUbicacion() == $i) ? 'selected' : '' ?>
+                                    ><?= $i ?></option>
+                                <?php endfor;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
                         <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>">
                             <div class="btn">Cancelar</div>
@@ -97,9 +113,9 @@ function FormAltaOperacionAccionPerfilToJson(){
         idAccion: $('#idAccion').val(), 
         idPerfil: $('#idPerfil').val(),
         urlDestino: $('#urlDestino').val(),
-        controllerName: $('#controllerName').val(),
-        controllerAction: $('#controllerAction').val(),
-        jsFunction: $('#jsFunction').val()
+        ordenUbicacion: $('#ordenUbicacion').val(),
+        jsFunction: $('#jsFunction').val(),
+        idHTMLElement: $('#idHTMLElement').val()
     };
     
     var JsonData = JSON.stringify(formData);

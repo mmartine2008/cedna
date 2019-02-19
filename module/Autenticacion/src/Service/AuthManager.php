@@ -77,7 +77,7 @@ class AuthManager
             //     $this->sessionManager->rememberMe(60*60*24*30);
             // }
             
-            // $this->registrarPerfil();
+            $this->registrarPerfil();
         } else {
 
         }
