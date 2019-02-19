@@ -29,7 +29,7 @@ class ConfiguracionController extends AbstractActionController
 
     protected function cargarAccionesDisponibles($nombreOperacion, $nombrePerfil){
         // $perfilActivo = $this->userSessionManager->getPerfilActivo();
-        // var_dump($perfilActivo);
+        // var_dump($this->userSessionManager->getPerfiles());
         // die;
 
         $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
