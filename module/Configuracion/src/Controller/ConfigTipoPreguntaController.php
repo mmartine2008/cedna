@@ -24,7 +24,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
     public function indexAction()
     {
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta', 'Administrador');
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta');
 
         $arrTipoPreguntasJSON = $this->configuracionManager->getArrTipoPreguntasJSON();
         
@@ -34,7 +34,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
     }
 
     public function altaAction(){
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Alta', 'Administrador');
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Alta');
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
@@ -55,7 +55,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
     }
 
     public function editarAction(){
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Edicion', 'Administrador');
+        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Edicion');
 
         $parametros = $this->params()->fromRoute();
 

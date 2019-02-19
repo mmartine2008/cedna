@@ -87,7 +87,7 @@ class AuthController extends AbstractActionController
         
         // $urlDefault = $Perfil->getDefaultHome();
         
-        return $this->redirect()->toRoute('abm');
+        return $this->redirect()->toRoute('configuracion');
     }
     
     /**
