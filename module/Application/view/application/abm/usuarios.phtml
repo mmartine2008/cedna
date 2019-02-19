@@ -27,7 +27,14 @@
                             <td><?= $Usuario->getApellido() ?></td>
                             <td><?= $Usuario->getEmail() ?></td>
                             <td><?= $Usuario->getBloqueado() ?></td>
-                            <td></td>
+                            <td>
+                                <a href="<?=$this->url("abm/entidad",
+                                    ["entidad" => "usuarios", "action" => "editar", "id" => $Usuario->getId()]
+                                    )?>">Editar</a> | 
+                                <a href="<?=$this->url("abm/entidad",
+                                    ["entidad" => "usuarios", "action" => "borrar", "id" => $Usuario->getId()]
+                                    )?>">Borrar</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

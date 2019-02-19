@@ -164,6 +164,8 @@ class AuthAdapter implements AdapterInterface
         {
             $Perfiles = $this->userManager->getPerfilesActivos($Usuario);
             
+            var_dump($Perfiles); die;
+
             $this->setPerfiles($Perfiles);
         }
         

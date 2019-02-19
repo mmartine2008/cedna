@@ -97,6 +97,8 @@ class UserSessionManager
     public function getPerfiles()
     {
         $dataSession = $this->sessionContainer->session;
+        var_dump($dataSession);
+        die;
         if (isset($dataSession[1]))
         {
             $perfiles = $dataSession[1];
@@ -131,20 +133,8 @@ class UserSessionManager
     public function setPerfilActivo($perfilActivo){
         $this->sessionContainer->perfilActivo = $perfilActivo;
     }
-
-    public function getManifiestoId()
-    {
-        $manifiestoId = $this->sessionContainer->manifiestoId;
-        
-        return $manifiestoId;
-    }
     
-    public function setManifiestoId($manifiestoId)
-    {
-        $this->sessionContainer->manifiestoId = $manifiestoId;
-    }   
-    
-     public function getTamanioPaginacion()
+    public function getTamanioPaginacion()
     {
         $tamanio = $this->sessionContainer->tamanio;
         
@@ -155,157 +145,11 @@ class UserSessionManager
     {
         $this->sessionContainer->tamanio = $tamanio;
     }
-
-    public function getRazonSocial()
-    {
-        $razonSocial = $this->sessionContainer->razonSocial;
-        
-        return $razonSocial;
-    }
     
-    public function getFiltros(){
-        
-        return $this->sessionContainer->filtros;
-    }
-    
-    public function limpiarFiltros(){
-        $this->sessionContainer->filtros = [];
-    }
-
-    public function setFiltros($filtros){
-        $this->sessionContainer->filtros = $filtros;
-    }
-
-    public function getFiltrosEstadisticas(){
-        
-        return $this->sessionContainer->filtrosEstadisticas;
-    }
-
-    public function setFiltrosEstadisticas($filtrosEstadisticas){
-        $this->sessionContainer->filtrosEstadisticas = $filtrosEstadisticas;
-    }
-
-    public function limpiarFiltrosEstadisticas(){
-        $this->sessionContainer->filtrosEstadisticas = [];
-    }
-
-    public function getFiltrosEstablecimiento(){
-        
-        return $this->sessionContainer->filtrosEstablecimiento;
-    }
-    
-    public function limpiarFiltrosEstablecimiento(){
-        $this->sessionContainer->filtrosEstablecimiento = [];
-    }
-
-    public function setFiltrosEstablecimiento($filtros){
-        $this->sessionContainer->filtrosEstablecimiento = $filtros;
-    }
-
-    public function getFiltrosEmpresa(){
-        
-        return $this->sessionContainer->filtrosEmpresa;
-    }
-    
-    public function limpiarFiltrosEmpresa(){
-        $this->sessionContainer->filtrosEmpresa = [];
-    }
-
-    public function setFiltrosEmpresa($filtros){
-        $this->sessionContainer->filtrosEmpresa = $filtros;
-    }
-
-    private function unsetFiltros(){
-        unset($this->sessionContainer->filtros);
-        unset($this->sessionContainer->filtrosEstablecimiento);
-        unset($this->sessionContainer->filtrosEmpresa);
-        //unset($this->sessionContainer->filtrosEmpresa);
-    }
-
-    public function setDatosRespInsc($datos) 
-    {
-        $this->sessionContainer->razonSocial = $datos;
-    }
-    
-    public function setEmail($email)
-    {
-        $this->sessionContainer->email = $email;
-    }
-
-    public function getEmail()
-    {
-        return $this->sessionContainer->email;
-    }  
-    
-    public function setClave($Clave)
-    {
-        $this->sessionContainer->Clave = $Clave;
-    }
-
-    public function getClave()
-    {
-        return $this->sessionContainer->Clave;
-    }
-    
-    public function setIdRelTTManifiesto($id_rel_tt_manifiesto)
-    {
-        $this->sessionContainer->id_rel_tt_manifiesto = $id_rel_tt_manifiesto;
-    }
- 
-    public function getIdRelTTManifiesto()
-    {
-        return $this->sessionContainer->id_rel_tt_manifiesto;
-    }
-    
-    public function setDescripcionConfiguracion($Descripcion){
-        $this->sessionContainer->Descripcion = $Descripcion;
-    }
-    
-    public function getDescripcionConfiguracion(){
-        return $this->sessionContainer->Descripcion;
-    }
-    
-    public function setCategoriaConfiguracion($Categoria){
-        $this->sessionContainer->Categoria = $Categoria;
-    }
-    
-    public function getCategoriaConfiguracion(){
-        return $this->sessionContainer->Categoria;
-    }
-    
-    public function setToleranciaConfiguracion($Tolerancia){
-        $this->sessionContainer->Tolerancia = $Tolerancia;
-    }
-    
-    public function getToleranciaConfiguracion(){
-        return $this->sessionContainer->Tolerancia;
-    }
-    
-    public function limpiarCategoriaConfiguracion() {
-        $this->sessionContainer->Categoria = '';
-    }
-    
-    public function limpiarToleranciaConfiguracion() {
-        $this->sessionContainer->Tolerancia = '';
-    }
-    
-    public function limpiarDescripcionConfiguracion() {
-        $this->sessionContainer->Descripcion = '';
-    }
-
     public function cerrar()
     {
-        unset($this->sessionContainer->email);
-        unset($this->sessionContainer->razonSocial);
-        unset($this->sessionContainer->manifiestoId);
         unset($this->sessionContainer->perfilActivo);
         unset($this->sessionContainer->session);
-        $this->unsetFiltros();
-    }
-    
-    public function getDatosRespIns()
-    {
-        return $this->sessionContainer->razonSocial;
     }
     
     public function esInterno()
@@ -320,37 +164,4 @@ class UserSessionManager
         }
     }
     
-    public function setTokenCompraVep()
-    {
-        $token = md5(random_int(1, 1000));
-        $this->sessionContainer->tokenCompraVep = $token;
-        
-        return $this->getTokenCompraVep();
-    }
-    
-    public function getTokenCompraVep()
-    {
-        return $this->sessionContainer->tokenCompraVep;
-    }
-    
-    public function getMontoTasa(){
-        return $this->sessionContainer->MontoTasa;
-    }
-    
-    public function setMontoTasa($monto){
-        $this->sessionContainer->MontoTasa = $monto;
-    }
-
-    public function setTokenFacturaVep()
-    {
-        $token = md5(random_int(1, 1000));
-        $this->sessionContainer->tokenCompraVep = $token;
-        
-        return $this->getTokenFacturaVep();
-    }
-    
-    public function getTokenFacturaVep()
-    {
-        return $this->sessionContainer->tokenCompraVep;
-    }
 }

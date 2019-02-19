@@ -7,6 +7,7 @@ use Configuracion\Controller\ConfigPerfilesController;
 
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfiguracionManager;
+use Autenticacion\Service\UserSessionManager;
 
 
 /**
@@ -19,7 +20,8 @@ class ConfigPerfilesControllerFactory implements FactoryInterface
     {
         $catalogoManager = $container->get(CatalogoManager::class);
         $configuracionManager = $container->get(ConfiguracionManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
         
-        return new ConfigPerfilesController($catalogoManager, $configuracionManager);
+        return new ConfigPerfilesController($catalogoManager, $configuracionManager, $userSessionManager);
     }
 }

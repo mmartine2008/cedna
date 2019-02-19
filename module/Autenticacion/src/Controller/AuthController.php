@@ -34,6 +34,8 @@ class AuthController extends AbstractActionController
      */
     private $userManager;
 
+    private $userSessionManager;
+
     /**
      * Constructor.
      */
@@ -45,6 +47,7 @@ class AuthController extends AbstractActionController
         $this->empresasManager = $empresasManager;
         $this->authManager = $authManager;
         $this->userManager = $userManager;
+        $this->userSessionManager = $userSessionManager;
     }
     
     private function procesarLoginAction()
@@ -83,7 +86,7 @@ class AuthController extends AbstractActionController
         // $Perfil = $this->authManager->getPerfilInicial();
         
         // $urlDefault = $Perfil->getDefaultHome();
-
+        
         return $this->redirect()->toRoute('abm');
     }
     
