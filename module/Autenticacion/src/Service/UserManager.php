@@ -432,9 +432,9 @@ class UserManager
         $output = [];
         
         foreach($UsuarioXPerfil as $UserxPerfil){
-            if ($UserxPerfil->getActivo() == 1){
+            //if ($UserxPerfil->getActivo() == 1){
                 $output[] = $UserxPerfil->getPerfil();
-            }
+            //}
         }
 
         return $output;

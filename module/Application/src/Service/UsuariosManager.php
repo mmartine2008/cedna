@@ -52,8 +52,12 @@ class UsuariosManager {
      * @param [JSON] $jsonData
      * @return void
      */
-    public function procesarAlta($jsonData){
-        $Usuario = new Usuarios();
+    public function procesarAlta($jsonData, $idUsuario = null){
+        if ($idUsuario){
+            $Usuario = $this->getEntidadPorId($idUsuario);
+        }else{
+            $Usuario = new Usuarios();
+        }
 
         $Usuario->setNombreUsuario($jsonData->username);
         
@@ -61,7 +65,6 @@ class UsuariosManager {
         $passwordHash = $bcrypt->create($jsonData->clave);
 
         $Usuario->setClave($passwordHash);
-
 
         $Usuario->setFechaAlta(new \DateTime('now'));
         $Usuario->setEmail($jsonData->email);
@@ -80,5 +83,25 @@ class UsuariosManager {
      */
     public function getArrVariablesAltaEntidad(){
         return [];
+    }
+
+    public function borrarEntidad($idUsuario){
+        $Usuario = $this->getEntidadPorId($idUsuario);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Usuario);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la operación correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La operación no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }
