@@ -97,6 +97,8 @@ class UserSessionManager
     public function getPerfiles()
     {
         $dataSession = $this->sessionContainer->session;
+        var_dump($dataSession);
+        die;
         if (isset($dataSession[1]))
         {
             $perfiles = $dataSession[1];

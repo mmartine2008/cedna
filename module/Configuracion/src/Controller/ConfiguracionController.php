@@ -31,7 +31,7 @@ class ConfiguracionController extends AbstractActionController
         // $perfilActivo = $this->userSessionManager->getPerfilActivo();
         // var_dump($this->userSessionManager->getPerfiles());
         // die;
-
+        $this->userSessionManager->getPerfiles();
         $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
 
         $arrAccionesDisponiblesJSON = [];

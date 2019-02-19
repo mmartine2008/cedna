@@ -72,7 +72,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $Usuarios = $this->configUsuariosManager->getUsuarios($idUsuarios);
+        $Usuarios = $this->catalogoManager->getUsuarios($idUsuarios);
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
         $view->setVariable('arrPerfiles', $arrPerfiles);

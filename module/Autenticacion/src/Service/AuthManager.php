@@ -77,7 +77,7 @@ class AuthManager
             //     $this->sessionManager->rememberMe(60*60*24*30);
             // }
             
-            // $this->registrarPerfil();
+            $this->registrarPerfil();
         } else {
 
         }
@@ -149,23 +149,4 @@ class AuthManager
         
     }
     
-    /**
-     * Dado un CUIT, verifica si es responsable inscripto,
-     * recuperando los datos o nulo si no lo es.
-     * Pre: Se supone que es un CUIT bien formado
-     * @param type $cuit
-     */
-    public function getDatosResponsableInscripto($cuit)
-    {
-        $datos = $this->afipManager->getDatosResponsableInscripto($cuit);
-        $parserAfip = new ParserAfip($datos);
-                
-        return $parserAfip;
-    }     
-    
-    public function getDatosEmpresaInscripta($cuit)
-    {
-        return $this->afipManager->getDatosResponsableInscripto($cuit);
-
-    }   
 }

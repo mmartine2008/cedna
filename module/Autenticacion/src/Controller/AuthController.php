@@ -86,7 +86,7 @@ class AuthController extends AbstractActionController
         // $Perfil = $this->authManager->getPerfilInicial();
         
         // $urlDefault = $Perfil->getDefaultHome();
-        $this->userSessionManager->setPerfilActivo(0);
+        
         return $this->redirect()->toRoute('abm');
     }
     
