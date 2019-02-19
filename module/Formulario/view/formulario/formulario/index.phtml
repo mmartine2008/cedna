@@ -1,7 +1,7 @@
 <script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
 <script>
     var formulario = <?= $formulario ?>;
-    var idList = "";
+    var idList = Array();
 
     function createListFromJSONLista(selector, lista, seleccione) {
         if (seleccione){
@@ -37,7 +37,7 @@
         var selector = createListFromJSONLista(selector, opciones, true);
         divElement.appendChild(selector);
 
-
+        idList.push(id);
     }
 
     function createMultipleSelector(id, name, opciones, divElement, size) {
@@ -51,6 +51,8 @@
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, false);
         divElement.appendChild(selector);
+
+        idList.push(id);
     }
 
     function createDivClass(info, div) {
@@ -115,7 +117,9 @@
         var select1 = document.getElementById(origin);
         var selected1 = [];
         for (var i = 0; i < select1.length; i++) {
-            if (select1.options[i].selected) selected1.push(select1.options[i].value);
+            if (select1.options[i].selected) {
+                selected1.push(select1.options[i].value);
+            }
         }
         
         var optionOrigin = deleteOptions(origin);
@@ -145,7 +149,7 @@
         var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row", divForm);
         var div_class_sm_3 = createDivClass("col-sm-3", divRow);
-        createMultipleSelector('MultiSelectDisp_'+id, 'MultiSelectDisp', opciones, div_class_sm_3, 10);
+        createMultipleSelector('MultiSelectDisp', id, opciones, div_class_sm_3, 10);
 
         var div_class_sm_1 = createDivClass("col-sm-1", divRow);
         createButton("button", "Positive_rightSelected", "Añadir seleccionados", div_class_sm_1, ">", false);
@@ -154,8 +158,8 @@
         createButton("button", "Negative_leftSelected", "Quitar seleccionados", div_class_sm_1, "<", true);
 
         var div_class_sm_3_2 = createDivClass("col-sm-3", divRow);
-        createMultipleSelector('Positive_to'+id, 'Positive_to', opciones_in, div_class_sm_3_2, 5);
-        createMultipleSelector('Negative_to'+id, 'Negative_to', opciones_out, div_class_sm_3_2, 5);
+        createMultipleSelector('Positive_to', id, opciones_in, div_class_sm_3_2, 5);
+        createMultipleSelector('Negative_to', id, opciones_out, div_class_sm_3_2, 5);
         var div_class_sm_5 = createDivClass("col-sm-5", divRow);
     }
 
@@ -168,6 +172,8 @@
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
         divElement.appendChild(ele);
+
+        idList.push(name);
     } 
 
     function createOptions(item, divElement){
@@ -184,17 +190,23 @@
 
     function createTextArea(item, divElement){
         ele = document.createElement('textarea');
-        ele.name = 'respuesta'+ item.id;
-        ele.id = 'respuesta'+ item.id;
+        id = item.id;
+        ele.name = id;
+        ele.id = id;
         divElement.appendChild(ele);
+
+        idList.push(id);
     }
 
     function createImage(item, divElement){
         ele = document.createElement('img');
-        ele.src = "documentacion/imagenes/20190204_170557.jpg"
-        ele.name = 'respuesta'+ item.id;
-        ele.id = 'respuesta'+ item.id;
+        ele.src = "documentacion/imagenes/20190204_170557.jpg";
+        id = item.id;
+        ele.name = id;
+        ele.id = id;
         divElement.appendChild(ele);
+
+        idList.push(id);
     }
     
     function createAnswer(item, divElement){
@@ -206,7 +218,7 @@
             } else if(item.tipoPregunta.descripcion == 'textarea'){
                 createTextArea(item, divElement);
             } else {
-                createInput(item.tipoPregunta.descripcion, 'respuesta'+ item.id, divElement);
+                createInput(item.tipoPregunta.descripcion, item.id, divElement);
             }
         }
     }
@@ -245,7 +257,6 @@
         createTextElement("h4", div_class_sm_1, item.nombre);
 
         createQuestions(item, divElement);
-
         contenedor.appendChild(divElement);
         
         return divElement;
@@ -272,6 +283,29 @@
         ele.appendChild(div);
     }
 
+    function updateInput() {
+        // var ent={};
+        // for(var i=0;i<idList.length;i++) {
+        //     var list=[];
+        //     list.id= idList[i];
+        //     list.resp=$("#"+idList[i]).val();
+        // }
+        var datos  = [];
+        var objeto = {};
+
+        for(var i= 0; i < idList.length; i++) {
+            var nombre = idList[i]
+            datos.push({ 
+                "id"    : idList[i],
+                "respuesta"  : $("#"+idList[i]).val(),
+            });
+        }
+        objeto.datos = datos;
+        console.log(JSON.stringify(objeto));
+
+        $("#res").text(JSON.stringify(objeto));
+    }
+
     function cargarInput() {
         var myJSON = JSON.stringify();
         $("#JsonData").val(myJSON);
@@ -279,7 +313,13 @@
 
     function createCancelOkButtons(contenedor) {
         var div = createDivClass("row", contenedor);
-        createInput("hidden", "JsonData", div);
+
+        ele = document.createElement('input');
+        ele.type = "hidden";
+        ele.id = "JsonData";
+        div.appendChild(ele);
+
+        updateInput();
         createHref("#", div);
         createButton("submit", "submit", "Enviar Formulario", div, "Confirmar", false);
     }
