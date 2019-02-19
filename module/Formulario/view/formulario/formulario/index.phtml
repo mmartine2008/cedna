@@ -52,7 +52,7 @@
         var selector = createListFromJSONLista(selector, opciones, false);
         divElement.appendChild(selector);
 
-        idList.push(id);
+        // idList.push(id);
     }
 
     function createDivClass(info, div) {
@@ -200,7 +200,7 @@
 
     function createImage(item, divElement){
         ele = document.createElement('img');
-        ele.src = "documentacion/imagenes/20190204_170557.jpg";
+        ele.src = "#";
         id = item.id;
         ele.name = id;
         ele.id = id;
@@ -284,12 +284,6 @@
     }
 
     function updateInput() {
-        // var ent={};
-        // for(var i=0;i<idList.length;i++) {
-        //     var list=[];
-        //     list.id= idList[i];
-        //     list.resp=$("#"+idList[i]).val();
-        // }
         var datos  = [];
         var objeto = {};
 
@@ -301,30 +295,14 @@
             });
         }
         objeto.datos = datos;
-        console.log(JSON.stringify(objeto));
 
-        $("#res").text(JSON.stringify(objeto));
+        var json = JSON.stringify(objeto);
+        console.log(json);
+
+        $("#JsonData").val(json);
     }
 
-    function cargarInput() {
-        var myJSON = JSON.stringify();
-        $("#JsonData").val(myJSON);
-    }
-
-    function createCancelOkButtons(contenedor) {
-        var div = createDivClass("row", contenedor);
-
-        ele = document.createElement('input');
-        ele.type = "hidden";
-        ele.id = "JsonData";
-        div.appendChild(ele);
-
-        updateInput();
-        createHref("#", div);
-        createButton("submit", "submit", "Enviar Formulario", div, "Confirmar", false);
-    }
-
-    function createForm(){
+    function createFormulario(){
         var contenedor = document.getElementsByTagName("div")[0];
 
         var divFormulario = document.createElement("Div");
@@ -334,10 +312,17 @@
         contenedor.appendChild(divFormulario);
 
         construirSecciones(formulario.secciones, divFormulario);
-
-        createCancelOkButtons(contenedor);
-
+        // createCancelOkButtons(contenedor);
     }
 
-    createForm();
+    createFormulario();
 </script>
+<form method="post" action="<?=$this->url("show-form")?>" name="formPerfil" >
+    <div class="row">
+        <input type="text" name="JsonData" id="JsonData">
+        <a href="#">
+            <div class="btn">Cancelar</div>
+        </a>
+        <button id="submit" type="submit" onclick="updateInput()">Confirmar</button>
+    </div>
+</form>
