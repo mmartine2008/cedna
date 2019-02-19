@@ -15,9 +15,9 @@ class ConfigUsuariosController extends ConfiguracionController
 
     private $configUsuariosManager;
 
-    public function __construct($catalogoManager, $configUsuariosManager)
+    public function __construct($catalogoManager, $configUsuariosManager, $userSessionManager)
     {
-        parent::__construct($catalogoManager);
+        parent::__construct($catalogoManager, $userSessionManager);
 
         $this->configUsuariosManager = $configUsuariosManager;
     }
@@ -72,7 +72,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
         $view = new ViewModel();
         
-        $Usuarios = $this->configUsuariosManager->getUsuarios($idUsuarios);
+        $Usuarios = $this->catalogoManager->getUsuarios($idUsuarios);
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
         $view->setVariable('arrPerfiles', $arrPerfiles);

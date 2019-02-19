@@ -7,6 +7,7 @@ use Configuracion\Controller\ConfigUsuariosController;
 
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfigUsuariosManager;
+use Autenticacion\Service\UserSessionManager;
 
 
 /**
@@ -19,7 +20,8 @@ class ConfigUsuariosControllerFactory implements FactoryInterface
     {
         $catalogoManager = $container->get(CatalogoManager::class);
         $configUsuariosManager = $container->get(ConfigUsuariosManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
         
-        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager);
+        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager, $userSessionManager);
     }
 }

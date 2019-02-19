@@ -6,6 +6,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 use Configuracion\Controller\ConfiguracionController;
 
 use DBAL\Service\CatalogoManager;
+use Autenticacion\Service\UserSessionManager;
 
 
 /**
@@ -17,7 +18,8 @@ class ConfiguracionControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $catalogoManager = $container->get(CatalogoManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
         
-        return new ConfiguracionController($catalogoManager);
+        return new ConfiguracionController($catalogoManager, $userSessionManager);
     }
 }
