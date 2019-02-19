@@ -7,6 +7,7 @@ use Configuracion\Controller\ConfigTipoPreguntaController;
 
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfiguracionManager;
+use Autenticacion\Service\UserSessionManager;
 
 
 /**
@@ -19,7 +20,8 @@ class ConfigTipoPreguntaControllerFactory implements FactoryInterface
     {
         $catalogoManager = $container->get(CatalogoManager::class);
         $configuracionManager = $container->get(ConfiguracionManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
 
-        return new ConfigTipoPreguntaController($catalogoManager, $configuracionManager);
+        return new ConfigTipoPreguntaController($catalogoManager, $configuracionManager, $userSessionManager);
     }
 }

@@ -13,11 +13,12 @@ use Zend\View\Model\ViewModel;
 class ConfiguracionController extends AbstractActionController
 {
     protected $catalogoManager;
+    protected $userSessionManager;
 
-    public function __construct($catalogoManager)
+    public function __construct($catalogoManager, $userSessionManager)
     {
         $this->catalogoManager = $catalogoManager;
-        
+        $this->userSessionManager = $userSessionManager;
     }
 
     public function indexAction()
@@ -27,6 +28,10 @@ class ConfiguracionController extends AbstractActionController
     }
 
     protected function cargarAccionesDisponibles($nombreOperacion, $nombrePerfil){
+        //$perfilActivo = $this->userSessionManager->getPerfilActivo();
+        // var_dump($perfilActivo);
+        // die;
+
         $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $nombrePerfil);
 
         $arrAccionesDisponiblesJSON = [];

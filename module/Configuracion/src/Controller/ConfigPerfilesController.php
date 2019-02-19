@@ -14,9 +14,9 @@ class ConfigPerfilesController extends ConfiguracionController
 {
     private $configuracionManager;
 
-    public function __construct($catalogoManager, $configuracionManager)
+    public function __construct($catalogoManager, $configuracionManager, $userSessionManager)
     {
-        parent::__construct($catalogoManager);
+        parent::__construct($catalogoManager, $userSessionManager);
 
         $this->configuracionManager = $configuracionManager;
     }
