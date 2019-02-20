@@ -136,3 +136,53 @@ h4, h1 {text-align:center;}
 tbody tr.highlight td {
     background-color: #ccc;
 }
+
+.footer {
+    background: #85c8f466;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.botonVolver {
+    content: url('../img/boton/volver-nuevo.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.botonNuevo {
+    content: url('../img/boton/nuevo.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.botonEditar {
+    content: url('../img/boton/firmas.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.botonGuardar {
+    content: url('../img/boton/confirmar.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.botonEliminar {
+    content: url('../img/boton/borrar.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
