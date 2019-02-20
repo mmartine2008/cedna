@@ -182,6 +182,8 @@ class Pregunta
         return $this;
     }
 
+    
+
     public function getJSON(){
         $output = "";
 
@@ -196,6 +198,7 @@ class Pregunta
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
+        $output .= '"respuesta": "' . "" .'", ';
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
         } else {

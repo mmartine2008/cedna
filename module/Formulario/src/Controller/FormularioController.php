@@ -14,32 +14,32 @@ class FormularioController extends AbstractActionController
 {
     private $FormularioManager;
 
-    public function __construct($FormularioManager)
-    {
+    public function __construct($FormularioManager) {
         $this->FormularioManager = $FormularioManager;
-        
     }
 
-    public function indexAction()
-    {
+    public function indexAction() {
         $idFormulario = 1;
         $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
-        // var_dump($formularioJSON);
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $JsonData = $this->params()->fromPost();
-            $data = json_decode($JsonData['JsonData']);
-            // var_dump($data);
-            $this->FormularioManager->altaRespuestasFormulario($data->datos);
-        }
+
         return new ViewModel([
             "formulario" => $formularioJSON
         ]);
     }
 
-    public function showFormAction()
-    {
+    public function showFormAction() {
+        $idFormulario = 1;
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $JsonData = $this->params()->fromPost();
+            $data = json_decode($JsonData['JsonData']);
+            var_dump($data);
+            $this->FormularioManager->altaRespuestasFormulario($data->datos);
+        }
+        // $respuestasJson = $this->FormularioManager->getRespuestasFormularioJSON($idFormulario);
+        // var_dump($respuestasJson);
         return new ViewModel([
+            // "respuestas" => $respuestasJson
         ]);
     }
 

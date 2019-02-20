@@ -33,6 +33,12 @@ class FormularioManager {
         return $formulario->getJSON();
     }
 
+    public function getRespuestasFormularioJSON($id) {
+        $respuestas = $this->entityManager->getRepository(Respuesta::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $respuestas->getJSON();
+    }
+
     public function getPregunta($id) {
         $pregunta = $this->entityManager->getRepository(Pregunta::class)
                                             ->findOneBy(['id' => $id]); 
@@ -90,7 +96,6 @@ class FormularioManager {
                 $this->altaRespuesta($idPregunta, $respuesta->respuesta);
             }
         }
-        
     }
 
     

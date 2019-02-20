@@ -1,0 +1,25 @@
+<script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
+<script>
+    var respuestas = <?= $respuestas ?>;
+
+    function construirSecciones(respuestas, contenedor){
+        for (var i = 0; i < respuestas.length; i++){
+            var item = respuestas[i];
+            var itemRespuesta = crearItemRespuesta(item, contenedor);
+            contenedor.appendChild(itemRespuesta);
+        }
+    }
+
+    function showForm() {
+        var contenedor = document.getElementsByTagName("div")[0];
+
+        var divFormulario = document.createElement("Div");
+        divFormulario.id = "Formulario"+formulario.id;
+        divFormulario.style.paddingTop = "15px";
+        createTextElement("h3", divFormulario, formulario.descripcion);
+        contenedor.appendChild(divFormulario);
+
+        showAnswers(respuestas, divFormulario);
+    }
+
+</script>

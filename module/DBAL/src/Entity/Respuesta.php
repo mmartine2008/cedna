@@ -146,13 +146,14 @@ class Respuesta
 
     public function getJSON(){
         $output = "";
-        $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"idRespuesta": "' . $this->getId() .'", ';
+        $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         if ($this->getPermiso()) {
-            $output .= '"permiso": ' . $this->getPermiso()->getJSON() .', ';
+            ', '.$output .= '"permiso": ' . $this->getPermiso()->getJSON().'"' ;
         }
         if ($this->getOpcion()) {
-            $output .= '"opcion": ' . $this->getOpcion()->getJSON() .', ';
+            ', '. $output .= '"opcion": ' . $this->getOpcion()->getJSON().'"';
         }
         return '{' . $output . '}';
     }
