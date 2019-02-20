@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?= $this->headTitle('ZF Skeleton Application')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headTitle('CEDNA')->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?= $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -27,39 +27,49 @@
         ?>
     </head>
     <body>
-        
-        <div class="container">
-            <?= $this->content ?>
-            <hr>
-            <footer>
-                <div class="form-row">
-                    <div class="col-lg-1" id="col1">
-                    </div>
-                    <div class="col-lg-1" id="col2">
-                    </div>
-                    <div class="col-lg-1" id="col3">
-                    </div>
-                    <div class="col-lg-1" id="col4">
-                    </div>
-                    <div class="col-lg-1" id="col5">
-                    </div>
-                    <div class="col-lg-1" id="col6">
-                    </div>
-                    <div class="col-lg-1" id="col7">
-                    </div>
-                    <div class="col-lg-1" id="col8">
-                    </div>
-                    <div class="col-lg-1" id="col9">
-                    </div>
-                    <div class="col-lg-1" id="col10">
-                    </div>
-                    <div class="col-lg-1" id="col11">
-                    </div>
-                    <div class="col-lg-1" id="col12">
-                    </div>
+        <div class="flex">
+            <!-- Page header -->
+            <div class="flex">
+                <div class="jumbotron">
+                    <h1 class="h1">CEDNA</h1>
+                    <p>Sistema de Permiso de Trabajo</p>
                 </div>
-            </footer>
+            </div>                
         </div>
+        <div class="form-row">
+            <div class="container">
+                <?= $this->content ?>
+                <hr>
+            </div>
+        </div>
+        <footer class="footer pb-3 pt-3">
+            <div class="form-row">
+                <div class="col-lg-1" id="col1">
+                </div>
+                <div class="col-lg-1" id="col2">
+                </div>
+                <div class="col-lg-1" id="col3">
+                </div>
+                <div class="col-lg-1" id="col4">
+                </div>
+                <div class="col-lg-1" id="col5">
+                </div>
+                <div class="col-lg-1" id="col6">
+                </div>
+                <div class="col-lg-1" id="col7">
+                </div>
+                <div class="col-lg-1" id="col8">
+                </div>
+                <div class="col-lg-1" id="col9">
+                </div>
+                <div class="col-lg-1" id="col10">
+                </div>
+                <div class="col-lg-1" id="col11">
+                </div>
+                <div class="col-lg-1" id="col12">
+                </div>
+            </div>
+        </footer>
         <?= $this->inlineScript() ?>
     </body>
 </html>
@@ -93,7 +103,7 @@
             icono.attr('class', accionBoton.Accion.icono);
             icono.text(accionBoton.Accion.titulo);
 
-            var boton = $('<button></button>');
+            var boton = $('<div></div>');
 
             boton.attr('onclick', accionBoton.jsFunction);
             boton.attr('id', accionBoton.idHTMLElement);

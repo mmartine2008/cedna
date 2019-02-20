@@ -163,8 +163,6 @@ class AuthAdapter implements AdapterInterface
         if ($Usuario)
         {
             $Perfiles = $this->userManager->getPerfilesActivos($Usuario);
-            
-            var_dump($Perfiles); die;
 
             $this->setPerfiles($Perfiles);
         }

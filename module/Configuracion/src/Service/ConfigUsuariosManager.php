@@ -2,6 +2,8 @@
 
 namespace Configuracion\Service;
 
+use Zend\Crypt\Password\Bcrypt;
+
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\Usuarios;
 use DBAL\Entity\UsuariosxPerfiles;
@@ -35,7 +37,11 @@ class ConfigUsuariosManager {
         $Usuarios->setNombre($jsonData->nombre);
         $Usuarios->setApellido($jsonData->apellido);
         $Usuarios->setEmail($jsonData->email);
-        $Usuarios->setClave($jsonData->clave);
+
+        $bcrypt = new Bcrypt();
+        $passwordHash = $bcrypt->create($jsonData->clave);
+        $Usuarios->setClave($passwordHash);
+
         $Usuarios->setFechaAlta(new \DateTime('now'));
 
         $this->actualizarPerfiles($Usuarios, $jsonData->perfiles);

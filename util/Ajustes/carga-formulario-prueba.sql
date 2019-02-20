@@ -1,3 +1,20 @@
+DELETE FROM Opcion;
+DELETE FROM TipoPregunta;
+DELETE FROM SeccionPregunta;
+DELETE FROM PreguntaOpcion;
+DELETE FROM Pregunta;
+DELETE FROM Respuesta;
+delete from Seccion;
+DELETE FROM Formulario;
+
+DBCC CHECKIDENT ('Opcion', RESEED, 0);
+DBCC CHECKIDENT ('Seccion', RESEED, 0);
+DBCC CHECKIDENT ('TipoPregunta', RESEED, 0);
+DBCC CHECKIDENT ('SeccionPregunta', RESEED, 0);
+DBCC CHECKIDENT ('Formulario', RESEED, 0);
+DBCC CHECKIDENT ('Pregunta', RESEED, 0);
+DBCC CHECKIDENT ('Respuesta', RESEED, 0);
+
 INSERT Formulario(Descripcion) VALUES('Datos Personales');
 
 INSERT Seccion(IdFormulario) VALUES (1);
@@ -37,11 +54,11 @@ INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (1,3);
 --  /////////////////////////////////////////////////////////////
 UPDATE TipoPregunta
 SET descripcion = 'text'
-WHERE descripcion = 'texto'
+WHERE descripcion = 'texto';
 
 UPDATE TipoPregunta
 SET descripcion = 'date'
-WHERE descripcion = 'fecha'
+WHERE descripcion = 'fecha';
 
 INSERT 	TipoPregunta(Descripcion) VALUES ('image');
 INSERT 	TipoPregunta(Descripcion) VALUES ('file');

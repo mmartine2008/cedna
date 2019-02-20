@@ -61,7 +61,7 @@ class AuthManager
         $authAdapter->setPassword($password);
         $result = $this->authService->authenticate();
 
-        // $this->procesarResultadoLogin($result, $rememberMe);
+        $this->procesarResultadoLogin($result, $rememberMe);
         
         return $result;
     }

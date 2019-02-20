@@ -46,9 +46,7 @@ class CatalogoManager {
         return $Perfiles;
     }
 
-    public function getAccionesPorPerfil($OperacionNombre, $PerfilNombre){
-        $Perfil = $this->entityManager->getRepository(Perfiles::class)->findOneBy(['Nombre' => $PerfilNombre]);
-
+    public function getAccionesPorPerfil($OperacionNombre, $Perfil){
         $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $OperacionNombre]);
 
         $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)

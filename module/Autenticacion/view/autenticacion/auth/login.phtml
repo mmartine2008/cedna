@@ -5,26 +5,52 @@ $(document).ready(function(){
    
 });
 </script>
-<div class="row center-xs ">
-    <div class="col-xs-12 col-md-4 login">
-        <form class="form-signin" method="post">
-
-            <!-- <div class="alert alert-warning" role="alert">
-                Incorrect login and/or password. 
-                <a href="">Forgot password?</a>
-            </div> -->
-
-            <img id="profile-img" class="profile-img-card" src="img/login/soup.png" />
-            <div style="margin-bottom:15px;"></div>
-            <label>Nombre de Usuario: <input type="text" name="Usuario"></label>
-            <label>Clave: <input type="password" name="Clave"></label>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox"> Remember me
-                </label>
+<div class="form-row center-xs ">
+    <div class="col-xs-12 col-md-10 login">
+        <div class="form-row align-items-center">
+            <div class="col-lg-4 offset-1">
+                <div class="text-center">
+                    <img id="profile-img" src="img/Coca-Cola_Femsa_Logo.png" />
+                </div>
             </div>
-
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        </form>
+            <div class="col-lg-5 offset-1 mx-auto">
+                <form class="form-signin" method="post">
+                    <!-- <div class="alert alert-warning" role="alert">
+                        Incorrect login and/or password. 
+                        <a href="">Forgot password?</a>
+                    </div> -->
+                    <div class="form-row mt-3">
+                        <div class="col-lg-5 text-left">
+                            <label>Nombre de Usuario:</label>
+                        </div>
+                        <div class="col-lg-7">
+                            <input type="text" class="form-control" name="Usuario">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-lg-3 text-left">
+                            <label>Contraseña:</label>
+                        </div>
+                        <div class="col-lg-9">
+                            <input type="password" class="form-control" name="Clave">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox"> Recordarme
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="">
+        </div>
+        <div class=""></div>
+        
     </div>
 </div>
