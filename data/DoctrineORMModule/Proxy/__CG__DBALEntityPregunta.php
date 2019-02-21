@@ -64,10 +64,10 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'seccion', 'opciones'];
+            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'opciones'];
         }
 
-        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'seccion', 'opciones'];
+        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'opciones'];
     }
 
     /**
@@ -318,28 +318,6 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTieneOpciones', [$tieneOpciones]);
 
         return parent::setTieneOpciones($tieneOpciones);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSeccion()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeccion', []);
-
-        return parent::getSeccion();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setSeccion($seccion)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSeccion', [$seccion]);
-
-        return parent::setSeccion($seccion);
     }
 
     /**

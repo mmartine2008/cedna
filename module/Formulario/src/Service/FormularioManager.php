@@ -72,7 +72,7 @@ class FormularioManager {
         return false;
     }
 
-    public function altaRespuesta($idPregunta, $respuesta) {
+    public function altaRespuesta($idPregunta, $idSeccion, $respuesta) {
         $pregunta = $this->getPregunta($idPregunta);
 
         $Entidad = new Respuesta();
@@ -89,11 +89,17 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
-    public function altaRespuestasFormulario($respuestas) {
-        foreach($respuestas as $respuesta){
-            if($this->tieneRespuesta($respuesta->respuesta)){
-                $idPregunta = $respuesta->id;
-                $this->altaRespuesta($idPregunta, $respuesta->respuesta);
+    public function altaRespuestasFormulario($datos) {
+        $secciones = $datos->secciones;
+        foreach($secciones as $seccion) {
+            $idSeccion = $seccion->id;
+            foreach($seccion->preguntas as $pregunta) {
+                var_dump($pregunta);
+                $respuesta = $pregunta->respuesta;
+                if($this->tieneRespuesta($respuesta)){
+                    $idPregunta = $pregunta->idPregunta;
+                    // $this->altaRespuesta($idPregunta, $idSeccion, $respuesta);
+                }
             }
         }
     }

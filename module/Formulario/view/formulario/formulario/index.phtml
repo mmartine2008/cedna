@@ -32,13 +32,13 @@
     function createSimpleSelector(id, opciones, divElement, idSeccion) {
         
         var selector = document.createElement("select");
-        idSector = "pregunta_"+id+"_seccion_"+idSeccion;
-        selector.id = idSector;
+        idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
+        selector.id = idSelector;
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, true);
         divElement.appendChild(selector);
 
-        idList.push(idSector);
+        idList.push(idSelector);
     }
 
     function createMultipleSelector(id, name, opciones, divElement, size) {
@@ -64,21 +64,16 @@
     }
 
     function insertarElementInSelect(origin, destination, id, idSeccion){
-        console.log(origin+id+"_seccion_"+idSeccion);
-        console.log(destination+id+"_seccion_"+idSeccion);
         var select1 = document.getElementById(origin+id+"_seccion_"+idSeccion);
-        console.log(select1);
         var selected1 = [];
         for (var i = 0; i < select1.length; i++) {
             if (select1.options[i].selected) {
                 selected1.push(select1.options[i].value);
-                console.log(select1.options[i].value);
             }
         }
         
         var optionOrigin = deleteOptions(origin+id+"_seccion_"+idSeccion);
         var selectIn = document.getElementById(destination+id+"_seccion_"+idSeccion);
-        console.log(selectIn);
         createListFromJSONLista(selectIn, selected1, false);
         manageButtons(id, idSeccion);
     }
@@ -157,14 +152,11 @@
     function updateJson(idSeccion, idPregunta, idRespuesta) {
         childs = formulario.secciones;
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
+            if(childs[i].idSeccion == idSeccion){
                 preguntas = childs[i].preguntas;
                 for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].id == idPregunta){
+                    if(preguntas[j].idPregunta == idPregunta){
                         preguntas[j].respuesta = $("#"+idRespuesta).val();
-                        console.log(idRespuesta);
-                        console.log($("#"+idRespuesta).val());
-                        console.log(preguntas[j].respuesta );
                     }
                 }
             }
@@ -173,11 +165,9 @@
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
-        console.log(idPregunta);
         ele = document.createElement('input');
         ele.type = infoType;
-        idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
-        console.log(idEle);
+        var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
         ele.name = idEle;
         ele.id = idEle;
         ele.onchange = function() {updateJson(idSeccion, idPregunta, idEle)};
@@ -192,10 +182,10 @@
     function createOptions(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
-            createSimpleSelector(item.id, opciones, divElement, idSeccion);
+            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
         } else if(item.tipoPregunta.destinos == 1) {
             var opciones = item.opciones;
-            createMultipleSelectorSkeleton(item.id, opciones, [],[], divElement, idSeccion);
+            createMultipleSelectorSkeleton(item.idPregunta, opciones, [],[], divElement, idSeccion);
         } else {
             //luego
         }
@@ -203,11 +193,11 @@
 
     function createTextArea(item, divElement, idSeccion){
         ele = document.createElement('textarea');
-        id = "pregunta_"+item.id+"_seccion_"+idSeccion;
+        var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
         divElement.appendChild(ele);
-        ele.onchange = function() {updateJson(idSeccion, item.id, id)};
+        ele.onchange = function() {updateJson(idSeccion, item.idPregunta, id)};
 
         // idList.push(id);
     }
@@ -215,7 +205,7 @@
     function createImage(item, divElement, idSeccion){
         ele = document.createElement('img');
         ele.src = "#";
-        id = "pregunta_"+item.id+"_seccion_"+idSeccion;
+        var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
         divElement.appendChild(ele);
@@ -232,8 +222,7 @@
             } else if(item.tipoPregunta.descripcion == 'textarea'){
                 createTextArea(item, divElement, idSeccion);
             } else {
-                console.log(item.id);
-                createInput(item.tipoPregunta.descripcion, item.id, divElement, idSeccion);
+                createInput(item.tipoPregunta.descripcion, item.idPregunta, divElement, idSeccion);
             }
         }
     }
@@ -299,29 +288,15 @@
     // }
 
     function updateInput() {
-        var datos  = [];
-        var objeto = {};
-        
-        for(var i= 0; i < idList.length; i++) {
-            var nombre = idList[i]
-            datos.push({ 
-                "id"    : idList[i],
-                "respuesta"  : $("#"+idList[i]).val(),
-            });
-        }
-        objeto.datos = datos;
-
-        var json = JSON.stringify(objeto);
-        console.log(json);
-
-        $("#JsonData").val(json);
+        data = JSON.stringify(formulario);
+        $("#JsonData").val(data);
     }
 
     function createFormulario(){
         var contenedor = document.getElementsByTagName("div")[0];
 
         var divFormulario = document.createElement("Div");
-        divFormulario.id = "Formulario_id_"+formulario.id;
+        divFormulario.id = "Formulario_id_"+formulario.idFormulario;
         divFormulario.style.paddingTop = "15px";
         createTextElement("h3", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);
@@ -340,3 +315,5 @@
         <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
     </div>
 </form>
+
+

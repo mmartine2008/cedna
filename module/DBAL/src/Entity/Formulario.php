@@ -146,7 +146,7 @@ class Formulario
         }
         $secciones = implode(", ", $secciones);
 
-        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"idFormulario": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"secciones": ['.$secciones.']';
