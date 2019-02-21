@@ -7,6 +7,7 @@ use DBAL\Entity\Respuesta;
 use DBAL\Entity\Opcion;
 use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
+use DBAL\Entity\Seccion;
 
 
 class FormularioManager {
@@ -45,6 +46,12 @@ class FormularioManager {
         return $pregunta;
     }
 
+    public function getSeccion($id) {
+        $seccion = $this->entityManager->getRepository(Seccion::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $seccion;
+    }
+
     public function getOpcion($descripcion) {
         $Opcion = $this->entityManager->getRepository(Opcion::class)
                                             ->findOneBy(['descripcion' => $descripcion]); 
@@ -74,9 +81,11 @@ class FormularioManager {
 
     public function altaRespuesta($idPregunta, $idSeccion, $respuesta) {
         $pregunta = $this->getPregunta($idPregunta);
+        $seccion = $this->getSeccion($idSeccion);
 
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
+        $Entidad->setSeccion($seccion);
         
         if($this->preguntaTieneOpciones($idPregunta)) {
             $opcion = $this->getOpcion($respuesta);
@@ -98,7 +107,7 @@ class FormularioManager {
                 $respuesta = $pregunta->respuesta;
                 if($this->tieneRespuesta($respuesta)){
                     $idPregunta = $pregunta->idPregunta;
-                    // $this->altaRespuesta($idPregunta, $idSeccion, $respuesta);
+                    $this->altaRespuesta($idPregunta, $idSeccion, $respuesta);
                 }
             }
         }

@@ -34,12 +34,9 @@ class FormularioController extends AbstractActionController
         if ($request->isPost()) {
             $JsonData = $this->params()->fromPost();
             $data = json_decode($JsonData['JsonData']);
-            // var_dump(json_decode($data));
-            // die();
             $this->FormularioManager->altaRespuestasFormulario($data);
         }
         $respuestasJson = $this->FormularioManager->getRespuestasFormularioJSON($idFormulario);
-        // var_dump($respuestasJson);
         return new ViewModel([
             "respuestas" => $respuestasJson
         ]);
