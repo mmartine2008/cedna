@@ -3,7 +3,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <?= $this->headTitle('CEDNA')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headTitle('ZF Skeleton Application')->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?= $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -27,160 +27,14 @@
         ?>
     </head>
     <body>
-        <div class="flex">
-            <!-- Page header -->
-            <div class="flex">
-                <div class="jumbotron">
-                    <h1 class="h1">CEDNA</h1>
-                    <p>Sistema de Permiso de Trabajo</p>
-                </div>
-            </div>                
+        
+        <div class="container">
+            <?= $this->content ?>
+            <hr>
+            <footer>
+                
+            </footer>
         </div>
-        <div class="form-row">
-            <div class="container">
-                <?= $this->content ?>
-                <hr>
-            </div>
-        </div>
-        <footer class="footer pb-3 pt-3">
-            <div class="form-row">
-                <div class="col-lg-1" id="col1">
-                </div>
-                <div class="col-lg-1" id="col2">
-                </div>
-                <div class="col-lg-1" id="col3">
-                </div>
-                <div class="col-lg-1" id="col4">
-                </div>
-                <div class="col-lg-1" id="col5">
-                </div>
-                <div class="col-lg-1" id="col6">
-                </div>
-                <div class="col-lg-1" id="col7">
-                </div>
-                <div class="col-lg-1" id="col8">
-                </div>
-                <div class="col-lg-1" id="col9">
-                </div>
-                <div class="col-lg-1" id="col10">
-                </div>
-                <div class="col-lg-1" id="col11">
-                </div>
-                <div class="col-lg-1" id="col12">
-                </div>
-            </div>
-        </footer>
         <?= $this->inlineScript() ?>
     </body>
 </html>
-<script>
-    var url = '<?= $this->serverUrl(); ?>';
-    var arrAccionesDisponibles = <?= $arrAccionesDisponibles; ?>;
-
-    function lugarEstaDisponible(lugar, lugaresOcupados){
-        if (jQuery.inArray(lugar, lugaresOcupados) !== -1){
-            return false;
-        }
-
-        return true;
-    }
-
-    function dibujarBotonConFuncionOnClick(accionBoton, lugaresOcupados){
-        var lugar = accionBoton.ordenUbicacion;
-        var lugarDisponible = false;
-
-        for (lugar; lugar <= 12; lugar++){
-            if (lugarEstaDisponible(lugar, lugaresOcupados)){
-                lugarDisponible = true;
-                break;
-            }
-        }
-
-        if (lugarDisponible){
-            var div = $('#col'+lugar);
-
-            var icono = $('<i></i>');
-            icono.attr('class', accionBoton.Accion.icono);
-            icono.text(accionBoton.Accion.titulo);
-
-            var boton = $('<div></div>');
-
-            boton.attr('onclick', accionBoton.jsFunction);
-            boton.attr('id', accionBoton.idHTMLElement);
-            boton.attr('style', 'display: none;');
-            boton.attr('disabled', true);
-
-            boton.append(icono);
-            div.append(boton);
-
-            return lugar;
-        }
-
-        return -1;
-    }
-
-    function dibujarBotonConEnlace(accionBoton, lugaresOcupados){
-        var lugar = accionBoton.ordenUbicacion;
-        var lugarDisponible = false;
-
-        for (lugar; lugar <= 12; lugar++){
-            if (lugarEstaDisponible(lugar, lugaresOcupados)){
-                lugarDisponible = true;
-                break;
-            }
-        }
-
-        if (lugarDisponible){
-            var div = $('#col'+lugar);
-
-            var icono = $('<i></i>');
-            icono.attr('class', accionBoton.Accion.icono);
-            icono.text(accionBoton.Accion.titulo);
-
-            var a = $('<a></a>');
-
-            a.attr('href', url + '/' +accionBoton.urlDestino);
-
-            a.append(icono);
-            div.append(a);
-
-            return lugar;
-        }
-
-        return -1;
-    }
-
-    function ordenarBotonera(){
-        var lugaresOcupados = [];
-
-        for (var i = 0; i < arrAccionesDisponibles.length; i++){
-            var accionBoton = arrAccionesDisponibles[i];
-
-            if (accionBoton.jsFunction !== ''){
-                var lugar = dibujarBotonConFuncionOnClick(accionBoton, lugaresOcupados);
-            }else{
-                var lugar = dibujarBotonConEnlace(accionBoton, lugaresOcupados);
-            }
-
-            if (lugar > 0){
-                lugaresOcupados.push(lugar);
-            }
-        }
-    }
-
-    function cambiarVisibilidadBotones(mostrar){
-        for (var i = 0; i < arrAccionesDisponibles.length; i++){
-            var boton = arrAccionesDisponibles[i];
-
-            if (boton.jsFunction !== '' && mostrar){
-                $('#' + boton.idHTMLElement).prop('disabled', false);
-                $('#' + boton.idHTMLElement).show();
-            }else if (boton.jsFunction !== '' && !mostrar){
-                $('#' + boton.idHTMLElement).prop('disabled', true);
-                $('#' + boton.idHTMLElement).hide();
-            }
-        }
-    }
-
-    ordenarBotonera();
-</script>

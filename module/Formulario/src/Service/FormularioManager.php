@@ -34,10 +34,22 @@ class FormularioManager {
         return $formulario->getJSON();
     }
 
-    public function getRespuestasFormularioJSON($id) {
+    public function getRespuestasFormularioJSON($idFormulario) {
         $respuestas = $this->entityManager->getRepository(Respuesta::class)
-                                            ->findOneBy(['id' => $id]); 
-        return $respuestas->getJSON();
+                                            ->findAll(); 
+        // foreach($respuestas as $respuesta) {
+        //     if($this->respuestaEsDeFormulario($idFormulario)){
+
+        //     }
+        // }
+        
+        // if($respuestas){
+        //     return $respuestas->getJSON();
+        // } else {
+        //     return "";
+        // }
+        return "";
+        
     }
 
     public function getPregunta($id) {
@@ -103,7 +115,6 @@ class FormularioManager {
         foreach($secciones as $seccion) {
             $idSeccion = $seccion->id;
             foreach($seccion->preguntas as $pregunta) {
-                var_dump($pregunta);
                 $respuesta = $pregunta->respuesta;
                 if($this->tieneRespuesta($respuesta)){
                     $idPregunta = $pregunta->idPregunta;

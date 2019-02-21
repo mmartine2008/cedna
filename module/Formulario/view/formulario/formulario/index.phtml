@@ -1,7 +1,6 @@
 <script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
 <script>
     var formulario = <?= $formulario ?>;
-    var idList = Array();
 
     function createListFromJSONLista(selector, lista, seleccione) {
         if (seleccione){
@@ -37,23 +36,35 @@
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, true);
         divElement.appendChild(selector);
-
-        idList.push(idSelector);
     }
 
-    function createMultipleSelector(id, name, opciones, divElement, size) {
+    function updateJson(idSeccion, idPregunta, idRespuesta) {
+        childs = formulario.secciones;
+        for (var i = 0; i < childs.length; i++){
+            if(childs[i].id == idSeccion){
+                preguntas = childs[i].preguntas;
+                for (var j = 0; j < preguntas.length; j++){
+                    if(preguntas[j].idPregunta == idPregunta){
+                        preguntas[j].respuesta = $("#"+idRespuesta).val();
+                        console.log($("#"+idRespuesta).val());
+                    }
+                }
+            }
+        }
+    }
+
+    function createMultipleSelector(id, opciones, divElement, size, idPregunta, idSeccion) {
         var selector = document.createElement("select");
         selector.name = name;
-        selector.id = id;
+        selector.id = id+idPregunta+"_seccion_"+idSeccion;
         selector.multiple = true;
         selector.className = "form-control";
         selector.size = size;
         selector.style.marginBottom = "5px";
+        // selector.onchange = function() {updateJson(idSeccion, idPregunta, id)};
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, false);
         divElement.appendChild(selector);
-
-        idList.push(id);
     }
 
     function createDivClass(info, div) {
@@ -88,8 +99,6 @@
         button.disabled = disabled;
         button.style.marginTop = "15px";
         button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion)};
-
-        
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
         // button.appendChild(icono);
@@ -114,54 +123,40 @@
 
     function manageButtons(id, idSeccion){
         if($('#Origen_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#PositiveR_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-            $("#NegativeR_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
+            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
+            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
         } else {
-            $("#PositiveR_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-            $("#NegativeR_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
+            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
+            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
         }
-        if($('#Positive_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#PositiveL_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
+        if($('#destino_1_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
+            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
         } else {
-            $("#PositiveL_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
+            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
         }
-        if($('#Negative_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#NegativeL_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
+        if($('#destino_2_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
+            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
         } else {
-            $("#NegativeL_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
+            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
         }
     }
 
-    function createMultipleSelectorSkeleton(id, opciones, opciones_in, opciones_out, divElement, idSeccion){
+    function createMultipleSelectorSkeleton(idPregunta, opciones, opciones_in, opciones_out, divElement, idSeccion){
         var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row", divForm);
-        var div_class_sm_3 = createDivClass("col-sm-3", divRow);
-        createMultipleSelector('Origen_id_'+id+"_seccion_"+idSeccion, id, opciones, div_class_sm_3, 10);
+        var div_class_sm_3 = createDivClass("col-sm-5", divRow);
+        createMultipleSelector('Origen_id_', opciones, div_class_sm_3, 10, idPregunta, idSeccion);
 
-        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
-        createButton("button", "PositiveR_id_"+id+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "Positive_id_", id,idSeccion);
-        createButton("button", "PositiveL_id_"+id+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "Positive_id_", "Origen_id_", id,idSeccion);
-        createButton("button", "NegativeR_id_"+id+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "Negative_id_", id,idSeccion);
-        createButton("button", "NegativeL_id_"+id+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "Negative_id_", "Origen_id_", id,idSeccion);
+        var div_class_sm_1 = createDivClass("col-sm-2", divRow);
+        createButton("button", "button_1_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "destino_1_id_", idPregunta,idSeccion);
+        createButton("button", "button_1_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_1_id_", "Origen_id_", idPregunta,idSeccion);
+        createButton("button", "button_2_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "destino_2_id_", idPregunta,idSeccion);
+        createButton("button", "button_2_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_2_id_", "Origen_id_", idPregunta,idSeccion);
 
-        var div_class_sm_3_2 = createDivClass("col-sm-3", divRow);
-        createMultipleSelector('Positive_id_'+id+"_seccion_"+idSeccion, id, opciones_in, div_class_sm_3_2, 5);
-        createMultipleSelector('Negative_id_'+id+"_seccion_"+idSeccion, id, opciones_out, div_class_sm_3_2, 5);
-        var div_class_sm_5 = createDivClass("col-sm-5", divRow);
-    }
-    function updateJson(idSeccion, idPregunta, idRespuesta) {
-        childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].idSeccion == idSeccion){
-                preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        preguntas[j].respuesta = $("#"+idRespuesta).val();
-                    }
-                }
-            }
-        }
-       
+        var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
+        createMultipleSelector('destino_1_id_', opciones_in, div_class_sm_3_2, 5, idPregunta, idSeccion);
+        createMultipleSelector('destino_2_id_', opciones_out, div_class_sm_3_2, 5, idPregunta, idSeccion);
+        var div_class_sm_5 = createDivClass("col-sm-1", divRow);
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
@@ -175,8 +170,6 @@
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
         divElement.appendChild(ele);
-
-        // idList.push(idEle);
     } 
 
     function createOptions(item, divElement, idSeccion){
@@ -198,8 +191,6 @@
         ele.id = id;
         divElement.appendChild(ele);
         ele.onchange = function() {updateJson(idSeccion, item.idPregunta, id)};
-
-        // idList.push(id);
     }
 
     function createImage(item, divElement, idSeccion){
@@ -209,8 +200,6 @@
         ele.name = id;
         ele.id = id;
         divElement.appendChild(ele);
-
-        // idList.push(id);
     }
     
     function createAnswer(item, divElement, idSeccion){
@@ -253,12 +242,12 @@
         var divElement = document.createElement("Div");
         divElement.id = "Seccion_id_"+item.id;
         divElement.style.padding = "10px";
-        divElement.className="form-row";
+        divElement.className="form-group";
         divElement.style.textAlign = "lefth";
 
-        var divSeleccion = createDivClass("row", divElement);
-        var div_class_sm_1 = createDivClass("col-sm-1", divSeleccion);
-        createTextElement("h4", div_class_sm_1, item.nombre);
+        var divSeccion = createDivClass("row", divElement);
+        var div_class_sm_2 = createDivClass("col-sm-1", divSeccion);
+        createTextElement("h4", div_class_sm_2, item.nombre);
 
         createQuestions(item, divElement);
         contenedor.appendChild(divElement);
@@ -274,22 +263,10 @@
         }
     }
 
-    // function createHref(info, divElement){
-    //     ele = document.createElement('a');
-    //     ele.href = info;
-    //     divElement.appendChild(ele);
-
-    //     var div = document.createElement("Div");
-    //     div.className = "btn";
-
-    //     var text = document.createTextNode("Cancelar");
-    //     div.appendChild(text);
-    //     ele.appendChild(div);
-    // }
-
     function updateInput() {
         data = JSON.stringify(formulario);
         $("#JsonData").val(data);
+        console.log($("#JsonData").val());
     }
 
     function createFormulario(){
