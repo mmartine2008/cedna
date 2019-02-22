@@ -2,6 +2,52 @@
 <script>
     var formulario = <?= $formulario ?>;
 
+    function updateJson(idSeccion, idPregunta, respuesta) {
+        childs = formulario.secciones;
+        for (var i = 0; i < childs.length; i++){
+            if(childs[i].id == idSeccion){
+                preguntas = childs[i].preguntas;
+                for (var j = 0; j < preguntas.length; j++){
+                    if(preguntas[j].idPregunta == idPregunta){
+                        preguntas[j].respuesta = respuesta ;
+                    }
+                }
+            }
+        }
+    }
+
+    function obtenerListaOpciones(lista){
+        var output = [];
+        for (var i=0; i < lista.length; i++) {
+            var item = lista[i];
+            output.push(item.descripcion);
+        }
+        return output;
+    }
+
+    function updateJSONRespSelecMultiple(selector, lista, idPregunta, idSeccion) {
+        childs = formulario.secciones;
+        for (var i = 0; i < childs.length; i++){
+            if(childs[i].id == idSeccion){
+                preguntas = childs[i].preguntas;
+                for (var j = 0; j < preguntas.length; j++){
+                    respuestas = preguntas[j].respuesta;
+                    console.log(respuestas);
+                    if(preguntas[j].idPregunta == idPregunta){
+                        for (var k = 0; k < respuestas.length; k++){
+                            if(respuestas[k].selector == selector) {
+                                console.log("sfsdfsd");
+                                console.log(lista);
+                                respuestas[k].respuesta = lista;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     function createListFromJSONLista(selector, lista, seleccione) {
         if (seleccione){
             var option = document.createElement("option");
@@ -19,13 +65,22 @@
         return selector;
     }
 
-    function obtenerListaOpciones(lista){
-        var output = [];
-        for (var i=0; i < lista.length; i++) {
-            var item = lista[i];
-            output.push(item.descripcion);
-        }
-        return output;
+    function updateJsonSimple(idSeccion, idPregunta, idRespuesta) {
+        var respuesta = $("#"+idRespuesta).val();
+        updateJson(idSeccion, idPregunta, respuesta);
+    }
+
+    function updateJsonMultipleSelector(idSeccion, idPregunta, idRespuesta) {
+        var datos  = [
+                            {   "selector" : "Origen_id_"+idPregunta+"_seccion_"+idSeccion,
+                                "respuesta" : ""},
+                            {   "selector" : "destino_1_id_"+idPregunta+"_seccion_"+idSeccion,
+                                "respuesta" : ""},
+                            {   "selector" : "destino_2_id_"+idPregunta+"_seccion_"+idSeccion,
+                                "respuesta" : ""},
+                        ]
+        
+        updateJson(idSeccion, idPregunta, datos);
     }
 
     function createSimpleSelector(id, opciones, divElement, idSeccion) {
@@ -35,35 +90,23 @@
         selector.id = idSelector;
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, true);
+        selector.onchange = function() {updateJsonSimple(idSeccion, id, idSelector)};
         divElement.appendChild(selector);
-    }
-
-    function updateJson(idSeccion, idPregunta, idRespuesta) {
-        childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        preguntas[j].respuesta = $("#"+idRespuesta).val();
-                        console.log($("#"+idRespuesta).val());
-                    }
-                }
-            }
-        }
     }
 
     function createMultipleSelector(id, opciones, divElement, size, idPregunta, idSeccion) {
         var selector = document.createElement("select");
         selector.name = name;
-        selector.id = id+idPregunta+"_seccion_"+idSeccion;
+        idSelector = id+idPregunta+"_seccion_"+idSeccion;
+        selector.id = idSelector;
         selector.multiple = true;
         selector.className = "form-control";
         selector.size = size;
         selector.style.marginBottom = "5px";
-        // selector.onchange = function() {updateJson(idSeccion, idPregunta, id)};
+        updateJsonMultipleSelector(idSeccion, idPregunta)
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, false);
+        updateJSONRespSelecMultiple(selector, opciones, id, idSeccion);
         divElement.appendChild(selector);
     }
 
@@ -73,7 +116,7 @@
         div.appendChild(divClass);
         return divClass;
     }
-
+    
     function insertarElementInSelect(origin, destination, id, idSeccion){
         var select1 = document.getElementById(origin+id+"_seccion_"+idSeccion);
         var selected1 = [];
@@ -82,10 +125,11 @@
                 selected1.push(select1.options[i].value);
             }
         }
-        
-        var optionOrigin = deleteOptions(origin+id+"_seccion_"+idSeccion);
+
+        var optionOrigin = deleteOptions(origin+id+"_seccion_"+idSeccion, id, idSeccion);
         var selectIn = document.getElementById(destination+id+"_seccion_"+idSeccion);
         createListFromJSONLista(selectIn, selected1, false);
+        updateJSONRespSelecMultiple(selectIn, selected1, id, idSeccion);
         manageButtons(id, idSeccion);
     }
 
@@ -111,7 +155,7 @@
             .end();
     }
 
-    function deleteOptions(origin) {
+    function deleteOptions(origin, idPregunta, idSeccion) {
         var select1 = document.getElementById(origin);
         var notSelected = [];
         for (var i = 0; i < select1.length; i++) {
@@ -119,6 +163,8 @@
         }
         removeAllOptionSelector(origin);
         createListFromJSONLista(select1, notSelected, false);
+        updateJSONRespSelecMultiple(select1, notSelected, idPregunta, idSeccion);
+        return select1;
     }
 
     function manageButtons(id, idSeccion){
@@ -165,7 +211,7 @@
         var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
         ele.name = idEle;
         ele.id = idEle;
-        ele.onchange = function() {updateJson(idSeccion, idPregunta, idEle)};
+        ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
@@ -190,7 +236,7 @@
         ele.name = id;
         ele.id = id;
         divElement.appendChild(ele);
-        ele.onchange = function() {updateJson(idSeccion, item.idPregunta, id)};
+        ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
 
     function createImage(item, divElement, idSeccion){
@@ -289,7 +335,7 @@
         <a href="#">
             <div class="btn btn-primary">Cancelar</div>
         </a>
-        <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
+        <button id="submit" class="btn btn-primary" type="button" onclick="updateInput()">Confirmar</button>
     </div>
 </form>
 
