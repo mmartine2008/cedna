@@ -16,35 +16,82 @@
         }
     }
 
+    function obtenerValoresSelector(id) {
+        var values = [];
+        var options =$('#'+id+' option');
+        console.log(options);
+        // console.log($('#destino_0_id_3_seccion_1 option')[0].value);
+        for(var i=0; i < options.length; i++){
+            values.push(options[i].value);
+            console.log(options[i].value);
+        }
+        return values;
+    }
+
     function obtenerListaOpciones(lista){
         var output = [];
         for (var i=0; i < lista.length; i++) {
             var item = lista[i];
-            output.push(item.descripcion);
+            var arreglo = []
+            arreglo.push(item.id);
+            arreglo.push(item.descripcion);
+            output.push(arreglo);
         }
         return output;
     }
 
-    function updateJSONRespSelecMultiple(selector, lista, idPregunta, idSeccion) {////////////////
+    function updateJsonRespuestaSelector(idSeccion, idPregunta, opciones, idSelector) {
         var childs = formulario.secciones;
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 var preguntas = childs[i].preguntas;
                 for (var j = 0; j < preguntas.length; j++){
-                    var respuestas = preguntas[j].respuesta;
                     if(preguntas[j].idPregunta == idPregunta){
-                        for (var k = 0; k < preguntas[j].respuesta.length; k++){
-                            if(preguntas[j].respuesta[k].selector == selector) {
-                                console.log(formulario);
-                                preguntas[j].respuesta[k].respuesta = lista;
-                                console.log(formulario);                                
+                        var resp = preguntas[j].respuesta;
+                        for (var k = 0; k < resp.length; k++){
+                            var idSelectorJSON = resp[k].destino+"_seccion_"+idSeccion;
+                            console.log(idSelectorJSON);
+                            if(idSelectorJSON == idSelector) {
+                                resp[k].destino = idSelector;
+                                resp[k].opcion = opciones;
                             }
                         }
                     }
                 }
             }
         }
+    }
 
+    function updateIdDestinoJsonSelectores(idSeccion, idPregunta) {
+        var childs = formulario.secciones;
+        for (var i = 0; i < childs.length; i++){
+            if(childs[i].id == idSeccion){
+                var preguntas = childs[i].preguntas;
+                for (var j = 0; j < preguntas.length; j++){
+                    if(preguntas[j].idPregunta == idPregunta){
+                        var resp = preguntas[j].respuesta;
+                        for (var k = 0; k < resp.length; k++){
+                            var idSelectorJSON = resp[k].destino+"_seccion_"+idSeccion;
+                            resp[k].destino = idSelectorJSON;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function updateJsonMultipleSelector(idSeccion, idPregunta, idSelector) {
+        var value = obtenerValoresSelector(idSelector);
+        
+        // var datos  = [
+        //                     {   "selector" : idOrigen,
+        //                         "respuesta" : valueOrigen },
+        //                     {   "selector" : idDestino1,
+        //                         "respuesta" : valueDestino1 },
+        //                     {   "selector" : idDestino2,
+        //                         "respuesta" : valueDestino2 },
+        //                 ];
+        updateJsonRespuestaSelector(idSeccion, idPregunta, value, idSelector);
     }
 
     function createListFromJSONLista(selector, lista, seleccione) {
@@ -54,12 +101,12 @@
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
-        
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
-            option.value = lista[i];
-            option.text = lista[i];
+            option.value = lista[i][0];
+            option.text = lista[i][1];
             selector.appendChild(option);
+            
         }
         return selector;
     }
@@ -67,19 +114,6 @@
     function updateJsonSimple(idSeccion, idPregunta, idRespuesta) {
         var respuesta = $("#"+idRespuesta).val();
         updateJson(idSeccion, idPregunta, respuesta);
-    }
-
-    function updateJsonMultipleSelector(idSeccion, idPregunta, idRespuesta) {
-        var datos  = [
-                            {   "selector" : "Origen_id_"+idPregunta+"_seccion_"+idSeccion,
-                                "respuesta" : ""},
-                            {   "selector" : "destino_1_id_"+idPregunta+"_seccion_"+idSeccion,
-                                "respuesta" : ""},
-                            {   "selector" : "destino_2_id_"+idPregunta+"_seccion_"+idSeccion,
-                                "respuesta" : ""},
-                        ]
-        
-        updateJson(idSeccion, idPregunta, datos);
     }
 
     function createSimpleSelector(id, opciones, divElement, idSeccion) {
@@ -102,11 +136,10 @@
         selector.className = "form-control";
         selector.size = size;
         selector.style.marginBottom = "5px";
-        updateJsonMultipleSelector(idSeccion, idPregunta)
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, false);
-        updateJSONRespSelecMultiple(idSelector, opciones, idPregunta, idSeccion);
         divElement.appendChild(selector);
+        // console.log($('#destino_0_id_3_seccion_1 option')[0].value);
     }
 
     function createDivClass(info, div) {
@@ -119,17 +152,19 @@
     function insertarElementInSelect(origin, destination, id, idSeccion){
         idSelector = origin+id+"_seccion_"+idSeccion;
         var select1 = document.getElementById(idSelector);
-        var selected1 = [];
+        var options = [];
         for (var i = 0; i < select1.length; i++) {
             if (select1.options[i].selected) {
-                selected1.push(select1.options[i].value);
+                var array = [];
+                array.push(select1.options[i].value);
+                array.push(select1.options[i].text);
+                options.push(array);
             }
         }
 
         var optionOrigin = deleteOptions(idSelector, id, idSeccion);
         var selectIn = document.getElementById(destination+id+"_seccion_"+idSeccion);
-        createListFromJSONLista(selectIn, selected1, false);
-        updateJSONRespSelecMultiple(idSelector, selected1, id, idSeccion);
+        createListFromJSONLista(selectIn, options, false);
         manageButtons(id, idSeccion);
     }
 
@@ -159,16 +194,21 @@
         var select1 = document.getElementById(origin);
         var notSelected = [];
         for (var i = 0; i < select1.length; i++) {
-            if (!select1.options[i].selected) notSelected.push(select1.options[i].value);
+            if (!select1.options[i].selected) {
+                var array = [];
+                array.push(select1.options[i].value);
+                array.push(select1.options[i].text);
+                notSelected.push(array);
+            }
         }
         removeAllOptionSelector(origin);
         createListFromJSONLista(select1, notSelected, false);
-        updateJSONRespSelecMultiple(origin, notSelected, idPregunta, idSeccion);
+        updateJsonMultipleSelector(idSeccion, idPregunta, origin);
         return select1;
     }
-
+    
     function manageButtons(id, idSeccion){
-        if($('#Origen_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
+        if($('#destino_0_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
             $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
             $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
         } else {
@@ -191,18 +231,19 @@
         var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row", divForm);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
-        createMultipleSelector('Origen_id_', opciones, div_class_sm_3, 10, idPregunta, idSeccion);
+        createMultipleSelector('destino_0_id_', opciones, div_class_sm_3, 10, idPregunta, idSeccion);
 
         var div_class_sm_1 = createDivClass("col-sm-2", divRow);
-        createButton("button", "button_1_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "destino_1_id_", idPregunta,idSeccion);
-        createButton("button", "button_1_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_1_id_", "Origen_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "Origen_id_", "destino_2_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_2_id_", "Origen_id_", idPregunta,idSeccion);
+        createButton("button", "button_1_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_1_id_", idPregunta,idSeccion);
+        createButton("button", "button_1_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_1_id_", "destino_0_id_", idPregunta,idSeccion);
+        createButton("button", "button_2_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_2_id_", idPregunta,idSeccion);
+        createButton("button", "button_2_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_2_id_", "destino_0_id_", idPregunta,idSeccion);
 
         var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
         createMultipleSelector('destino_1_id_', opciones_in, div_class_sm_3_2, 5, idPregunta, idSeccion);
         createMultipleSelector('destino_2_id_', opciones_out, div_class_sm_3_2, 5, idPregunta, idSeccion);
         var div_class_sm_5 = createDivClass("col-sm-1", divRow);
+        updateIdDestinoJsonSelectores(idSeccion, idPregunta);
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
@@ -222,12 +263,10 @@
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
             createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
-        } else if(item.tipoPregunta.destinos == 1) {
+        } else {
             var opciones = item.opciones;
             createMultipleSelectorSkeleton(item.idPregunta, opciones, [],[], divElement, idSeccion);
-        } else {
-            //luego
-        }
+        } 
     }
 
     function createTextArea(item, divElement, idSeccion){
