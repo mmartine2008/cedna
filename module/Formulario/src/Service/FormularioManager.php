@@ -7,6 +7,7 @@ use DBAL\Entity\Respuesta;
 use DBAL\Entity\Opcion;
 use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
+use DBAL\Entity\Seccion;
 
 
 class FormularioManager {
@@ -33,10 +34,22 @@ class FormularioManager {
         return $formulario->getJSON();
     }
 
+    public function getRespuestasFormularioJSON($id) {
+        $respuestas = $this->entityManager->getRepository(Respuesta::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $respuestas->getJSON();
+    }
+
     public function getPregunta($id) {
         $pregunta = $this->entityManager->getRepository(Pregunta::class)
                                             ->findOneBy(['id' => $id]); 
         return $pregunta;
+    }
+
+    public function getSeccion($id) {
+        $seccion = $this->entityManager->getRepository(Seccion::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $seccion;
     }
 
     public function getOpcion($descripcion) {
@@ -66,11 +79,13 @@ class FormularioManager {
         return false;
     }
 
-    public function altaRespuesta($idPregunta, $respuesta) {
+    public function altaRespuesta($idPregunta, $idSeccion, $respuesta) {
         $pregunta = $this->getPregunta($idPregunta);
+        $seccion = $this->getSeccion($idSeccion);
 
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
+        $Entidad->setSeccion($seccion);
         
         if($this->preguntaTieneOpciones($idPregunta)) {
             $opcion = $this->getOpcion($respuesta);
@@ -83,14 +98,19 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
-    public function altaRespuestasFormulario($respuestas) {
-        foreach($respuestas as $respuesta){
-            if($this->tieneRespuesta($respuesta->respuesta)){
-                $idPregunta = $respuesta->id;
-                $this->altaRespuesta($idPregunta, $respuesta->respuesta);
+    public function altaRespuestasFormulario($datos) {
+        $secciones = $datos->secciones;
+        foreach($secciones as $seccion) {
+            $idSeccion = $seccion->id;
+            foreach($seccion->preguntas as $pregunta) {
+                var_dump($pregunta);
+                $respuesta = $pregunta->respuesta;
+                if($this->tieneRespuesta($respuesta)){
+                    $idPregunta = $pregunta->idPregunta;
+                    $this->altaRespuesta($idPregunta, $idSeccion, $respuesta);
+                }
             }
         }
-        
     }
 
     
