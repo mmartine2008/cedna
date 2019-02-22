@@ -74,6 +74,7 @@ return [
             ],
         ],
     ],
+
     'controllers' => [
         'factories' => [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
@@ -86,8 +87,17 @@ return [
         'factories' => [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
             Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
+            \Zend\I18n\Translator\TranslatorInterface::class => \Zend\I18n\Translator\TranslatorServiceFactory::class,
+
         ],
     ],
+
+    'view_helpers' => [
+        'invokables' => [
+            'translate' => \Zend\I18n\View\Helper\Translate::class
+        ]
+    ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
