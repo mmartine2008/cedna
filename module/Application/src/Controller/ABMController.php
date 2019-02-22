@@ -32,6 +32,7 @@ class ABMController extends AbstractActionController
 
     public function indexAction()
     {
+
         return new ViewModel();
     }
 

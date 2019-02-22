@@ -10,19 +10,25 @@ namespace Configuracion\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+use Zend\I18n\Translator\Translator;
+
 class ConfiguracionController extends AbstractActionController
 {
     protected $catalogoManager;
     protected $userSessionManager;
+    protected $translator;
 
-    public function __construct($catalogoManager, $userSessionManager)
+    public function __construct($catalogoManager, $userSessionManager, $translator)
     {
         $this->catalogoManager = $catalogoManager;
         $this->userSessionManager = $userSessionManager;
+        $this->translator = $translator;
     }
 
     public function indexAction()
     {
+        // echo($this->translator->translate('Hello', null, 'es_ES'));
+
         $this->cargarAccionesDisponibles('Configuracion');
         return new ViewModel();
     }
