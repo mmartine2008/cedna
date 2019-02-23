@@ -42,7 +42,7 @@
                                 <option value="">-- Seleccione --</option>
                             <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
                                 <option value="<?= $Operacion->getId() ?>"
-                                <?= ($Entidad && $Entidad->getGrupo()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
+                                <?= ($Entidad && $Entidad->getGrupo() && $Entidad->getGrupo()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
                                 ><?= $Operacion->getTitulo() ?></option>
                             <?php endforeach;?>
                             </select>
@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="ordenOperacion" name="ordenOperacion" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
+                            value="<?= ($Entidad) ? $Entidad->getOrden() : '' ?>">
                         </div>
                     </div>
                     <div class="row form-group">

@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Operacion
 {
+
+    const NOMBRE_INDEX = 'index';
+    
     /**
      * @ORM\Id
      * @ORM\Column(name="Id", type="integer")

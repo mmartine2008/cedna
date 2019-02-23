@@ -24,6 +24,16 @@ return [
                     ],
                 ],
             ],
+            'index' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/index',
+                    'defaults' => [
+                        'controller' => Controller\CednaController::class, //Cambiar por un nuevo indexController
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
             'abm' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -57,6 +67,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
+            Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
         ],
     ],
     'service_manager' => [

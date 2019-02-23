@@ -64,4 +64,32 @@ class CatalogoManager {
 
         return $Usuarios;
     }
+
+    /**
+     * Funcion que recupera las Operaciones iniciales para un determinado perfil.
+     * 
+     * Se consideran Operaciones iniciales a aquellas operaciones que tienen como
+     * operacion padre al INDEX.
+     *
+     * @param [type] $Perfil
+     * @return void
+     */
+    public function getOperacionesInicialesPorPerfil($Perfil){
+        $arrOperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)
+                                                        ->findBy(['Perfil' => $Perfil]);
+
+        $output = [];
+        $idsGuardados = [];
+        foreach($arrOperacionAccionPerfil as $OperacionAccionPerfil){
+            $OperacionIndex = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => Operacion::NOMBRE_INDEX]);
+
+            if ($OperacionAccionPerfil->getOperacion()->getGrupo() == $OperacionIndex
+                && !in_array($OperacionAccionPerfil->getOperacion()->getId(), $idsGuardados)){
+                $output[] = $OperacionAccionPerfil->getOperacion();
+                $idsGuardados[] = $OperacionAccionPerfil->getOperacion()->getId();
+            }
+        }
+
+        return $output;
+    }
 }
