@@ -8,15 +8,15 @@
 namespace Configuracion\Controller;
 
 use Zend\View\Model\ViewModel;
-use Configuracion\Controller\ConfiguracionController;
+use Application\Controller\CednaController;
 
-class ConfigPerfilesController extends ConfiguracionController
+class ConfigPerfilesController extends CednaController
 {
     private $configuracionManager;
 
-    public function __construct($catalogoManager, $configuracionManager, $userSessionManager)
+    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator)
     {
-        parent::__construct($catalogoManager, $userSessionManager);
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->configuracionManager = $configuracionManager;
     }

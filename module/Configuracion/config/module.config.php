@@ -77,7 +77,6 @@ return [
 
     'controllers' => [
         'factories' => [
-            Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
@@ -88,7 +87,6 @@ return [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
             Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
             \Zend\I18n\Translator\TranslatorInterface::class => \Zend\I18n\Translator\TranslatorServiceFactory::class,
-
         ],
     ],
 

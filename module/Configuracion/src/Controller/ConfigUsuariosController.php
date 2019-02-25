@@ -15,7 +15,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
     private $configUsuariosManager;
 
-    public function __construct($catalogoManager, $configUsuariosManager, $userSessionManager)
+    public function __construct($catalogoManager, $configUsuariosManager, $userSessionManager, $translator)
     {
         parent::__construct($catalogoManager, $userSessionManager);
 
