@@ -198,17 +198,30 @@ class Pregunta
         $output .= '"idPregunta": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
-        $output .= '"respuesta": "' . "" .'", ';
+        
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
+            $cantDestinos = $this->getTipoPregunta()->getCantDestinos();
+            if($cantDestinos > 0){
+                $output .= '"cantDestinos": "' . $cantDestinos .'", ';
+                $resp = [];
+                $resp[] = '{"destino": "destino_0_id_'.$this->getId().'", "opcion": ['.$opciones.']}';
+                for($i=1 ; $i<=$cantDestinos; $i++) {
+                    var_dump($cantDestinos);
+                    var_dump($i);
+                    $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": ""}';
+                }
+                $resp = implode(", ", $resp);
+                $output .= '"respuesta": ['.$resp.'],';
+                $output .= '"opciones": ['.$opciones.']';
+            } else {
+                $output .= '"opciones": ['.$opciones.'],';
+                $output .= '"respuesta": ""';
+            }
         } else {
             $output .= '"cerrada": "' . 0 .'", ';
-        }
-        
-        if($this->tieneOpciones()){
-            $output .= '"opciones": ['.$opciones.']';
-        } 
-        
+            $output .= '"respuesta": ""';
+        }        
         return '{' . $output . '}';
     }
 

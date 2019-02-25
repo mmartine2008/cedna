@@ -79,7 +79,7 @@ class TipoPregunta
     }
 
     public function esPeguntaMultiple(){
-        if($this->descripcion == 'Multiple'){
+        if($this->descripcion == 'multiple'){
             return true;
         } else {
             return false;
@@ -90,7 +90,7 @@ class TipoPregunta
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"destinos": "' . $this->getCantDestinos() .'", ';
+        $output .= '"destinos": "' . $this->getCantDestinos() .'" ';
         return '{' . $output . '}';
     }
 

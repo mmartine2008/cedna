@@ -24,6 +24,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
     public function indexAction()
     {
+        
         $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta');
 
         $arrTipoPreguntasJSON = $this->configuracionManager->getArrTipoPreguntasJSON();

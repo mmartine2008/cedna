@@ -11,6 +11,8 @@ use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
+define ('APPLICATION_MODULE_ROOT', '/home/mariano/work/cedna');
+
 return [
     'router' => [
         'routes' => [
@@ -64,6 +66,7 @@ return [
             ],
         ],
     ],
+
     'controllers' => [
         'factories' => [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
@@ -72,6 +75,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            'translator' => \Zend\I18n\Translator\TranslatorServiceFactory::class,
             Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
             Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
@@ -100,4 +104,19 @@ return [
         'RegistroUsuario'
     ],
 
+    'translator' => [
+        'locale' => 'es_ES',
+        'translation_file_patterns' => [
+            [
+                'base_dir' => APPLICATION_MODULE_ROOT .'/data/language/phpArray',
+                'type'     => 'phpArray',
+                'pattern'  => '%s.php',
+            ],
+            [
+                'base_dir' => APPLICATION_MODULE_ROOT .'/data/language/gettext',
+                'type'     => 'gettext',
+                'pattern'  => '%s.mo',
+            ],
+        ],
+    ],
 ];

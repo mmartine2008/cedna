@@ -15,6 +15,8 @@ return [
     'Zend\Validator',
     'Zend\Session',
     'Zend\Db',
+    'Zend\I18n',
+    'Zend\Mvc\I18n',
     'DoctrineModule',
     'DoctrineORMModule',
     'Application',

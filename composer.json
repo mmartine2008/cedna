@@ -31,7 +31,8 @@
         "vladmeh/zf3-tcpdf": "dev-master",
         "zendframework/zend-console": "^2.7",
         "zfcampus/zf-console": "^1.4",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "zendframework/zend-mvc-i18n": "^1.1"
     },
     "autoload": {
         "psr-4": {

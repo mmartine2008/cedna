@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4a0cfe9213332a8c4f92bda655fe44e1",
-    "content-hash": "8ddfc2c6b4fdfc78df4c4d57b19fc892",
+    "hash": "8fb2049874b2296867b14aa83176adf6",
+    "content-hash": "b57866dce53846f08f23b0c784e6591c",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -821,12 +821,12 @@
             "version": "v2.5.14",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/810a7baf81462a5ddf10e8baa8cb94b6eec02754",
                 "reference": "810a7baf81462a5ddf10e8baa8cb94b6eec02754",
                 "shasum": ""
             },
@@ -3385,6 +3385,69 @@
                 "zf"
             ],
             "time": "2017-11-24 06:32:07"
+        },
+        {
+            "name": "zendframework/zend-mvc-i18n",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-mvc-i18n.git",
+                "reference": "90e64d1304385cfcf19447b6449514e8a720adfc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-mvc-i18n/zipball/90e64d1304385cfcf19447b6449514e8a720adfc",
+                "reference": "90e64d1304385cfcf19447b6449514e8a720adfc",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.1",
+                "php": "^5.6 || ^7.0",
+                "zendframework/zend-i18n": "^2.7",
+                "zendframework/zend-router": "^3.0",
+                "zendframework/zend-servicemanager": "^2.7.10 || ^3.0.3",
+                "zendframework/zend-stdlib": "^2.7.6 || ^3.0",
+                "zendframework/zend-validator": "^2.6"
+            },
+            "conflict": {
+                "zendframework/zend-mvc": "<3.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.5",
+                "zendframework/zend-cache": "^2.6.1",
+                "zendframework/zend-coding-standard": "~1.0.0"
+            },
+            "suggest": {
+                "zendframework/zend-cache": "To enable caching of translation strings"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev",
+                    "dev-develop": "1.2.x-dev"
+                },
+                "zf": {
+                    "component": "Zend\\Mvc\\I18n",
+                    "config-provider": "Zend\\Mvc\\I18n\\ConfigProvider"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Mvc\\I18n\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Integration between zend-mvc and zend-i18n",
+            "keywords": [
+                "ZendFramework",
+                "i18n",
+                "mvc",
+                "zf"
+            ],
+            "time": "2018-05-01 15:48:40"
         },
         {
             "name": "zendframework/zend-mvc-plugin-flashmessenger",

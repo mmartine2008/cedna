@@ -35,4 +35,22 @@ return [
         'session_storage' => [
             'type' => SessionArrayStorage::class
         ],
+
+        
+    'translator' => [
+        // 'locale' => 'es_ES',
+        'locale' => 'en_US',
+        'translation_file_patterns' => [
+            [
+                'base_dir' => __DIR__.'/../data/languag/phpArray',
+                'type'     => 'phpArray',
+                'pattern'  => '%s.php',
+            ],
+            [
+                'base_dir' => __DIR__.'/../data/languag/gettext',
+                'type'     => 'gettext',
+                'pattern'  => '%s.mo',
+            ],
+        ],
+    ],
 ];
