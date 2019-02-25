@@ -31,6 +31,6 @@ class ConfiguracionController extends CednaController
 
         $this->cargarAccionesDisponibles('Configuracion');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('Configuracion');
-        return new ViewModel();
+        return new ViewModel(['OperacionesJSON' => $OperacionesJSON]);
     }
 }

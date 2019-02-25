@@ -24,14 +24,16 @@ class ConfigUsuariosController extends ConfiguracionController
 
     public function indexAction()
     {
-        $arrUsuarios = $this->catalogoManager->getUsuarios();
+        $this->cargarAccionesDisponibles('usuarios');
+        $arrUsuariosJSON = $this->configUsuariosManager->getArrUsuariosJSON();
 
         return new ViewModel([
-            'arrUsuarios' => $arrUsuarios
+            'arrUsuariosJSON' => $arrUsuariosJSON
         ]);
     }
 
     public function altaAction(){
+        $this->cargarAccionesDisponibles('usuarios - alta');
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
@@ -55,6 +57,7 @@ class ConfigUsuariosController extends ConfiguracionController
     }
 
     public function editarAction(){
+        $this->cargarAccionesDisponibles('usuarios - edicion');
         $parametros = $this->params()->fromRoute();
 
         $idUsuarios = $parametros['id'];
