@@ -130,20 +130,20 @@ class FormularioManager {
         $secciones = $datos->secciones;
         $idFormulario = $datos->idFormulario;
         $formularioEnt = $this->getFormulario($idFormulario);
-        foreach($secciones as $seccion) {
+        foreach ($secciones as $seccion) {
             $idSeccion = $seccion->id;
             $seccionEnt = $this->getSeccion($idSeccion);
-            foreach($seccion->preguntas as $pregunta) {
+            foreach ($seccion->preguntas as $pregunta) {
                 $respuesta = $pregunta->respuesta;
-                if($this->tieneRespuesta($respuesta)){
+                if ($this->tieneRespuesta($respuesta)){
                     $idPregunta = $pregunta->idPregunta;
                     $preguntaEnt = $this->getPregunta($idPregunta);
                     $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
-                    if($listaOpcionDestino){
+                    if ($listaOpcionDestino){
                         $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, $listaOpcionDestino);
                     } else {
                         $opcion = null;
-                        if($this->preguntaTieneOpciones($preguntaEnt)) {
+                        if ($this->preguntaTieneOpciones($preguntaEnt)) {
                             $opcion = $this->getOpcion($respuesta);
                             $this->altaRespuesta($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, null, $opcion);
                         }   

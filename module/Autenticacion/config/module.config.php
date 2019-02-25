@@ -201,9 +201,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\AuthController::class => Controller\Factory\AuthControllerFactory::class,
-            
-            Controller\RolesController::class => Controller\Factory\RolesControllerFactory::class, 
-            Controller\PerfilesController::class => Controller\Factory\PerfilesControllerFactory::class, 
+                         
         ],
     ],
     // The 'access_filter' key is used by the User module to restrict or permit

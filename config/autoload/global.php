@@ -38,8 +38,8 @@ return [
 
         
     'translator' => [
-        'locale' => 'es_ES',
-        //'locale' => 'en_US',
+        // 'locale' => 'es_ES',
+        'locale' => 'en_US',
         'translation_file_patterns' => [
             [
                 'base_dir' => __DIR__.'/../data/languag/phpArray',

@@ -23,8 +23,12 @@ class FormularioController extends AbstractActionController
         $idFormulario = 1;
         $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
 
+
+        $this->layout()->arrAccionesDisponibles = '{}';
+
         return new ViewModel([
-            "formulario" => $formularioJSON
+            "formulario" => $formularioJSON,
+            
         ]);
     }
 
@@ -36,8 +40,7 @@ class FormularioController extends AbstractActionController
             $data = json_decode($JsonData['JsonData']);
             $this->FormularioManager->altaRespuestasFormulario($data);
         }
-        return new ViewModel([
-        ]);
+        return new ViewModel([ ]);
     }
 
 }
