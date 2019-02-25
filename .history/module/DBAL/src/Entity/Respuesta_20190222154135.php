@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DoctrineORMModule\Proxy\__CG__\DBAL\Entity\Pregunta;
 
 /**
  * This class represents a registered user.
@@ -41,10 +42,21 @@ class Respuesta
     protected $seccion;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Formulario")
+     * @ORM\JoinColumn(name="IdFormulario", nullable=true, referencedColumnName="IdFormulario")
+     */
+    protected $formulario;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Opcion")
      * @ORM\JoinColumn(name="IdOpcion", nullable=true, referencedColumnName="IdOpcion")
      */
     protected $opcion;
+
+    /**
+     * @ORM\Column(name="Destino",  nullable=true, type="string", length=100)
+     */
+    protected $destino;
 
     /**
      * Get the value of id
@@ -170,19 +182,67 @@ class Respuesta
         return $this;
     }
 
+    /**
+     * Get the value of formulario
+     */ 
+    public function getFormulario()
+    {
+        return $this->formulario;
+    }
+
+    /**
+     * Set the value of formulario
+     *
+     * @return  self
+     */ 
+    public function setFormulario($formulario)
+    {
+        $this->formulario = $formulario;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of destino
+     */ 
+    public function getDestino()
+    {
+        return $this->destino;
+    }
+
+    /**
+     * Set the value of destino
+     *
+     * @return  self
+     */ 
+    public function setDestino($destino)
+    {
+        $this->destino = $destino;
+
+        return $this;
+    }
+
+    public function poseeMultiplesDestinos(){
+        $this->getPregunta()->getTipoPregunta()->esPeguntaMultiple();
+    }
+
+
     public function getJSON(){
         $output = "";
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
         $output .= '"seccion": "' . $this->getSeccion()()->getId() .'", ';
+        $output .= '"formulario": "' . $this->getFormulario()->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         if ($this->getPermiso()) {
             ', '.$output .= '"permiso": ' . $this->getPermiso()->getJSON().'"' ;
         }
         if ($this->getOpcion()) {
             ', '. $output .= '"opcion": ' . $this->getOpcion()->getJSON().'"';
+            if ($this->getPregunta()->getTipoPregunta()->esPeguntaMultiple()) {
+                ', '. $output .= '"destino": ' . $this->getDestino().'"';
+            }
         }
         return '{' . $output . '}';
     }
-
 }
