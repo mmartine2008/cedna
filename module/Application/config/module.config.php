@@ -11,8 +11,6 @@ use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
-define ('APPLICATION_MODULE_ROOT', '/home/mariano/work/cedna');
-
 return [
     'router' => [
         'routes' => [
@@ -108,12 +106,12 @@ return [
         'locale' => 'es_ES',
         'translation_file_patterns' => [
             [
-                'base_dir' => APPLICATION_MODULE_ROOT .'/data/language/phpArray',
+                'base_dir' => \getcwd() .'/data/language/phpArray',
                 'type'     => 'phpArray',
                 'pattern'  => '%s.php',
             ],
             [
-                'base_dir' => APPLICATION_MODULE_ROOT .'/data/language/gettext',
+                'base_dir' => \getcwd() .'/data/language/gettext',
                 'type'     => 'gettext',
                 'pattern'  => '%s.mo',
             ],
