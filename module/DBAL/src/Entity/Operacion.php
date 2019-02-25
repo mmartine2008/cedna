@@ -12,7 +12,7 @@ class Operacion
 {
 
     const NOMBRE_INDEX = 'index';
-    
+
     /**
      * @ORM\Id
      * @ORM\Column(name="Id", type="integer")
@@ -46,6 +46,11 @@ class Operacion
      */
     protected $orden;
 
+    /**
+     * @ORM\Column(name="url")
+     */
+    protected $url;
+
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
@@ -69,6 +74,11 @@ class Operacion
     public function setOrden($orden)
     {
         $this->orden = $orden;
+    }
+
+    public function setUrl($url)
+    {
+        $this->url = $url;
     }
 
     public function getId()
@@ -101,6 +111,11 @@ class Operacion
         return $this->orden;
     }
 
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -116,6 +131,7 @@ class Operacion
         }
 
         $output .= '"orden": "' . $this->getOrden() .'", ';
+        $output .= '"url": "' . $this->getUrl() .'", ';
         
         return '{' . $output . '}';
     }

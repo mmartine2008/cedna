@@ -69,6 +69,10 @@ class OperacionManager {
         
         $Operacion->setOrden($jsonData->orden);
 
+        if (trim($jsonData->url) != ''){
+            $Operacion->setUrl($jsonData->url);
+        }
+
         $this->entityManager->persist($Operacion);
         $this->entityManager->flush();
     }

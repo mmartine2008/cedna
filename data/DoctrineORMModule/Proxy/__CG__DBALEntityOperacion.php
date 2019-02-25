@@ -64,10 +64,10 @@ class Operacion extends \DBAL\Entity\Operacion implements \Doctrine\ORM\Proxy\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nombre', 'titulo', 'icono', 'grupo', 'orden'];
+            return ['__isInitialized__', 'id', 'nombre', 'titulo', 'icono', 'grupo', 'orden', 'url'];
         }
 
-        return ['__isInitialized__', 'id', 'nombre', 'titulo', 'icono', 'grupo', 'orden'];
+        return ['__isInitialized__', 'id', 'nombre', 'titulo', 'icono', 'grupo', 'orden', 'url'];
     }
 
     /**
@@ -231,6 +231,17 @@ class Operacion extends \DBAL\Entity\Operacion implements \Doctrine\ORM\Proxy\Pr
     /**
      * {@inheritDoc}
      */
+    public function setUrl($url)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setUrl', [$url]);
+
+        return parent::setUrl($url);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -296,6 +307,17 @@ class Operacion extends \DBAL\Entity\Operacion implements \Doctrine\ORM\Proxy\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrden', []);
 
         return parent::getOrden();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUrl()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUrl', []);
+
+        return parent::getUrl();
     }
 
     /**

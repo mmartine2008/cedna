@@ -50,11 +50,20 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3">
-                            <label for="iconoOperacion">Orden:</label>
+                            <label for="ordenOperacion">Orden:</label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="ordenOperacion" name="ordenOperacion" class="form-control"
                             value="<?= ($Entidad) ? $Entidad->getOrden() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="urlOperacion">URL:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="urlOperacion" name="urlOperacion" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getUrl() : '' ?>">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -77,7 +86,8 @@ function FormAltaOperacionToJson(){
         titulo: $('#tituloOperacion').val(), 
         icono: $('#iconoOperacion').val(),
         id_grupo: $('#grupoOperacion').val(),
-        orden: $('#ordenOperacion').val()
+        orden: $('#ordenOperacion').val(),
+        url: $('#urlOperacion').val()
     };
     
     var JsonData = JSON.stringify(formData);

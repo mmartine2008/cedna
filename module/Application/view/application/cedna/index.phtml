@@ -14,7 +14,6 @@
 var operacionesJSON = <?= $OperacionesJSON ?>;
 
 function dibujarOperacionesIniciales(){
-    //$('#divIndex').empty();
     var divIndex = document.getElementById("divIndex");
     var divFila = document.createElement('div');
     divFila.setAttribute('class','form-row');
@@ -27,16 +26,18 @@ function dibujarOperacionesIniciales(){
         icon.setAttribute('title', operacion.titulo);
 
         //crear enlace a la operacion
+        var a = document.createElement('a');
+        a.setAttribute('href', operacion.url);
 
+        a.appendChild(icon);
         var divCol = document.createElement('div');;
         divCol.setAttribute('class','col-lg-2');
 
-        divCol.appendChild(icon);
+        divCol.appendChild(a);
 
         divFila.appendChild(divCol);
     }
     divIndex.appendChild(divFila);
-    //$('#divIndex').append(divFila);
 }
 
 dibujarOperacionesIniciales();
