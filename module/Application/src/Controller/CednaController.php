@@ -25,7 +25,7 @@ class CednaController extends AbstractActionController
     {
         $this->cargarAccionesDisponibles('index');
         
-        $OperacionesJSON = $this->recuperarOperacionesIniciales();
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('index');
         
         return new ViewModel(['OperacionesJSON' => $OperacionesJSON]);
     }
@@ -46,10 +46,10 @@ class CednaController extends AbstractActionController
         $this->layout()->arrAccionesDisponibles = '[' . $arrAccionesDisponiblesJSON . ']';
     }
 
-    protected function recuperarOperacionesIniciales(){
+    protected function recuperarOperacionesIniciales($nombreOperacion){
         $PerfilActivo = $this->userSessionManager->getPerfilActivo();
 
-        $arrOperacionesDisponibles = $this->catalogoManager->getOperacionesInicialesPorPerfil($PerfilActivo);
+        $arrOperacionesDisponibles = $this->catalogoManager->getOperacionesInicialesPorPerfil($PerfilActivo, $nombreOperacion);
 
         $arrOperacionesDisponiblesJSON = [];
 

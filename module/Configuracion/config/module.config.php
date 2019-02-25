@@ -77,6 +77,7 @@ return [
 
     'controllers' => [
         'factories' => [
+            Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,

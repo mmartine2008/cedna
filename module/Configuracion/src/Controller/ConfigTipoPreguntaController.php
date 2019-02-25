@@ -8,9 +8,9 @@
 namespace Configuracion\Controller;
 
 use Zend\View\Model\ViewModel;
-use Application\Controller\CednaController;
+use Configuracion\Controller\ConfiguracionController;
 
-class ConfigTipoPreguntaController extends CednaController
+class ConfigTipoPreguntaController extends ConfiguracionController
 {
 
     private $configuracionManager;
