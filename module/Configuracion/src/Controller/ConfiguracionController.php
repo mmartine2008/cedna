@@ -7,12 +7,12 @@
 
 namespace Configuracion\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\CednaController;
 use Zend\View\Model\ViewModel;
 
 use Zend\I18n\Translator\Translator;
 
-class ConfiguracionController extends AbstractActionController
+class ConfiguracionController extends CednaController
 {
     protected $catalogoManager;
     protected $userSessionManager;
@@ -30,23 +30,7 @@ class ConfiguracionController extends AbstractActionController
         // echo($this->translator->translate('Hello', null, 'es_ES'));
 
         $this->cargarAccionesDisponibles('Configuracion');
-        return new ViewModel();
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('Configuracion');
+        return new ViewModel(['OperacionesJSON' => $OperacionesJSON]);
     }
-
-    protected function cargarAccionesDisponibles($nombreOperacion){
-        $PerfilActivo = $this->userSessionManager->getPerfilActivo();
-
-        $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $PerfilActivo);
-
-        $arrAccionesDisponiblesJSON = [];
-
-        foreach($arrAccionesDisponibles as $AccionDisponible){
-            $arrAccionesDisponiblesJSON[] = $AccionDisponible->getJSON();
-        }
-
-        $arrAccionesDisponiblesJSON = implode(", ", $arrAccionesDisponiblesJSON);
-
-        $this->layout()->arrAccionesDisponibles = '[' . $arrAccionesDisponiblesJSON . ']';
-    }
-
 }

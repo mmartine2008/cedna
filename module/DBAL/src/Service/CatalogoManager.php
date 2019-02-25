@@ -71,17 +71,18 @@ class CatalogoManager {
      * Se consideran Operaciones iniciales a aquellas operaciones que tienen como
      * operacion padre al INDEX.
      *
-     * @param [type] $Perfil
+     * @param [Perfil] $Perfil
+     * @param [string] $nombreOperacion
      * @return void
      */
-    public function getOperacionesInicialesPorPerfil($Perfil){
+    public function getOperacionesInicialesPorPerfil($Perfil, $nombreOperacion){
         $arrOperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)
                                                         ->findBy(['Perfil' => $Perfil]);
 
         $output = [];
         $idsGuardados = [];
         foreach($arrOperacionAccionPerfil as $OperacionAccionPerfil){
-            $OperacionIndex = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => Operacion::NOMBRE_INDEX]);
+            $OperacionIndex = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $nombreOperacion]);
 
             if ($OperacionAccionPerfil->getOperacion()->getGrupo() == $OperacionIndex
                 && !in_array($OperacionAccionPerfil->getOperacion()->getId(), $idsGuardados)){

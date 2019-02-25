@@ -15,9 +15,9 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
     private $configuracionManager;
 
-    public function __construct($catalogoManager, $configuracionManager, $userSessionManager)
+    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator)
     {
-        parent::__construct($catalogoManager, $userSessionManager);
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->configuracionManager = $configuracionManager;
     }

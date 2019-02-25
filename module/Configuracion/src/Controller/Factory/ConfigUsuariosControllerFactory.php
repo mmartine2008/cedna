@@ -21,7 +21,8 @@ class ConfigUsuariosControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $configUsuariosManager = $container->get(ConfigUsuariosManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
+        $translator = $container->get('translator');
         
-        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager, $userSessionManager);
+        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager, $userSessionManager, $translator);
     }
 }

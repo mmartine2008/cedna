@@ -1,16 +1,12 @@
-CREATE TABLE PreguntaGeneradora(
-	IdPreguntaGeneradora int IDENTITY(1,1),
-	IdPregunta int null,
-	IdOpcion int null, 
-	IdPreguntaGenerada int null,
+CREATE TABLE Operarios(
+	IdOperario INT IDENTITY(1,1),
+	Nombre varchar(100) NOT NULL,
+    Apellido varchar(100) NOT NULL,
+    CUIT varchar(100) NOT NULL,
+    Telefono int NULL,
+    Email varchar(100) NULL,
 
-	CONSTRAINT PK_PreguntaGeneradora PRIMARY KEY (IdPreguntaGeneradora),  
-	CONSTRAINT FK_PreguntaGeneradora_Pregunta FOREIGN KEY (IdPregunta) REFERENCES Pregunta (IdPregunta), 
-	CONSTRAINT FK_PreguntaGeneradora_Opcion FOREIGN KEY (IdOpcion) REFERENCES Opcion (IdOpcion), 
-	CONSTRAINT FK_PreguntaGeneradora_PregGenerada FOREIGN KEY (IdPreguntaGenerada) REFERENCES Pregunta (IdPregunta), 
+	CONSTRAINT PK_Operarios PRIMARY KEY (IdOperario),  
 );
-
-ALTER TABLE Seccion
-ADD Descripcion varchar(1000) null;
 
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('15.sql', GETDATE ( ), 0, 15);

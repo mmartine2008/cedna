@@ -2,19 +2,47 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><?= $this->translate('__configuracion__') ?></h3>
+                <h3 class="panel-title">Configuración</h3>
             </div>
-            <div class="panel-body">
-                <div class="row">
-                    <a href="<?=$this->url("configuracion/tipo-pregunta",["action" => "index"])?>"><?= $this->translate('__tipo_pregunta__') ?></a>
-                </div>
-                <div class="row">
-                    <a href="<?=$this->url("configuracion/perfiles",["action" => "index"])?>"><?= $this->translate('__perfiles__') ?></a>
-                </div>
-                <div class="row">
-                    <a href="<?=$this->url("configuracion/usuarios",["action" => "index"])?>"><?= $this->translate('__usuarios__') ?></a>
-                </div>
+            <div class="panel-body" id="divIndex">
+                
             </div>
         </div>
     </div>
 </div>
+<script>
+var operacionesJSON = <?= $OperacionesJSON ?>;
+
+function dibujarOperacionesIniciales(){
+    var divIndex = document.getElementById("divIndex");
+    var divFila = document.createElement('div');
+    divFila.setAttribute('class','form-row');
+
+    for (var i = 0; i < operacionesJSON.length; i++){
+        var operacion = operacionesJSON[i];
+
+        var icon = document.createElement('i');
+        icon.setAttribute('class', operacion.icono);
+        icon.setAttribute('title', operacion.titulo);
+
+        //crear enlace a la operacion
+        var a = document.createElement('a');
+        a.setAttribute('href', operacion.url);
+
+        a.appendChild(icon);
+        var divCol = document.createElement('div');;
+        divCol.setAttribute('class','col-lg-2');
+
+        divCol.appendChild(a);
+
+        divFila.appendChild(divCol);
+    }
+    divIndex.appendChild(divFila);
+}
+
+dibujarOperacionesIniciales();
+
+$( document ).ready(function() {
+    
+});
+</script>

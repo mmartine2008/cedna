@@ -1,37 +1,124 @@
 <div class="form-row">
-    <div class="col-md-3">
-        <a href="<?=$this->url("configuracion/perfiles",["action" => "alta"])?>">Nuevo Perfil</a>
-    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Listado de Perfiles</h3>
             </div>
-            <div class="panel-body">
-                <table class="footable table table-stripped toggle-arrow-tiny no-borders">
+            <div class="panel-body mt-5">
+                <table id="tablaPerfiles" class="table table-hover">
                     <thead>
                         <tr>
                             <th class="text-center">Nombre</th>
                             <th class="text-center">Descripcion</th>
-                            <th class="text-right">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="">
-                    <?php foreach($arrPerfiles as $Perfiles) : ?>
-                        <tr>
-                            <td class="text-left"><?= $Perfiles->getNombre() ?></td>
-                            <td class="text-left"><?= $Perfiles->getDescripcion() ?></td>
-                            <td class="text-left">
-                                <a href="<?=$this->url("configuracion/perfiles",
-                                                    ["action" => "editar", "id" => $Perfiles->getId()])?>">editar</a> | 
-                                <a href="<?=$this->url("configuracion/perfiles",
-                                                    ["action" => "borrar", "id" => $Perfiles->getId()])?>">borrar</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                    <tbody id="bodyConfPerfiles">
+                    
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrPerfilesJSON = <?= $arrPerfilesJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaPerfiles();
+    });
+
+    function dibujarTablaPerfiles(){
+        $('#bodyConfPerfiles').find('tr').remove();
+    
+        for (var i = 0; i < arrPerfilesJSON.length; i++)
+        {
+            var perfil = arrPerfilesJSON[i];
+
+            var body = document.getElementById("bodyConfPerfiles");
+            var row = body.insertRow();
+            row.id = i;
+
+            var nombre = row.insertCell(0);
+            var descripcion = row.insertCell(1);
+
+            nombre.innerHTML = perfil.nombre;
+            descripcion.innerHTML = perfil.descripcion;   
+        }
+    }
+
+    $(function() {
+        $('#tablaPerfiles').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarPerfil() {
+        var result = null;
+        var perfil = arrPerfilesJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/configuracion/perfiles/borrar/' + perfil.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var perfil = arrPerfilesJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Perfil',
+                width: 600,
+                text: "Esta seguro que desea eliminar el perfil: "+ perfil.descripcion +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Confirmar'
+            }).then((result) => {
+                if (result.value) {
+                    borrarPerfil();
+                    window.location.replace(url + "/configuracion/perfiles");
+                }
+            });
+        }else{
+            swal('Perfil no seleccionado',
+                'Por favor seleccione el perfil que desea eliminar',
+                'error');
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var perfil = arrPerfilesJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/perfiles/editar/" + perfil.id);
+        }else{
+            swal('Perfil no seleccionado',
+                'Por favor seleccione el perfil que desea editar',
+                'error');
+        }
+    }
+
+  </script>

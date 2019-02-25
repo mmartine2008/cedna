@@ -14,23 +14,26 @@ class ConfigPerfilesController extends ConfiguracionController
 {
     private $configuracionManager;
 
-    public function __construct($catalogoManager, $configuracionManager, $userSessionManager)
+    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator)
     {
-        parent::__construct($catalogoManager, $userSessionManager);
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->configuracionManager = $configuracionManager;
     }
 
     public function indexAction()
     {
-        $arrPerfiles = $this->catalogoManager->getPerfiles();
+        $this->cargarAccionesDisponibles('perfiles');
+        
+        $arrPerfilesJSON = $this->configuracionManager->getArrPerfilesJSON();
 
         return new ViewModel([
-            'arrPerfiles' => $arrPerfiles
+            'arrPerfilesJSON' => $arrPerfilesJSON
         ]);
     }
 
     public function altaAction(){
+        $this->cargarAccionesDisponibles('perfiles - alta');
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
@@ -50,6 +53,7 @@ class ConfigPerfilesController extends ConfiguracionController
     }
 
     public function editarAction(){
+        $this->cargarAccionesDisponibles('perfiles - edicion');
         $parametros = $this->params()->fromRoute();
 
         $idPerfiles = $parametros['id'];

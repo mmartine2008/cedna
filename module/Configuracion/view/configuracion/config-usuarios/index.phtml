@@ -1,41 +1,130 @@
 <div class="form-row">
-    <div class="col-md-3">
-        <a href="<?=$this->url("configuracion/usuarios",["action" => "alta"])?>">Nuevo Usuario</a>
-    </div>
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Listado de Usuarios</h3>
             </div>
-            <div class="panel-body">
-                <table>
+            <div class="panel-body mt-5">
+                <table id="tablaUsuarios" class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Nombre de Usuario</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>Email</th>
-                            <th class="text-right">Acciones</th>
+                            <th class="text-center">Nombre de Usuario</th>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Apellido</th>
+                            <th class="text-center">Email</th>
                         </tr>
                     </thead>
-                    <tbody id="">
-                    <?php foreach($arrUsuarios as $Usuario) : ?>
-                        <tr>
-                            <td><?= $Usuario->getNombreUsuario() ?></td>
-                            <td><?= $Usuario->getNombre() ?></td>
-                            <td><?= $Usuario->getApellido() ?></td>
-                            <td><?= $Usuario->getEmail() ?></td>
-                            <td>
-                                <a href="<?=$this->url("configuracion/usuarios",
-                                                    ["action" => "editar", "id" => $Usuario->getId()])?>">editar</a> | 
-                                <a href="<?=$this->url("configuracion/usuarios",
-                                                    ["action" => "borrar", "id" => $Usuario->getId()])?>">borrar</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
+                    <tbody id="bodyConfUsuarios">
+                    
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrUsuariosJSON = <?= $arrUsuariosJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaUsuarios();
+    });
+
+    function dibujarTablaUsuarios(){
+        $('#bodyConfUsuarios').find('tr').remove();
+    
+        for (var i = 0; i < arrUsuariosJSON.length; i++)
+        {
+            var usuario = arrUsuariosJSON[i];
+
+            var body = document.getElementById("bodyConfUsuarios");
+            var row = body.insertRow();
+            row.id = i;
+
+            var userName = row.insertCell(0);
+            var nombre = row.insertCell(1);
+            var apellido = row.insertCell(2);
+            var email = row.insertCell(3);
+
+            userName.innerHTML = usuario.userName;
+            nombre.innerHTML = usuario.nombre;
+            apellido.innerHTML = usuario.apellido;
+            email.innerHTML = usuario.email;
+        }
+    }
+
+    $(function() {
+        $('#tablaUsuarios').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarUsuario() {
+        var result = null;
+        var usuario = arrUsuariosJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/configuracion/usuarios/borrar/' + usuario.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var usuarios = arrUsuariosJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Usuario',
+                width: 600,
+                text: "Esta seguro que desea eliminar el usuario: "+ usuario.userName +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Confirmar'
+            }).then((result) => {
+                if (result.value) {
+                    borrarUsuario();
+                    window.location.replace(url + "/configuracion/usuarios");
+                }
+            });
+        }else{
+            swal('Usuario no seleccionado',
+                'Por favor seleccione el usuario que desea eliminar',
+                'error');
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var usuario = arrUsuariosJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/usuarios/editar/" + usuario.id);
+        }else{
+            swal('Usuario no seleccionado',
+                'Por favor seleccione el usuario que desea editar',
+                'error');
+        }
+    }
+
+  </script>

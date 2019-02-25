@@ -21,7 +21,8 @@ class ConfigPerfilesControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $configuracionManager = $container->get(ConfiguracionManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
+        $translator = $container->get('translator');
         
-        return new ConfigPerfilesController($catalogoManager, $configuracionManager, $userSessionManager);
+        return new ConfigPerfilesController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
     }
 }
