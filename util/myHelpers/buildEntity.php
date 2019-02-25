@@ -57,9 +57,12 @@
      }
      
      process([
-        'IdUsuarioxPerfil', 
-        'IdUsuario', 
-        'IdPerfil', 
+        'IdOperario', 
+'Nombre', 
+'Apellido', 
+'CUIT', 
+'Telefono', 
+'Email', 
 ]);
      
      /*
