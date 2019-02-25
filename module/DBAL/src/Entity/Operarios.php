@@ -56,7 +56,7 @@ class Operarios
         $this->Apellido = $Apellido;
     }
 
-    public function setCUIT($CUIT)
+    public function setCuit($CUIT)
     {
         $this->CUIT = $CUIT;
     }
