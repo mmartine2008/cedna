@@ -209,11 +209,11 @@ class Pregunta
                 for($i=1 ; $i<=$cantDestinos; $i++) {
                     var_dump($cantDestinos);
                     var_dump($i);
-                    $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": ""}';
+                    $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
                 }
                 $resp = implode(", ", $resp);
                 $output .= '"respuesta": ['.$resp.'],';
-                $output .= '"opciones": ['.$opciones.']';
+                // $output .= '"opciones": ['.$opciones.']';
             } else {
                 $output .= '"opciones": ['.$opciones.'],';
                 $output .= '"respuesta": ""';
