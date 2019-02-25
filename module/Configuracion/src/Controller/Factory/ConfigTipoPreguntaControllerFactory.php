@@ -21,7 +21,8 @@ class ConfigTipoPreguntaControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $configuracionManager = $container->get(ConfiguracionManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
+        $translator = $container->get('translator');
 
-        return new ConfigTipoPreguntaController($catalogoManager, $configuracionManager, $userSessionManager);
+        return new ConfigTipoPreguntaController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
     }
 }

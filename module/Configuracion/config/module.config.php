@@ -88,7 +88,6 @@ return [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
             Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
             \Zend\I18n\Translator\TranslatorInterface::class => \Zend\I18n\Translator\TranslatorServiceFactory::class,
-
         ],
     ],
 
