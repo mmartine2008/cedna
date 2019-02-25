@@ -14,6 +14,8 @@ DBCC CHECKIDENT ('SeccionPregunta', RESEED, 0);
 DBCC CHECKIDENT ('Formulario', RESEED, 0);
 DBCC CHECKIDENT ('Pregunta', RESEED, 0);
 DBCC CHECKIDENT ('Respuesta', RESEED, 0);
+DBCC CHECKIDENT ('PreguntaOpcion', RESEED, 0);
+
 
 INSERT Formulario(Descripcion) VALUES('Datos Personales');
 
@@ -86,3 +88,88 @@ INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (2,5);
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (2,6);
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (2,7);
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (2,8);
+
+--/////////////////////////////////////////////////////////
+INSERT Formulario(Descripcion, Nombre) VALUES('Nuevo Permiso de Trabajo en Frio', 'Nuevo Permiso de Trabajo en Frio');
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'General', 'Datos generales');
+
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Fecha', 5, 0);
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('', 1, 1);
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Empresa', 1, 1, 'getNombresEmpresas');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Imagen del lugar', 7, 0);
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Planta o lugar', 1, 1, 'getNombresPlantaLugar');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Etapa de obra', 1, 1, 'getEtapasObra');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Actividad', 1, 1, 'getEtapasObra');
+
+INSERT Opcion(Descripcion) VALUES ('Interno');
+INSERT Opcion(Descripcion) VALUES ('Externo');
+
+INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (10, 7); 
+INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (10, 8); 
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,9); 
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,10);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,11);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,12);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,13);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,14);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,15);
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Protección', 'Equipos y elementos de protección');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 3, 1, 'getEquiposElementosProteccion');
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (4,16); 
+
+INSERT TipoPregunta(Descripcion) VALUES ('number');
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Ambientales', 'Riesgos Ambientales');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getRiesgosAmbientales');
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (5,17); 
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Adicionales', 'Riesgos Adicionales');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getRiesgosAdicionales');
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (6,18); 
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Gases', 'Prueba de Gases');
+
+INSERT TipoPregunta(Descripcion) VALUES ('time');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Fecha de prueba', 5, 0);
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Hora de prueba', 10, 0); 
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Tiempo de validez', 9, 0); 
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getPruebasGases');
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (7,19); 
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (7,20);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (7,21);
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (7,22);
+
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Firmas', 'Firmas del Permiso');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getFirmasPermiso');
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (8,23); 
+
+INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Informacion', 'Informacion');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Se encuentra casado?', 1, 1);
+
+INSERT Opcion(Descripcion) VALUES ('Si');
+INSERT Opcion(Descripcion) VALUES ('No');
+
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Nombre de pareja', 4, 0);
+
+INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (24, 9); 
+INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (24, 10); 
+
+INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (9,24); 
+
+INSERT PreguntaGeneradora(IdPregunta, idOpcion, IdPreguntaGenerada) VALUES (24, 9, 25);

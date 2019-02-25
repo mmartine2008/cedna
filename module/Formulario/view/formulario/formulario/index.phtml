@@ -115,13 +115,17 @@
         }
     }
 
-    function createListFromJSONLista(selector, lista, seleccione) {
+    function createListFromJSONLista(selector, lista, seleccione, preguntaGeneradora) {
         if (seleccione){
             var option = document.createElement("option");
             option.value =  -1;
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
+        // var optionGeneradora = null;
+        // if(preguntaGeneradora) {
+        //     var optionGeneradora = preguntaGeneradora.opcion;
+        // }
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             option.value = lista[i][0];
@@ -137,13 +141,13 @@
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
-    function createSimpleSelector(id, opciones, divElement, idSeccion) {
+    function createSimpleSelector(id, opciones, divElement, idSeccion, preguntaGeneradora) {
         
         var selector = document.createElement("select");
         idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
         selector.id = idSelector;
         var opciones = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, opciones, true);
+        var selector = createListFromJSONLista(selector, opciones, true, preguntaGeneradora);
         selector.onchange = function() {updateJsonSimple(idSeccion, id, idSelector)};
         divElement.appendChild(selector);
     }
@@ -311,7 +315,11 @@
     function createOptions(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
-            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
+            var preguntaGeneradora = null;
+            if(item.generaPregunta == '1'){
+                var preguntaGeneradora = item.preguntaGeneradora;
+            }
+            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion, preguntaGeneradora);
         } else {
             createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion);
         } 

@@ -8,6 +8,7 @@ use DBAL\Entity\Opcion;
 use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
+use DBAL\Entity\SeccionPregunta;
 
 
 class FormularioManager {
@@ -27,14 +28,6 @@ class FormularioManager {
         $this->entityManager = $entityManager;
         
     }
-
-    public function getFormularioJSON($id) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $id]); 
-        return $formulario->getJSON();
-    }
-
-    
 
     public function getPregunta($id) {
         $pregunta = $this->entityManager->getRepository(Pregunta::class)
@@ -64,6 +57,48 @@ class FormularioManager {
         $Entidad = $this->entityManager->getRepository(PreguntaOpcion::class)
                                             ->findBy(['pregunta' => $idPregunta]); 
         return $Entidad;
+    }
+
+    public function getPreguntasxSeccion($seccion) {
+        $preguntas = $this->entityManager->getRepository(SeccionPregunta::class)
+                                            ->findBy(['seccion' => $seccion]); 
+        return $preguntas;
+    }
+
+    public function getSeccionesxFormulario($formulario){
+        $Secciones = $this->entityManager->getRepository(Seccion::class)
+                                            ->findBy(['formulario' => $formulario]); 
+        return $Secciones;
+    }
+
+    public function getPreguntasxFormulario($formulario) {
+        $secciones = $this->getSeccionesxFormulario($formulario);
+        $arregloPreg = [];
+        foreach($secciones as $seccion){
+            $preguntas = $this->getPreguntasxSeccion($seccion);
+            array_merge($arregloPreg, $preguntas);
+        }
+        return $arregloPreg;
+    }
+
+    public function modificarOpcionesJSON($pregunta, $formulario) {
+        $JSON = $formulario->getJSON()();
+        
+    }
+    public function modificarPreguntasConFuncion($formulario){
+        $preguntas = getPreguntasxFormulario($formulario);
+        foreach($preguntas as $pregunta) {
+            if($pregunta->tieneFuncion()){
+                $this->modificarOpcionesJSON($pregunta, $formulario);
+            }
+        }
+    }
+
+    public function getFormularioJSON($id) {
+        $formulario = $this->entityManager->getRepository(Formulario::class)
+                                            ->findOneBy(['id' => $id]); 
+        $this->modificarPreguntasConFuncion($formulario);
+        return $formulario->getJSON();
     }
 
     public function tieneRespuesta($respuesta) {

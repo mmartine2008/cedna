@@ -92,4 +92,15 @@ class CatalogoManager {
 
         return $output;
     }
+
+    public function getElementosProteccionPersonal(){
+        $resultado = [];
+        $elementos = ['Casco', 'Anteojos de Seguridad', 'Antiparras', 'calzado de seguridad', 'ropa especial de trabajo', 'chaleco reflectivo'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => $id, 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
 }
