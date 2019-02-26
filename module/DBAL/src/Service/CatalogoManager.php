@@ -8,6 +8,7 @@ use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
 use DBAL\Entity\Usuarios;
+use DBAL\Entity\Operarios;
 
 class CatalogoManager {
     
@@ -63,6 +64,36 @@ class CatalogoManager {
         }
 
         return $Usuarios;
+    }
+
+    public function getOperarios($idOperarios = null){
+        if ($idOperarios){
+            $Operarios = $this->entityManager->getRepository(Operarios::class)->findOneBy(['id' => $idOperarios]);
+        }else{
+            $Operarios = $this->entityManager->getRepository(Operarios::class)->findAll();
+        }
+
+        return $Operarios;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Operarios
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrOperariosJSON(){
+        $arrOperarios = $this->getOperarios();
+
+        $output = [];
+        
+        foreach($arrOperarios as $Operario){
+            $output[] = $Operario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
     /**

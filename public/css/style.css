@@ -139,7 +139,7 @@ tbody tr.highlight td {
 
 .footer {
     background: #85c8f466;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
 }

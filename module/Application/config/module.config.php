@@ -62,6 +62,21 @@ return [
                     ],
                 ],
             ],
+            'operarios' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/operarios[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\OperariosController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -69,6 +84,7 @@ return [
         'factories' => [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
             Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
+            Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -79,6 +95,7 @@ return [
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
             Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
+            Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
         ],
     ],
     'view_manager' => [

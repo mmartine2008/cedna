@@ -5,7 +5,7 @@
                 <h3 class="panel-title">Nuevo Usuario</h3>
             </div>
             <div class="panel-body">
-                <form method="post" name="formUsuario" onsubmit="preSubmit()">
+                <form method="post" id="formUsuario" name="formUsuario">
                     <div class="form-row mt-5">
                         <div class="col-lg-6">
                             <div class="form-row">
@@ -29,7 +29,7 @@
                                     <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
                                 </div>
                                 <div class="col-md-7">
-                                    <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control">
+                                    <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control" required="true">
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                     <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <input type="text" id="emailUsuario" name="emailUsuario" class="form-control">
+                                    <input type="text" id="emailUsuario" name="emailUsuario" class="form-control" required="true">
                                 </div>
                             </div>
                             <div class="form-row mt-3">
@@ -55,7 +55,7 @@
                                     <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control">
+                                    <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control" required="true">
                                 </div>
                             </div>
                         </div>
@@ -136,10 +136,10 @@ function preSubmit(){
     var JsonData = FormUsuarioToJson();
     $('#JsonData').val(JsonData);
 
-    if ($("#formPerfil")[0].checkValidity()){
-        $("#formPerfil").submit();
+    if ($("#formUsuario")[0].checkValidity()){
+        $("#formUsuario").submit();
     }else{
-        $("#formPerfil")[0].reportValidity();
+        $("#formUsuario")[0].reportValidity();
     }
 }
 
