@@ -56,13 +56,11 @@
          }         
      }
      
-     process([
-        'IdOperario', 
-'Nombre', 
-'Apellido', 
-'CUIT', 
-'Telefono', 
-'Email', 
+process([
+    'IdEsJefeDe', 
+'IdNodo', 
+'IdUsuario', 
+'Orden',  
 ]);
      
      /*
