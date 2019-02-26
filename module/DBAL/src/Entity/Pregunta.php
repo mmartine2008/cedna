@@ -257,13 +257,13 @@ class Pregunta
                 $output .= '"respuesta": ['.$resp.'],';
             } else {
                 $output .= '"opciones": ['.$opciones.'],';
-                $output .= '"respuesta": ""';
+                $output .= '"respuesta": "",';
             }
             if($this->getPreguntaGeneradora()){
                 $output .= '"generaPregunta": "' . 1 .'", ';
-                $output .= '"preguntaGeneradora": ' . $this->getPreguntaGeneradora()->getJSON() .', ';
+                $output .= '"preguntaGeneradora": ' . $this->getPreguntaGeneradora()->getJSON() .' ';
             } else {
-                $output .= '"generaPregunta": "' . 0 .'", ';
+                $output .= '"generaPregunta": "' . 0 .'" ';
             }
         } else {
             $output .= '"cerrada": "' . 0 .'", ';

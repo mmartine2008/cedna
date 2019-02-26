@@ -18,14 +18,15 @@ class FormularioManager {
      * @var Doctrine\ORM\EntityManager
      */
     private $entityManager; 
-    
+    private $catalogoManager;
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager) 
+    public function __construct($entityManager, $catalogoManager) 
     {
         $this->entityManager = $entityManager;
+        $this->catalogoManager = $catalogoManager;
         
     }
 
@@ -75,30 +76,79 @@ class FormularioManager {
         $secciones = $this->getSeccionesxFormulario($formulario);
         $arregloPreg = [];
         foreach($secciones as $seccion){
-            $preguntas = $this->getPreguntasxSeccion($seccion);
-            array_merge($arregloPreg, $preguntas);
+            $preguntasxSeccion = $this->getPreguntasxSeccion($seccion);
+            foreach($preguntasxSeccion as $pregunta) {
+                $arregloPreg[] = $pregunta->getPregunta();
+            }
         }
         return $arregloPreg;
     }
 
-    public function modificarOpcionesJSON($pregunta, $formulario) {
-        $JSON = $formulario->getJSON()();
-        
+    public function getOpcionesFuncion($pregunta) {
+        $strinfFuncion = $pregunta->getFuncion();
+        // var_dump($strinfFuncion);
+        $opciones = $this->catalogoManager->{$strinfFuncion}();
+        // var_dump($opciones);
+        return $opciones;
     }
-    public function modificarPreguntasConFuncion($formulario){
-        $preguntas = getPreguntasxFormulario($formulario);
-        foreach($preguntas as $pregunta) {
-            if($pregunta->tieneFuncion()){
-                $this->modificarOpcionesJSON($pregunta, $formulario);
+
+    public function getJSONModificadoSelectSimple($pregunta, $form) {
+        $secciones = $form->secciones;
+        foreach($secciones as $seccion) {
+            $preguntas = $seccion->preguntas;
+            foreach($preguntas as $preguntaJSON) {
+                if($preguntaJSON->idPregunta == $pregunta->getId()) {
+                    $opciones = $this->getOpcionesFuncion($pregunta);
+                    $preguntaJSON->opciones = $opciones;
+                }
             }
         }
+        return $form;
+    }
+
+    public function getJSONModificadoSelectMultiple($pregunta, $form) {
+        $secciones = $form->secciones;
+        foreach($secciones as $seccion) {
+            $preguntas = $seccion->preguntas;
+            foreach($preguntas as $preguntaJSON) {
+                if($preguntaJSON->idPregunta == $pregunta->getId()) {
+                    $opciones = $this->getOpcionesFuncion($pregunta);
+                    $respuestas = $preguntaJSON->respuesta;
+                    $destino = 'destino_0_id_'.$pregunta->getId();
+                    foreach($respuestas as $respuesta) {
+                        if($respuesta->destino == $destino){
+                            $opcionesJSON = $opciones;
+                            $respuesta->opcion = $opcionesJSON;
+                        }
+                    }
+                }
+            }
+        }
+        return $form;
+    }
+
+    public function getJSONActualizado($formulario){
+        $preguntas = $this->getPreguntasxFormulario($formulario);
+        $JSON = $formulario->getJSON();
+        $formJSON = json_decode($JSON);
+        foreach($preguntas as $pregunta) {
+            if($pregunta->tieneFuncion()){
+                $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();
+                if($cantDestinos > 0){
+                    $formJSON = $this->getJSONModificadoSelectMultiple($pregunta, $formJSON);
+                } else {
+                    $formJSON = $this->getJSONModificadoSelectSimple($pregunta, $formJSON);
+                }  
+            }
+        }
+        return json_encode($formJSON);
     }
 
     public function getFormularioJSON($id) {
         $formulario = $this->entityManager->getRepository(Formulario::class)
                                             ->findOneBy(['id' => $id]); 
-        $this->modificarPreguntasConFuncion($formulario);
-        return $formulario->getJSON();
+
+        return  $this->getJSONActualizado($formulario);
     }
 
     public function tieneRespuesta($respuesta) {

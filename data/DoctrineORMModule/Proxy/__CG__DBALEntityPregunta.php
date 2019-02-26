@@ -64,10 +64,10 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'opciones'];
+            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'funcion', 'opciones', 'preguntaGeneradora'];
         }
 
-        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'opciones'];
+        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'funcion', 'opciones', 'preguntaGeneradora'];
     }
 
     /**
@@ -202,6 +202,17 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getPreguntaGeneradora()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPreguntaGeneradora', []);
+
+        return parent::getPreguntaGeneradora();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function addOpciones(\DBAL\Entity\Opcion $opciones = NULL)
     {
 
@@ -318,6 +329,39 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTieneOpciones', [$tieneOpciones]);
 
         return parent::setTieneOpciones($tieneOpciones);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFuncion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFuncion', []);
+
+        return parent::getFuncion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFuncion($funcion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFuncion', [$funcion]);
+
+        return parent::setFuncion($funcion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function tieneFuncion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'tieneFuncion', []);
+
+        return parent::tieneFuncion();
     }
 
     /**
