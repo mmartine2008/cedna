@@ -13,4 +13,4 @@ CREATE TABLE PreguntaGeneradora(
 ALTER TABLE Seccion
 ADD Descripcion varchar(1000) null;
 
-INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('16.sql', GETDATE ( ), 0, 16);
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('17.sql', GETDATE ( ), 0, 17);
