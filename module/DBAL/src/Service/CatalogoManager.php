@@ -9,6 +9,8 @@ use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
 use DBAL\Entity\Usuarios;
 use DBAL\Entity\Operarios;
+use DBAL\Entity\TipoNodo;
+use DBAL\Entity\Nodos;
 
 class CatalogoManager {
     
@@ -76,6 +78,26 @@ class CatalogoManager {
         return $Operarios;
     }
 
+    public function getTipoNodo($idTipoNodo = null){
+        if ($idTipoNodo){
+            $TipoNodo = $this->entityManager->getRepository(TipoNodo::class)->findOneBy(['id' => $idTipoNodo]);
+        }else{
+            $TipoNodo = $this->entityManager->getRepository(TipoNodo::class)->findAll();
+        }
+
+        return $TipoNodo;
+    }
+
+    public function getNodos($idNodos = null){
+        if ($idNodos){
+            $Nodos = $this->entityManager->getRepository(Nodos::class)->findOneBy(['id' => $idNodos]);
+        }else{
+            $Nodos = $this->entityManager->getRepository(Nodos::class)->findAll();
+        }
+
+        return $Nodos;
+    }
+
     /**
      * Funcion que devuelve el arreglo de todas las entidades Operarios
      * en formato JSON para ser enviado a la vista.
@@ -89,6 +111,26 @@ class CatalogoManager {
         
         foreach($arrOperarios as $Operario){
             $output[] = $Operario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Nodos
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrNodosJSON(){
+        $arrNodos = $this->getNodos();
+
+        $output = [];
+        
+        foreach($arrNodos as $Nodo){
+            $output[] = $Nodo->getJSON();
         }
 
         $output = implode(", ", $output);

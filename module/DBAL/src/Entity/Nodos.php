@@ -76,7 +76,11 @@ class Nodos
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"tipoNodo": ' . $this->getTipoNodo()->getJSON() .', ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
-        $output .= '"nodoSuperior": ' . $this->getNodoSuperior()->getJSON .', ';
+        if ($this->getNodoSuperior()){
+            $output .= '"nodoSuperior": ' . $this->getNodoSuperior()->getJSON() .', ';
+        }else{
+            $output .= '"nodoSuperior": "", ';
+        }
         
         return '{' . $output . '}';
     }

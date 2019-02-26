@@ -1,0 +1,132 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Nodos</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaNodos" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Tipo de Nodo</th>
+                            <th class="text-center">Nombre Nodo Padre</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyNodos">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrNodosJSON = <?= $arrNodosJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaNodos();
+    });
+
+    function dibujarTablaNodos(){
+        $('#bodyNodos').find('tr').remove();
+    
+        for (var i = 0; i < arrNodosJSON.length; i++)
+        {
+            var nodo = arrNodosJSON[i];
+
+            var body = document.getElementById("bodyNodos");
+            var row = body.insertRow();
+            row.id = i;
+
+            var nombre = row.insertCell(0);
+            var tipoNodo = row.insertCell(1);
+            var nodoSuperior = row.insertCell(2);
+
+            nombre.innerHTML = nodo.nombre;
+            tipoNodo.innerHTML = nodo.tipoNodo.descripcion;
+
+            if (nodo.nodoSuperior != ''){
+                nodoSuperior.innerHTML = nodo.nodoSuperior.nombre;
+            }else{
+                nodoSuperior.innerHTML = '-';
+            }
+        }
+    }
+
+    $(function() {
+        $('#tablaNodos').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarNodo() {
+        var result = null;
+        var nodo = arrNodosJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/organigrama/borrar/' + nodo.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var nodo = arrNodosJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Nodo',
+                width: 600,
+                text: "Esta seguro que desea eliminar el nodo: "+ nodo.nombre +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Confirmar'
+            }).then((result) => {
+                if (result.value) {
+                    borrarNodo();
+                    window.location.replace(url + "/organigrama");
+                }
+            });
+        }else{
+            swal('Nodo no seleccionado',
+                'Por favor seleccione el nodo que desea eliminar',
+                'error');
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var nodo = arrNodosJSON[filaSeleccionada];
+
+            window.location.replace(url + "/organigrama/editar/" + nodo.id);
+        }else{
+            swal('Nodo no seleccionado',
+                'Por favor seleccione el nodo que desea editar',
+                'error');
+        }
+    }
+
+  </script>

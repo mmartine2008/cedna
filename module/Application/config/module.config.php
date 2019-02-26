@@ -77,6 +77,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'organigrama' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/organigrama[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\OrganigramaController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -85,6 +100,7 @@ return [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
             Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
             Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
+            Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -96,6 +112,7 @@ return [
             Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
             Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
+            Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
         ],
     ],
     'view_manager' => [
