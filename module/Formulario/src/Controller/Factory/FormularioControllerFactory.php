@@ -6,6 +6,8 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 use Formulario\Controller\FormularioController;
 
 use Formulario\Service\FormularioManager;
+use DBAL\Service\CatalogoManager;
+use Autenticacion\Service\UserSessionManager;
 
 
 /**
@@ -17,7 +19,9 @@ class FormularioControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $FormularioManager = $container->get(FormularioManager::class);
+        $catalogoManager = $container->get(CatalogoManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
         
-        return new FormularioController($FormularioManager);
+        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager);
     }
 }

@@ -187,7 +187,7 @@ class FormularioManager {
     public function altaRespuestasDestino($pregunta, $seccion, $formulario,$respuesta, $listaDestinos){
         foreach($listaDestinos as $item) {
             $destino = $item[0];
-            $opcion = $item[1];
+            $opcion = $item[1]->id;
             $this->altaRespuesta($pregunta, $seccion, $formulario,$respuesta, $destino, $opcion);
         }
     }
@@ -195,9 +195,9 @@ class FormularioManager {
     public function getListaOpcionDestinoPregunta($pregunta, $respuestas) {
         $output = [];
         if($pregunta->getTipoPregunta()->esPeguntaMultiple()) {
-            foreach ($respuestas as $respuesta) {
-                $destino = $respuesta->selector;
-                $opciones = $respuesta->respuesta;
+            foreach ($respuestas as $resp) {
+                $destino = $resp->destino;
+                $opciones = $resp->opcion;
                 if($opciones){
                     foreach($opciones as $opcion) {
                         $opcionDestino = Array();
@@ -230,8 +230,8 @@ class FormularioManager {
                         $opcion = null;
                         if($this->preguntaTieneOpciones($preguntaEnt)) {
                             $opcion = $this->getOpcion($respuesta);
-                            $this->altaRespuesta($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, null, $opcion);
                         }   
+                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, null, $opcion);
                     }
                 }
             }

@@ -7,24 +7,28 @@
 
 namespace Formulario\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\CednaController;
 use Zend\View\Model\ViewModel;
-use function GuzzleHttp\json_encode;
 
-class FormularioController extends AbstractActionController
+class FormularioController extends CednaController
 {
     private $FormularioManager;
 
-    public function __construct($FormularioManager) {
+    public function __construct($FormularioManager, $catalogoManager, $userSessionManager) {
+        parent::__construct($catalogoManager, $userSessionManager);
+
         $this->FormularioManager = $FormularioManager;
     }
 
     public function indexAction() {
+        $this->cargarAccionesDisponibles('Formulario');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('Formulario');
         $idFormulario = 2;
         $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
-
+        
         return new ViewModel([
-            "formulario" => $formularioJSON
+            "formulario" => $formularioJSON,
+            "OperacionesJSON" => $OperacionesJSON,
         ]);
     }
 
