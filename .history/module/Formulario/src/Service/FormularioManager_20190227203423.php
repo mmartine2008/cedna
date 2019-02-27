@@ -128,9 +128,7 @@ class FormularioManager {
     public function getJSONActualizado($formulario){
         $preguntas = $this->getPreguntasxFormulario($formulario);
         $JSON = $formulario->getJSON();
-        var_dump($JSON);
         $formJSON = json_decode($JSON);
-        var_dump($formJSON);
         foreach($preguntas as $pregunta) {
             if($pregunta->tieneFuncion()){
                 $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();

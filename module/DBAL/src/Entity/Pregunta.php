@@ -254,10 +254,10 @@ class Pregunta
                     $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
                 }
                 $resp = implode(", ", $resp);
-                $output .= '"respuesta": ['.$resp.'],';
+                $output .= '"respuesta": ['.$resp.']';// agregar coma cuando haga lo de preg generadora
             } else {
-                $output .= '"opciones": ['.$opciones.'],';
-                $output .= '"respuesta": "",';
+                $output .= '"opciones": ['.$opciones.'],'; //idem
+                $output .= '"respuesta": ""';
             }
             // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
             //     $preguntaGeneradora = $this->getPreguntaGeneradora();
