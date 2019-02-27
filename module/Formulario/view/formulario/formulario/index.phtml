@@ -58,8 +58,6 @@
         return opciones;
     }
 
-    
-
     function crearJSONOpciones(opciones){
         var array = [];
         for(var i=0 ; i < opciones.length; i++){
@@ -88,7 +86,6 @@
                                     }
                                 }
                                 resp[k].opcion = obj;
-                                
                             }
                         }
                     }
@@ -122,6 +119,10 @@
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
+        // var optionGeneradora = null;
+        // if(preguntaGeneradora) {
+        //     var optionGeneradora = preguntaGeneradora.opcion;
+        // }
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             option.value = lista[i][0];
@@ -215,8 +216,23 @@
         }
         return options;
     }
+
+    function manageButtons(idPregunta, idSeccion, cantDestinos){
+        for(var i=1; i <= cantDestinos; i++){ 
+            if($("#destino_0_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
+                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
+            } else {
+                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
+            }
+            if($("#destino_"+i+"_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
+                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
+            } else {
+                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
+            }
+        }
+    }
     
-    function insertarElementInSelect(origin, destination, idPregunta, idSeccion){
+    function insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
         var idSelectorOrigen = origin+idPregunta+"_seccion_"+idSeccion;
         var options = obtenerElementosSeleccionados(idSelectorOrigen);
         var optionOrigin = deleteOptionsSelectorOrigen(idSelectorOrigen, idPregunta, idSeccion);
@@ -229,11 +245,10 @@
         var listaOpciones = obtenerListaOpciones(opciones);
         removeAllOptionSelector(idSelectDestino);
         createListFromJSONLista(selectIn, listaOpciones, false);
-        manageButtons(idPregunta, idSeccion);
-
+        manageButtons(idPregunta, idSeccion, cantDestinos);
     }
 
-    function createButton(infoType, id, title, divElement, icon, disabled, origin, destination, idPregunta, idSeccion){
+    function createButton(infoType, id, title, divElement, icon, disabled, origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
         var button = document.createElement("button");
         button.type = infoType;
         button.id = id;
@@ -242,11 +257,11 @@
         button.textContent = icon;
         button.disabled = disabled;
         button.style.marginTop = "15px";
-        button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion)};
+        button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino)};
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
         // button.appendChild(icono);
-        divElement.appendChild(button);
+        divElement.appendChild(button, id);
     }
 
     function removeAllOptionSelector(origin){
@@ -254,28 +269,8 @@
             .remove()
             .end();
     }
-    
-    function manageButtons(id, idSeccion){
-        if($('#destino_0_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-        if($('#destino_1_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-        if($('#destino_2_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-    }
 
-    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion){
+    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
         var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row", divForm);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
@@ -284,15 +279,13 @@
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
         var div_class_sm_1 = createDivClass("col-sm-2", divRow);
-        createButton("button", "button_1_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_1_id_", idPregunta,idSeccion);
-        createButton("button", "button_1_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_1_id_", "destino_0_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_2_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_2_id_", "destino_0_id_", idPregunta,idSeccion);
-
         var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
-        createMultipleSelector('destino_1_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
-        createMultipleSelector('destino_2_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
-        var div_class_sm_5 = createDivClass("col-sm-1", divRow);
+        for(var i=1; i <= cantDestinos; i++){
+            createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
+            createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
+
+            createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
+        }
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
@@ -311,9 +304,14 @@
     function createOptions(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
+            // var preguntaGeneradora = null;
+            // if(item.generaPregunta == '1'){
+            //     var preguntaGeneradora = item.preguntaGeneradora;
+            // }
             createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
         } else {
-            createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion);
+                var cantDestinos = item.cantDestinos;
+                createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
         } 
     }
 
@@ -369,18 +367,23 @@
         }
     }
 
-    function crearItemSeccion(item, contenedor){
-
+    function crearItemSeccion(item, contenedor, active){
         // Creating a div element
         var divElement = document.createElement("Div");
         divElement.id = "Seccion_id_"+item.id;
         divElement.style.padding = "10px";
-        divElement.className="form-group";
+        if(active){
+            var clases = "form-group tab-pane active";
+        } else {
+            var clases = "form-group tab-pane";
+        }
+        divElement.classList= clases;
         divElement.style.textAlign = "lefth";
 
         var divSeccion = createDivClass("row", divElement);
-        var div_class_sm_2 = createDivClass("col-sm-1", divSeccion);
-        createTextElement("h4", div_class_sm_2, item.nombre);
+        var div_class_sm_4 = createDivClass("col-sm-4", divSeccion);
+        // createTextElement("h4", div_class_sm_4, item.nombre);
+        createTextElement("h4", div_class_sm_4, item.descripcion);
 
         createQuestions(item, divElement);
         contenedor.appendChild(divElement);
@@ -388,11 +391,48 @@
         return divElement;
     }
 
+    function createLiNav(navPills, item, active) {
+        var liNav = document.createElement("li");
+        
+        if(active) {
+            liNav.className = "active";
+        }
+        navPills.appendChild(liNav);
+
+
+        var aNav = document.createElement("a");
+        aNav.href = "#Seccion_id_"+item.id;
+        aNav.toggleAttribute="tab";
+        liNav.appendChild(aNav);
+
+        createTextElement("p", aNav, item.nombre);
+    }
+
     function construirSecciones(childs, contenedor){
-        for (var i = 0; i < childs.length; i++){
+        var navPills = document.createElement("ul");
+        navPills.classList = "nav nav-pills";
+        contenedor.appendChild(navPills);
+
+        createLiNav(navPills, childs[0], true);
+
+        for (var j = 1; j < childs.length; j++){
+            var item = childs[j];
+            createLiNav(navPills, item, false);  
+        }
+
+        var divElement = document.createElement("Div");
+        divElement.classList="tab-content clearfix";
+        contenedor.appendChild(divElement);
+
+        var item = childs[0];
+        var itemSeccion = crearItemSeccion(item, contenedor, true);
+        divElement.appendChild(itemSeccion);
+
+        for (var i = 1; i < childs.length; i++){
+
             var item = childs[i];
-            var itemSeccion = crearItemSeccion(item, contenedor);
-            contenedor.appendChild(itemSeccion);
+            var itemSeccion = crearItemSeccion(item, contenedor, false);
+            divElement.appendChild(itemSeccion);
         }
     }
 
@@ -407,6 +447,7 @@
 
         var divFormulario = document.createElement("Div");
         divFormulario.id = "Formulario_id_"+formulario.idFormulario;
+        divFormulario.className="container";
         divFormulario.style.paddingTop = "15px";
         createTextElement("h3", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);

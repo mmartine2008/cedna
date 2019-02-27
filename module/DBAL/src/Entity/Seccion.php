@@ -37,6 +37,11 @@ class Seccion
     protected $nombre;
 
     /**
+     * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
+     */
+    protected $descripcion;
+
+    /**
      *
      * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
      * @ORM\JoinTable(name="SeccionPregunta",
@@ -174,6 +179,26 @@ class Seccion
         return $this;
     }
 
+    /**
+     * Get the value of descripcion
+     */ 
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set the value of descripcion
+     *
+     * @return  self
+     */ 
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -185,6 +210,7 @@ class Seccion
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         if ($this->getTipoSeccion()) {
             $output .= '"tipoSeccion": ' . $this->getTipoSeccion()->getJSON() .', ';
         }
@@ -192,4 +218,5 @@ class Seccion
 
         return '{' . $output . '}';
     }
+
 }

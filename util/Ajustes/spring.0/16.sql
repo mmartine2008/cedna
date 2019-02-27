@@ -1,3 +1,4 @@
+
 ALTER TABLE Operarios 
 DROP COLUMN Telefono;
 
