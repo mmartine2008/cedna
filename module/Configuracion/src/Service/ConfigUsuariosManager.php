@@ -129,24 +129,4 @@ class ConfigUsuariosManager {
         //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
         $this->borrarPerfilesFromArreglo($Usuarios, $arrPerfilesOriginales);
     }
-    
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Usuarios
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrUsuariosJSON(){
-        $arrUsuarios = $this->catalogoManager->getUsuarios();
-
-        $output = [];
-        
-        foreach($arrUsuarios as $Usuario){
-            $output[] = $Usuario->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
 }

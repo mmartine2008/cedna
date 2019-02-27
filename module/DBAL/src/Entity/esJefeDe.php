@@ -21,13 +21,19 @@ class esJefeDe
      * @ORM\ManyToOne(targetEntity="Nodos")
      * @ORM\JoinColumn(name="IdNodo", referencedColumnName="IdNodo")
      */
-    protected $IdNodo;
+    protected $Nodo;
 
     /**
      * @ORM\ManyToOne(targetEntity="Usuarios")
      * @ORM\JoinColumn(name="IdUsuario", referencedColumnName="IdUsuario")
      */
-    protected $IdUsuario;
+    protected $Usuario;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="TipoJefe")
+     * @ORM\JoinColumn(name="IdTipoJefe", referencedColumnName="IdTipoJefe")
+     */
+    protected $TipoJefe;
 
     /**
      * @ORM\Column(name="Orden")
@@ -47,6 +53,11 @@ class esJefeDe
     public function setOrden($Orden)
     {
         $this->Orden = $Orden;
+    }
+
+    public function setTipoJefe($TipoJefe)
+    {
+        $this->TipoJefe = $TipoJefe;
     }
 
     public function getId()
@@ -69,12 +80,18 @@ class esJefeDe
         return $this->Orden;
     }
 
+    public function getTipoJefe()
+    {
+        return $this->TipoJefe;
+    }
+
     public function getJSON(){
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
         $output .= '"usuario": ' . $this->getUsuario()->getJSON() .', ';
+        $output .= '"tipoJefe": ' . $this->getTipoJefe()->getJSON() .', ';
         $output .= '"orden": "' . $this->getOrden() .'", ';
         
         return '{' . $output . '}';

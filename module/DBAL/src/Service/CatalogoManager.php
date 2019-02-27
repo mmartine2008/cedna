@@ -11,6 +11,8 @@ use DBAL\Entity\Usuarios;
 use DBAL\Entity\Operarios;
 use DBAL\Entity\TipoNodo;
 use DBAL\Entity\Nodos;
+use DBAL\Entity\TipoJefe;
+use DBAL\Entity\esJefeDe;
 
 class CatalogoManager {
     
@@ -98,6 +100,28 @@ class CatalogoManager {
         return $Nodos;
     }
 
+    public function getTipoJefe($idTipoJefe = null){
+        if ($idTipoJefe){
+            $TipoJefe = $this->entityManager->getRepository(TipoJefe::class)->findOneBy(['id' => $idTipoJefe]);
+        }else{
+            $TipoJefe = $this->entityManager->getRepository(TipoJefe::class)->findAll();
+        }
+
+        return $TipoJefe;
+    }
+
+    public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
+        $EsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Usuario' => $Usuario]);
+
+        return $EsJefeDe;
+    }
+
+    public function getEsJefeDePorNodo($Nodo){
+        $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
+
+        return $arrEsJefeDe;
+    }
+
     /**
      * Funcion que devuelve el arreglo de todas las entidades Operarios
      * en formato JSON para ser enviado a la vista.
@@ -131,6 +155,46 @@ class CatalogoManager {
         
         foreach($arrNodos as $Nodo){
             $output[] = $Nodo->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Usuarios
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrUsuariosJSON(){
+        $arrUsuarios = $this->getUsuarios();
+
+        $output = [];
+        
+        foreach($arrUsuarios as $Usuario){
+            $output[] = $Usuario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades TipoJefe
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrTipoJefeJSON(){
+        $arrTipoJefe = $this->getTipoJefe();
+
+        $output = [];
+        
+        foreach($arrTipoJefe as $TipoJefe){
+            $output[] = $TipoJefe->getJSON();
         }
 
         $output = implode(", ", $output);

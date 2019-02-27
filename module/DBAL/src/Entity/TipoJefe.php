@@ -6,13 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Perfiles")
+ * @ORM\Table(name="TipoJefe")
  */
-class Perfiles
+class TipoJefe
 {
     /**
      * @ORM\Id
-     * @ORM\Column(name="IdPerfil", type="integer")
+     * @ORM\Column(name="IdTipoJefe", type="integer")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     protected $id;
@@ -22,19 +22,9 @@ class Perfiles
      */
     protected $Descripcion;
 
-    /**
-     * @ORM\Column(name="Nombre")
-     */
-    protected $Nombre;
-
     public function setDescripcion($Descripcion)
     {
         $this->Descripcion = $Descripcion;
-    }
-
-    public function setNombre($Nombre)
-    {
-        $this->Nombre = $Nombre;
     }
 
     public function getId()
@@ -47,16 +37,12 @@ class Perfiles
         return $this->Descripcion;
     }
 
-    public function getNombre()
-    {
-        return $this->Nombre;
-    }
-
     public function getJSON(){
         $output = "";
+
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"nombre": "' . $this->getNombre() .'"';
+        
         return '{' . $output . '}';
     }
 }
