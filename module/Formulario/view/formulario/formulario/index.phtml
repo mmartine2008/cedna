@@ -5,18 +5,15 @@
 
 </div>
 <form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
-    
-<div class="form-row">
+<div class="row col-lg-12">
+    <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
         <input type="hidden" name="JsonData" id="JsonData">
-                <div class="col-sm-1">
         <a href="#">
-            <div class="btn btn-primary">Cancelar</div>
+            <button class="btn btn-primary margin-vertical-25" style="margin: 20px;" type="button">Cancelar</button>
         </a>
-       </div>
-       <div class="col-sm-1">
         <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
-</div>   
     </div>
+</div> 
 </form>
 
 
@@ -415,8 +412,7 @@
 
         var divSeccion = createDivClass("row", divElement);
         var div_class_sm_4 = createDivClass("col-sm-4", divSeccion);
-        // createTextElement("h4", div_class_sm_4, item.nombre);
-        createTextElement("h4", div_class_sm_4, item.descripcion);
+        createTextElement("h5", div_class_sm_4, item.descripcion);
 
         createQuestions(item, divElement);
         contenedor.appendChild(divElement);
