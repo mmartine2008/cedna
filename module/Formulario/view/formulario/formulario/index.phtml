@@ -295,13 +295,13 @@
 
     function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
         // var divForm = createDivClass("form-row", divElement);
-        var divRow = createDivClass("row", divElement);
+        var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
-        var div_class_sm_1 = createDivClass("col-sm-2", divRow);
+        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
         var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
         for(var i=1; i <= cantDestinos; i++){
             createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
