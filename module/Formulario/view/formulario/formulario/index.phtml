@@ -140,14 +140,14 @@
         }
         // var optionGeneradora = null;
         // if(preguntaGeneradora) {
-        //     var optionGeneradora = preguntaGeneradora.opcion;
+        //      optionGeneradora = preguntaGeneradora.opcion;
         // }
+        // console.log(optionGeneradora);
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             option.value = lista[i][0];
             option.text = lista[i][1];
             selector.appendChild(option);
-            
         }
         return selector;
     }

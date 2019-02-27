@@ -1,11 +1,12 @@
-DELETE FROM Opcion;
-DELETE FROM TipoPregunta;
-DELETE FROM SeccionPregunta;
 DELETE FROM PreguntaOpcion;
+DELETE FROM Opcion;
+DELETE FROM SeccionPregunta;
 DELETE FROM Pregunta;
+DELETE FROM TipoPregunta;
 DELETE FROM Respuesta;
 delete from Seccion;
 DELETE FROM Formulario;
+DELETE FROM PreguntaGeneradora;
 
 DBCC CHECKIDENT ('Opcion', RESEED, 0);
 DBCC CHECKIDENT ('Seccion', RESEED, 0);
@@ -15,6 +16,8 @@ DBCC CHECKIDENT ('Formulario', RESEED, 0);
 DBCC CHECKIDENT ('Pregunta', RESEED, 0);
 DBCC CHECKIDENT ('Respuesta', RESEED, 0);
 DBCC CHECKIDENT ('PreguntaOpcion', RESEED, 0);
+DBCC CHECKIDENT ('PreguntaGeneradora', RESEED, 0);
+
 
 
 INSERT Formulario(Descripcion) VALUES('Datos Personales');
