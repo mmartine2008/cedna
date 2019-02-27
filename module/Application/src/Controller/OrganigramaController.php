@@ -25,6 +25,14 @@ class OrganigramaController extends CednaController
     {
         $this->cargarAccionesDisponibles('organigrama');
         
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('organigrama');
+        
+        return new ViewModel(['OperacionesJSON' => $OperacionesJSON]);
+    }
+
+    public function nodosAction(){
+        $this->cargarAccionesDisponibles('nodos');
+        
         $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
 
         return new ViewModel([
@@ -33,7 +41,7 @@ class OrganigramaController extends CednaController
     }
 
     public function altaAction(){
-        $this->cargarAccionesDisponibles('organigrama - alta');
+        $this->cargarAccionesDisponibles('nodos - alta');
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
@@ -42,7 +50,7 @@ class OrganigramaController extends CednaController
 
             $this->organigramaManager->altaEdicionNodos($JsonData);
 
-            $this->redirect()->toRoute("organigrama", ["action" => "index"]);
+            $this->redirect()->toRoute("organigrama/nodos", ["action" => "nodos"]);
         }
 
         $arrTipoNodo = $this->catalogoManager->getTipoNodo();
@@ -59,7 +67,7 @@ class OrganigramaController extends CednaController
     }
 
     public function editarAction(){
-        $this->cargarAccionesDisponibles('organigrama - edicion');
+        $this->cargarAccionesDisponibles('nodos - edicion');
         $parametros = $this->params()->fromRoute();
 
         $idNodos = $parametros['id'];
@@ -70,7 +78,7 @@ class OrganigramaController extends CednaController
 
             $this->organigramaManager->altaEdicionNodos($JsonData, $idNodos);
 
-            $this->redirect()->toRoute("organigrama", ["action" => "index"]);
+            $this->redirect()->toRoute("organigrama/nodos", ["action" => "nodos"]);
         }
 
         $view = new ViewModel();
@@ -96,7 +104,50 @@ class OrganigramaController extends CednaController
         $mensaje = $this->organigramaManager->borrarNodos($idNodos);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("organigrama", ["action" => "index"]);
-    } 
+        return $this->redirect()->toRoute("organigrama/nodos", ["action" => "nodos"]);
+    }
+    
+    public function AutoridadesAction(){
+        $this->cargarAccionesDisponibles('autoridades');
+        
+        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+
+        $view = new ViewModel();
+        $view->setVariable('arrNodosJSON', $arrNodosJSON);
+        
+        return $view;
+    }
+
+    public function editarAutoridadesAction(){
+        $this->cargarAccionesDisponibles('autoridades - edicion');
+        
+        $parametros = $this->params()->fromRoute();
+        $idNodos = $parametros['id'];
+        $Nodos = $this->catalogoManager->getNodos($idNodos);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->organigramaManager->altaEdicionAutoridades($JsonData, $Nodos);
+
+            $this->redirect()->toRoute("organigrama/autoridades", ["action" => "autoridades"]);
+        }
+
+        $arrUsuariosJSON  = $this->organigramaManager->getUsuariosDisponiblesParaJefe($Nodos);
+        $arrTipoJefeJSON  = $this->catalogoManager->getArrTipoJefeJSON();
+        $arrEsJefeDeJSON = $this->organigramaManager->getArrJefesInicialesJSON($Nodos);
+
+        $view = new ViewModel();
+        
+        $view->setVariable('NodosJson', $Nodos->getJSON());
+        $view->setVariable('arrUsuariosJSON', $arrUsuariosJSON);
+        $view->setVariable('arrTipoJefeJSON', $arrTipoJefeJSON);
+        $view->setVariable('arrEsJefeDeJSON', $arrEsJefeDeJSON);
+        $view->setTemplate('application/organigrama/form-autoridades.phtml');
+        
+        return $view;
+    }
 
 }

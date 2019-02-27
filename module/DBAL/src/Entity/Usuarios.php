@@ -180,7 +180,7 @@ class Usuarios
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"apellido": "' . $this->getApellido() .'", ';
         $output .= '"email": "' . $this->getEmail() .'", ';
-        $output .= '"clave": "' . $this->getClave() .'", ';
+        //$output .= '"clave": "' . $this->getClave() .'", ';
         $output .= '"perfiles": ['.$perfiles.']';
         return '{' . $output . '}';
     }

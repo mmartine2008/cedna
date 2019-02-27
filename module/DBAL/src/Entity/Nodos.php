@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a registered user.
@@ -34,6 +35,18 @@ class Nodos
      */
     protected $NodoSuperior;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Usuarios", inversedBy="Nodo", cascade={"persist"})
+     * @ORM\JoinTable(name="esJefeDe",
+     *      joinColumns={@ORM\JoinColumn(name="IdNodo", referencedColumnName="IdNodo")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdUsuario", referencedColumnName="IdUsuario")}
+     *      )
+     */
+    protected $Jefes;
+
+    public function __construct() {
+        $this->Jefes = new ArrayCollection();
+    }
 
     public function setTipoNodo($TipoNodo)
     {
@@ -70,6 +83,15 @@ class Nodos
         return $this->NodoSuperior;
     }
 
+    public function getJefes()
+    {
+        if ($this->Jefes){
+            return $this->Jefes->toArray();
+        }else{
+            return null;
+        }
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -77,9 +99,9 @@ class Nodos
         $output .= '"tipoNodo": ' . $this->getTipoNodo()->getJSON() .', ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         if ($this->getNodoSuperior()){
-            $output .= '"nodoSuperior": ' . $this->getNodoSuperior()->getJSON() .', ';
+            $output .= '"nodoSuperior": ' . $this->getNodoSuperior()->getJSON() .'';
         }else{
-            $output .= '"nodoSuperior": "", ';
+            $output .= '"nodoSuperior": ""';
         }
         
         return '{' . $output . '}';
