@@ -1,0 +1,133 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Tareas</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaTareas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Resumen</th>
+                            <th class="text-center">Solicitante</th>
+                            <th class="text-center">Nodo</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Fecha de Solicitud</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTareas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrTareasJSON = <?= $arrTareasJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaTareas();
+    });
+
+    function dibujarTablaTareas(){
+        $('#bodyTareas').find('tr').remove();
+    
+        for (var i = 0; i < arrTareasJSON.length; i++)
+        {
+            var tarea = arrTareasJSON[i];
+
+            var body = document.getElementById("bodyTareas");
+            var row = body.insertRow();
+            row.id = i;
+
+            var resumen = row.insertCell(0);
+            var solicitante = row.insertCell(1);
+            var nodo = row.insertCell(2);
+            var estado = row.insertCell(3);
+            var fecha = row.insertCell(4);
+
+            resumen.innerHTML = tarea.resumen;
+            solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
+            nodo.innerHTML = tarea.nodo.nombre;
+            estado.innerHTML = tarea.estadoTarea.descripcion;
+            fecha.innerHTML = tarea.fechaSolicitud;
+        }
+    }
+
+    $(function() {
+        $('#tablaTareas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarTarea() {
+        var result = null;
+        var tarea = arrTareasJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/tareas/borrar/' + tarea.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var tarea = arrTareasJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Tarea',
+                width: 600,
+                text: "Esta seguro que desea eliminar la tarea: "+ tarea.resumen +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Confirmar'
+            }).then((result) => {
+                if (result.value) {
+                    borrarTarea();
+                    window.location.replace(url + "/tareas");
+                }
+            });
+        }else{
+            swal('Tarea no seleccionado',
+                'Por favor seleccione el tarea que desea eliminar',
+                'error');
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var tarea = arrTareasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/tareas/editar/" + tarea.id);
+        }else{
+            swal('Tarea no seleccionado',
+                'Por favor seleccione la tarea que desea editar',
+                'error');
+        }
+    }
+
+  </script>

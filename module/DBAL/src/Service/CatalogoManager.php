@@ -13,6 +13,8 @@ use DBAL\Entity\TipoNodo;
 use DBAL\Entity\Nodos;
 use DBAL\Entity\TipoJefe;
 use DBAL\Entity\esJefeDe;
+use DBAL\Entity\EstadoTarea;
+use DBAL\Entity\Tareas;
 
 class CatalogoManager {
     
@@ -110,6 +112,26 @@ class CatalogoManager {
         return $TipoJefe;
     }
 
+    public function getEstadoTarea($idEstadoTarea = null){
+        if ($idEstadoTarea){
+            $EstadoTarea = $this->entityManager->getRepository(EstadoTarea::class)->findOneBy(['id' => $idEstadoTarea]);
+        }else{
+            $EstadoTarea = $this->entityManager->getRepository(EstadoTarea::class)->findAll();
+        }
+
+        return $EstadoTarea;
+    }
+
+    public function getTareas($idTarea = null){
+        if ($idTarea){
+            $Tareas = $this->entityManager->getRepository(Tareas::class)->findOneBy(['id' => $idTarea]);
+        }else{
+            $Tareas = $this->entityManager->getRepository(Tareas::class)->findAll();
+        }
+
+        return $Tareas;
+    }
+
     public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
         $EsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Usuario' => $Usuario]);
 
@@ -120,6 +142,46 @@ class CatalogoManager {
         $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
 
         return $arrEsJefeDe;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades EstadoTarea
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrEstadoTareaJSON(){
+        $arrEstadoTarea = $this->getEstadoTarea();
+
+        $output = [];
+        
+        foreach($arrEstadoTarea as $EstadoTarea){
+            $output[] = $EstadoTarea->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Tareas
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrTareasJSON(){
+        $arrTareas = $this->getTareas();
+
+        $output = [];
+        
+        foreach($arrTareas as $Tareas){
+            $output[] = $Tareas->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
     /**
