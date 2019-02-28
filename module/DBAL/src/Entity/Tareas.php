@@ -36,6 +36,12 @@ class Tareas
     protected $EstadoTarea;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Formulario")
+     * @ORM\JoinColumn(name="IdFormulario", referencedColumnName="IdFormulario")
+     */
+    protected $Formulario;
+
+    /**
      * @ORM\Column(name="FechaSolicitud")
      */
     protected $FechaSolicitud;
@@ -63,6 +69,11 @@ class Tareas
     public function setEstadoTarea($EstadoTarea)
     {
         $this->EstadoTarea = $EstadoTarea;
+    }
+
+    public function setFormulario($Formulario)
+    {
+        $this->Formulario = $Formulario;
     }
 
     public function setFechaSolicitud($FechaSolicitud)
@@ -100,6 +111,11 @@ class Tareas
         return $this->EstadoTarea;
     }
 
+    public function getFormulario()
+    {
+        return $this->Formulario;
+    }
+
     public function getFechaSolicitud()
     {
         return $this->FechaSolicitud;
@@ -122,6 +138,7 @@ class Tareas
         $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
         $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
         $output .= '"estadoTarea": ' . $this->getEstadoTarea()->getJSON() .', ';
+        $output .= '"formulario": ' . $this->getFormulario()->getJSON() .', ';
         $output .= '"fechaSolicitud": "' . $this->getFechaSolicitud() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"resumen": "' . $this->getResumen() .'"';

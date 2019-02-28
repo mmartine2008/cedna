@@ -138,6 +138,16 @@ class CatalogoManager {
         return $Tareas;
     }
 
+    public function getFormulario($idFormulario = null){
+        if ($idFormulario){
+            $Formulario = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormulario]);
+        }else{
+            $Formulario = $this->entityManager->getRepository(Formulario::class)->findAll();
+        }
+
+        return $Formulario;
+    }
+
     public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
         $EsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Usuario' => $Usuario]);
 
@@ -148,6 +158,26 @@ class CatalogoManager {
         $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
 
         return $arrEsJefeDe;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Formulario
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrFormularioJSON(){
+        $arrFormulario = $this->getFormulario();
+
+        $output = [];
+        
+        foreach($arrFormulario as $Formulario){
+            $output[] = $Formulario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
     /**

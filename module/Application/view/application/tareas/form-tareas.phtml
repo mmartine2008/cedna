@@ -18,6 +18,16 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="formularioTarea"><span class="obligatorio">(*) </span>Formulario:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="formularioTarea" name="formularioTarea" class="form-control" required="true">
+                                        
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
                                     <label for="resumenTarea"><span class="obligatorio">(*) </span>Resumen:</label>
@@ -48,12 +58,15 @@
 <script>
 var tareasJson = <?= $TareasJson ?>;
 var arrNodosJSON = <?= $arrNodosJSON ?>;
+var arrFormularioJSON = <?= $arrFormularioJSON ?>;
 
 function FormTareaToJson(){
-    var iPosNodo = $('#nodoTarea').val()
+    var iPosNodo = $('#nodoTarea').val();
+    var iPosFormulario = $('#formularioTarea').val();
     
     var formData = {
-        nodo: arrNodosJSON[iPosNodo], 
+        nodo: arrNodosJSON[iPosNodo],
+        formulario: arrFormularioJSON[iPosFormulario], 
         resumen: $('#resumenTarea').val(), 
         descripcion: $('#descripcionTarea').val()
     };
@@ -76,6 +89,7 @@ function preSubmit(){
 
 $( document ).ready(function() {
     dibujarSelectNodos();
+    seleccionarFormulario();
 
     if (tareasJson !== ''){
         $('#resumenTarea').val(tareasJson.resumen);
@@ -108,6 +122,17 @@ function seleccionarNodo(){
     }
 }
 
+function seleccionarFormulario(){
+    for (var i = 0; i < arrFormularioJSON.length; i++){
+        var formulario = arrFormularioJSON[i];
+
+        if (formulario.id == tareasJson.formulario.id){
+            $('#nodoTarea').val(i);
+            break;
+        }
+    }
+}
+
 function dibujarSelectNodos(){
     $('#nodoTarea')
         .find('option')
@@ -126,6 +151,27 @@ function dibujarSelectNodos(){
                             .text(nodo.nombre);
 
         $('#nodoTarea').append(option);
+    }
+}
+
+function dibujarSelectFormulario(){
+    $('#formularioTarea')
+        .find('option')
+        .remove();
+
+    $('#formularioTarea')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrFormularioJSON.length; i++){
+        var formulario = arrFormularioJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(formulario.nombre);
+
+        $('#formularioTarea').append(option);
     }
 }
 

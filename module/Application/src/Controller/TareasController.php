@@ -47,11 +47,13 @@ class TareasController extends CednaController
         }
         
         $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
 
         $view = new ViewModel();
         
         $view->setVariable('TareasJson', '""');
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
         $view->setTemplate('application/tareas/form-tareas.phtml');
         
         return $view;
@@ -74,6 +76,7 @@ class TareasController extends CednaController
         }
 
         $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
 
         $view = new ViewModel();
         
@@ -81,6 +84,7 @@ class TareasController extends CednaController
 
         $view->setVariable('TareasJson', $Tareas->getJSON());
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
         $view->setTemplate('application/tareas/form-tareas.phtml');
         
         return $view;
