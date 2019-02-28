@@ -303,4 +303,92 @@ class CatalogoManager {
         }
         return $resultado;
     }
+
+    public function getEmpresas() {
+        $resultado = [];
+        $elementos = ['Construcciones del Sur', 'Construcciones del Norte'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getLugarObra() {
+        $resultado = [];
+        $elementos = ['Deposito', 'Planta 1', 'Planta 2', 'Zona 1', 'Zona 2'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getEtapasObra() {
+        $resultado = [];
+        $elementos = ['Pintura', 'Mambo', 'Yeso'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getActividadesObra() {
+        $resultado = [];
+        $elementos =  ['Pintura', 'Mambo', 'Yeso'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getRiesgosAmbientales() {
+        $resultado = [];
+        $elementos = ['Existe posibilidad de algún tipo de derrame o emisión?', 'Se colocaron los equipos, elementos o barreras necesarias?'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getRiesgosAdicionales() {
+        $resultado = [];
+        $elementos = ['Requiere guardia de operación', 'Requiere control de emergencia', 'Requiere guardia de seguridad', 'Requiere equipo contra incendio'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getPruebaDeGases() {
+        $resultado = [];
+        $elementos = ['LEL, % <= 10', 'O2 % 19.5 a 23', 'CO, ppm <= 35', 'H2S, ppm <= 10'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getFirmasPermiso() {
+        $resultado = [];
+        $elementos = ['Solicitante del trabajo', 'Dueño del área', 'Seguridad e Higiene', 'Contratista'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
 }

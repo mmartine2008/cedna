@@ -35,11 +35,11 @@ INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'General', 'Datos g
 
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Fecha', 5, 0);
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('', 1, 1);
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Empresa', 1, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Empresa', 1, 1, 'getEmpresas');
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Imagen del lugar', 7, 0);
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Planta o lugar', 1, 1, 'getElementosProteccionPersonal');
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Etapa de obra', 1, 1, 'getElementosProteccionPersonal');
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Actividad', 1, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Planta o lugar', 1, 1, 'getLugarObra');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Etapa de obra', 1, 1, 'getEtapasObra');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('Actividad', 1, 1, 'getActividadesObra');
 
 INSERT Opcion(Descripcion) VALUES ('Interno');
 INSERT Opcion(Descripcion) VALUES ('Externo');
@@ -63,13 +63,13 @@ INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (2,8);
 
 INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'Ambientales', 'Riesgos Ambientales');
 
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getRiesgosAmbientales');
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (3,9); 
 
 INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'Adicionales', 'Riesgos Adicionales');
 
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getRiesgosAdicionales');
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (4,10); 
 
@@ -78,7 +78,7 @@ INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'Gases', 'Prueba de
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Fecha de prueba', 5, 0);
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Hora de prueba', 10, 0); 
 INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Tiempo de validez', 9, 0); 
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getPruebaDeGases');
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (5,11); 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (5,12);
@@ -88,7 +88,7 @@ INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (5,14);
 
 INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'Firmas', 'Firmas del Permiso');
 
-INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getElementosProteccionPersonal');
+INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1, 'getFirmasPermiso');
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (6,15); 
 

@@ -135,6 +135,7 @@
         if (seleccione){
             var option = document.createElement("option");
             option.value =  -1;
+            option.title = 'Seleccione';
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
@@ -147,6 +148,7 @@
             var option = document.createElement("option");
             option.value = lista[i][0];
             option.text = lista[i][1];
+            option.title = lista[i][1];
             selector.appendChild(option);
         }
         return selector;
@@ -187,6 +189,14 @@
     function createDivClass(info, div) {
         var divClass = document.createElement("Div");
         divClass.classList = info;
+        div.appendChild(divClass);
+        return divClass;
+    }
+
+    function createDivClassSelectMultiple(info, div) {
+        var divClass = document.createElement("Div");
+        divClass.classList = info;
+        // divClass.style="overflow-x:scroll; width:200px;overflow: -moz-scrollbars-horizontal;";
         div.appendChild(divClass);
         return divClass;
     }
@@ -291,15 +301,14 @@
     }
 
     function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
-        // var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row col-sm-9", divElement);
-        var div_class_sm_3 = createDivClass("col-sm-5", divRow);
+        var div_class_sm_3 = createDivClassSelectMultiple("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
         var div_class_sm_1 = createDivClass("col-sm-1", divRow);
-        var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
+        var div_class_sm_3_2 = createDivClassSelectMultiple("col-sm-5", divRow);
         for(var i=1; i <= cantDestinos; i++){
             createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
             createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
@@ -402,6 +411,7 @@
         var divElement = document.createElement("Div");
         divElement.id = "Seccion_id_"+item.id;
         divElement.style.padding = "10px";
+
         if(active){
             var clases = "form-group tab-pane container active";
         } else {
