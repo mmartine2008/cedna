@@ -118,6 +118,21 @@ return [
                     ],
                 ],
             ],
+            'tareas' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/tareas[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\TareasController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -127,6 +142,7 @@ return [
             Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
             Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
             Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
+            Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -139,6 +155,7 @@ return [
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
             Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
             Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
+            Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
         ],
     ],
     'view_manager' => [

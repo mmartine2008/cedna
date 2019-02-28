@@ -57,10 +57,12 @@
      }
      
 process([
-    'IdEsJefeDe', 
+    'IdTarea', 
+'IdSolicitante', 
 'IdNodo', 
-'IdUsuario', 
-'Orden',  
+'IdEstadoTarea', 
+'FechaSolicitud', 
+'Descripcion',  
 ]);
      
      /*
