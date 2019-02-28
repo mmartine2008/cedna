@@ -38,7 +38,7 @@ return [
 
         
     'translator' => [
-        // 'locale' => 'es_ES',
+        //'locale' => 'es_ES',
         'locale' => 'en_US',
         'translation_file_patterns' => [
             [

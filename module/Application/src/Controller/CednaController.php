@@ -14,9 +14,11 @@ class CednaController extends AbstractActionController
 {
     protected $catalogoManager;
     protected $userSessionManager;
+    protected $translator;
 
-    public function __construct($catalogoManager, $userSessionManager)
+    public function __construct($catalogoManager, $userSessionManager, $translator)
     {
+        $this->translator = $translator;
         $this->catalogoManager = $catalogoManager;
         $this->userSessionManager = $userSessionManager;
     }
