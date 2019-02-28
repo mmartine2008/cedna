@@ -20,7 +20,8 @@ class OrganigramaControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $organigramaManager = $container->get(OrganigramaManager::class);
+        $translator = $container->get('translator');
         
-    return new OrganigramaController($catalogoManager, $userSessionManager, $organigramaManager);
+    return new OrganigramaController($catalogoManager, $userSessionManager, $organigramaManager, $translator);
     }
 }

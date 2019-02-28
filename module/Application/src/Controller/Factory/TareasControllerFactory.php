@@ -20,7 +20,8 @@ class TareasControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $tareasManager = $container->get(TareasManager::class);
+        $translator = $container->get('translator');
         
-        return new TareasController($catalogoManager, $userSessionManager, $tareasManager);
+        return new TareasController($catalogoManager, $userSessionManager, $tareasManager, $translator);
     }
 }

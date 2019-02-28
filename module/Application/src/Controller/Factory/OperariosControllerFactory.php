@@ -20,7 +20,8 @@ class OperariosControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $operariosManager = $container->get(OperariosManager::class);
+        $translator = $container->get('translator');
         
-        return new OperariosController($catalogoManager, $userSessionManager, $operariosManager);
+        return new OperariosController($catalogoManager, $userSessionManager, $operariosManager, $translator);
     }
 }
