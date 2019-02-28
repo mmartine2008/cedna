@@ -1,4 +1,23 @@
 <script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
+
+
+<div class="form-row" id="divFormulario">
+
+</div>
+<form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
+<div class="row col-lg-12">
+    <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
+        <input type="hidden" name="JsonData" id="JsonData">
+        <a href="#">
+            <button class="btn btn-primary margin-vertical-25" style="margin: 20px;" type="button">Cancelar</button>
+        </a>
+        <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
+    </div>
+</div> 
+</form>
+
+
+
 <script>
     var formulario = <?= $formulario ?>;
 
@@ -58,8 +77,6 @@
         return opciones;
     }
 
-    
-
     function crearJSONOpciones(opciones){
         var array = [];
         for(var i=0 ; i < opciones.length; i++){
@@ -88,7 +105,6 @@
                                     }
                                 }
                                 resp[k].opcion = obj;
-                                
                             }
                         }
                     }
@@ -122,25 +138,30 @@
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
+        // var optionGeneradora = null;
+        // if(preguntaGeneradora) {
+        //      optionGeneradora = preguntaGeneradora.opcion;
+        // }
+        // console.log(optionGeneradora);
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             option.value = lista[i][0];
             option.text = lista[i][1];
             selector.appendChild(option);
-            
         }
         return selector;
     }
 
     function updateJsonSimple(idSeccion, idPregunta, idRespuesta) {
         var respuesta = $("#"+idRespuesta).val();
+        console.log(respuesta);
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
     function createSimpleSelector(id, opciones, divElement, idSeccion) {
         
         var selector = document.createElement("select");
-        idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
+        var idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
         selector.id = idSelector;
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, true);
@@ -165,7 +186,7 @@
 
     function createDivClass(info, div) {
         var divClass = document.createElement("Div");
-        divClass.className = info;
+        divClass.classList = info;
         div.appendChild(divClass);
         return divClass;
     }
@@ -215,8 +236,23 @@
         }
         return options;
     }
+
+    function manageButtons(idPregunta, idSeccion, cantDestinos){
+        for(var i=1; i <= cantDestinos; i++){ 
+            if($("#destino_0_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
+                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
+            } else {
+                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
+            }
+            if($("#destino_"+i+"_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
+                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
+            } else {
+                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
+            }
+        }
+    }
     
-    function insertarElementInSelect(origin, destination, idPregunta, idSeccion){
+    function insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
         var idSelectorOrigen = origin+idPregunta+"_seccion_"+idSeccion;
         var options = obtenerElementosSeleccionados(idSelectorOrigen);
         var optionOrigin = deleteOptionsSelectorOrigen(idSelectorOrigen, idPregunta, idSeccion);
@@ -229,11 +265,10 @@
         var listaOpciones = obtenerListaOpciones(opciones);
         removeAllOptionSelector(idSelectDestino);
         createListFromJSONLista(selectIn, listaOpciones, false);
-        manageButtons(idPregunta, idSeccion);
-
+        manageButtons(idPregunta, idSeccion, cantDestinos);
     }
 
-    function createButton(infoType, id, title, divElement, icon, disabled, origin, destination, idPregunta, idSeccion){
+    function createButton(infoType, id, title, divElement, icon, disabled, origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
         var button = document.createElement("button");
         button.type = infoType;
         button.id = id;
@@ -242,11 +277,11 @@
         button.textContent = icon;
         button.disabled = disabled;
         button.style.marginTop = "15px";
-        button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion)};
+        button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino)};
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
         // button.appendChild(icono);
-        divElement.appendChild(button);
+        divElement.appendChild(button, id);
     }
 
     function removeAllOptionSelector(origin){
@@ -254,48 +289,27 @@
             .remove()
             .end();
     }
-    
-    function manageButtons(id, idSeccion){
-        if($('#destino_0_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_1_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-            $("#button_2_R_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-        if($('#destino_1_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_1_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-        if($('#destino_2_id_'+id+"_seccion_"+idSeccion+' option').length == 0){
-            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', true);
-        } else {
-            $("#button_2_L_id_"+id+"_seccion_"+idSeccion).prop('disabled', false);
-        }
-    }
 
-    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion){
-        var divForm = createDivClass("form-row", divElement);
-        var divRow = createDivClass("row", divForm);
+    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
+        // var divForm = createDivClass("form-row", divElement);
+        var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
-        var div_class_sm_1 = createDivClass("col-sm-2", divRow);
-        createButton("button", "button_1_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_1_id_", idPregunta,idSeccion);
-        createButton("button", "button_1_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_1_id_", "destino_0_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_R_id_"+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", "destino_2_id_", idPregunta,idSeccion);
-        createButton("button", "button_2_L_id_"+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, "destino_2_id_", "destino_0_id_", idPregunta,idSeccion);
-
+        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
         var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
-        createMultipleSelector('destino_1_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
-        createMultipleSelector('destino_2_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
-        var div_class_sm_5 = createDivClass("col-sm-1", divRow);
+        for(var i=1; i <= cantDestinos; i++){
+            createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
+            createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
+
+            createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
+        }
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
+        
         ele = document.createElement('input');
         ele.type = infoType;
         var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
@@ -305,34 +319,44 @@
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
+
+        var div = createDivClass("text-right", divElement);
         divElement.appendChild(ele);
     } 
 
     function createOptions(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
+            // var preguntaGeneradora = null;
+            // if(item.generaPregunta == '1'){
+            //     var preguntaGeneradora = item.preguntaGeneradora;
+            // }
             createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
         } else {
-            createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion);
+                var cantDestinos = item.cantDestinos;
+                createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
         } 
     }
 
     function createTextArea(item, divElement, idSeccion){
+        var div = createDivClass("col-sm-3 text-right", divElement);
         ele = document.createElement('textarea');
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
-        divElement.appendChild(ele);
+        ele.className = "form-control";
+        div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
 
     function createImage(item, divElement, idSeccion){
+        var div = createDivClass("text-right", divElement);
         ele = document.createElement('img');
         ele.src = "#";
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
-        divElement.appendChild(ele);
+        div.appendChild(ele);
     }
     
     function createAnswer(item, divElement, idSeccion){
@@ -357,30 +381,38 @@
     }
 
     function createQuestions(item, divElement){
+
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
             var div = document.createElement("Div");
-            div.className='row';
+            div.className='form-row';
             div.style.padding = "15px";
             divElement.appendChild(div);
             var item2 = preguntas[i];
-            createTextElement("P", div, item2.descripcion);
+            var divText = createDivClass("col-sm-3 text-right", div);
+            var text = item2.descripcion;
+            if(text) text = text+": ";
+            createTextElement("P", divText, text);
             createAnswer(item2, div, item.id);
         }
     }
 
-    function crearItemSeccion(item, contenedor){
-
+    function crearItemSeccion(item, contenedor, active){
         // Creating a div element
         var divElement = document.createElement("Div");
         divElement.id = "Seccion_id_"+item.id;
         divElement.style.padding = "10px";
-        divElement.className="form-group";
+        if(active){
+            var clases = "form-group tab-pane container active";
+        } else {
+            var clases = "form-group tab-pane container fade";
+        }
+        divElement.classList= clases;
         divElement.style.textAlign = "lefth";
 
         var divSeccion = createDivClass("row", divElement);
-        var div_class_sm_2 = createDivClass("col-sm-1", divSeccion);
-        createTextElement("h4", div_class_sm_2, item.nombre);
+        var div_class_sm_4 = createDivClass("col-sm-4", divSeccion);
+        createTextElement("h5", div_class_sm_4, item.descripcion);
 
         createQuestions(item, divElement);
         contenedor.appendChild(divElement);
@@ -388,11 +420,52 @@
         return divElement;
     }
 
+    function createLiNav(navPills, item, active) {
+        var liNav = document.createElement("li");
+        
+        liNav.className = " nav-item";
+        navPills.appendChild(liNav);
+
+
+        var aNav = document.createElement("a");
+        aNav.href = "#Seccion_id_"+item.id;
+        if(active) {
+            aNav.classList="nav-link active";
+        } else {
+            aNav.classList="nav-link";
+        }
+        aNav.classList="nav-link";
+        aNav.setAttribute("data-toggle", "tab");
+        liNav.appendChild(aNav);
+
+        createTextElement("p", aNav, item.nombre);
+    }
+
     function construirSecciones(childs, contenedor){
-        for (var i = 0; i < childs.length; i++){
+        var navPills = document.createElement("ul");
+        navPills.classList = "nav nav-tabs";
+        contenedor.appendChild(navPills);
+
+        createLiNav(navPills, childs[0], true);
+
+        for (var j = 1; j < childs.length; j++){
+            var item = childs[j];
+            createLiNav(navPills, item, false);  
+        }
+
+        var divElement = document.createElement("Div");
+        divElement.classList="tab-content";
+        contenedor.appendChild(divElement);
+
+        var item = childs[0];
+        var itemSeccion = crearItemSeccion(item, contenedor, true);
+        divElement.appendChild(itemSeccion);
+
+        for (var i = 1; i < childs.length; i++){
+
             var item = childs[i];
-            var itemSeccion = crearItemSeccion(item, contenedor);
-            contenedor.appendChild(itemSeccion);
+            var itemSeccion = crearItemSeccion(item, contenedor, false);
+            divElement.appendChild(itemSeccion);
         }
     }
 
@@ -403,12 +476,13 @@
     }
 
     function createFormulario(){
-        var contenedor = document.getElementsByTagName("div")[0];
+        var contenedor = document.getElementById("divFormulario");
 
         var divFormulario = document.createElement("Div");
         divFormulario.id = "Formulario_id_"+formulario.idFormulario;
+        divFormulario.className="container";
         divFormulario.style.paddingTop = "15px";
-        createTextElement("h3", divFormulario, formulario.descripcion);
+        createTextElement("h4", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);
 
         construirSecciones(formulario.secciones, divFormulario);
@@ -416,14 +490,6 @@
 
     createFormulario();
 </script>
-<form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
-    <div class="row">
-        <input type="hidden" name="JsonData" id="JsonData">
-        <a href="#">
-            <div class="btn btn-primary">Cancelar</div>
-        </a>
-        <button id="submit" class="btn btn-primary" type="button" onclick="updateInput()">Confirmar</button>
-    </div>
-</form>
+
 
 

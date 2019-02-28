@@ -5,60 +5,66 @@
                 <h3 class="panel-title">Nuevo Usuario</h3>
             </div>
             <div class="panel-body">
-                <form method="post" name="formUsuario" onsubmit="preSubmit()">
-                <div class="row">
-                        <div class="col-md-3">
-                            <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                <form method="post" id="formUsuario" name="formUsuario">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="userName" name="userName" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="password" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control" required="true">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <input type="text" id="userName" name="userName" class="form-control" required="true">
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="emailUsuario" name="emailUsuario" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-4">
+                                    <label for="contraseniaRepetida"><span class="obligatorio">(*) </span>Repetir Contraseña:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="password" id="contraseniaRepetida" name="contraseniaRepetida" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control" required="true">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="password" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="contraseniaRepetida"><span class="obligatorio">(*) </span>Repetir Contraseña:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="password" id="contraseniaRepetida" name="contraseniaRepetida" class="form-control" required="true">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label for="emailUsuario"><span class="obligatorio">(*) </span>Email:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="emailUsuario" name="emailUsuario" class="form-control">
-                        </div>
-                    </div>
-                    <div class="row">
+                    <div class="form-row mt-5">
                         <div class="col-md-1">
                             <label for="idPerfil">Perfil:</label>
                         </div>  
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <select id="idPerfil" name="idPerfil" class="form-control">
                                 <option value="-1">-- Seleccione --</option>
                                 <?php foreach($arrPerfiles as $Perfil) :?>
@@ -70,8 +76,8 @@
                             <div class="btn" onclick="agregarPerfil();">Agregar</div>
                         </div>
                     </div>
-                    <div class="row">
-                        <table class="footable table table-stripped toggle-arrow-tiny no-borders" data-page-size="15">
+                    <div class="form-row mt-5">
+                        <table class="table table-hover" data-page-size="15">
                             <thead>
                                 <tr>
                                     <th>Perfiles Asociados</th>
@@ -83,12 +89,8 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="row">
+                    <div class="flex">
                         <input type="hidden" name="JsonData" id="JsonData">
-                        <a href="<?=$this->url("configuracion/usuarios",["action" => "index"])?>">
-                            <div class="btn">Cancelar</div>
-                        </a>
-                        <button type="submit">Confirmar</button>
                     </div>
                 </form>
             </div>
@@ -134,17 +136,16 @@ function preSubmit(){
     var JsonData = FormUsuarioToJson();
     $('#JsonData').val(JsonData);
 
-    if ($("#formPerfil")[0].checkValidity()){
-        $("#formPerfil").submit();
+    if ($("#formUsuario")[0].checkValidity()){
+        $("#formUsuario").submit();
     }else{
-        $("#formPerfil")[0].reportValidity();
+        $("#formUsuario")[0].reportValidity();
     }
 }
 
 $( document ).ready(function() {
     if (usuariosJson !== ''){
         $('#userName').val(usuariosJson.userName);
-        $('#contraseniaUsuario').val(usuariosJson.clave);
         $('#nombreUsuario').val(usuariosJson.nombre);
         $('#apellidoUsuario').val(usuariosJson.apellido);
         $('#emailUsuario').val(usuariosJson.email);
@@ -162,7 +163,7 @@ $( document ).ready(function() {
     //         $('#divErrorNombreUsuario').hide(500);
     //     }
     // });
-
+    verificarMostrarBotonGuardar();
 });
 
 function agregarPerfil(){
@@ -236,7 +237,7 @@ function actualizarPerfiles(){
 
 function borrarPerfil(IdPerfil, nombre){
     swal({
-        title: 'Eliminar Residuo',
+        title: 'Eliminar Usuario',
         width: 600,
         text: "Esta seguro que desea eliminar el perfil: " + nombre + "?",
         type: 'warning',
@@ -275,6 +276,17 @@ function existePerfil(IdPerfil){
         }
     });
     return existe;
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
 }
 
 // function getNombreUsuarioEsValido(nombreUsuario) {

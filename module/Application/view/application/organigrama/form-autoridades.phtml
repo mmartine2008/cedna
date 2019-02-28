@@ -1,0 +1,282 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Asignar autoridades al nodo: <span id="NombreNodo"></span></h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formAutoridades" name="formAutoridades">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="idUsuario"><span class="obligatorio">(*) </span>Usuario:</label>
+                                </div>  
+                                <div class="col-md-7">
+                                    <select id="idUsuario" name="idUsuario" class="form-control">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-4">
+                                    <label for="idTipoJefe"><span class="obligatorio">(*) </span>Tipo de Autoridad:</label>
+                                </div>  
+                                <div class="col-md-6">
+                                    <select id="idTipoJefe" name="idTipoJefe" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="ordenAutoridad"><span class="obligatorio">(*) </span>Orden:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select id="ordenAutoridad" name="ordenAutoridad" class="form-control">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-5">
+                                <div class="col-md-1 offset-8">
+                                    <div class="btn" onclick="agregarJefe();">Agregar</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <table class="table table-hover" data-page-size="15">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre y Apellido</th>
+                                            <th>Tipo de Autoridad</th>
+                                            <th>Orden</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="bodyJefes">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var NodosJson = <?= $NodosJson ?>;
+var arrJefes = <?= $arrEsJefeDeJSON ?>;
+var arrOrden = [1, 2, 3, 4];
+var arrUsuariosJSON = <?= $arrUsuariosJSON ?>;
+var arrTipoJefeJSON = <?= $arrTipoJefeJSON ?>;
+
+function preSubmit(){
+    var JsonData = JSON.stringify(arrJefes);
+    $('#JsonData').val(JsonData);
+
+    $("#formAutoridades").submit();
+}
+
+$( document ).ready(function() {
+    $('#NombreNodo').text(NodosJson.nombre);
+    actualizarJefes();
+    actualizarSelectOrden();
+    actualizarSelectUsuarios();
+    dibujarSelectTipoJefe();
+    verificarMostrarBotonGuardar();
+});
+
+function dibujarSelectTipoJefe(){
+    $('#idTipoJefe')
+        .find('option')
+        .remove();
+
+    $('#idTipoJefe')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrTipoJefeJSON.length; i++){
+        var tipoJefe = arrTipoJefeJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(tipoJefe.descripcion);
+
+        $('#idTipoJefe').append(option);
+    }
+}
+
+function actualizarSelectUsuarios(){
+    $('#idUsuario')
+        .find('option')
+        .remove();
+
+    $('#idUsuario')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrUsuariosJSON.length; i++){
+        var usuario = arrUsuariosJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(usuario.nombre +', '+usuario.apellido);
+
+        $('#idUsuario').append(option);
+    }
+}
+
+function actualizarSelectOrden(){
+    $('#ordenAutoridad')
+        .find('option')
+        .remove();
+
+    $('#ordenAutoridad')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrOrden.length; i++){
+        var valor = arrOrden[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(valor);
+
+        $('#ordenAutoridad').append(option);
+    }
+}
+
+function agregarJefe(){
+    var combo = document.getElementById("idUsuario");
+    
+    var iPosUsuario = combo.value;
+    
+    if (iPosUsuario >= 0 && $('#ordenAutoridad').val() >= 0 && $('#idTipoJefe').val() >= 0) {
+        addJefe(iPosUsuario);
+    }
+    else{
+        swal(
+            'Datos incompletos',
+            'Por favor cargue todos los datos para poder asignar correctamente la autoridad al nodo.',
+            'error'
+        );  
+    }
+    actualizarJefes();
+    actualizarSelectOrden();
+    actualizarSelectUsuarios();
+    $('#idTipoJefe').val('-1');
+}
+
+function addJefe(iPosUsuario){    
+    var usuario = arrUsuariosJSON.splice(iPosUsuario, 1);
+    
+    var iPosOrden = $('#ordenAutoridad').val();
+
+    var iPosTipoJefe = $('#idTipoJefe').val();
+    
+    var nuevoJefe = {
+        'usuario': usuario[0],
+        'tipoJefe' : arrTipoJefeJSON[iPosTipoJefe],
+        'orden' : arrOrden[iPosOrden]
+    };
+    
+    arrOrden.splice(iPosOrden, 1);
+    arrJefes.push(nuevoJefe);
+}
+
+function agregarBotonBorrarJefe(contenedor, idPosJefe){
+    var icon = document.createElement('i');
+    icon.setAttribute('class','fa p16 fa-trash-alt');
+
+    var div = document.createElement('div');
+    div.setAttribute('class','btn btn-danger btn-circle btn-outline');
+    div.setAttribute('onclick', 'borrarJefe(' + idPosJefe + ')');
+
+    div.appendChild(icon);
+
+    contenedor.appendChild(div);
+}
+
+function actualizarJefes(){
+   $('#bodyJefes').find('tr').remove();
+
+    for (var i = 0; i < arrJefes.length; i++)
+    {
+        var jefe = arrJefes[i];
+
+        var body = document.getElementById("bodyJefes");
+        var row = body.insertRow();
+
+        var nombreApellido = row.insertCell(0);
+        var tipoJefe = row.insertCell(1);
+        var orden = row.insertCell(2);
+        var borrar = row.insertCell(3);
+
+        nombreApellido.innerHTML = jefe.usuario.nombre + ', '+ jefe.usuario.apellido;
+        tipoJefe.innerHTML = jefe.tipoJefe.descripcion;
+        orden.innerHTML = jefe.orden;
+        agregarBotonBorrarJefe(borrar, i);
+    }
+}
+
+function borrarJefe(idPosJefe){
+    var usuario = arrJefes[idPosJefe].usuario;
+
+    swal({
+        title: 'Eliminar Jefe',
+        width: 600,
+        text: "Esta seguro que desea eliminar la asignacion del usuario: " + usuario.nombre +', ' + usuario.apellido + " como autoridad?",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar'
+    }).then((result) => {
+        if (result.value) {
+            eliminarJefe(idPosJefe);
+            swal(
+                'Eliminado!',
+                'El usuario ha sido eliminado como autoridad.',
+                'success'
+            )
+        }
+    })  
+};
+
+function eliminarJefe(idPosJefe){
+    var jefe = arrJefes.splice(idPosJefe, 1);
+    var usuario = jefe[0].usuario;
+    var valor = jefe[0].orden;
+
+    arrOrden.splice(valor - 1, 0, valor); //Agrega de forma ordenada el valor del Orden
+    arrUsuariosJSON.push(usuario);
+
+    actualizarJefes();
+    actualizarSelectOrden();
+    actualizarSelectUsuarios();
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+</script>

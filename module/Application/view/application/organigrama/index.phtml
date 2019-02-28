@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Organigrama</h3>
+            </div>
+            <div class="panel-body" id="divIndex">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var operacionesJSON = <?= $OperacionesJSON ?>;
+
+function dibujarOperacionesIniciales(){
+    var divIndex = document.getElementById("divIndex");
+    var divFila = document.createElement('div');
+    divFila.setAttribute('class','form-row');
+
+    for (var i = 0; i < operacionesJSON.length; i++){
+        var operacion = operacionesJSON[i];
+
+        var icon = document.createElement('i');
+        icon.setAttribute('class', operacion.icono);
+        icon.setAttribute('title', operacion.titulo);
+
+        //crear enlace a la operacion
+        var a = document.createElement('a');
+        a.setAttribute('href', operacion.url);
+
+        a.appendChild(icon);
+        var divCol = document.createElement('div');;
+        divCol.setAttribute('class','col-lg-2');
+
+        divCol.appendChild(a);
+
+        divFila.appendChild(divCol);
+    }
+    divIndex.appendChild(divFila);
+}
+
+dibujarOperacionesIniciales();
+
+$( document ).ready(function() {
+    
+});
+</script>

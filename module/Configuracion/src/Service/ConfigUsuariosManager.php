@@ -129,5 +129,4 @@ class ConfigUsuariosManager {
         //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
         $this->borrarPerfilesFromArreglo($Usuarios, $arrPerfilesOriginales);
     }
-    
 }

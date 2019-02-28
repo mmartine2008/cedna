@@ -82,6 +82,7 @@ form ul li {
     background: url('../img/FondoCEDNA-2.png');
     background-size: contain;
     text-align: center;
+    padding: 2rem 1rem !important;
 }
 .jumbotron{font-family: 'Montserrat', sans-serif;}
 .glyphicon {
@@ -137,11 +138,34 @@ tbody tr.highlight td {
     background-color: #ccc;
 }
 
+.encabezado {
+    position: absolute;
+    top: 0px;
+    height: 150px;
+    overflow: hidden;
+    left: 0px;
+    right: 0px;
+}
+
+.contenido {
+    position: absolute;
+    top: 150px;
+    bottom: 150px;
+    overflow: auto;
+    left: 0px;
+    right: 0px;
+    margin-top: 15px;
+}
+
 .footer {
     background: #85c8f466;
     position: absolute;
-    bottom: 0;
+    bottom: 0px;
+    height: 150px;
     width: 100%;
+    overflow: hidden;
+    left: 0px;
+    right: 0px;
 }
 
 .configuracion {
@@ -173,6 +197,51 @@ tbody tr.highlight td {
 
 .personal {
     content: url('../img/boton/agentes-b.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.usuarios {
+    content: url('../img/boton/usuarios.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.organigrama {
+    content: url('../img/boton/usuarios.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.nodos {
+    content: url('../img/boton/nodos.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.perfiles {
+    content: url('../img/boton/perfiles.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.tareas {
+    content: url('../img/boton/firmas.png');
     background-size: contain;
     text-align: center;
     max-width: 100%;

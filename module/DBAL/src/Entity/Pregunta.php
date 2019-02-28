@@ -36,6 +36,11 @@ class Pregunta
     protected $tieneOpciones;
 
     /**
+     * @ORM\Column(name="Funcion",  nullable=true, type="string", length=1000)
+     */
+    protected $funcion;
+
+    /**
      *
      * @ORM\ManyToMany(targetEntity="Opcion", inversedBy="Pregunta", cascade={"persist"})
      * @ORM\JoinTable(name="PreguntaOpcion",
@@ -45,8 +50,14 @@ class Pregunta
      */
     protected $opciones;
 
+     /**
+     * @ORM\OneToMany(targetEntity="PreguntaGeneradora", mappedBy="pregunta")
+     */
+    protected $preguntaGeneradora;
+
     public function __construct() {
         $this->opciones = new ArrayCollection();
+        $this->preguntaGeneradora = new ArrayCollection();
     }
 
     /**
@@ -69,6 +80,15 @@ class Pregunta
         return $this;
     }
 
+    public function getPreguntaGeneradora()
+    {
+        if ($this->preguntaGeneradora){
+            return $this->preguntaGeneradora->toArray();
+        }else{
+            return null;
+        }
+    }
+
     /**
      * @param Opcion|null $opciones
      */
@@ -87,7 +107,7 @@ class Pregunta
         if ($this->opciones){
             return $this->opciones->toArray();
         }else{
-            return null;
+            return null; 
         }
     }
     
@@ -109,7 +129,6 @@ class Pregunta
     {
         $this->opciones->clear();
     }
-
 
     /**
      * Get the value of descripcion
@@ -182,7 +201,32 @@ class Pregunta
         return $this;
     }
 
-    
+    /**
+     * Get the value of funcion
+     */ 
+    public function getFuncion()
+    {
+        return $this->funcion;
+    }
+
+    /**
+     * Set the value of funcion
+     *
+     * @return  self
+     */ 
+    public function setFuncion($funcion)
+    {
+        $this->funcion = $funcion;
+
+        return $this;
+    }
+
+    public function tieneFuncion() {
+        if($this->funcion) {
+            return true;
+        }
+        return false;
+    }
 
     public function getJSON(){
         $output = "";
@@ -210,17 +254,24 @@ class Pregunta
                     $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
                 }
                 $resp = implode(", ", $resp);
-                $output .= '"respuesta": ['.$resp.'],';
-                // $output .= '"opciones": ['.$opciones.']';
+                $output .= '"respuesta": ['.$resp.']';// agregar coma cuando haga lo de preg generadora
             } else {
-                $output .= '"opciones": ['.$opciones.'],';
+                $output .= '"opciones": ['.$opciones.'],'; //idem
                 $output .= '"respuesta": ""';
             }
+            // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
+            //     $preguntaGeneradora = $this->getPreguntaGeneradora();
+            //     $output .= '"generaPregunta": "' . 1 .'", ';
+            //     foreach($preguntaGeneradora as $pg){
+            //         $output .= '"preguntaGeneradora": ' . $pg->getJSON() .' ';
+            //     }
+            // } else {
+                // $output .= '"generaPregunta": "' . 0 .'" ';
+            // }
         } else {
             $output .= '"cerrada": "' . 0 .'", ';
             $output .= '"respuesta": ""';
         }        
         return '{' . $output . '}';
     }
-
 }

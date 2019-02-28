@@ -19,7 +19,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\ABMController::class, //Cambiar por un nuevo indexController
+                        'controller' => Controller\ABMController::class, 
                         'action'     => 'login',
                     ],
                 ],
@@ -29,7 +29,7 @@ return [
                 'options' => [
                     'route'    => '/index',
                     'defaults' => [
-                        'controller' => Controller\CednaController::class, //Cambiar por un nuevo indexController
+                        'controller' => Controller\CednaController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -62,6 +62,77 @@ return [
                     ],
                 ],
             ],
+            'operarios' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/operarios[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\OperariosController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
+            'organigrama' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/organigrama',
+                    'defaults' => [
+                        'controller' => Controller\OrganigramaController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'nodos' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/nodos[/:action[/:id]]',
+                            'defaults' => [
+                                'action'     => 'nodos',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'autoridades' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/autoridades[/:action[/:id]]',
+                            'defaults' => [
+                                'action'     => 'autoridades',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
+            ],
+            'tareas' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/tareas[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\TareasController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -69,6 +140,9 @@ return [
         'factories' => [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
             Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
+            Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
+            Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
+            Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -79,6 +153,9 @@ return [
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
             Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
+            Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
+            Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
+            Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
         ],
     ],
     'view_manager' => [

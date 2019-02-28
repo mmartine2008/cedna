@@ -56,10 +56,13 @@
          }         
      }
      
-     process([
-        'IdUsuarioxPerfil', 
-        'IdUsuario', 
-        'IdPerfil', 
+process([
+    'IdTarea', 
+'IdSolicitante', 
+'IdNodo', 
+'IdEstadoTarea', 
+'FechaSolicitud', 
+'Descripcion',  
 ]);
      
      /*

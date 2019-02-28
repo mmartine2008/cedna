@@ -8,6 +8,13 @@ use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
 use DBAL\Entity\Usuarios;
+use DBAL\Entity\Operarios;
+use DBAL\Entity\TipoNodo;
+use DBAL\Entity\Nodos;
+use DBAL\Entity\TipoJefe;
+use DBAL\Entity\esJefeDe;
+use DBAL\Entity\EstadoTarea;
+use DBAL\Entity\Tareas;
 
 class CatalogoManager {
     
@@ -65,6 +72,198 @@ class CatalogoManager {
         return $Usuarios;
     }
 
+    public function getOperarios($idOperarios = null){
+        if ($idOperarios){
+            $Operarios = $this->entityManager->getRepository(Operarios::class)->findOneBy(['id' => $idOperarios]);
+        }else{
+            $Operarios = $this->entityManager->getRepository(Operarios::class)->findAll();
+        }
+
+        return $Operarios;
+    }
+
+    public function getTipoNodo($idTipoNodo = null){
+        if ($idTipoNodo){
+            $TipoNodo = $this->entityManager->getRepository(TipoNodo::class)->findOneBy(['id' => $idTipoNodo]);
+        }else{
+            $TipoNodo = $this->entityManager->getRepository(TipoNodo::class)->findAll();
+        }
+
+        return $TipoNodo;
+    }
+
+    public function getNodos($idNodos = null){
+        if ($idNodos){
+            $Nodos = $this->entityManager->getRepository(Nodos::class)->findOneBy(['id' => $idNodos]);
+        }else{
+            $Nodos = $this->entityManager->getRepository(Nodos::class)->findAll();
+        }
+
+        return $Nodos;
+    }
+
+    public function getTipoJefe($idTipoJefe = null){
+        if ($idTipoJefe){
+            $TipoJefe = $this->entityManager->getRepository(TipoJefe::class)->findOneBy(['id' => $idTipoJefe]);
+        }else{
+            $TipoJefe = $this->entityManager->getRepository(TipoJefe::class)->findAll();
+        }
+
+        return $TipoJefe;
+    }
+
+    public function getEstadoTarea($idEstadoTarea = null){
+        if ($idEstadoTarea){
+            $EstadoTarea = $this->entityManager->getRepository(EstadoTarea::class)->findOneBy(['id' => $idEstadoTarea]);
+        }else{
+            $EstadoTarea = $this->entityManager->getRepository(EstadoTarea::class)->findAll();
+        }
+
+        return $EstadoTarea;
+    }
+
+    public function getTareas($idTarea = null){
+        if ($idTarea){
+            $Tareas = $this->entityManager->getRepository(Tareas::class)->findOneBy(['id' => $idTarea]);
+        }else{
+            $Tareas = $this->entityManager->getRepository(Tareas::class)->findAll();
+        }
+
+        return $Tareas;
+    }
+
+    public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
+        $EsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Usuario' => $Usuario]);
+
+        return $EsJefeDe;
+    }
+
+    public function getEsJefeDePorNodo($Nodo){
+        $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
+
+        return $arrEsJefeDe;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades EstadoTarea
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrEstadoTareaJSON(){
+        $arrEstadoTarea = $this->getEstadoTarea();
+
+        $output = [];
+        
+        foreach($arrEstadoTarea as $EstadoTarea){
+            $output[] = $EstadoTarea->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Tareas
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrTareasJSON(){
+        $arrTareas = $this->getTareas();
+
+        $output = [];
+        
+        foreach($arrTareas as $Tareas){
+            $output[] = $Tareas->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Operarios
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrOperariosJSON(){
+        $arrOperarios = $this->getOperarios();
+
+        $output = [];
+        
+        foreach($arrOperarios as $Operario){
+            $output[] = $Operario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Nodos
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrNodosJSON(){
+        $arrNodos = $this->getNodos();
+
+        $output = [];
+        
+        foreach($arrNodos as $Nodo){
+            $output[] = $Nodo->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Usuarios
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrUsuariosJSON(){
+        $arrUsuarios = $this->getUsuarios();
+
+        $output = [];
+        
+        foreach($arrUsuarios as $Usuario){
+            $output[] = $Usuario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades TipoJefe
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrTipoJefeJSON(){
+        $arrTipoJefe = $this->getTipoJefe();
+
+        $output = [];
+        
+        foreach($arrTipoJefe as $TipoJefe){
+            $output[] = $TipoJefe->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
     /**
      * Funcion que recupera las Operaciones iniciales para un determinado perfil.
      * 
@@ -92,5 +291,16 @@ class CatalogoManager {
         }
 
         return $output;
+    }
+
+    public function getElementosProteccionPersonal(){
+        $resultado = [];
+        $elementos = ['Casco', 'Anteojos de Seguridad', 'Antiparras', 'calzado de seguridad', 'ropa especial de trabajo', 'chaleco reflectivo'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
     }
 }

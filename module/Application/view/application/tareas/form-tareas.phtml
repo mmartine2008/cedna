@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Tarea</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formTarea" name="formTarea">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-8 offset-2">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="nodoTarea"><span class="obligatorio">(*) </span>Nodo:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="nodoTarea" name="nodoTarea" class="form-control" required="true">
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="resumenTarea"><span class="obligatorio">(*) </span>Resumen:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="resumenTarea" name="resumenTarea" class="form-control" required="true" maxlenght="125">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="descripcionTarea"><span class="obligatorio">(*) </span>Descripcion:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <textarea id="descripcionTarea" name="descripcionTarea" class="form-control" required="true" maxlength="1000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var tareasJson = <?= $TareasJson ?>;
+var arrNodosJSON = <?= $arrNodosJSON ?>;
+
+function FormTareaToJson(){
+    var formData = {
+        nodo: $('#cuitTarea').val(), 
+        resumen: $('#resumenTarea').val(), 
+        descripcion: $('#descripcionTarea').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormTareaToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formTarea")[0].checkValidity()){
+        $("#formTarea").submit();
+    }else{
+        $("#formTarea")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    dibujarSelectNodos();
+
+    if (tareasJson !== ''){
+        $('#resumenTarea').val(tareasJson.resumen);
+        $('#descripcionTarea').val(tareasJson.descripcion);
+        seleccionarNodo()
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function seleccionarNodo(){
+    for (var i = 0; i < arrNodosJSON.length; i++){
+        var nodo = arrNodosJSON[i];
+
+        if (nodo.id == tareasJson.nodo.id){
+            $('#nodoTarea').val(i);
+            break;
+        }
+    }
+}
+
+function dibujarSelectNodos(){
+    $('#nodoTarea')
+        .find('option')
+        .remove();
+
+    $('#nodoTarea')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrNodosJSON.length; i++){
+        var nodo = arrNodosJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(nodo.nombre);
+
+        $('#nodoTarea').append(option);
+    }
+}
+
+</script>

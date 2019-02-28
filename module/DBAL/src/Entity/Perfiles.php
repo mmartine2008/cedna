@@ -56,7 +56,7 @@ class Perfiles
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"nombre": "' . $this->getNombre() .'"';
         return '{' . $output . '}';
     }
 }

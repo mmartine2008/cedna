@@ -1,0 +1,117 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nuevo Nodo</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formNodo" name="formNodo">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-8 offset-2">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="nombreNodo"><span class="obligatorio">(*) </span>Nombre:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="nombreNodo" name="nombreNodo" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="idTipoNodo"><span class="obligatorio">(*) </span>Tipo de Nodo:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="idTipoNodo" name="idTipoNodo" class="form-control" required="true">
+                                        <option value="">-- Seleccione --</option>
+                                        <?php foreach($arrTipoNodo as $TipoNodo) :?>
+                                            <option value="<?= $TipoNodo->getId() ?>"><?= $TipoNodo->getDescripcion() ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="idNodoSuperior">Nodo Superior:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select id="idNodoSuperior" name="idNodoSuperior" class="form-control">
+                                        <option value="">-- Seleccione --</option>
+                                        <?php foreach($arrNodos as $Nodo) :?>
+                                            <option value="<?= $Nodo->getId() ?>"><?= $Nodo->getNombre() ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var nodosJson = <?= $NodosJson ?>;
+
+function FormNodoToJson(){
+    var formData = {
+        nombre: $('#nombreNodo').val(), 
+        idTipoNodo: $('#idTipoNodo').val(), 
+        idNodoSuperior: $('#idNodoSuperior').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormNodoToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formNodo")[0].checkValidity()){
+        $("#formNodo").submit();
+    }else{
+        $("#formNodo")[0].reportValidity();
+    }
+}
+
+/**
+ * Funcion que elimina de la lista de nodos superiores el nodo actual.
+ * Considero que un nodo no puede tenerse a si mismo como nodo superior.
+ *
+ * @return void
+ */
+function eliminarOpcionNodoNoValida(){
+    $("#idNodoSuperior option[value='"+nodosJson.id+"']").remove();
+}
+
+$( document ).ready(function() {
+    eliminarOpcionNodoNoValida();
+    
+    if (nodosJson !== ''){
+        $('#nombreNodo').val(nodosJson.nombre);
+        $('#idTipoNodo').val(nodosJson.tipoNodo.id);
+        if (nodosJson.nodoSuperior != ''){
+            $('#idNodoSuperior').val(nodosJson.nodoSuperior.id);
+        }
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+</script>

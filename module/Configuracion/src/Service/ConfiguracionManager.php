@@ -115,4 +115,24 @@ class ConfiguracionManager {
 
         return '[' . $output . ']';
     }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Perfiles
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrPerfilesJSON(){
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
+
+        $output = [];
+        
+        foreach($arrPerfiles as $Perfiles){
+            $output[] = $Perfiles->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
 }
