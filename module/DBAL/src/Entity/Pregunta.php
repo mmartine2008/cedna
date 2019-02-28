@@ -246,6 +246,17 @@ class Pregunta
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
             $cantDestinos = $this->getTipoPregunta()->getCantDestinos();
+            // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
+            //     $preguntaGeneradora = $this->getPreguntaGeneradora();
+            //     $output .= '"generaPregunta": "' . 1 .'", ';
+            //     var_dump($preguntaGeneradora[0]->getJSON());
+            //     foreach($preguntaGeneradora as $pg){
+            //         // var_dump($pg);
+            //         // $output .= '"preguntaGeneradora": ' . $pg->getJSON() .' ,';
+            //     }
+            // } else {
+            //     $output .= '"generaPregunta": "' . 0 .'" ,';
+            // }
             if($cantDestinos > 0){
                 $output .= '"cantDestinos": "' . $cantDestinos .'", ';
                 $resp = [];
@@ -254,20 +265,11 @@ class Pregunta
                     $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
                 }
                 $resp = implode(", ", $resp);
-                $output .= '"respuesta": ['.$resp.']';// agregar coma cuando haga lo de preg generadora
+                $output .= '"respuesta": ['.$resp.']';
             } else {
-                $output .= '"opciones": ['.$opciones.'],'; //idem
+                $output .= '"opciones": ['.$opciones.'],'; 
                 $output .= '"respuesta": ""';
             }
-            // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
-            //     $preguntaGeneradora = $this->getPreguntaGeneradora();
-            //     $output .= '"generaPregunta": "' . 1 .'", ';
-            //     foreach($preguntaGeneradora as $pg){
-            //         $output .= '"preguntaGeneradora": ' . $pg->getJSON() .' ';
-            //     }
-            // } else {
-                // $output .= '"generaPregunta": "' . 0 .'" ';
-            // }
         } else {
             $output .= '"cerrada": "' . 0 .'", ';
             $output .= '"respuesta": ""';

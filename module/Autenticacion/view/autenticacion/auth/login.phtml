@@ -21,7 +21,7 @@ $(document).ready(function(){
                     </div> -->
                     <div class="form-row mt-3">
                         <div class="col-lg-5 text-left">
-                            <label>Nombre de Usuario:</label>
+                            <label><?= $this->translate('__nombre_de_usuario__') ?>:</label>
                         </div>
                         <div class="col-lg-7">
                             <input type="text" class="form-control" name="Usuario">
@@ -29,7 +29,7 @@ $(document).ready(function(){
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-lg-3 text-left">
-                            <label>Contraseña:</label>
+                            <label><?= $this->translate('__Clave__') ?>:</label>
                         </div>
                         <div class="col-lg-9">
                             <input type="password" class="form-control" name="Clave">
@@ -38,12 +38,12 @@ $(document).ready(function(){
                     <div class="form-row mt-3">
                         <div class="checkbox">
                             <label>
-                                <input type="checkbox"> Recordarme
+                                <input type="checkbox"> <?= $this->translate('__Recordarme__') ?>
                             </label>
                         </div>
                     </div>
                     <div class="form-row mt-3">
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Ingresar</button>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit"><?= $this->translate('__Ingresar__') ?></button>
                     </div>
                 </form>
             </div>

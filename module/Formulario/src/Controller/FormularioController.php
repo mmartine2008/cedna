@@ -14,8 +14,8 @@ class FormularioController extends CednaController
 {
     private $FormularioManager;
 
-    public function __construct($FormularioManager, $catalogoManager, $userSessionManager) {
-        parent::__construct($catalogoManager, $userSessionManager);
+    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator) {
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->FormularioManager = $FormularioManager;
     }
@@ -23,8 +23,15 @@ class FormularioController extends CednaController
     public function indexAction() {
         $this->cargarAccionesDisponibles('Formulario');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('Formulario');
-        $idFormulario = 2;
+        $idFormulario = 1;
         $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
+
+
+        // $this->layout()->arrAccionesDisponibles = '{}';
+
+        // return new ViewModel([
+        //     "formulario" => $formularioJSON,
+            
         
         return new ViewModel([
             "formulario" => $formularioJSON,
@@ -40,8 +47,7 @@ class FormularioController extends CednaController
             $data = json_decode($JsonData['JsonData']);
             $this->FormularioManager->altaRespuestasFormulario($data);
         }
-        return new ViewModel([
-        ]);
+        return new ViewModel([ ]);
     }
 
 }
