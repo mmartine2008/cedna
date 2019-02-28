@@ -25,10 +25,20 @@ class FormularioController extends CednaController
         $OperacionesJSON = $this->recuperarOperacionesIniciales('Formulario');
         $idFormulario = 2;
         $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
+<<<<<<< HEAD
+
+
+        $this->layout()->arrAccionesDisponibles = '{}';
+
+        return new ViewModel([
+            "formulario" => $formularioJSON,
+            
+=======
         
         return new ViewModel([
             "formulario" => $formularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
+>>>>>>> 2734ed1893029ec18461e6deb2f65cf99979b526
         ]);
     }
 
@@ -40,8 +50,7 @@ class FormularioController extends CednaController
             $data = json_decode($JsonData['JsonData']);
             $this->FormularioManager->altaRespuestasFormulario($data);
         }
-        return new ViewModel([
-        ]);
+        return new ViewModel([ ]);
     }
 
 }

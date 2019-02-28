@@ -14,15 +14,10 @@ use Zend\I18n\Translator\Translator;
 
 class ConfiguracionController extends CednaController
 {
-    protected $catalogoManager;
-    protected $userSessionManager;
-    protected $translator;
 
     public function __construct($catalogoManager, $userSessionManager, $translator)
     {
-        $this->catalogoManager = $catalogoManager;
-        $this->userSessionManager = $userSessionManager;
-        $this->translator = $translator;
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
     }
 
     public function indexAction()

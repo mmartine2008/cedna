@@ -19,7 +19,8 @@ class CednaControllerFactory implements FactoryInterface
     {
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
-        
-        return new CednaController($catalogoManager, $userSessionManager);
+        $translator = $container->get('translator');
+
+        return new CednaController($catalogoManager, $userSessionManager, $translator);
     }
 }
