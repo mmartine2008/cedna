@@ -161,7 +161,7 @@ tbody tr.highlight td {
     background: #85c8f466;
     position: absolute;
     bottom: 0px;
-    height: 150px;
+    height: 115px;
     width: 100%;
     overflow: hidden;
     left: 0px;
@@ -241,7 +241,7 @@ tbody tr.highlight td {
 }
 
 .tareas {
-    content: url('../img/boton/firmas.png');
+    content: url('../img/boton/tareas.png');
     background-size: contain;
     text-align: center;
     max-width: 100%;
@@ -299,4 +299,18 @@ tbody tr.highlight td {
     max-width: 100%;
     max-height: 100%;
     cursor: pointer;
+}
+
+.zoom{
+    transition: width 0.3s, height 0.3s, transform 0.3s;
+    -moz-transition: width 0.3s, height 0.3s, -moz-transform 0.3s;
+    -webkit-transition: width 0.3s, height 0.3s, -webkit-transform 0.3s;
+    -o-transition: width 0.3s, height 0.3s,-o-transform 0.3s;  
+}
+
+.zoom:hover{
+    transform : scale(0.85);
+    -moz-transform : scale(0.85);      /* Firefox */
+    -webkit-transform : scale(0.85);   /* Chrome - Safari */
+    -o-transform : scale(0.85);        /* Opera */
 }

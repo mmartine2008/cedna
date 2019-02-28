@@ -239,6 +239,17 @@ class Pregunta
             $opciones = implode(", ", $opciones);
         }
 
+        $output = "";
+
+        $preguntasGen = [];
+        if($this->getPreguntaGeneradora()){
+            $preguntasGeneradas = $this->getPreguntaGeneradora();
+            foreach($preguntasGeneradas as $preguntaGenerada){
+                $preguntasGen[] = $preguntaGenerada->getJSON();
+            }
+            $preguntasGen = implode(", ", $preguntasGen);
+        }
+
         $output .= '"idPregunta": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
@@ -246,17 +257,12 @@ class Pregunta
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
             $cantDestinos = $this->getTipoPregunta()->getCantDestinos();
-            // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
-            //     $preguntaGeneradora = $this->getPreguntaGeneradora();
-            //     $output .= '"generaPregunta": "' . 1 .'", ';
-            //     var_dump($preguntaGeneradora[0]->getJSON());
-            //     foreach($preguntaGeneradora as $pg){
-            //         // var_dump($pg);
-            //         // $output .= '"preguntaGeneradora": ' . $pg->getJSON() .' ,';
-            //     }
-            // } else {
-            //     $output .= '"generaPregunta": "' . 0 .'" ,';
-            // }
+            if($this->getPreguntaGeneradora()){ 
+                $output .= '"generaPregunta": "' . 1 .'", ';
+                $output .= '"preguntasGeneradas": ['.$preguntasGen.'],'; 
+            } else {
+                $output .= '"generaPregunta": "' . 0 .'" ,';
+            }
             if($cantDestinos > 0){
                 $output .= '"cantDestinos": "' . $cantDestinos .'", ';
                 $resp = [];

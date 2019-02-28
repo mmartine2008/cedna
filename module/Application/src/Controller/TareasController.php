@@ -14,9 +14,9 @@ class TareasController extends CednaController
 {
     private $tareasManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $tareasManager)
+    public function __construct($catalogoManager, $userSessionManager, $tareasManager, $translator)
     {
-        parent::__construct($catalogoManager, $userSessionManager);
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->tareasManager = $tareasManager;
     }
@@ -40,17 +40,20 @@ class TareasController extends CednaController
             
             $JsonData = json_decode($data['JsonData']);
 
-            // $this->tareasManager->altaEdicionTareas($JsonData);
+            $userName = $this->userSessionManager->getUserName();
+            $this->tareasManager->altaEdicionTareas($JsonData, $userName);
 
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
         
         $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
 
         $view = new ViewModel();
         
         $view->setVariable('TareasJson', '""');
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
         $view->setTemplate('application/tareas/form-tareas.phtml');
         
         return $view;
@@ -66,16 +69,22 @@ class TareasController extends CednaController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            // $this->tareasManager->altaEdicionTareas($JsonData, $idTareas);
+            $userName = $this->userSessionManager->getUserName();
+            $this->tareasManager->altaEdicionTareas($JsonData, $userName, $idTareas);
 
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
+
+        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
 
         $view = new ViewModel();
         
         $Tareas = $this->catalogoManager->getTareas($idTareas);
 
         $view->setVariable('TareasJson', $Tareas->getJSON());
+        $view->setVariable('arrNodosJSON', $arrNodosJSON);
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
         $view->setTemplate('application/tareas/form-tareas.phtml');
         
         return $view;

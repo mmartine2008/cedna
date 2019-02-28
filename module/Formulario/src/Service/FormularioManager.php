@@ -9,6 +9,7 @@ use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
+use Zend\Console\Console;
 
 
 class FormularioManager {

@@ -122,7 +122,7 @@ class PreguntaGeneradora
 
         $output .= '"idPreguntaGenerada": "' . $this->getId() .'", ';
         $output .= '"opcion": ' . $this->getOpcion()->getJSON() .', ';
-        $output .= '"preguntaGenerada": ' . $this->getPreguntaGenerada()->getJSON() .', ';
+        $output .= '"preguntaGenerada": ' . $this->getPreguntaGenerada()->getJSON() .'';
         
         return '{' . $output . '}';
     }

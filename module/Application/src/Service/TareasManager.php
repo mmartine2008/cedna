@@ -24,20 +24,26 @@ class TareasManager {
         $this->catalogoManager = $catalogoManager;
     }
 
-    public function altaEdicionTareas($jsonData, $idTareas = null){
+    public function altaEdicionTareas($jsonData, $userName, $idTareas = null){
         if ($idTareas){
             $Tareas = $this->catalogoManager->getTareas($idTareas);
         }else{
             $EstadoTarea = $this->catalogoManager->getEstadoTarea(EstadoTarea::ID_ESTADO_SOLICITADA);
             
             $Tareas = new Tareas();
+
+            $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+            $Tareas->setSolicitante($UsuarioActivo);
             $Tareas->setFechaSolicitud(new \DateTime("now"));
             $Tareas->setEstadoTarea($EstadoTarea);
         }
 
         $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
+        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
 
-        $Tareas->setNodos($Nodo);
+        $Tareas->setNodo($Nodo);
+        $Tareas->setFormulario($Formulario);
         $Tareas->setResumen($jsonData->resumen);
         $Tareas->setDescripcion($jsonData->descripcion);
 

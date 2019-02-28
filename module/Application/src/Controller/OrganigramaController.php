@@ -14,9 +14,9 @@ class OrganigramaController extends CednaController
 {
     private $organigramaManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $organigramaManager)
+    public function __construct($catalogoManager, $userSessionManager, $organigramaManager, $translator)
     {
-        parent::__construct($catalogoManager, $userSessionManager);
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->organigramaManager = $organigramaManager;
     }

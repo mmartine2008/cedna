@@ -92,7 +92,7 @@ INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ('', 2, 1
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (6,15); 
 
--- INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (2, 'Informacion', 'Informacion');
+-- INSERT Seccion(IdFormulario, Nombre, Descripcion) VALUES (1, 'Informacion', 'Informacion');
 
 -- INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Se encuentra casado?', 1, 1);
 
@@ -101,9 +101,9 @@ INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (6,15);
 
 -- INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ('Nombre de pareja', 4, 0);
 
--- INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (24, 9); 
--- INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (24, 10); 
+-- INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (16, 3); 
+-- INSERT PreguntaOpcion(IdPregunta, idOpcion) VALUES (16, 4); 
 
--- INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (9,24); 
+-- INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (7,16); 
 
--- INSERT PreguntaGeneradora(IdPregunta, idOpcion, IdPreguntaGenerada) VALUES (24, 9, 25);
+-- INSERT PreguntaGeneradora(IdPregunta, idOpcion, IdPreguntaGenerada) VALUES (16, 3, 17);
