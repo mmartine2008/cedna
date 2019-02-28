@@ -21,7 +21,9 @@ class FormularioControllerFactory implements FactoryInterface
         $FormularioManager = $container->get(FormularioManager::class);
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
+        $translator = $container->get('translator');
+
         
-        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager);
+        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator);
     }
 }
