@@ -31,7 +31,7 @@
                                     <label for="descripcionTarea"><span class="obligatorio">(*) </span>Descripcion:</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <textarea id="descripcionTarea" name="descripcionTarea" class="form-control" required="true" maxlength="1000"></textarea>
+                                    <textarea id="descripcionTarea" name="descripcionTarea" class="form-control" required="true" rows="7" maxlength="1000"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -50,8 +50,10 @@ var tareasJson = <?= $TareasJson ?>;
 var arrNodosJSON = <?= $arrNodosJSON ?>;
 
 function FormTareaToJson(){
+    var iPosNodo = $('#nodoTarea').val()
+    
     var formData = {
-        nodo: $('#cuitTarea').val(), 
+        nodo: arrNodosJSON[iPosNodo], 
         resumen: $('#resumenTarea').val(), 
         descripcion: $('#descripcionTarea').val()
     };

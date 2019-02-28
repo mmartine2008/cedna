@@ -72,6 +72,12 @@ class CatalogoManager {
         return $Usuarios;
     }
 
+    public function getUsuarioPorNombreUsuario($userName){
+        $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['NombreUsuario' => $userName]);
+
+        return $Usuarios;
+    }
+
     public function getOperarios($idOperarios = null){
         if ($idOperarios){
             $Operarios = $this->entityManager->getRepository(Operarios::class)->findOneBy(['id' => $idOperarios]);

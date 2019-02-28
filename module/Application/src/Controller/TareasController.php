@@ -40,7 +40,8 @@ class TareasController extends CednaController
             
             $JsonData = json_decode($data['JsonData']);
 
-            // $this->tareasManager->altaEdicionTareas($JsonData);
+            $userName = $this->userSessionManager->getUserName();
+            $this->tareasManager->altaEdicionTareas($JsonData, $userName);
 
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
@@ -66,16 +67,20 @@ class TareasController extends CednaController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            // $this->tareasManager->altaEdicionTareas($JsonData, $idTareas);
+            $userName = $this->userSessionManager->getUserName();
+            $this->tareasManager->altaEdicionTareas($JsonData, $userName, $idTareas);
 
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
+
+        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
 
         $view = new ViewModel();
         
         $Tareas = $this->catalogoManager->getTareas($idTareas);
 
         $view->setVariable('TareasJson', $Tareas->getJSON());
+        $view->setVariable('arrNodosJSON', $arrNodosJSON);
         $view->setTemplate('application/tareas/form-tareas.phtml');
         
         return $view;

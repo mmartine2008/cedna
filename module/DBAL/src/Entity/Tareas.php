@@ -124,7 +124,7 @@ class Tareas
         $output .= '"estadoTarea": ' . $this->getEstadoTarea()->getJSON() .', ';
         $output .= '"fechaSolicitud": "' . $this->getFechaSolicitud() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"descripcion": "' . $this->getResumen() .'"';
+        $output .= '"resumen": "' . $this->getResumen() .'"';
         
         return '{' . $output . '}';
     }
