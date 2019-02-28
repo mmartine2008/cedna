@@ -1,4 +1,23 @@
 <script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
+
+
+<div class="form-row" id="divFormulario">
+
+</div>
+<form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
+<div class="row col-lg-12">
+    <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
+        <input type="hidden" name="JsonData" id="JsonData">
+        <a href="#">
+            <button class="btn btn-primary margin-vertical-25" style="margin: 20px;" type="button">Cancelar</button>
+        </a>
+        <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
+    </div>
+</div> 
+</form>
+
+
+
 <script>
     var formulario = <?= $formulario ?>;
 
@@ -121,27 +140,28 @@
         }
         // var optionGeneradora = null;
         // if(preguntaGeneradora) {
-        //     var optionGeneradora = preguntaGeneradora.opcion;
+        //      optionGeneradora = preguntaGeneradora.opcion;
         // }
+        // console.log(optionGeneradora);
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             option.value = lista[i][0];
             option.text = lista[i][1];
             selector.appendChild(option);
-            
         }
         return selector;
     }
 
     function updateJsonSimple(idSeccion, idPregunta, idRespuesta) {
         var respuesta = $("#"+idRespuesta).val();
+        console.log(respuesta);
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
     function createSimpleSelector(id, opciones, divElement, idSeccion) {
         
         var selector = document.createElement("select");
-        idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
+        var idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
         selector.id = idSelector;
         var opciones = obtenerListaOpciones(opciones);
         var selector = createListFromJSONLista(selector, opciones, true);
@@ -166,7 +186,7 @@
 
     function createDivClass(info, div) {
         var divClass = document.createElement("Div");
-        divClass.className = info;
+        divClass.classList = info;
         div.appendChild(divClass);
         return divClass;
     }
@@ -271,14 +291,14 @@
     }
 
     function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
-        var divForm = createDivClass("form-row", divElement);
-        var divRow = createDivClass("row", divForm);
+        // var divForm = createDivClass("form-row", divElement);
+        var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
-        var div_class_sm_1 = createDivClass("col-sm-2", divRow);
+        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
         var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
         for(var i=1; i <= cantDestinos; i++){
             createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
@@ -289,6 +309,7 @@
     }
 
     function createInput(infoType, idPregunta, divElement, idSeccion){
+        
         ele = document.createElement('input');
         ele.type = infoType;
         var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
@@ -298,6 +319,8 @@
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
+
+        var div = createDivClass("text-right", divElement);
         divElement.appendChild(ele);
     } 
 
@@ -316,21 +339,24 @@
     }
 
     function createTextArea(item, divElement, idSeccion){
+        var div = createDivClass("col-sm-3 text-right", divElement);
         ele = document.createElement('textarea');
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
-        divElement.appendChild(ele);
+        ele.className = "form-control";
+        div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
 
     function createImage(item, divElement, idSeccion){
+        var div = createDivClass("text-right", divElement);
         ele = document.createElement('img');
         ele.src = "#";
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
-        divElement.appendChild(ele);
+        div.appendChild(ele);
     }
     
     function createAnswer(item, divElement, idSeccion){
@@ -355,14 +381,18 @@
     }
 
     function createQuestions(item, divElement){
+
         preguntas = item.preguntas;
         for (var i = 0; i < preguntas.length; i++){
             var div = document.createElement("Div");
-            div.className='row';
+            div.className='form-row';
             div.style.padding = "15px";
             divElement.appendChild(div);
             var item2 = preguntas[i];
-            createTextElement("P", div, item2.descripcion);
+            var divText = createDivClass("col-sm-3 text-right", div);
+            var text = item2.descripcion;
+            if(text) text = text+": ";
+            createTextElement("P", divText, text);
             createAnswer(item2, div, item.id);
         }
     }
@@ -373,17 +403,16 @@
         divElement.id = "Seccion_id_"+item.id;
         divElement.style.padding = "10px";
         if(active){
-            var clases = "form-group tab-pane active";
+            var clases = "form-group tab-pane container active";
         } else {
-            var clases = "form-group tab-pane";
+            var clases = "form-group tab-pane container fade";
         }
         divElement.classList= clases;
         divElement.style.textAlign = "lefth";
 
         var divSeccion = createDivClass("row", divElement);
         var div_class_sm_4 = createDivClass("col-sm-4", divSeccion);
-        // createTextElement("h4", div_class_sm_4, item.nombre);
-        createTextElement("h4", div_class_sm_4, item.descripcion);
+        createTextElement("h5", div_class_sm_4, item.descripcion);
 
         createQuestions(item, divElement);
         contenedor.appendChild(divElement);
@@ -394,15 +423,19 @@
     function createLiNav(navPills, item, active) {
         var liNav = document.createElement("li");
         
-        if(active) {
-            liNav.className = "active";
-        }
+        liNav.className = " nav-item";
         navPills.appendChild(liNav);
 
 
         var aNav = document.createElement("a");
         aNav.href = "#Seccion_id_"+item.id;
-        aNav.toggleAttribute="tab";
+        if(active) {
+            aNav.classList="nav-link active";
+        } else {
+            aNav.classList="nav-link";
+        }
+        aNav.classList="nav-link";
+        aNav.setAttribute("data-toggle", "tab");
         liNav.appendChild(aNav);
 
         createTextElement("p", aNav, item.nombre);
@@ -410,7 +443,7 @@
 
     function construirSecciones(childs, contenedor){
         var navPills = document.createElement("ul");
-        navPills.classList = "nav nav-pills";
+        navPills.classList = "nav nav-tabs";
         contenedor.appendChild(navPills);
 
         createLiNav(navPills, childs[0], true);
@@ -421,7 +454,7 @@
         }
 
         var divElement = document.createElement("Div");
-        divElement.classList="tab-content clearfix";
+        divElement.classList="tab-content";
         contenedor.appendChild(divElement);
 
         var item = childs[0];
@@ -443,13 +476,13 @@
     }
 
     function createFormulario(){
-        var contenedor = document.getElementsByTagName("div")[0];
+        var contenedor = document.getElementById("divFormulario");
 
         var divFormulario = document.createElement("Div");
         divFormulario.id = "Formulario_id_"+formulario.idFormulario;
         divFormulario.className="container";
         divFormulario.style.paddingTop = "15px";
-        createTextElement("h3", divFormulario, formulario.descripcion);
+        createTextElement("h4", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);
 
         construirSecciones(formulario.secciones, divFormulario);
@@ -457,14 +490,6 @@
 
     createFormulario();
 </script>
-<form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
-    <div class="row">
-        <input type="hidden" name="JsonData" id="JsonData">
-        <a href="#">
-            <div class="btn btn-primary">Cancelar</div>
-        </a>
-        <button id="submit" class="btn btn-primary" type="button" onclick="updateInput()">Confirmar</button>
-    </div>
-</form>
+
 
 

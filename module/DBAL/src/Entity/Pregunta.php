@@ -254,22 +254,24 @@ class Pregunta
                     $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
                 }
                 $resp = implode(", ", $resp);
-                $output .= '"respuesta": ['.$resp.'],';
+                $output .= '"respuesta": ['.$resp.']';// agregar coma cuando haga lo de preg generadora
             } else {
-                $output .= '"opciones": ['.$opciones.'],';
-                $output .= '"respuesta": "",';
+                $output .= '"opciones": ['.$opciones.'],'; //idem
+                $output .= '"respuesta": ""';
             }
-            if($this->getPreguntaGeneradora()){
-                $output .= '"generaPregunta": "' . 1 .'", ';
-                $output .= '"preguntaGeneradora": ' . $this->getPreguntaGeneradora()->getJSON() .' ';
-            } else {
-                $output .= '"generaPregunta": "' . 0 .'" ';
-            }
+            // if($this->getPreguntaGeneradora()){ //por ahora solo genera una
+            //     $preguntaGeneradora = $this->getPreguntaGeneradora();
+            //     $output .= '"generaPregunta": "' . 1 .'", ';
+            //     foreach($preguntaGeneradora as $pg){
+            //         $output .= '"preguntaGeneradora": ' . $pg->getJSON() .' ';
+            //     }
+            // } else {
+                // $output .= '"generaPregunta": "' . 0 .'" ';
+            // }
         } else {
             $output .= '"cerrada": "' . 0 .'", ';
             $output .= '"respuesta": ""';
         }        
         return '{' . $output . '}';
     }
-
 }
