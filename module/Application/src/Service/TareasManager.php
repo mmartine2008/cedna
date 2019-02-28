@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use DBAL\Entity\Tareas;
+use DBAL\Entity\EstadoTarea;
 
 class TareasManager {
     
@@ -27,18 +28,18 @@ class TareasManager {
         if ($idTareas){
             $Tareas = $this->catalogoManager->getTareas($idTareas);
         }else{
-            $EstadoTarea = $this->catalogoManager->getEstadoTarea($jsonData->estadoTarea->id);
+            $EstadoTarea = $this->catalogoManager->getEstadoTarea(EstadoTarea::ID_ESTADO_SOLICITADA);
             
             $Tareas = new Tareas();
             $Tareas->setFechaSolicitud(new \DateTime("now"));
             $Tareas->setEstadoTarea($EstadoTarea);
         }
 
-        // $Tareas->setNombre($jsonData->nombre);
-        // $Tareas->setApellido($jsonData->apellido);
-        // $Tareas->setCuit($jsonData->cuit);
-        // $Tareas->setTelefono($jsonData->telefono);
-        // $Tareas->setEmail($jsonData->email);
+        $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
+
+        $Tareas->setNodos($Nodo);
+        $Tareas->setResumen($jsonData->resumen);
+        $Tareas->setDescripcion($jsonData->descripcion);
 
         $this->entityManager->persist($Tareas);
         $this->entityManager->flush();

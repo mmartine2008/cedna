@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class EstadoTarea
 {
+    const ID_ESTADO_SOLICITADA = 2;
+    
     /**
      * @ORM\Id
      * @ORM\Column(name="IdEstadoTarea", type="integer")
