@@ -40,7 +40,7 @@ class TareasManager {
         }
 
         $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
-        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->id);
+        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
 
         $Tareas->setNodo($Nodo);
         $Tareas->setFormulario($Formulario);

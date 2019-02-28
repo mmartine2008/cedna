@@ -18,7 +18,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-row">
+                            <div class="form-row mt-3">
                                 <div class="col-md-2">
                                     <label for="formularioTarea"><span class="obligatorio">(*) </span>Formulario:</label>
                                 </div>
@@ -89,12 +89,13 @@ function preSubmit(){
 
 $( document ).ready(function() {
     dibujarSelectNodos();
-    seleccionarFormulario();
+    dibujarSelectFormulario();
 
     if (tareasJson !== ''){
         $('#resumenTarea').val(tareasJson.resumen);
         $('#descripcionTarea').val(tareasJson.descripcion);
-        seleccionarNodo()
+        seleccionarNodo();
+        seleccionarFormulario();
     }
     
     verificarMostrarBotonGuardar();
@@ -126,8 +127,8 @@ function seleccionarFormulario(){
     for (var i = 0; i < arrFormularioJSON.length; i++){
         var formulario = arrFormularioJSON[i];
 
-        if (formulario.id == tareasJson.formulario.id){
-            $('#nodoTarea').val(i);
+        if (formulario.idFormulario == tareasJson.formulario.idFormulario){
+            $('#formularioTarea').val(i);
             break;
         }
     }

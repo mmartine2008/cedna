@@ -15,6 +15,7 @@ use DBAL\Entity\TipoJefe;
 use DBAL\Entity\esJefeDe;
 use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Tareas;
+use DBAL\Entity\Formulario;
 
 class CatalogoManager {
     
