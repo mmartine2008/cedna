@@ -126,17 +126,24 @@
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
-        // var optionGeneradora = null;
-        // if(preguntaGeneradora) {
-        //      optionGeneradora = preguntaGeneradora.opcion;
-        // }
+        
         // console.log(optionGeneradora);
         for (var i=0; i < lista.length; i++) {
+            var optionGeneradora = null;
+            //preguntar si la opcion genera respuesta y crearla bloqueada y 
+            //luego cuando hace click desbloquea y cuando hace click otro bloquea
+        // if(preguntaGeneradora) { 
+        //      optionGeneradora = preguntaGeneradora.opcion;
+        //      generateQuestionBlock(preguntaGeneradora.)
+        // }
             var option = document.createElement("option");
             item = lista[i];
             option.value = item.id;
             option.text = item.descripcion;
             option.title = item.descripcion;
+            if(optionGeneradora) {
+                option.onclick = function() {generateQuestion(idSeccion, id, idSelector)};
+            }
             selector.appendChild(option);
         }
         return selector;
@@ -309,7 +316,7 @@
         divElement.appendChild(ele);
     } 
 
-    function createOptions(item, divElement, idSeccion){
+    function createSelector(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
             var preguntasGeneradas = null;
@@ -345,8 +352,8 @@
     }
     
     function createAnswer(item, divElement, idSeccion){
-        if (item.cerrada == '1'){
-            createOptions(item, divElement, idSeccion);
+        if ((item.tipoPregunta.descripcion == 'simple') || (item.tipoPregunta.descripcion == 'multiple')){
+            createSelector(item, divElement, idSeccion);
         } else {
             if(item.tipoPregunta.descripcion == 'image'){
                 createImage(item, divElement, idSeccion);
