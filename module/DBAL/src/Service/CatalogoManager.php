@@ -16,6 +16,7 @@ use DBAL\Entity\esJefeDe;
 use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Tareas;
 use DBAL\Entity\Formulario;
+use DBAL\Entity\Relevamientos;
 
 class CatalogoManager {
     
@@ -159,6 +160,16 @@ class CatalogoManager {
         $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
 
         return $arrEsJefeDe;
+    }
+
+    public function getRelevamientos($idRelevamiento = null){
+        if ($idRelevamiento){
+            $Relevamientos = $this->entityManager->getRepository(Relevamientos::class)->findOneBy(['id' => $idRelevamiento]);
+        }else{
+            $Relevamientos = $this->entityManager->getRepository(Relevamientos::class)->findAll();
+        }
+
+        return $Relevamientos;
     }
 
     /**

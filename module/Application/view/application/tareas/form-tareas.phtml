@@ -127,7 +127,7 @@ function seleccionarFormulario(){
     for (var i = 0; i < arrFormularioJSON.length; i++){
         var formulario = arrFormularioJSON[i];
 
-        if (formulario.idFormulario == tareasJson.formulario.idFormulario){
+        if (formulario.idFormulario == tareasJson.relevamiento.formulario.idFormulario){
             $('#formularioTarea').val(i);
             break;
         }

@@ -17,26 +17,17 @@ return [
             'formulario' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/formulario',
+                    'route'    => '/formulario[/:action[/:id]]',
                     'defaults' => [
                         'controller' => Controller\FormularioController::class,
                         'action'     => 'index',
                     ],
                 ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'show-form' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/show-form',
-                            'defaults' => [
-                                'controller' => Controller\FormularioController::class,
-                                'action'     => 'showForm',
-                            ],
-                        ],
-                        'may_terminate' => true,
-                    ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
                 ],
+                'may_terminate' => true,
             ],
         ],
     ],

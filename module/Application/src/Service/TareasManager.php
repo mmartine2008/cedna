@@ -4,6 +4,7 @@ namespace Application\Service;
 
 use DBAL\Entity\Tareas;
 use DBAL\Entity\EstadoTarea;
+use DBAL\Entity\Relevamientos;
 
 class TareasManager {
     
@@ -25,9 +26,21 @@ class TareasManager {
     }
 
     public function altaEdicionTareas($jsonData, $userName, $idTareas = null){
+        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
+
         if ($idTareas){
             $Tareas = $this->catalogoManager->getTareas($idTareas);
+
+            $Relevamiento = $Tareas->getRelevamiento();
+            $Relevamiento->setFormulario($Formulario);
+            $this->entityManager->persist($Relevamiento);
         }else{
+            $Relevamiento = new Relevamientos();
+            $Relevamiento->setFormulario($Formulario);
+            
+            $this->entityManager->persist($Relevamiento);
+            $this->entityManager->flush();
+
             $EstadoTarea = $this->catalogoManager->getEstadoTarea(EstadoTarea::ID_ESTADO_SOLICITADA);
             
             $Tareas = new Tareas();
@@ -37,13 +50,13 @@ class TareasManager {
             $Tareas->setSolicitante($UsuarioActivo);
             $Tareas->setFechaSolicitud(new \DateTime("now"));
             $Tareas->setEstadoTarea($EstadoTarea);
+            $Tareas->setRelevamiento($Relevamiento);
         }
 
         $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
         $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
 
         $Tareas->setNodo($Nodo);
-        $Tareas->setFormulario($Formulario);
         $Tareas->setResumen($jsonData->resumen);
         $Tareas->setDescripcion($jsonData->descripcion);
 
