@@ -1,10 +1,9 @@
 ALTER TABLE Respuesta 
-DROP CONSTRAINT FK_Respuesta_Tarea;
+DROP CONSTRAINT FK_Respuesta_Formulario;
 
 ALTER TABLE Respuesta
-DROP COLUMN IdTarea;
+DROP COLUMN IdFormulario;
 
--- Agrego la nueva columna
 ALTER TABLE Respuesta
 ADD IdRelevamiento INT NULL;
 
