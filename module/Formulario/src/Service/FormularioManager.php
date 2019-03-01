@@ -163,7 +163,6 @@ class FormularioManager {
         $Entidad->setRelevamiento($relevamiento);
         $Entidad->setDestino($destino);
         if($opcion){
-            // var_dump($opcion);
             $Entidad->setOpcion($opcion);
         } else {
             $Entidad->setDescripcion($respuesta);
@@ -205,7 +204,6 @@ class FormularioManager {
         // $formularioEnt = $this->getFormulario($idFormulario);
         $Tarea = $this->catalogoManager->getTareas($idTarea);
         $Relevamiento = $Tarea->getRelevamiento();
-        // var_dump($Tarea);
         foreach ($secciones as $seccion) {
             $idSeccion = $seccion->id;
             $seccionEnt = $this->getSeccion($idSeccion);

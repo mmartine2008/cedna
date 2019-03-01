@@ -113,10 +113,15 @@
         }
     }
 
-    function generateQuestionBlock(){
-//preguntar si la opcion genera respuesta y crearla bloqueada y 
-            //luego cuando hace click desbloquea y cuando hace click otro bloquea
+    function generateQuestionsBlock(preguntasGeneradas){
+        // recorre lista y genera todas las preguntas que debe generar pero bloquadas 
+        //(necesito div para insertar)
         
+    }
+
+    function blockUnlockQuestion(idOpcion, preguntasGeneradas) {
+        //consulto si esta opcion genera otras preguntas, si genera, desbloquea,
+        //sino, bloquea
     }
 
     function createListFromJSONLista(selector, lista, seleccione, preguntasGeneradas) {
@@ -127,6 +132,10 @@
             selector.appendChild(option);
         }
 
+        // if(preguntasGeneradas) { 
+        //         var optionGeneradora = generateQuestionsBlock(preguntasGeneradas);
+        // }
+
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
             item = lista[i];
@@ -134,10 +143,7 @@
             option.text = item.descripcion;
             option.title = item.descripcion;
             // if(preguntasGeneradas) { 
-            //     var optionGeneradora = generateQuestionBlock(item.id);
-            //     if(optionGeneradora) {
-            //         option.onclick = function() {unlockQuestion(item.id)};
-            //     }
+            //     option.onclick = function() {blockUnlockQuestion(item.id, preguntasGeneradas)};
             // }
             selector.appendChild(option);
         }
