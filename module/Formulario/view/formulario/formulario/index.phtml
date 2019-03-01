@@ -1,504 +1,95 @@
-<script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
-
-
-<div class="form-row" id="divFormulario">
-
-</div>
-<form method="post"  action="<?=$this->url("formulario/show-form",["action" => "showForm"])?>" name="formPerfil" >
-<div class="row col-lg-12">
-    <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
-        <input type="hidden" name="JsonData" id="JsonData">
-        <a href="#">
-            <button class="btn btn-primary margin-vertical-25" style="margin: 20px;" type="button">Cancelar</button>
-        </a>
-        <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Tareas</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaTareas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Resumen</th>
+                            <th class="text-center">Solicitante</th>
+                            <th class="text-center">Nodo</th>
+                            <th class="text-center">Estado</th>
+                            <th class="text-center">Fecha de Solicitud</th>
+                            <th class="text-center">Formulario</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTareas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div> 
-</form>
-
-
+</div>
 
 <script>
-    var formulario = <?= $formulario ?>;
+    var filaSeleccionada = -1;
+    var arrTareasJSON = <?= $arrTareasJSON; ?>;
 
-    function updateJson(idSeccion, idPregunta, respuesta) {
-        childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        preguntas[j].respuesta = respuesta ;
-                    }
-                }
-            }
-        }
-    }
+    $( document ).ready(function() {
+        dibujarTablaTareas();
+    });
 
-    function obtenerValoresSelector(id) {
-        var values = [];
-        var options =$('#'+id+' option');
-        for(var i=0; i < options.length; i++){
-            values.push(options[i].value);
-        }
-        return values;
-    }
-
-    function obtenerListaOpciones(lista){
-        var output = [];
-        for (var i=0; i < lista.length; i++) {
-            var item = lista[i];
-            var arreglo = []
-            arreglo.push(item.id);
-            arreglo.push(item.descripcion);
-            output.push(arreglo);
-        }
-        return output;
-    }
-
-    function obtenerOpcionesSelectorMultiple(idSelector, idSeccion, idPregunta){
-        var output = [];
-        var childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        var resp = preguntas[j].respuesta;
-                        for (var k = 0; k < resp.length; k++){
-                            if(resp[k].destino == idSelector) {
-                                var opciones = resp[k].opcion;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return opciones;
-    }
-
-    function crearJSONOpciones(opciones){
-        var array = [];
-        for(var i=0 ; i < opciones.length; i++){
-            array.push('{"id": "' + opciones[i][0] +'", "descripcion": "' + opciones[i][1] +'" }');
-        }
-        array.join(',');
-        return '[' + array + ']';
-    }
-
-    function updateJsonRespuestaSelector(idSelector, opciones, idSeccion, idPregunta, borrarAnteriores) {
-        var childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        var resp = preguntas[j].respuesta;
-                        for (var k = 0; k < resp.length; k++){
-                            if(resp[k].destino == idSelector) {
-                                jsonOption = crearJSONOpciones(opciones);
-                                var obj = JSON.parse(jsonOption);
-                                if(!borrarAnteriores){
-                                    opcionesAnt = resp[k].opcion;
-                                    for (var z = 0; z < opcionesAnt.length; z++){
-                                        obj.push(opcionesAnt[z]);
-                                    }
-                                }
-                                resp[k].opcion = obj;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    function updateIdDestinoJsonSelectores(idSeccion, idPregunta) {
-        var childs = formulario.secciones;
-        for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var preguntas = childs[i].preguntas;
-                for (var j = 0; j < preguntas.length; j++){
-                    if(preguntas[j].idPregunta == idPregunta){
-                        var resp = preguntas[j].respuesta;
-                        for (var k = 0; k < resp.length; k++){
-                            var idSelectorJSON = resp[k].destino+"_seccion_"+idSeccion;
-                            resp[k].destino = idSelectorJSON;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    function createListFromJSONLista(selector, lista, seleccione) {
-        if (seleccione){
-            var option = document.createElement("option");
-            option.value =  -1;
-            option.title = 'Seleccione';
-            option.text = 'Seleccione';
-            selector.appendChild(option);
-        }
-        // var optionGeneradora = null;
-        // if(preguntaGeneradora) {
-        //      optionGeneradora = preguntaGeneradora.opcion;
-        // }
-        // console.log(optionGeneradora);
-        for (var i=0; i < lista.length; i++) {
-            var option = document.createElement("option");
-            option.value = lista[i][0];
-            option.text = lista[i][1];
-            option.title = lista[i][1];
-            selector.appendChild(option);
-        }
-        return selector;
-    }
-
-    function updateJsonSimple(idSeccion, idPregunta, idRespuesta) {
-        var respuesta = $("#"+idRespuesta).val();
-        console.log(respuesta);
-        updateJson(idSeccion, idPregunta, respuesta);
-    }
-
-    function createSimpleSelector(id, opciones, divElement, idSeccion) {
-        var selector = document.createElement("select");
-        var idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
-        selector.id = idSelector;
-        var opc = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, opc, true);
-        selector.onchange = function() {updateJsonSimple(idSeccion, id, idSelector)};
-        divElement.appendChild(selector);
-    }
-
-    function createMultipleSelector(id, divElement, size, idPregunta, idSeccion) {
-        var selector = document.createElement("select");
-        selector.name = name;
-        idSelector = id+idPregunta+"_seccion_"+idSeccion;
-        selector.id = idSelector;
-        selector.multiple = true;
-        selector.className = "form-control";
-        selector.size = size;
-        selector.style.marginBottom = "5px";
-        var opciones = obtenerOpcionesSelectorMultiple(idSelector, idSeccion, idPregunta);
-        var listaOpciones = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, listaOpciones, false);
-        divElement.appendChild(selector);
-    }
-
-    function createDivClass(info, div) {
-        var divClass = document.createElement("Div");
-        divClass.classList = info;
-        div.appendChild(divClass);
-        return divClass;
-    }
-
-    function createDivClassSelectMultiple(info, div) {
-        var divClass = document.createElement("Div");
-        divClass.classList = info;
-        // divClass.style="overflow-x:scroll; width:200px;overflow: -moz-scrollbars-horizontal;";
-        div.appendChild(divClass);
-        return divClass;
-    }
-
-    function obtenerElementosNoSeleccionados(selectOrigen){
-        var notSelected = [];
-        for (var i = 0; i < selectOrigen.length; i++) {
-            if (!selectOrigen.options[i].selected) {
-                var array = [];
-                array.push(selectOrigen.options[i].value);
-                array.push(selectOrigen.options[i].text);
-                notSelected.push(array);
-            }
-        }
-        return notSelected;
-    }
-
-    function deleteOptionsSelectorOrigen(origin, idPregunta, idSeccion) {
-        var selectOrigen = document.getElementById(origin);
-        var notSelected = [];
-        for (var i = 0; i < selectOrigen.length; i++) {
-            if (!selectOrigen.options[i].selected) {
-                var array = [];
-                array.push(selectOrigen.options[i].value);
-                array.push(selectOrigen.options[i].text);
-                notSelected.push(array);
-            }
-        }
-        updateJsonRespuestaSelector(origin, notSelected, idSeccion, idPregunta, true);
-        removeAllOptionSelector(origin);
-        var opciones = obtenerOpcionesSelectorMultiple(origin, idSeccion, idPregunta); 
-        var listaOpciones = obtenerListaOpciones(opciones);
-        createListFromJSONLista(selectOrigen, listaOpciones, false);
-        return selectOrigen;
-    }
-
-    function obtenerElementosSeleccionados(idSelectorOrigen){
-        var select1 = document.getElementById(idSelectorOrigen);
-        var options = [];
-        for (var i = 0; i < select1.length; i++) {
-            if (select1.options[i].selected) {
-                var array = [];
-                array.push(select1.options[i].value);
-                array.push(select1.options[i].text);
-                options.push(array);
-            }
-        }
-        return options;
-    }
-
-    function manageButtons(idPregunta, idSeccion, cantDestinos){
-        for(var i=1; i <= cantDestinos; i++){ 
-            if($("#destino_0_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
-                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
-            } else {
-                $("#button_"+i+"_R_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
-            }
-            if($("#destino_"+i+"_id_"+idPregunta+"_seccion_"+idSeccion+' option').length == 0){
-                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', true);
-            } else {
-                $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
-            }
-        }
-    }
+    function dibujarTablaTareas(){
+        $('#bodyTareas').find('tr').remove();
     
-    function insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
-        var idSelectorOrigen = origin+idPregunta+"_seccion_"+idSeccion;
-        var options = obtenerElementosSeleccionados(idSelectorOrigen);
-        var optionOrigin = deleteOptionsSelectorOrigen(idSelectorOrigen, idPregunta, idSeccion);
+        for (var i = 0; i < arrTareasJSON.length; i++)
+        {
+            var tarea = arrTareasJSON[i];
 
-        var idSelectDestino = destination+idPregunta+"_seccion_"+idSeccion;
-        var selectIn = document.getElementById(idSelectDestino);
-        
-        updateJsonRespuestaSelector(idSelectDestino, options, idSeccion, idPregunta, false);
-        var opciones = obtenerOpcionesSelectorMultiple(idSelectDestino, idSeccion, idPregunta);
-        var listaOpciones = obtenerListaOpciones(opciones);
-        removeAllOptionSelector(idSelectDestino);
-        createListFromJSONLista(selectIn, listaOpciones, false);
-        manageButtons(idPregunta, idSeccion, cantDestinos);
-    }
+            var body = document.getElementById("bodyTareas");
+            var row = body.insertRow();
+            row.id = i;
 
-    function createButton(infoType, id, title, divElement, icon, disabled, origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino){
-        var button = document.createElement("button");
-        button.type = infoType;
-        button.id = id;
-        button.title = title;
-        button.className = "btn btn-primary";
-        button.textContent = icon;
-        button.disabled = disabled;
-        button.style.marginTop = "15px";
-        button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino)};
-        // var icono = document.createElement("i");
-        // icono.className = "fas fa-angle-left";
-        // button.appendChild(icono);
-        divElement.appendChild(button, id);
-    }
+            var resumen = row.insertCell(0);
+            var solicitante = row.insertCell(1);
+            var nodo = row.insertCell(2);
+            var estado = row.insertCell(3);
+            var fecha = row.insertCell(4);
+            var formulario = row.insertCell(5);
 
-    function removeAllOptionSelector(origin){
-        $('#'+origin).find('option')
-            .remove()
-            .end();
-    }
+            resumen.innerHTML = tarea.resumen;
+            solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
+            nodo.innerHTML = tarea.nodo.nombre;
+            estado.innerHTML = tarea.estadoTarea.descripcion;
 
-    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
-        var divRow = createDivClass("row col-sm-9", divElement);
-        var div_class_sm_3 = createDivClassSelectMultiple("col-sm-5", divRow);
-        updateIdDestinoJsonSelectores(idSeccion, idPregunta);
+            //var date = new Date(tarea.fechaSolicitud);
 
-        createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
-
-        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
-        var div_class_sm_3_2 = createDivClassSelectMultiple("col-sm-5", divRow);
-        for(var i=1; i <= cantDestinos; i++){
-            createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
-            createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
-
-            createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
+            fecha.innerHTML = tarea.fechaSolicitud;
+            formulario.innerHTML = tarea.relevamiento.formulario.nombre;
         }
     }
 
-    function createInput(infoType, idPregunta, divElement, idSeccion){
-        
-        ele = document.createElement('input');
-        ele.type = infoType;
-        var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
-        ele.name = idEle;
-        ele.id = idEle;
-        ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
-        // accept = getInputAccept(item);
-        // ele.accept= accept;
-        // ele.accept="image/png, image/jpeg"
+    $(function() {
+        $('#tablaTareas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
 
-        var div = createDivClass("text-right", divElement);
-        divElement.appendChild(ele);
-    } 
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
 
-    function createOptions(item, divElement, idSeccion){
-        if(item.tipoPregunta.descripcion == 'simple'){
-            var opciones = item.opciones;
-            // var preguntaGeneradora = null;
-            // if(item.generaPregunta == '1'){
-            //     var preguntaGeneradora = item.preguntaGeneradora;
-            // }
-            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
-        } else {
-                var cantDestinos = item.cantDestinos;
-                createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
-        } 
-    }
-
-    function createTextArea(item, divElement, idSeccion){
-        var div = createDivClass("col-sm-3 text-right", divElement);
-        ele = document.createElement('textarea');
-        var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
-        ele.name = id;
-        ele.id = id;
-        ele.className = "form-control";
-        div.appendChild(ele);
-        ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
-    }
-
-    function createImage(item, divElement, idSeccion){
-        var div = createDivClass("text-right", divElement);
-        ele = document.createElement('img');
-        ele.src = "#";
-        var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
-        ele.name = id;
-        ele.id = id;
-        div.appendChild(ele);
-    }
-    
-    function createAnswer(item, divElement, idSeccion){
-        if (item.cerrada == '1'){
-            createOptions(item, divElement, idSeccion);
-        } else {
-            if(item.tipoPregunta.descripcion == 'image'){
-                createImage(item, divElement, idSeccion);
-            } else if(item.tipoPregunta.descripcion == 'textarea'){
-                createTextArea(item, divElement, idSeccion);
-            } else {
-                createInput(item.tipoPregunta.descripcion, item.idPregunta, divElement, idSeccion);
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
             }
+        });
+    });
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var tarea = arrTareasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/formulario/cargar/" + tarea.id);
+        }else{
+            swal('Tarea no seleccionado',
+                'Por favor seleccione la tarea que desea editar',
+                'error');
         }
     }
 
-    function createTextElement(type, div, info){
-        var element = document.createElement(type);
-        var text = document.createTextNode(info);
-        element.appendChild(text);
-        div.appendChild(element);
-    }
-
-    function createQuestions(item, divElement){
-
-        preguntas = item.preguntas;
-        for (var i = 0; i < preguntas.length; i++){
-            var div = document.createElement("Div");
-            div.className='form-row';
-            div.style.padding = "15px";
-            divElement.appendChild(div);
-            var item2 = preguntas[i];
-            var divText = createDivClass("col-sm-3 text-right", div);
-            var text = item2.descripcion;
-            if(text) text = text+": ";
-            createTextElement("P", divText, text);
-            createAnswer(item2, div, item.id);
-        }
-    }
-
-    function crearItemSeccion(item, contenedor, active){
-        // Creating a div element
-        var divElement = document.createElement("Div");
-        divElement.id = "Seccion_id_"+item.id;
-        divElement.style.padding = "10px";
-
-        if(active){
-            var clases = "form-group tab-pane container active";
-        } else {
-            var clases = "form-group tab-pane container fade";
-        }
-        divElement.classList= clases;
-        divElement.style.textAlign = "lefth";
-
-        var divSeccion = createDivClass("row", divElement);
-        var div_class_sm_4 = createDivClass("col-sm-4", divSeccion);
-        createTextElement("h5", div_class_sm_4, item.descripcion);
-
-        createQuestions(item, divElement);
-        contenedor.appendChild(divElement);
-        
-        return divElement;
-    }
-
-    function createLiNav(navPills, item, active) {
-        var liNav = document.createElement("li");
-        
-        liNav.className = " nav-item";
-        navPills.appendChild(liNav);
-
-
-        var aNav = document.createElement("a");
-        aNav.href = "#Seccion_id_"+item.id;
-        if(active) {
-            aNav.classList="nav-link active";
-        } else {
-            aNav.classList="nav-link";
-        }
-        aNav.classList="nav-link";
-        aNav.setAttribute("data-toggle", "tab");
-        liNav.appendChild(aNav);
-
-        createTextElement("p", aNav, item.nombre);
-    }
-
-    function construirSecciones(childs, contenedor){
-        var navPills = document.createElement("ul");
-        navPills.classList = "nav nav-tabs";
-        contenedor.appendChild(navPills);
-
-        createLiNav(navPills, childs[0], true);
-
-        for (var j = 1; j < childs.length; j++){
-            var item = childs[j];
-            createLiNav(navPills, item, false);  
-        }
-
-        var divElement = document.createElement("Div");
-        divElement.classList="tab-content";
-        contenedor.appendChild(divElement);
-
-        var item = childs[0];
-        var itemSeccion = crearItemSeccion(item, contenedor, true);
-        divElement.appendChild(itemSeccion);
-
-        for (var i = 1; i < childs.length; i++){
-
-            var item = childs[i];
-            var itemSeccion = crearItemSeccion(item, contenedor, false);
-            divElement.appendChild(itemSeccion);
-        }
-    }
-
-    function updateInput() {
-        data = JSON.stringify(formulario);
-        $("#JsonData").val(data);
-        console.log($("#JsonData").val());
-    }
-
-    function createFormulario(){
-        var contenedor = document.getElementById("divFormulario");
-
-        var divFormulario = document.createElement("Div");
-        divFormulario.id = "Formulario_id_"+formulario.idFormulario;
-        divFormulario.className="container";
-        divFormulario.style.paddingTop = "15px";
-        createTextElement("h4", divFormulario, formulario.descripcion);
-        contenedor.appendChild(divFormulario);
-
-        construirSecciones(formulario.secciones, divFormulario);
-    }
-
-    createFormulario();
-</script>
-
-
-
+  </script>

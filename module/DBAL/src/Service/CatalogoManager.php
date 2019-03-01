@@ -15,6 +15,8 @@ use DBAL\Entity\TipoJefe;
 use DBAL\Entity\esJefeDe;
 use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Tareas;
+use DBAL\Entity\Formulario;
+use DBAL\Entity\Relevamientos;
 
 class CatalogoManager {
     
@@ -68,6 +70,12 @@ class CatalogoManager {
         }else{
             $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findAll();
         }
+
+        return $Usuarios;
+    }
+
+    public function getUsuarioPorNombreUsuario($userName){
+        $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['NombreUsuario' => $userName]);
 
         return $Usuarios;
     }
@@ -132,6 +140,16 @@ class CatalogoManager {
         return $Tareas;
     }
 
+    public function getFormulario($idFormulario = null){
+        if ($idFormulario){
+            $Formulario = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormulario]);
+        }else{
+            $Formulario = $this->entityManager->getRepository(Formulario::class)->findAll();
+        }
+
+        return $Formulario;
+    }
+
     public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
         $EsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Usuario' => $Usuario]);
 
@@ -142,6 +160,36 @@ class CatalogoManager {
         $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findBy(['Nodo' => $Nodo]);
 
         return $arrEsJefeDe;
+    }
+
+    public function getRelevamientos($idRelevamiento = null){
+        if ($idRelevamiento){
+            $Relevamientos = $this->entityManager->getRepository(Relevamientos::class)->findOneBy(['id' => $idRelevamiento]);
+        }else{
+            $Relevamientos = $this->entityManager->getRepository(Relevamientos::class)->findAll();
+        }
+
+        return $Relevamientos;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades Formulario
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrFormularioJSON(){
+        $arrFormulario = $this->getFormulario();
+
+        $output = [];
+        
+        foreach($arrFormulario as $Formulario){
+            $output[] = $Formulario->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
     /**

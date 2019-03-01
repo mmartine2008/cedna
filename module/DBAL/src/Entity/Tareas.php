@@ -36,10 +36,10 @@ class Tareas
     protected $EstadoTarea;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Formulario")
-     * @ORM\JoinColumn(name="IdFormulario", referencedColumnName="IdFormulario")
+     * @ORM\ManyToOne(targetEntity="Relevamientos")
+     * @ORM\JoinColumn(name="IdRelevamiento", referencedColumnName="IdRelevamiento")
      */
-    protected $Formulario;
+    protected $Relevamiento;
 
     /**
      * @ORM\Column(name="FechaSolicitud")
@@ -71,9 +71,9 @@ class Tareas
         $this->EstadoTarea = $EstadoTarea;
     }
 
-    public function setFormulario($Formulario)
+    public function setRelevamiento($Relevamiento)
     {
-        $this->Formulario = $Formulario;
+        $this->Relevamiento = $Relevamiento;
     }
 
     public function setFechaSolicitud($FechaSolicitud)
@@ -111,14 +111,19 @@ class Tareas
         return $this->EstadoTarea;
     }
 
-    public function getFormulario()
+    public function getRelevamiento()
     {
-        return $this->Formulario;
+        return $this->Relevamiento;
     }
 
     public function getFechaSolicitud()
     {
-        return $this->FechaSolicitud;
+        if (is_string($this->FechaSolicitud)){
+            $fecha = date("d-m-Y", strtotime($this->FechaSolicitud));
+            return $fecha;
+        }else{
+            return $this->FechaSolicitud->format('d-m-Y');
+        }
     }
 
     public function getDescripcion()
@@ -138,7 +143,7 @@ class Tareas
         $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
         $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
         $output .= '"estadoTarea": ' . $this->getEstadoTarea()->getJSON() .', ';
-        $output .= '"formulario": ' . $this->getFormulario()->getJSON() .', ';
+        $output .= '"relevamiento": ' . $this->getRelevamiento()->getJSON() .', ';
         $output .= '"fechaSolicitud": "' . $this->getFechaSolicitud() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"resumen": "' . $this->getResumen() .'"';
