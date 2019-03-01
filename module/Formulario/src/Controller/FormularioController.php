@@ -21,20 +21,29 @@ class FormularioController extends CednaController
     }
 
     public function indexAction() {
-        $this->cargarAccionesDisponibles('Formulario');
-        $OperacionesJSON = $this->recuperarOperacionesIniciales('Formulario');
-        $idFormulario = 1;
-        $formularioJSON = $this->FormularioManager->getFormularioJSON($idFormulario);
+        $this->cargarAccionesDisponibles('formularios');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios');
 
+        //Actualmente mostrará todas las tareas creadas sin filtro alguno
+        $arrTareasJSON = $this->catalogoManager->getArrTareasJSON();
 
-        // $this->layout()->arrAccionesDisponibles = '{}';
+        return new ViewModel([
+            "OperacionesJSON" => $OperacionesJSON,
+            'arrTareasJSON' => $arrTareasJSON
+        ]);
+    }
 
-        // return new ViewModel([
-        //     "formulario" => $formularioJSON,
-            
+    public function cargarAction(){
+        $this->cargarAccionesDisponibles('formularios - cargar');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - cargar');
+        
+        $parametros = $this->params()->fromRoute();
+        $idTarea = $parametros['id'];
+        $Tarea = $this->catalogoManager->getTareas($idTarea);
+        $Formulario = $Tarea->getRelevamiento()->getFormulario();
         
         return new ViewModel([
-            "formulario" => $formularioJSON,
+            "formulario" => $this->FormularioManager->getJSONActualizado($Formulario),
             "OperacionesJSON" => $OperacionesJSON,
         ]);
     }
