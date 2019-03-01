@@ -48,8 +48,7 @@ class Respuesta
     protected $relevamiento;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Opcion")
-     * @ORM\JoinColumn(name="IdOpcion", nullable=true, referencedColumnName="IdOpcion")
+     * @ORM\Column(name="IdOpcion",  nullable=true, type="integer")
      */
     protected $opcion;
 
@@ -142,25 +141,6 @@ class Respuesta
         return $this;
     }
 
-    /**
-     * Get the value of opcion
-     */ 
-    public function getOpcion()
-    {
-        return $this->opcion;
-    }
-
-    /**
-     * Set the value of opcion
-     *
-     * @return  self
-     */ 
-    public function setOpcion($opcion)
-    {
-        $this->opcion = $opcion;
-
-        return $this;
-    }
 
     /**
      * Get the value of seccion
@@ -222,6 +202,27 @@ class Respuesta
         return $this;
     }
 
+
+    /**
+     * Get the value of opcion
+     */ 
+    public function getOpcion()
+    {
+        return $this->opcion;
+    }
+
+    /**
+     * Set the value of opcion
+     *
+     * @return  self
+     */ 
+    public function setOpcion($opcion)
+    {
+        $this->opcion = $opcion;
+
+        return $this;
+    }
+
     public function poseeMultiplesDestinos(){
         $this->getPregunta()->getTipoPregunta()->esPeguntaMultiple();
     }
@@ -233,16 +234,17 @@ class Respuesta
         $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
         $output .= '"seccion": "' . $this->getSeccion()->getId() .'", ';
         $output .= '"relevamiento": "' . $this->getRelevamiento()->getId() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
+       
         if ($this->getPermiso()) {
-            ', '.$output .= '"permiso": ' . $this->getPermiso()->getJSON().'"' ;
+             $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
         }
         if ($this->getOpcion()) {
-            ', '. $output .= '"opcion": ' . $this->getOpcion()->getJSON().'"';
+            $output .= '"opcion": "' . $this->getOpcion().'", ';
             if ($this->getPregunta()->getTipoPregunta()->esPeguntaMultiple()) {
-                ', '. $output .= '"destino": ' . $this->getDestino().'"';
+                $output .= '"destino": "' . $this->getDestino().'", ';
             }
         }
+        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         return '{' . $output . '}';
     }
 

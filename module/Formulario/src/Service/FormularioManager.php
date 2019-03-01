@@ -156,14 +156,6 @@ class FormularioManager {
         return true;
     }
 
-    public function preguntaTieneOpciones($pregunta){
-        $opciones = $this->getPreguntaOpcion($pregunta);
-        if ($opciones) {
-            return true;
-        }
-        return false;
-    }
-
     public function altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
@@ -171,8 +163,8 @@ class FormularioManager {
         $Entidad->setRelevamiento($relevamiento);
         $Entidad->setDestino($destino);
         if($opcion){
-            $opcionEnt = $this->getOpcion($opcion);
-            $Entidad->setOpcion($opcionEnt);
+            // var_dump($opcion);
+            $Entidad->setOpcion($opcion);
         } else {
             $Entidad->setDescripcion($respuesta);
         }
@@ -227,8 +219,8 @@ class FormularioManager {
                         $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
                     } else {
                         $opcion = null;
-                        if ($this->preguntaTieneOpciones($preguntaEnt)) {
-                            $opcion = $this->getOpcion($respuesta);
+                        if ($preguntaEnt->tieneOpciones()) {
+                            $opcion = $respuesta;
                         }   
                         $this->altaRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
                     }

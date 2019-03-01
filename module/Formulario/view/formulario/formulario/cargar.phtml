@@ -113,31 +113,32 @@
         }
     }
 
-    function createListFromJSONLista(selector, lista, seleccione) {
+    function generateQuestionBlock(){
+//preguntar si la opcion genera respuesta y crearla bloqueada y 
+            //luego cuando hace click desbloquea y cuando hace click otro bloquea
+        
+    }
+
+    function createListFromJSONLista(selector, lista, seleccione, preguntasGeneradas) {
         if (seleccione){
             var option = document.createElement("option");
             option.value =  -1;
             option.text = 'Seleccione';
             selector.appendChild(option);
         }
-        
-        // console.log(optionGeneradora);
+
         for (var i=0; i < lista.length; i++) {
-            var optionGeneradora = null;
-            //preguntar si la opcion genera respuesta y crearla bloqueada y 
-            //luego cuando hace click desbloquea y cuando hace click otro bloquea
-        // if(preguntaGeneradora) { 
-        //      optionGeneradora = preguntaGeneradora.opcion;
-        //      generateQuestionBlock(preguntaGeneradora.)
-        // }
             var option = document.createElement("option");
             item = lista[i];
             option.value = item.id;
             option.text = item.descripcion;
             option.title = item.descripcion;
-            if(optionGeneradora) {
-                option.onclick = function() {generateQuestion(idSeccion, id, idSelector)};
-            }
+            // if(preguntasGeneradas) { 
+            //     var optionGeneradora = generateQuestionBlock(item.id);
+            //     if(optionGeneradora) {
+            //         option.onclick = function() {unlockQuestion(item.id)};
+            //     }
+            // }
             selector.appendChild(option);
         }
         return selector;
@@ -169,7 +170,7 @@
         selector.size = size;
         selector.style.marginBottom = "5px";
         var opciones = obtenerOpcionesSelectorMultiple(idSelector, idSeccion, idPregunta);
-        var selector = createListFromJSONLista(selector, opciones, false);
+        var selector = createListFromJSONLista(selector, opciones, false, null);
         divElement.appendChild(selector);
     }
 
@@ -207,7 +208,7 @@
         updateJsonRespuestaSelector(origin, notSelected, idSeccion, idPregunta, true);
         removeAllOptionSelector(origin);
         var opciones = obtenerOpcionesSelectorMultiple(origin, idSeccion, idPregunta); 
-        createListFromJSONLista(selectOrigen, opciones, false);
+        createListFromJSONLista(selectOrigen, opciones, false, null);
         return selectOrigen;
     }
 
@@ -251,7 +252,7 @@
         updateJsonRespuestaSelector(idSelectDestino, options, idSeccion, idPregunta, false);
         var opciones = obtenerOpcionesSelectorMultiple(idSelectDestino, idSeccion, idPregunta);
         removeAllOptionSelector(idSelectDestino);
-        createListFromJSONLista(selectIn, opciones, false);
+        createListFromJSONLista(selectIn, opciones, false, null);
         manageButtons(idPregunta, idSeccion, cantDestinos);
     }
 
