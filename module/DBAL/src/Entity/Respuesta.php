@@ -42,10 +42,10 @@ class Respuesta
     protected $seccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Tareas")
-     * @ORM\JoinColumn(name="IdTarea", nullable=true, referencedColumnName="IdTarea")
+     * @ORM\ManyToOne(targetEntity="Relevamientos")
+     * @ORM\JoinColumn(name="IdRelevamiento", nullable=true, referencedColumnName="IdRelevamiento")
      */
-    protected $tarea;
+    protected $relevamiento;
 
     /**
      * @ORM\ManyToOne(targetEntity="Opcion")
@@ -183,21 +183,21 @@ class Respuesta
     }
 
     /**
-     * Get the value of tarea
+     * Get the value of relevamiento
      */ 
-    public function getTarea()
+    public function getRelevamiento()
     {
-        return $this->tarea;
+        return $this->relevamiento;
     }
 
     /**
-     * Set the value of tarea
+     * Set the value of relevamiento
      *
      * @return  self
      */ 
-    public function setTarea($tarea)
+    public function setRelevamiento($relevamiento)
     {
-        $this->tarea = $tarea;
+        $this->relevamiento = $relevamiento;
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Respuesta
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
         $output .= '"seccion": "' . $this->getSeccion()()->getId() .'", ';
-        $output .= '"tarea": "' . $this->getTarea()->getId() .'", ';
+        $output .= '"relevamiento": "' . $this->getRelevamiento()->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         if ($this->getPermiso()) {
             ', '.$output .= '"permiso": ' . $this->getPermiso()->getJSON().'"' ;

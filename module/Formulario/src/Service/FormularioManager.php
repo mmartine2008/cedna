@@ -164,11 +164,11 @@ class FormularioManager {
         return false;
     }
 
-    public function altaRespuesta($pregunta, $seccion, $tarea, $respuesta, $destino, $opcion) {
+    public function altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
         $Entidad->setSeccion($seccion);
-        $Entidad->setTarea($tarea);
+        $Entidad->setRelevamiento($relevamiento);
         $Entidad->setDestino($destino);
         if($opcion){
             $opcionEnt = $this->getOpcion($opcion);
@@ -180,11 +180,11 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
-    public function altaRespuestasDestino($pregunta, $seccion, $tarea, $respuesta, $listaDestinos){
+    public function altaRespuestasDestino($pregunta, $seccion, $Relevamiento, $respuesta, $listaDestinos){
         foreach($listaDestinos as $item) {
             $destino = $item[0];
             $opcion = $item[1]->id;
-            $this->altaRespuesta($pregunta, $seccion, $tarea, $respuesta, $destino, $opcion);
+            $this->altaRespuesta($pregunta, $seccion, $Relevamiento, $respuesta, $destino, $opcion);
         }
     }
 
@@ -212,6 +212,7 @@ class FormularioManager {
         // $idFormulario = $datos->idFormulario;
         // $formularioEnt = $this->getFormulario($idFormulario);
         $Tarea = $this->catalogoManager->getTareas($idTarea);
+        $Relevamiento = $Tarea->getRelevamiento();
         // var_dump($Tarea);
         foreach ($secciones as $seccion) {
             $idSeccion = $seccion->id;
@@ -223,13 +224,13 @@ class FormularioManager {
                     $preguntaEnt = $this->getPregunta($idPregunta);
                     $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
                     if ($listaOpcionDestino){
-                        $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Tarea, $respuesta, $listaOpcionDestino);
+                        $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
                     } else {
                         $opcion = null;
                         if ($this->preguntaTieneOpciones($preguntaEnt)) {
                             $opcion = $this->getOpcion($respuesta);
                         }   
-                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $Tarea, $respuesta, null, $opcion);
+                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
                     }
                 }
             }
