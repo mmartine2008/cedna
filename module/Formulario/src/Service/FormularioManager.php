@@ -9,7 +9,6 @@ use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
-use Zend\Console\Console;
 
 
 class FormularioManager {
@@ -165,14 +164,12 @@ class FormularioManager {
         return false;
     }
 
-    public function altaRespuesta($pregunta, $seccion, $formulario,$respuesta, $destino, $opcion) {
+    public function altaRespuesta($pregunta, $seccion, $tarea, $respuesta, $destino, $opcion) {
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
         $Entidad->setSeccion($seccion);
-        $Entidad->setFormulario($formulario);
-        if($destino) {
-            $Entidad->setDestino($destino);
-        }
+        $Entidad->setTarea($tarea);
+        $Entidad->setDestino($destino);
         if($opcion){
             $opcionEnt = $this->getOpcion($opcion);
             $Entidad->setOpcion($opcionEnt);
@@ -183,11 +180,11 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
-    public function altaRespuestasDestino($pregunta, $seccion, $formulario,$respuesta, $listaDestinos){
+    public function altaRespuestasDestino($pregunta, $seccion, $tarea, $respuesta, $listaDestinos){
         foreach($listaDestinos as $item) {
             $destino = $item[0];
             $opcion = $item[1]->id;
-            $this->altaRespuesta($pregunta, $seccion, $formulario,$respuesta, $destino, $opcion);
+            $this->altaRespuesta($pregunta, $seccion, $tarea, $respuesta, $destino, $opcion);
         }
     }
 
@@ -210,10 +207,12 @@ class FormularioManager {
         return $output;
     }
 
-    public function altaRespuestasFormulario($datos) {
+    public function altaRespuestasFormulario($datos, $idTarea) {
         $secciones = $datos->secciones;
-        $idFormulario = $datos->idFormulario;
-        $formularioEnt = $this->getFormulario($idFormulario);
+        // $idFormulario = $datos->idFormulario;
+        // $formularioEnt = $this->getFormulario($idFormulario);
+        $Tarea = $this->catalogoManager->getTareas($idTarea);
+        // var_dump($Tarea);
         foreach ($secciones as $seccion) {
             $idSeccion = $seccion->id;
             $seccionEnt = $this->getSeccion($idSeccion);
@@ -224,13 +223,13 @@ class FormularioManager {
                     $preguntaEnt = $this->getPregunta($idPregunta);
                     $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
                     if ($listaOpcionDestino){
-                        $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, $listaOpcionDestino);
+                        $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Tarea, $respuesta, $listaOpcionDestino);
                     } else {
                         $opcion = null;
                         if ($this->preguntaTieneOpciones($preguntaEnt)) {
                             $opcion = $this->getOpcion($respuesta);
                         }   
-                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $formularioEnt,$respuesta, null, $opcion);
+                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $Tarea, $respuesta, null, $opcion);
                     }
                 }
             }

@@ -44,7 +44,8 @@ class FormularioController extends CednaController
         if ($this->getRequest()->isPost()) {
             $JsonData = $this->params()->fromPost();
             $data = json_decode($JsonData['JsonData']);
-            $this->FormularioManager->altaRespuestasFormulario($data);
+            $this->FormularioManager->altaRespuestasFormulario($data, $idTarea);
+            $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
         $Formulario = $Tarea->getRelevamiento()->getFormulario();

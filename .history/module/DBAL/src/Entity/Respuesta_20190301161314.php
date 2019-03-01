@@ -42,10 +42,10 @@ class Respuesta
     protected $seccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Formulario")
-     * @ORM\JoinColumn(name="IdFormulario", nullable=true, referencedColumnName="IdFormulario")
+     * @ORM\ManyToOne(targetEntity="Tareas")
+     * @ORM\JoinColumn(name="IdTarea", nullable=true, referencedColumnName="IdTarea")
      */
-    protected $formulario;
+    protected $tarea;
 
     /**
      * @ORM\ManyToOne(targetEntity="Opcion")
@@ -183,21 +183,21 @@ class Respuesta
     }
 
     /**
-     * Get the value of formulario
+     * Get the value of tarea
      */ 
-    public function getFormulario()
+    public function getTarea()
     {
-        return $this->formulario;
+        return $this->tarea;
     }
 
     /**
-     * Set the value of formulario
+     * Set the value of tarea
      *
      * @return  self
      */ 
-    public function setFormulario($formulario)
+    public function setTarea($tarea)
     {
-        $this->formulario = $formulario;
+        $this->tarea = $tarea;
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Respuesta
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
         $output .= '"seccion": "' . $this->getSeccion()()->getId() .'", ';
-        $output .= '"formulario": "' . $this->getFormulario()->getId() .'", ';
+        $output .= '"tarea": "' . $this->getTarea()->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         if ($this->getPermiso()) {
             ', '.$output .= '"permiso": ' . $this->getPermiso()->getJSON().'"' ;
@@ -245,4 +245,5 @@ class Respuesta
         }
         return '{' . $output . '}';
     }
+
 }
