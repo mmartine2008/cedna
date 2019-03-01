@@ -16,6 +16,7 @@ SET Funcion='getElementosProteccionPersonal'
 WHERE IdPregunta=8 ;
 UPDATE cedna.dbo.Pregunta
 SET Funcion='getRiesgosAmbientales'
+
 WHERE IdPregunta=9 ;
 UPDATE cedna.dbo.Pregunta
 SET Funcion='getRiesgosAdicionales'
