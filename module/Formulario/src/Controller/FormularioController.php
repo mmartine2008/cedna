@@ -40,6 +40,8 @@ class FormularioController extends CednaController
         $parametros = $this->params()->fromRoute();
         $idTarea = $parametros['id'];
         $Tarea = $this->catalogoManager->getTareas($idTarea);
+        // var_dump($Tarea->getRelevamiento()->getRespuestas());
+        // die;
 
         if ($this->getRequest()->isPost()) {
             $JsonData = $this->params()->fromPost();

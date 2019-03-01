@@ -109,7 +109,7 @@ class Operarios
         $output .= '"apellido": "' . $this->getApellido() .'", ';
         $output .= '"cuit": "' . $this->getCuit() .'", ';
         $output .= '"telefono": "' . $this->getTelefono() .'", ';
-        $output .= '"email": "' . $this->getEmail() .'", ';
+        $output .= '"email": "' . $this->getEmail() .'"';
         
         return '{' . $output . '}';
     }

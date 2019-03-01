@@ -140,7 +140,7 @@ class OperacionAccionPerfil
         $output .= '"jsFunction": "' . $this->getJsFunction() .'", ';
         $output .= '"ordenUbicacion": "' . $this->getOrdenUbicacion() .'", ';
         $output .= '"urlDestino": "' . $this->getUrlDestino() .'", ';
-        $output .= '"idHTMLElement": "' . $this->getIdHTMLElement() .'", ';
+        $output .= '"idHTMLElement": "' . $this->getIdHTMLElement() .'"';
         
         return '{' . $output . '}';
     }

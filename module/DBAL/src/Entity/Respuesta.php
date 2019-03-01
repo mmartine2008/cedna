@@ -231,7 +231,7 @@ class Respuesta
         $output = "";
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
-        $output .= '"seccion": "' . $this->getSeccion()()->getId() .'", ';
+        $output .= '"seccion": "' . $this->getSeccion()->getId() .'", ';
         $output .= '"relevamiento": "' . $this->getRelevamiento()->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         if ($this->getPermiso()) {

@@ -131,7 +131,7 @@ class Operacion
         }
 
         $output .= '"orden": "' . $this->getOrden() .'", ';
-        $output .= '"url": "' . $this->getUrl() .'", ';
+        $output .= '"url": "' . $this->getUrl() .'"';
         
         return '{' . $output . '}';
     }
