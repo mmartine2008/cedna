@@ -44,18 +44,6 @@
         return values;
     }
 
-    function obtenerListaOpciones(lista){
-        var output = [];
-        for (var i=0; i < lista.length; i++) {
-            var item = lista[i];
-            var arreglo = []
-            arreglo.push(item.id);
-            arreglo.push(item.descripcion);
-            output.push(arreglo);
-        }
-        return output;
-    }
-
     function obtenerOpcionesSelectorMultiple(idSelector, idSeccion, idPregunta){
         var output = [];
         var childs = formulario.secciones;
@@ -145,8 +133,10 @@
         // console.log(optionGeneradora);
         for (var i=0; i < lista.length; i++) {
             var option = document.createElement("option");
-            option.value = lista[i][0];
-            option.text = lista[i][1];
+            item = lista[i];
+            option.value = item.id;
+            option.text = item.descripcion;
+            option.title = item.descripcion;
             selector.appendChild(option);
         }
         return selector;
@@ -158,13 +148,12 @@
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
-    function createSimpleSelector(id, opciones, divElement, idSeccion) {
+    function createSimpleSelector(id, opciones, divElement, idSeccion, preguntasGeneradas) {
         
         var selector = document.createElement("select");
         var idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
         selector.id = idSelector;
-        var opciones = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, opciones, true);
+        var selector = createListFromJSONLista(selector, opciones, true, preguntasGeneradas);
         selector.onchange = function() {updateJsonSimple(idSeccion, id, idSelector)};
         divElement.appendChild(selector);
     }
@@ -179,8 +168,7 @@
         selector.size = size;
         selector.style.marginBottom = "5px";
         var opciones = obtenerOpcionesSelectorMultiple(idSelector, idSeccion, idPregunta);
-        var listaOpciones = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, listaOpciones, false);
+        var selector = createListFromJSONLista(selector, opciones, false);
         divElement.appendChild(selector);
     }
 
@@ -218,8 +206,7 @@
         updateJsonRespuestaSelector(origin, notSelected, idSeccion, idPregunta, true);
         removeAllOptionSelector(origin);
         var opciones = obtenerOpcionesSelectorMultiple(origin, idSeccion, idPregunta); 
-        var listaOpciones = obtenerListaOpciones(opciones);
-        createListFromJSONLista(selectOrigen, listaOpciones, false);
+        createListFromJSONLista(selectOrigen, opciones, false);
         return selectOrigen;
     }
 
@@ -262,9 +249,8 @@
         
         updateJsonRespuestaSelector(idSelectDestino, options, idSeccion, idPregunta, false);
         var opciones = obtenerOpcionesSelectorMultiple(idSelectDestino, idSeccion, idPregunta);
-        var listaOpciones = obtenerListaOpciones(opciones);
         removeAllOptionSelector(idSelectDestino);
-        createListFromJSONLista(selectIn, listaOpciones, false);
+        createListFromJSONLista(selectIn, opciones, false);
         manageButtons(idPregunta, idSeccion, cantDestinos);
     }
 
@@ -291,7 +277,6 @@
     }
 
     function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
-        // var divForm = createDivClass("form-row", divElement);
         var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
@@ -327,11 +312,11 @@
     function createOptions(item, divElement, idSeccion){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
-            // var preguntaGeneradora = null;
-            // if(item.generaPregunta == '1'){
-            //     var preguntaGeneradora = item.preguntaGeneradora;
-            // }
-            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion);
+            var preguntasGeneradas = null;
+            if(item.generaPregunta == '1'){
+                var preguntasGeneradas = item.preguntasGeneradas;
+            }
+            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion, preguntasGeneradas);
         } else {
                 var cantDestinos = item.cantDestinos;
                 createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
