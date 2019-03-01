@@ -90,7 +90,7 @@ class TipoPregunta
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"destinos": "' . $this->getCantDestinos() .'" ';
+        $output .= '"destinos": "' . $this->getCantDestinos() .'"';
         return '{' . $output . '}';
     }
 

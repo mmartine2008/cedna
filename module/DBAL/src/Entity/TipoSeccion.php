@@ -67,7 +67,7 @@ class TipoSeccion
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         return '{' . $output . '}';
     }
 }

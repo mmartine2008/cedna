@@ -43,7 +43,7 @@ class EstadoTarea
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
         
         return '{' . $output . '}';
     }

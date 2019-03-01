@@ -96,7 +96,7 @@ class SeccionPregunta
             $output .= '"seccion": ' . $this->getSeccion()->getJSON() .', ';
         }
         if ($this->getPregunta()) {
-            $output .= '"pregunta": ' . $this->getPregunta()->getJSON() .', ';
+            $output .= '"pregunta": ' . $this->getPregunta()->getJSON() .'';
         }
         return '{' . $output . '}';
     }

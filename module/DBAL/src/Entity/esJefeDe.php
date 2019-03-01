@@ -92,7 +92,7 @@ class esJefeDe
         $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
         $output .= '"usuario": ' . $this->getUsuario()->getJSON() .', ';
         $output .= '"tipoJefe": ' . $this->getTipoJefe()->getJSON() .', ';
-        $output .= '"orden": "' . $this->getOrden() .'", ';
+        $output .= '"orden": "' . $this->getOrden() .'"';
         
         return '{' . $output . '}';
     }
