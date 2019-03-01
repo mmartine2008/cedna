@@ -4,16 +4,12 @@
 <div class="form-row" id="divFormulario">
 
 </div>
-<form method="post"  name="formFormulario" name="formFormulario" >
-<div class="row col-lg-12">
-    <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
-        <input type="hidden" name="JsonData" id="JsonData">
-        <a href="#">
-            <button class="btn btn-primary margin-vertical-25" style="margin: 20px;" type="button">Cancelar</button>
-        </a>
-        <button id="submit" class="btn btn-primary" type="submit" onclick="updateInput()">Confirmar</button>
-    </div>
-</div> 
+<form method="post"  id="formFormulario" name="formFormulario" >
+    <div class="row col-lg-12">
+        <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
+            <input type="hidden" name="JsonData" id="JsonData">
+        </div>
+    </div> 
 </form>
 
 
@@ -473,6 +469,12 @@
         data = JSON.stringify(formulario);
         $("#JsonData").val(data);
         console.log($("#JsonData").val());
+
+        if ($("#formFormulario")[0].checkValidity()){
+            $("#formFormulario").submit();
+        }else{
+            $("#formFormulario")[0].reportValidity();
+        }
     }
 
     function createFormulario(){
@@ -488,7 +490,23 @@
         construirSecciones(formulario.secciones, divFormulario);
     }
 
+    function verificarMostrarBotonGuardar(){
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var boton = arrAccionesDisponibles[i];
+
+            if (boton.jsFunction === 'updateInput()'){
+                $('#'+boton.idHTMLElement).prop('disabled', false);
+                $('#'+boton.idHTMLElement).show();
+            }
+        }
+    }
+
     createFormulario();
+    
+    $( document ).ready(function() {
+        verificarMostrarBotonGuardar();
+    });
+
 </script>
 
 

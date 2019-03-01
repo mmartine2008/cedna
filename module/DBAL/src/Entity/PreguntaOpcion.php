@@ -93,7 +93,7 @@ class PreguntaOpcion
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"pregunta": "' . $this->getPregunta()->getJSON() .'", ';
-        $output .= '"opcion": "' . $this->getOpcion()->getJSON() .'", ';
+        $output .= '"opcion": "' . $this->getOpcion()->getJSON() .'"';
         return '{' . $output . '}';
     }
 }
