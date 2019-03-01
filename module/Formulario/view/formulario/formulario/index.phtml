@@ -165,8 +165,8 @@
         var selector = document.createElement("select");
         var idSelector = "pregunta_"+id+"_seccion_"+idSeccion;
         selector.id = idSelector;
-        var opciones = obtenerListaOpciones(opciones);
-        var selector = createListFromJSONLista(selector, opciones, true);
+        var opc = obtenerListaOpciones(opciones);
+        var selector = createListFromJSONLista(selector, opc, true);
         selector.onchange = function() {updateJsonSimple(idSeccion, id, idSelector)};
         divElement.appendChild(selector);
     }
