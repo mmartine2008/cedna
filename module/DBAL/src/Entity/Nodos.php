@@ -93,11 +93,18 @@ class Nodos
     }
 
     public function getJSON(){
+        $jefes = [];
+        foreach ($this->getJefes() as $jefe) {
+            $jefes[] = $jefe->getJSON();
+        }
+        $jefes = implode(", ", $jefes);
+
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"tipoNodo": ' . $this->getTipoNodo()->getJSON() .', ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"jefes": ['.$jefes.'], ';
         if ($this->getNodoSuperior()){
             $output .= '"nodoSuperior": ' . $this->getNodoSuperior()->getJSON() .'';
         }else{

@@ -133,6 +133,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'ordenes-de-compra' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/ordenes-de-compra[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\OrdenesDeCompraController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -143,6 +158,7 @@ return [
             Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
             Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
             Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
+            Controller\OrdenesDeCompraController::class => Controller\Factory\OrdenesDeCompraControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -156,6 +172,7 @@ return [
             Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
             Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
             Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
+            Service\OrdenesDeCompraManager::class => Service\Factory\OrdenesDeCompraManagerFactory::class,
         ],
     ],
     'view_manager' => [

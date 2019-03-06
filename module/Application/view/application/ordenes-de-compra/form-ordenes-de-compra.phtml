@@ -1,0 +1,369 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Orden de Compra</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formOrdenDeCompra" name="formOrdenDeCompra">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-10 offset-1">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="fechaOrdenDeCompra"><span class="obligatorio">(*) </span>Fecha de Liberación:</label>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="date" id="fechaOrdenDeCompra" name="fechaOrdenDeCompra" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="solicitanteOrdenDeCompra"><span class="obligatorio">(*) </span>Solicitante:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="solicitanteOrdenDeCompra" name="solicitanteOrdenDeCompra" class="form-control" required="true">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="ejecutorOrdenDeCompra"><span class="obligatorio">(*) </span>Ejecutor:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="ejecutorOrdenDeCompra" onchange="dibujarPlanificadorDeTarea()" name="ejecutorOrdenDeCompra" class="form-control" required="true">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="nodoOrdenDeCompra"><span class="obligatorio">(*) </span>Sección:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="nodoOrdenDeCompra" name="nodoOrdenDeCompra" onchange="dibujarResponsables()" class="form-control" required="true">
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="responsableOrdenDeCompra"><span class="obligatorio">(*) </span>Responsable:</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="responsableOrdenDeCompra" name="responsableOrdenDeCompra" onchange="dibujarPlanificadorDeTarea()" class="form-control" required="true" disabled="true">
+                                                <option value="">-- Seleccione --</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="planificaTarea"><span class="obligatorio">(*) </span>Quién planificará la tarea?</label>
+                                </div>
+                                <div class="col-md-5">
+                                    <select id="planificaTarea" name="planificaTarea" class="form-control" required="true" disabled="true">
+                                        <option value="">-- Seleccione --</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="descripcionOrdenDeCompra"><span class="obligatorio">(*) </span>Descripcion Tarea:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <textarea id="descripcionOrdenDeCompra" name="descripcionOrdenDeCompra" class="form-control" required="true" rows="7" maxlength="1000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var OrdenesDeCompraJson = <?= $OrdenesDeCompraJson ?>;
+var arrNodosJSON = <?= $arrNodosJSON ?>;
+var arrUsuariosJSON = <?= $arrUsuariosJSON ?>;
+
+function FormOrdenDeCompraToJson(){
+    var iPosNodo = $('#nodoOrdenDeCompra').val();
+    var iPosSolicitante = $('#solicitanteOrdenDeCompra').val();
+    var iPosEjecutor = $('#ejecutorOrdenDeCompra').val();
+    var iPosJefe = $('#responsableOrdenDeCompra').val();
+
+    var nodo = arrNodosJSON[iPosNodo];
+
+    var formData = {
+        fechaLiberacion: $('#fechaOrdenDeCompra').val(),
+        nodo: nodo,
+        ejecutor: arrUsuariosJSON[iPosEjecutor],
+        solicitante: arrUsuariosJSON[iPosSolicitante],
+        responsable: nodo[iPosJefe], 
+        planificaTarea: buscarUsuarioPlanificaTarea(),
+        descripcion: $('#descripcionOrdenDeCompra').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormOrdenDeCompraToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formOrdenDeCompra")[0].checkValidity()){
+        $("#formOrdenDeCompra").submit();
+    }else{
+        $("#formOrdenDeCompra")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    dibujarSelectNodos();
+    dibujarSelectEjecutor();
+    dibujarSelectSolicitante();
+
+    if (tareasJson !== ''){
+        // $('#resumenOrdenDeCompra').val(tareasJson.resumen);
+        // $('#descripcionOrdenDeCompra').val(tareasJson.descripcion);
+        // seleccionarNodo();
+        // seleccionarFormulario();
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function seleccionarNodo(){
+    // for (var i = 0; i < arrNodosJSON.length; i++){
+    //     var nodo = arrNodosJSON[i];
+
+    //     if (nodo.id == tareasJson.nodo.id){
+    //         $('#nodoOrdenDeCompra').val(i);
+    //         break;
+    //     }
+    // }
+}
+
+function seleccionarSolicitante(){
+    // for (var i = 0; i < arrFormularioJSON.length; i++){
+    //     var formulario = arrFormularioJSON[i];
+
+    //     if (formulario.idFormulario == tareasJson.relevamiento.formulario.idFormulario){
+    //         $('#solicitanteOrdenDeCompra').val(i);
+    //         break;
+    //     }
+    // }
+}
+
+function dibujarSelectNodos(){
+    $('#nodoOrdenDeCompra')
+        .find('option')
+        .remove();
+
+    $('#nodoOrdenDeCompra')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrNodosJSON.length; i++){
+        var nodo = arrNodosJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(nodo.nombre);
+
+        $('#nodoOrdenDeCompra').append(option);
+    }
+}
+
+function dibujarSelectSolicitante(){
+    $('#solicitanteOrdenDeCompra')
+        .find('option')
+        .remove();
+
+    $('#solicitanteOrdenDeCompra')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrUsuariosJSON.length; i++){
+        var usuario = arrUsuariosJSON[i];
+
+        if (noEsContratista(usuario.perfiles)){
+            var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(usuario.nombre + ', ' + usuario.apellido);
+
+            $('#solicitanteOrdenDeCompra').append(option);
+        }
+    }
+}
+
+function tienePerfilComitente(arrPerfiles){
+    for (var i = 0; i < arrPerfiles.length; i++){
+        var perfil = arrPerfiles[i];
+
+        if (perfil.nombre == 'Comitente'){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function dibujarResponsables(){
+    $('#responsableOrdenDeCompra')
+        .find('option')
+        .remove();
+
+    $('#responsableOrdenDeCompra')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+    
+    var iPosNodo = $('#nodoOrdenDeCompra').val();
+    
+    if (iPosNodo >= 0){
+        var jefes = arrNodosJSON[iPosNodo].jefes;
+
+        for (var i = 0; i < jefes.length; i++){
+            var usuario = jefes[i];
+
+            var option = $("<option></option>")
+                                .attr("value", i)
+                                .text(usuario.nombre + ', ' + usuario.apellido);
+
+            $('#responsableOrdenDeCompra').append(option);
+        }
+
+        $('#responsableOrdenDeCompra').prop('disabled', false);
+    }else{
+        $('#responsableOrdenDeCompra').prop('disabled', true);
+        $('#responsableOrdenDeCompra').change();
+    }
+}
+
+/**
+ * Funcion que determina el perfil del usuario es distinto al de Contratista.
+ * Con que tenga un solo perfil distinto ya es suficiente.
+ *
+ * @return boolean
+ */
+function noEsContratista(arrPerfiles){
+    for (var i = 0; i < arrPerfiles.length; i++){
+        var perfil = arrPerfiles[i];
+
+        if (perfil.nombre != 'Contratista'){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function dibujarPlanificadorDeTarea(){
+    $('#planificaTarea')
+        .find('option')
+        .remove();
+
+    $('#planificaTarea')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    var iPosJefe = $('#responsableOrdenDeCompra').val();
+    var iPosEjecutor = $('#ejecutorOrdenDeCompra').val();
+
+    if (iPosJefe >= 0 && iPosEjecutor >= 0){
+        var iPosNodo = $('#nodoOrdenDeCompra').val();
+        var arrJefes = arrNodosJSON[iPosNodo].jefes;
+        
+        var jefe = arrJefes[iPosJefe];
+
+        var option = $("<option></option>")
+                        .attr("value", jefe.id)
+                        .text(jefe.nombre + ', ' + jefe.apellido);
+
+        $('#planificaTarea').append(option);
+
+        var ejecutor = arrUsuariosJSON[iPosEjecutor];
+
+        var option = $("<option></option>")
+                        .attr("value", ejecutor.id)
+                        .text(ejecutor.nombre + ', ' + ejecutor.apellido);
+
+        $('#planificaTarea').append(option);
+
+        $('#planificaTarea').prop('disabled', false);
+    }else{
+        $('#planificaTarea').prop('disabled', true);
+    }
+}
+
+function dibujarSelectEjecutor(){
+    $('#ejecutorOrdenDeCompra')
+        .find('option')
+        .remove();
+
+    $('#ejecutorOrdenDeCompra')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrUsuariosJSON.length; i++){
+        var usuario = arrUsuariosJSON[i];
+
+        if (tienePerfilComitente(usuario.perfiles)){
+            var option = $("<option></option>")
+                            .attr("value", i)
+                            .text(usuario.nombre + ', ' + usuario.apellido);
+
+            $('#ejecutorOrdenDeCompra').append(option);
+        }
+    }
+}
+
+function buscarUsuarioPlanificaTarea(){
+    var idUsuario = $('#planificaTarea').val();
+
+    for (var i = 0; i < arrUsuariosJSON.length; i++){
+        var usuario = arrUsuariosJSON[i];
+
+        if (usuario.if == idUsuario){
+            return usuario;
+        }
+    }
+
+    return null;
+}
+
+</script>
