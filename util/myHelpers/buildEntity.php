@@ -57,8 +57,14 @@
      }
      
 process([
-    'IdRelevamiento', 
-'IdFormulario', 
+    'IdOrdenDeCompra', 
+'FechaLiberacion', 
+'IdSolicitante', 
+'IdEjecutor', 
+'IdNodo', 
+'IdResponsable', 
+'IdPlanificaTarea', 
+'Descripcion',  
 ]);
      
      /*

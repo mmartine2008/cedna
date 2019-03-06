@@ -17,6 +17,7 @@ use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Tareas;
 use DBAL\Entity\Formulario;
 use DBAL\Entity\Relevamientos;
+use DBAL\Entity\OrdenesDeCompra;
 
 class CatalogoManager {
     
@@ -170,6 +171,36 @@ class CatalogoManager {
         }
 
         return $Relevamientos;
+    }
+
+    public function getOrdenesDeCompra($idOrdenesDeCompra = null){
+        if ($idOrdenesDeCompra){
+            $OrdenesDeCompra = $this->entityManager->getRepository(OrdenesDeCompra::class)->findOneBy(['id' => $idOrdenesDeCompra]);
+        }else{
+            $OrdenesDeCompra = $this->entityManager->getRepository(OrdenesDeCompra::class)->findAll();
+        }
+
+        return $OrdenesDeCompra;
+    }
+
+    /**
+     * Funcion que devuelve el arreglo de todas las entidades OrdenesDeCompra
+     * en formato JSON para ser enviado a la vista.
+     *
+     * @return string
+     */
+    public function getArrOrdenesDeCompraJSON(){
+        $arrOrdenesDeCompra = $this->getOrdenesDeCompra();
+
+        $output = [];
+        
+        foreach($arrOrdenesDeCompra as $OrdenesDeCompra){
+            $output[] = $OrdenesDeCompra->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
     /**
