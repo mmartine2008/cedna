@@ -198,32 +198,54 @@ class FormularioManager {
         return $output;
     }
 
+    public function altaRespuestaSegunTipoRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta){
+        $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
+        if ($listaOpcionDestino){
+            $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
+        } else {
+            $opcion = null;
+            if ($preguntaEnt->tieneOpciones()) {
+                $opcion = $respuesta;
+            }   
+            $this->altaRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
+        }
+    }
+
+    public function altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento){
+        $respuesta = $pregunta->respuesta;
+        if ($this->tieneRespuesta($respuesta)){
+            $idPregunta = $pregunta->idPregunta;
+            $preguntaEnt = $this->getPregunta($idPregunta);
+            $this->altaRespuestaSegunTipoRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta);
+        }
+    }
+
+    public function altaRespuestaPreguntasGeneradas($preguntasGeneradas, $seccionEnt, $Relevamiento){
+        foreach($preguntasGeneradas as $preguntaGenerada) {
+            if($preguntaGenerada->estado == "block"){
+                $pregunta = $preguntaGenerada->preguntaGenerada;
+                $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
+            }
+        }
+    }
+
+    public function altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento){
+        $idSeccion = $seccion->id;
+        $seccionEnt = $this->getSeccion($idSeccion);
+        foreach ($seccion->preguntas as $pregunta) {
+            $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
+            if($pregunta->preguntasGeneradas) {
+                $this->altaRespuestaPreguntasGeneradas($pregunta->preguntasGeneradas, $seccionEnt, $Relevamiento);
+            }
+        }
+    }
+
     public function altaRespuestasFormulario($datos, $idTarea) {
         $secciones = $datos->secciones;
-        // $idFormulario = $datos->idFormulario;
-        // $formularioEnt = $this->getFormulario($idFormulario);
         $Tarea = $this->catalogoManager->getTareas($idTarea);
         $Relevamiento = $Tarea->getRelevamiento();
         foreach ($secciones as $seccion) {
-            $idSeccion = $seccion->id;
-            $seccionEnt = $this->getSeccion($idSeccion);
-            foreach ($seccion->preguntas as $pregunta) {
-                $respuesta = $pregunta->respuesta;
-                if ($this->tieneRespuesta($respuesta)){
-                    $idPregunta = $pregunta->idPregunta;
-                    $preguntaEnt = $this->getPregunta($idPregunta);
-                    $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
-                    if ($listaOpcionDestino){
-                        $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
-                    } else {
-                        $opcion = null;
-                        if ($preguntaEnt->tieneOpciones()) {
-                            $opcion = $respuesta;
-                        }   
-                        $this->altaRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
-                    }
-                }
-            }
+            $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }
     }
 
