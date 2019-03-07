@@ -206,7 +206,10 @@ class Pregunta
      */ 
     public function getFuncion()
     {
-        return $this->funcion;
+        if($this->funcion) {
+            return $this->funcion;
+        }
+        return "";
     }
 
     /**
@@ -252,11 +255,13 @@ class Pregunta
         } else {
             $preguntasGeneradasJSON = '[]'; 
         }
+ 
 
         $output .= '"idPregunta": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
         $output .= '"preguntasGeneradas": '.$preguntasGeneradasJSON.', ';
+        $output .= '"funcion": '.$this->getFuncion.', ';
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
             $cantDestinos = $this->getTipoPregunta()->getCantDestinos();

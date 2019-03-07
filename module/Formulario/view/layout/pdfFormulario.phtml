@@ -1,0 +1,20 @@
+<h3><?=$data->descripcionFormulario?></h3>
+
+<?php foreach ($data->secciones as $seccion) { ?>
+    <div class="form-group col-md-12 margin-top-10" id="div_seccion_<?php $seccion->idSeccion?>" >
+        <h4><?=$data->descripcionSeccion?></h4>
+        <?php foreach ($seccion->respuestas as $respuesta) { ?>
+            <div class="form-rowmargin-top-10" style="padding:5px" id="div_respuesta_<?php $respuesta->idRespuesta?>">
+                <div class="col-sm-3 text-right">
+                    <?php $respuesta->pregunta->descripcion  ?>
+                </div>
+                <div class="col-sm-2 text-left">
+                    <?php $respuesta->respuesta ?>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+<?php } ?>
+
+ 
+

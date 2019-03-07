@@ -231,20 +231,19 @@ class Respuesta
     public function getJSON(){
         $output = "";
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
-        $output .= '"pregunta": "' . $this->getPregunta()->getDescripcion() .'", ';
-        $output .= '"seccion": "' . $this->getSeccion()->getId() .'", ';
-        $output .= '"relevamiento": "' . $this->getRelevamiento()->getId() .'", ';
-       
+        $output .= '"pregunta": "' . $this->getPregunta()->getJson() .'", ';
+
         if ($this->getPermiso()) {
              $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
         }
         if ($this->getOpcion()) {
             $output .= '"opcion": "' . $this->getOpcion().'", ';
+            $output .= '"respuesta": "", ';
             if ($this->getPregunta()->getTipoPregunta()->esPeguntaMultiple()) {
                 $output .= '"destino": "' . $this->getDestino().'", ';
             }
         }
-        $output .= '"descripcion": "' . $this->getDescripcion() .'"';
+        $output .= '"respuesta": "' . $this->getDescripcion() .'"';
         return '{' . $output . '}';
     }
 

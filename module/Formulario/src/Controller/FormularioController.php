@@ -12,12 +12,25 @@ use Zend\View\Model\ViewModel;
 
 class FormularioController extends CednaController
 {
+    
+    /*
+     * @var \TCPDF
+    */  
+    protected $tcpdf;
+    /**
+     * @var RendererInterface
+     */
+    protected $renderer;
+
     private $FormularioManager;
 
-    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator) {
+
+    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer) {
         parent::__construct($catalogoManager, $userSessionManager, $translator);
 
         $this->FormularioManager = $FormularioManager;
+        $this->tcpdf = $tcpdf;
+        $this->renderer = $renderer;
     }
 
     public function indexAction() {
@@ -67,4 +80,40 @@ class FormularioController extends CednaController
         return new ViewModel([ ]);
     }
 
+    public function imprimirFormularioAction() {
+
+        $parametros = $this->params()->fromRoute();
+        $idTarea = $parametros['id'];
+        $Tarea = $this->catalogoManager->getTareas($idTarea);
+        $Relevamiento = $Tarea->getRelevamiento();
+        // $Formulario = $Relevamiento->getFormulario();
+        $json = $this->FormularioManager->getRespuestasJSON($Relevamiento);
+
+        // $data = $this->params()->fromRoute();
+        // $idManifiesto = $data['id'];
+
+        $view = new ViewModel();
+
+        // $empresa = $this->getDatosEmpresa();
+        // $Manifiesto = $this->catalogoManager->getManifiestoPorId($idManifiesto);
+        // $data = $this->manifiestosManager->getDataPDF($Manifiesto);
+
+        $renderer = $this->renderer;
+        $view->setTemplate('layout/pdfFormulario');
+        $view->setVariable('data', $json);
+
+        $html = $renderer->render($view);
+
+        $pdf = $this->tcpdf;
+
+        $pdf->SetFont('arialnarrow', '', 8, '', false);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        
+        $pdf->AddPage('P', 'A4');
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        $pdf->Output();
+    }
 }

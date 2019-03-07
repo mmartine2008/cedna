@@ -149,6 +149,80 @@ class FormularioManager {
         return  $this->getJSONActualizado($formulario);
     }
 
+    public function getRespuestasSegunRelevamiento($Relevamiento){
+        $Respuestas = $this->entityManager->getRepository(Respuesta::class)
+                            ->findAll(); 
+        $output = [];
+        foreach($Respuestas as $Respuesta) {
+            if ($Respuesta->getRelevamiento()->getId() == $Relevamiento->getId()) {
+                $output[] = $Respuesta;
+            }
+        }
+        return $output;
+    }
+
+    private function getValorFuncion($funcion, $opcion){
+        $opciones = $this->catalogoManager->{$funcion}();
+        foreach($opciones as $opcionFuncion) {
+            if($opcionFuncion->id == $opcion){
+                return $opcionFuncion->descripcion;
+            }
+        }
+    }
+
+    public function getRespuestaModificada($Respuesta) {
+        $JSON = $Respuesta->getJSON();
+        $respuestaDec = json_decode($JSON);
+
+        $pregunta = $respuestaDec->pregunta;
+        if($pregunta->cerrada == 1) {
+            if($pregunta->funcion) {
+                $valorOpcion = $this->getValorFuncion($pregunta->funcion, $respuestaDec->opcion);
+            } else {
+                $valorOpcion = $this->getOpcion($respuestaDec->opcion)->getDescripcion();
+            }
+            $respuestaDec->respuesta = $valorOpcion;
+        }
+        return json_encode($respuestaDec);
+    } 
+
+    private function getRespuestaPorSeccion($RespuestasRelevamiento, $idSeccion){
+        $respuestas = [];
+        foreach($RespuestasRelevamiento as $Respuesta){
+            if($Respuesta->getSeccion()->getId() == $idSeccion){
+                $respuestas[] = $this->getRespuestaModificada($Respuesta);
+            } //ver respuestas para los select multiple
+        } 
+        $respuestas = implode(", ", $respuestas);
+        
+        return '['.$respuestas .']';
+    } 
+
+    private function getSeccionesPorFormulario($Relevamiento){
+        $RespuestasRelevamiento = $this->getRespuestasSegunRelevamiento($Relevamiento);
+        $secciones = $Relevamiento->getFormulario()->getSecciones();
+        foreach($secciones as $seccion) {
+            $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
+                    'respuestas' => $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId())];
+        }
+    
+        $output = implode(", ", $output);
+
+        return '{'.$output.'}';
+    }
+
+    public function getRespuestasJSON($Relevamiento){
+        $output = [];
+        
+        $output = "";
+        $output .= '"idRelevamiento": "' . $Relevamiento->getId() .'", ';
+        $output .= '"descripcionFormulario": "' . $Relevamiento->getFormulario()->getNombre() .'", ';
+        $secciones = $this->getSeccionesPorFormulario($Relevamiento);
+        $output .=  '"secciones": '.$secciones;
+
+        return '{' . $output . '}';
+    }
+
     public function tieneRespuesta($respuesta) {
         if ((!$respuesta) || ($respuesta == "-1")){
             return false; 
@@ -179,6 +253,18 @@ class FormularioManager {
         }
     }
 
+    public function getOpcionDestino($opciones, $destino){
+        $output = [];
+        foreach($opciones as $opcion) {
+            $opcionDestino = Array();
+            $opcionDestino[] = $destino;
+            $opcionDestino[] = $opcion;
+            $output[] = $opcionDestino;
+        }
+        return $output;
+    }
+    
+
     public function getListaOpcionDestinoPregunta($pregunta, $respuestas) {
         $output = [];
         if($pregunta->getTipoPregunta()->esPeguntaMultiple()) {
@@ -186,12 +272,8 @@ class FormularioManager {
                 $destino = $resp->destino;
                 $opciones = $resp->opcion;
                 if($opciones){
-                    foreach($opciones as $opcion) {
-                        $opcionDestino = Array();
-                        $opcionDestino[] = $destino;
-                        $opcionDestino[] = $opcion;
-                        $output[]=$opcionDestino;
-                    }
+                    $opcionesDestinos = $this->getOpcionDestino($opciones, $destino);
+                    $output = array_merge($opcionesDestinos, $output);
                 }
             }
         }
