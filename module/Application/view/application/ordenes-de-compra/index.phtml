@@ -49,11 +49,11 @@
             var ejecutor = row.insertCell(3);
             var planificaTarea = row.insertCell(4);
 
-            fecha.innerHTML = ordenDeCompra.resumen;
+            fecha.innerHTML = ordenDeCompra.fechaLiberacion;
             solicitante.innerHTML = ordenDeCompra.solicitante.nombre + ', ' + ordenDeCompra.solicitante.apellido;
             nodo.innerHTML = ordenDeCompra.nodo.nombre;
-            ejecutor.innerHTML = ordenDeCompra.estadoTarea.descripcion;
-            planificaTarea.innerHTML = ordenDeCompra.fechaSolicitud;
+            ejecutor.innerHTML = ordenDeCompra.ejecutor.nombre + ', ' + ordenDeCompra.ejecutor.apellido;
+            planificaTarea.innerHTML = ordenDeCompra.planificaTarea.nombre + ', ' + ordenDeCompra.planificaTarea.apellido;
         }
     }
 

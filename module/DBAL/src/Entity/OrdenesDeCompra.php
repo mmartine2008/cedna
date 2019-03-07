@@ -142,6 +142,7 @@ class OrdenesDeCompra
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"fechaLiberacion": "' . $this->getFechaLiberacion() .'", ';
+        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
         $output .= '"ejecutor": ' . $this->getEjecutor()->getJSON() .', ';
         $output .= '"responsable": ' . $this->getResponsable()->getJSON() .', ';

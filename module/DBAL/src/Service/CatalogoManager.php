@@ -184,158 +184,22 @@ class CatalogoManager {
     }
 
     /**
-     * Funcion que devuelve el arreglo de todas las entidades OrdenesDeCompra
+     * Funcion que devuelve el arreglo de todas las entidades
      * en formato JSON para ser enviado a la vista.
+     * 
+     * Recibe por parametro el nombre de la entidad, el cual debe ser
+     * exactamente igual al de la clase PHP.
      *
      * @return string
      */
-    public function getArrOrdenesDeCompraJSON(){
-        $arrOrdenesDeCompra = $this->getOrdenesDeCompra();
+    public function getArrEntidadJSON($nombreEntidad){
+        $nombreFuncion = 'get'.$nombreEntidad;
+        $arrEntidad = $this->$nombreFuncion();
 
         $output = [];
         
-        foreach($arrOrdenesDeCompra as $OrdenesDeCompra){
-            $output[] = $OrdenesDeCompra->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Formulario
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrFormularioJSON(){
-        $arrFormulario = $this->getFormulario();
-
-        $output = [];
-        
-        foreach($arrFormulario as $Formulario){
-            $output[] = $Formulario->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades EstadoTarea
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrEstadoTareaJSON(){
-        $arrEstadoTarea = $this->getEstadoTarea();
-
-        $output = [];
-        
-        foreach($arrEstadoTarea as $EstadoTarea){
-            $output[] = $EstadoTarea->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Tareas
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrTareasJSON(){
-        $arrTareas = $this->getTareas();
-
-        $output = [];
-        
-        foreach($arrTareas as $Tareas){
-            $output[] = $Tareas->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Operarios
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrOperariosJSON(){
-        $arrOperarios = $this->getOperarios();
-
-        $output = [];
-        
-        foreach($arrOperarios as $Operario){
-            $output[] = $Operario->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Nodos
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrNodosJSON(){
-        $arrNodos = $this->getNodos();
-
-        $output = [];
-        
-        foreach($arrNodos as $Nodo){
-            $output[] = $Nodo->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades Usuarios
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrUsuariosJSON(){
-        $arrUsuarios = $this->getUsuarios();
-
-        $output = [];
-        
-        foreach($arrUsuarios as $Usuario){
-            $output[] = $Usuario->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
-    }
-
-    /**
-     * Funcion que devuelve el arreglo de todas las entidades TipoJefe
-     * en formato JSON para ser enviado a la vista.
-     *
-     * @return string
-     */
-    public function getArrTipoJefeJSON(){
-        $arrTipoJefe = $this->getTipoJefe();
-
-        $output = [];
-        
-        foreach($arrTipoJefe as $TipoJefe){
-            $output[] = $TipoJefe->getJSON();
+        foreach($arrEntidad as $Entidad){
+            $output[] = $Entidad->getJSON();
         }
 
         $output = implode(", ", $output);

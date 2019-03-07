@@ -86,7 +86,7 @@ class OrganigramaManager {
 
     public function getUsuariosDisponiblesParaJefe($Nodo){
         $arrJefesIniciales = $Nodo->getJefes();
-        $arrUsuariosString  = $this->catalogoManager->getArrUsuariosJSON();
+        $arrUsuariosString  = $this->catalogoManager->getArrEntidadJSON('Usuarios');
         $arrUsuariosJSON = json_decode($arrUsuariosString);
         $output = [];
 

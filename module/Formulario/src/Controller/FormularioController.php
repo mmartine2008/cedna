@@ -38,7 +38,7 @@ class FormularioController extends CednaController
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios');
 
         //Actualmente mostrará todas las tareas creadas sin filtro alguno
-        $arrTareasJSON = $this->catalogoManager->getArrTareasJSON();
+        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
 
         return new ViewModel([
             "OperacionesJSON" => $OperacionesJSON,

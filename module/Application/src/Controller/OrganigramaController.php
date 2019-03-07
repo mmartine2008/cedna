@@ -33,7 +33,7 @@ class OrganigramaController extends CednaController
     public function nodosAction(){
         $this->cargarAccionesDisponibles('nodos');
         
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
 
         return new ViewModel([
             'arrNodosJSON' => $arrNodosJSON
@@ -110,7 +110,7 @@ class OrganigramaController extends CednaController
     public function AutoridadesAction(){
         $this->cargarAccionesDisponibles('autoridades');
         
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
 
         $view = new ViewModel();
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
@@ -136,7 +136,7 @@ class OrganigramaController extends CednaController
         }
 
         $arrUsuariosJSON  = $this->organigramaManager->getUsuariosDisponiblesParaJefe($Nodos);
-        $arrTipoJefeJSON  = $this->catalogoManager->getArrTipoJefeJSON();
+        $arrTipoJefeJSON  = $this->catalogoManager->getArrEntidadJSON('TipoJefe');
         $arrEsJefeDeJSON = $this->organigramaManager->getArrJefesInicialesJSON($Nodos);
 
         $view = new ViewModel();
