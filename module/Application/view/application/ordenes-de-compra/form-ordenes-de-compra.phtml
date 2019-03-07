@@ -115,7 +115,7 @@ function FormOrdenDeCompraToJson(){
         nodo: nodo,
         ejecutor: arrUsuariosJSON[iPosEjecutor],
         solicitante: arrUsuariosJSON[iPosSolicitante],
-        responsable: nodo[iPosJefe], 
+        responsable: nodo.jefes[iPosJefe], 
         planificaTarea: buscarUsuarioPlanificaTarea(),
         descripcion: $('#descripcionOrdenDeCompra').val()
     };
@@ -141,15 +141,26 @@ $( document ).ready(function() {
     dibujarSelectEjecutor();
     dibujarSelectSolicitante();
 
-    if (tareasJson !== ''){
-        // $('#resumenOrdenDeCompra').val(tareasJson.resumen);
-        // $('#descripcionOrdenDeCompra').val(tareasJson.descripcion);
-        // seleccionarNodo();
-        // seleccionarFormulario();
+    if (OrdenesDeCompraJson !== ''){
+        var fecha = transformarFechaParaInput(OrdenesDeCompraJson.fechaLiberacion);
+        $('#fechaOrdenDeCompra').val(fecha);
+        seleccionarNodo();
+        seleccionarUsuarioPorPosicion(OrdenesDeCompraJson.solicitante, 'solicitanteOrdenDeCompra');
+        seleccionarUsuarioPorPosicion(OrdenesDeCompraJson.ejecutor, 'ejecutorOrdenDeCompra');
+        seleccionarResponsable();
+        seleccionarPlanificaTarea();
+        $('#descripcionOrdenDeCompra').val(OrdenesDeCompraJson.descripcion);
     }
     
     verificarMostrarBotonGuardar();
 });
+
+function transformarFechaParaInput(fecha){
+    var arrFecha = fecha.split('-');
+    //[0] => dia; [1] => mes; [2] => anio
+
+    return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+}
 
 function verificarMostrarBotonGuardar(){
     for (var i = 0; i < arrAccionesDisponibles.length; i++){
@@ -163,25 +174,54 @@ function verificarMostrarBotonGuardar(){
 }
 
 function seleccionarNodo(){
-    // for (var i = 0; i < arrNodosJSON.length; i++){
-    //     var nodo = arrNodosJSON[i];
+    for (var i = 0; i < arrNodosJSON.length; i++){
+        var nodo = arrNodosJSON[i];
 
-    //     if (nodo.id == tareasJson.nodo.id){
-    //         $('#nodoOrdenDeCompra').val(i);
-    //         break;
-    //     }
-    // }
+        if (nodo.id == OrdenesDeCompraJson.nodo.id){
+            $('#nodoOrdenDeCompra').val(i);
+            $('#nodoOrdenDeCompra').change();
+            break;
+        }
+    }
 }
 
-function seleccionarSolicitante(){
-    // for (var i = 0; i < arrFormularioJSON.length; i++){
-    //     var formulario = arrFormularioJSON[i];
+function seleccionarUsuarioPorPosicion(usuarioCargado, idDiv){
+    for (var i = 0; i < arrUsuariosJSON.length; i++){
+        var usuario = arrUsuariosJSON[i];
 
-    //     if (formulario.idFormulario == tareasJson.relevamiento.formulario.idFormulario){
-    //         $('#solicitanteOrdenDeCompra').val(i);
-    //         break;
-    //     }
-    // }
+        if (usuario.id == usuarioCargado.id){
+            $('#'+idDiv).val(i);
+            $('#'+idDiv).change();
+            break;
+        }
+    }
+}
+
+/**
+ * Esta funcion debe ejecutarse luego de que el nodo haya sido cargado.
+ *
+ * @return void
+ */
+function seleccionarResponsable(){
+    var nodo = OrdenesDeCompraJson.nodo;
+
+    for (var i = 0; i < nodo.jefes.length; i++){
+        var jefe = nodo.jefes[i];
+
+        if (jefe.id == OrdenesDeCompraJson.responsable.id){
+            $('#responsableOrdenDeCompra').val(i);
+            $('#responsableOrdenDeCompra').change();
+        }
+    }
+}
+
+/**
+ * Esta funcion se debe ejecutar luego de cargarse los datos del Ejecutor y Responsable.
+ *
+ * @return void
+ */
+function seleccionarPlanificaTarea(){
+    $('#planificaTarea').val(OrdenesDeCompraJson.planificaTarea.id);
 }
 
 function dibujarSelectNodos(){
@@ -358,7 +398,7 @@ function buscarUsuarioPlanificaTarea(){
     for (var i = 0; i < arrUsuariosJSON.length; i++){
         var usuario = arrUsuariosJSON[i];
 
-        if (usuario.if == idUsuario){
+        if (usuario.id == idUsuario){
             return usuario;
         }
     }

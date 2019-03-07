@@ -39,9 +39,10 @@ class OrdenesDeCompraController extends CednaController
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
+            // var_dump($JsonData);
+            // die;
 
-            $userName = $this->userSessionManager->getUserName();
-            $this->ordenesDeCompraManager->altaEdicionOrdenesDeCompra($JsonData, $userName);
+            $this->ordenesDeCompraManager->altaEdicionOrdenesDeCompra($JsonData);
 
             $this->redirect()->toRoute("ordenes-de-compra",["action" => "index"]);
         }
@@ -69,14 +70,13 @@ class OrdenesDeCompraController extends CednaController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $userName = $this->userSessionManager->getUserName();
-            $this->ordenesDeCompraManager->altaEdicionOrdenesDeCompra($JsonData, $userName, $idOrdenesDeCompra);
+            $this->ordenesDeCompraManager->altaEdicionOrdenesDeCompra($JsonData, $idOrdenesDeCompra);
 
             $this->redirect()->toRoute("ordenes-de-compra",["action" => "index"]);
         }
 
         $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
-        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
+        $arrUsuariosJSON = $this->catalogoManager->getArrUsuariosJSON();
 
         $view = new ViewModel();
         
@@ -84,7 +84,7 @@ class OrdenesDeCompraController extends CednaController
 
         $view->setVariable('OrdenesDeCompraJson', $OrdenesDeCompra->getJSON());
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
-        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
+        $view->setVariable('arrUsuariosJSON', $arrUsuariosJSON);
         $view->setTemplate('application/ordenes-de-compra/form-ordenes-de-compra.phtml');
         
         return $view;

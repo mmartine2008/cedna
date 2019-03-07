@@ -24,39 +24,26 @@ class OrdenesDeCompraManager {
     }
 
     public function altaEdicionOrdenesDeCompra($jsonData, $idOrdenesDeCompra = null){
-
-        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
+        $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
+        $Ejecutor = $this->catalogoManager->getUsuarios($jsonData->ejecutor->id);
+        $Solicitante = $this->catalogoManager->getUsuarios($jsonData->solicitante->id);
+        $Responsable = $this->catalogoManager->getUsuarios($jsonData->responsable->id);
+        $PlanificaTarea = $this->catalogoManager->getUsuarios($jsonData->planificaTarea->id);
 
         if ($idOrdenesDeCompra){
             $OrdenesDeCompra = $this->catalogoManager->getOrdenesDeCompra($idOrdenesDeCompra);
-
-            $Relevamiento = $OrdenesDeCompra->getRelevamiento();
-            $Relevamiento->setFormulario($Formulario);
-            $this->entityManager->persist($Relevamiento);
         }else{
-            $Relevamiento = new Relevamientos();
-            $Relevamiento->setFormulario($Formulario);
-            
-            $this->entityManager->persist($Relevamiento);
-            $this->entityManager->flush();
-
-            $EstadoTarea = $this->catalogoManager->getEstadoTarea(EstadoTarea::ID_ESTADO_SOLICITADA);
-            
             $OrdenesDeCompra = new OrdenesDeCompra();
-
-            $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
-
-            $OrdenesDeCompra->setSolicitante($UsuarioActivo);
-            $OrdenesDeCompra->setFechaSolicitud(new \DateTime("now"));
-            $OrdenesDeCompra->setEstadoTarea($EstadoTarea);
-            $OrdenesDeCompra->setRelevamiento($Relevamiento);
         }
-
-        $Nodo = $this->catalogoManager->getNodos($jsonData->nodo->id);
-        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
-
+        
+        $OrdenesDeCompra->setSolicitante($Solicitante);
+        $OrdenesDeCompra->setEjecutor($Ejecutor);
         $OrdenesDeCompra->setNodo($Nodo);
-        $OrdenesDeCompra->setResumen($jsonData->resumen);
+        $OrdenesDeCompra->setResponsable($Responsable);
+        $OrdenesDeCompra->setPlanificaTarea($PlanificaTarea);
+
+        //$fechaLiberacion = date('Y-m-d', $jsonData->fechaLiberacion);
+        $OrdenesDeCompra->setFechaLiberacion($jsonData->fechaLiberacion);
         $OrdenesDeCompra->setDescripcion($jsonData->descripcion);
 
         $this->entityManager->persist($OrdenesDeCompra);
@@ -72,12 +59,12 @@ class OrdenesDeCompraManager {
             $this->entityManager->flush();
 
             $this->entityManager->commit();
-            $mensaje = 'Se ha eliminado la tarea correctamente';
+            $mensaje = 'Se ha eliminado la orden de compra correctamente';
 
         } catch (Exception $e) {
             $this->entityManager->rollBack();
 
-            $mensaje = 'La tarea no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+            $mensaje = 'La orden de compra no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
         }
 
         return $mensaje;
