@@ -25,7 +25,7 @@ class OperariosController extends CednaController
     {
         $this->cargarAccionesDisponibles('operarios');
         
-        $arrOperariosJSON = $this->catalogoManager->getArrOperariosJSON();
+        $arrOperariosJSON = $this->catalogoManager->getArrEntidadJSON('Operarios');
 
         return new ViewModel([
             'arrOperariosJSON' => $arrOperariosJSON

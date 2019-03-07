@@ -25,7 +25,7 @@ class OrdenesDeCompraController extends CednaController
     {
         $this->cargarAccionesDisponibles('ordenes de compra');
         
-        $arrOrdenesDeCompraJSON = $this->catalogoManager->getArrOrdenesDeCompraJSON();
+        $arrOrdenesDeCompraJSON = $this->catalogoManager->getArrEntidadJSON('OrdenesDeCompra');
 
         return new ViewModel([
             'arrOrdenesDeCompraJSON' => $arrOrdenesDeCompraJSON
@@ -39,16 +39,14 @@ class OrdenesDeCompraController extends CednaController
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
-            // var_dump($JsonData);
-            // die;
 
             $this->ordenesDeCompraManager->altaEdicionOrdenesDeCompra($JsonData);
 
             $this->redirect()->toRoute("ordenes-de-compra",["action" => "index"]);
         }
         
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
-        $arrUsuariosJSON = $this->catalogoManager->getArrUsuariosJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
+        $arrUsuariosJSON = $this->catalogoManager->getArrEntidadJSON('Usuarios');
 
         $view = new ViewModel();
         
@@ -75,8 +73,8 @@ class OrdenesDeCompraController extends CednaController
             $this->redirect()->toRoute("ordenes-de-compra",["action" => "index"]);
         }
 
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
-        $arrUsuariosJSON = $this->catalogoManager->getArrUsuariosJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
+        $arrUsuariosJSON = $this->catalogoManager->getArrEntidadJSON('Usuarios');
 
         $view = new ViewModel();
         

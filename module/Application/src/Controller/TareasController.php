@@ -25,7 +25,7 @@ class TareasController extends CednaController
     {
         $this->cargarAccionesDisponibles('tareas');
         
-        $arrTareasJSON = $this->catalogoManager->getArrTareasJSON();
+        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
 
         return new ViewModel([
             'arrTareasJSON' => $arrTareasJSON
@@ -46,8 +46,8 @@ class TareasController extends CednaController
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
         
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
-        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
+        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
 
         $view = new ViewModel();
         
@@ -75,8 +75,8 @@ class TareasController extends CednaController
             $this->redirect()->toRoute("tareas",["action" => "index"]);
         }
 
-        $arrNodosJSON = $this->catalogoManager->getArrNodosJSON();
-        $arrFormularioJSON = $this->catalogoManager->getArrFormularioJSON();
+        $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
+        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
 
         $view = new ViewModel();
         

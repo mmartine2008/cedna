@@ -25,7 +25,7 @@ class ConfigPerfilesController extends ConfiguracionController
     {
         $this->cargarAccionesDisponibles('perfiles');
         
-        $arrPerfilesJSON = $this->configuracionManager->getArrPerfilesJSON();
+        $arrPerfilesJSON = $this->catalogoManager->getArrEntidadJSON('Perfiles');
 
         return new ViewModel([
             'arrPerfilesJSON' => $arrPerfilesJSON

@@ -25,7 +25,7 @@ class ConfigUsuariosController extends ConfiguracionController
     public function indexAction()
     {
         $this->cargarAccionesDisponibles('usuarios');
-        $arrUsuariosJSON = $this->catalogoManager->getArrUsuariosJSON();
+        $arrUsuariosJSON = $this->catalogoManager->getArrEntidadJSON('Usuarios');
 
         return new ViewModel([
             'arrUsuariosJSON' => $arrUsuariosJSON

@@ -41,8 +41,6 @@ class OrdenesDeCompraManager {
         $OrdenesDeCompra->setNodo($Nodo);
         $OrdenesDeCompra->setResponsable($Responsable);
         $OrdenesDeCompra->setPlanificaTarea($PlanificaTarea);
-
-        //$fechaLiberacion = date('Y-m-d', $jsonData->fechaLiberacion);
         $OrdenesDeCompra->setFechaLiberacion($jsonData->fechaLiberacion);
         $OrdenesDeCompra->setDescripcion($jsonData->descripcion);
 
