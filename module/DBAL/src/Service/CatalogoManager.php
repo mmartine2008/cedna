@@ -18,6 +18,7 @@ use DBAL\Entity\Tareas;
 use DBAL\Entity\Formulario;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\OrdenesDeCompra;
+use DBAL\Entity\Planificaciones;
 
 class CatalogoManager {
     
@@ -181,6 +182,43 @@ class CatalogoManager {
         }
 
         return $OrdenesDeCompra;
+    }
+
+    public function getPlanificaciones($idPlanificaciones = null){
+        if ($idPlanificaciones){
+            $Planificaciones = $this->entityManager->getRepository(Planificaciones::class)->findOneBy(['id' => $idPlanificaciones]);
+        }else{
+            $Planificaciones = $this->entityManager->getRepository(Planificaciones::class)->findAll();
+        }
+
+        return $Planificaciones;
+    }
+
+    public function getTareaPorOrdenDeCompra($OrdenDeCompra){
+        $Tareas = $this->entityManager->getRepository(Tareas::class)->findOneBy(['OrdenDeCompra' => $OrdenDeCompra]);
+
+        return $Tareas;
+    }
+
+    /**
+     * Funcion generica que busca una Entidad en particular, si se pasa el ID
+     * como parametro, o de lo contrario recupera todas las entidades disponibles.
+     * 
+     * El parametro $claseEntidad tiene que ser: Entidad::class
+     *
+     * @param [string] $claseEntidad
+     * @param [integer] $idEntidad
+     * @return Entidad | array
+     */
+    public function getEntidades($claseEntidad, $idEntidad = null){
+        //$claseEntidad = $claseEntidad;
+        if ($idEntidad){
+            $Entidades = $this->entityManager->getRepository($claseEntidad)->findOneBy(['id' => $idEntidad]);
+        }else{
+            $Entidades = $this->entityManager->getRepository($claseEntidad)->findAll();
+        }
+
+        return $Entidades;
     }
 
     /**

@@ -99,6 +99,5 @@ class TareasController extends CednaController
 
         //Todavia no hay para mostrar mensajes
         return $this->redirect()->toRoute("tareas",["action" => "index"]);
-    } 
-
+    }
 }

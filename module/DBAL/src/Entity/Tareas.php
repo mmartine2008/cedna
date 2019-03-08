@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a registered user.
@@ -24,6 +25,24 @@ class Tareas
     protected $Solicitante;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\JoinColumn(name="IdEjecutor", referencedColumnName="IdUsuario")
+     */
+    protected $Ejecutor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\JoinColumn(name="IdResponsable", referencedColumnName="IdUsuario")
+     */
+    protected $Responsable;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\JoinColumn(name="IdPlanificaTarea", referencedColumnName="IdUsuario")
+     */
+    protected $PlanificaTarea;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Nodos")
      * @ORM\JoinColumn(name="IdNodo", referencedColumnName="IdNodo")
      */
@@ -34,6 +53,12 @@ class Tareas
      * @ORM\JoinColumn(name="IdEstadoTarea", referencedColumnName="IdEstadoTarea")
      */
     protected $EstadoTarea;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OrdenesDeCompra")
+     * @ORM\JoinColumn(name="IdOrdenDeCompra", referencedColumnName="IdOrdenDeCompra")
+     */
+    protected $OrdenDeCompra;
 
     /**
      * @ORM\ManyToOne(targetEntity="Relevamientos")
@@ -56,6 +81,15 @@ class Tareas
      */
     protected $Resumen;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Planificaciones", mappedBy="Tarea")
+     */
+    protected $Planificaciones;
+
+    public function __construct() {
+        $this->Planificaciones = new ArrayCollection();
+    }
+
     public function setSolicitante($Solicitante)
     {
         $this->Solicitante = $Solicitante;
@@ -66,9 +100,29 @@ class Tareas
         $this->Nodo = $Nodo;
     }
 
+    public function setEjecutor($Ejecutor)
+    {
+        $this->Ejecutor = $Ejecutor;
+    }
+
+    public function setResponsable($Responsable)
+    {
+        $this->Responsable = $Responsable;
+    }
+
+    public function setPlanificaTarea($PlanificaTarea)
+    {
+        $this->PlanificaTarea = $PlanificaTarea;
+    }
+
     public function setEstadoTarea($EstadoTarea)
     {
         $this->EstadoTarea = $EstadoTarea;
+    }
+
+    public function setOrdenDeCompra($OrdenDeCompra)
+    {
+        $this->OrdenDeCompra = $OrdenDeCompra;
     }
 
     public function setRelevamiento($Relevamiento)
@@ -101,6 +155,21 @@ class Tareas
         return $this->Solicitante;
     }
 
+    public function getEjecutor()
+    {
+        return $this->Ejecutor;
+    }
+
+    public function getResponsable()
+    {
+        return $this->Responsable;
+    }
+
+    public function getPlanificaTarea()
+    {
+        return $this->PlanificaTarea;
+    }
+
     public function getNodo()
     {
         return $this->Nodo;
@@ -109,6 +178,11 @@ class Tareas
     public function getEstadoTarea()
     {
         return $this->EstadoTarea;
+    }
+
+    public function getOrdenDeCompra()
+    {
+        return $this->OrdenDeCompra;
     }
 
     public function getRelevamiento()
@@ -136,17 +210,48 @@ class Tareas
         return $this->Resumen;
     }
 
+    public function getPlanificaciones()
+    {
+        if ($this->Planificaciones){
+            return $this->Planificaciones->toArray();
+        }else{
+            return null;
+        }
+    }
+
     public function getJSON(){
+        $planificaciones = [];
+        foreach ($this->getPlanificaciones() as $planificacion) {
+            $planificaciones[] = $planificacion->getJSON();
+        }
+        $planificaciones = implode(", ", $planificaciones);
+
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
+        $output .= '"ejecutor": ' . $this->getEjecutor()->getJSON() .', ';
+        $output .= '"responsable": ' . $this->getResponsable()->getJSON() .', ';
+        $output .= '"planificaTarea": ' . $this->getPlanificaTarea()->getJSON() .', ';
         $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
         $output .= '"estadoTarea": ' . $this->getEstadoTarea()->getJSON() .', ';
-        $output .= '"relevamiento": ' . $this->getRelevamiento()->getJSON() .', ';
+        
+        if ($this->getOrdenDeCompra()){
+            $output .= '"ordenDeCompra": ' . $this->getOrdenDeCompra()->getJSON() .', ';
+        }else{
+            $output .= '"ordenDeCompra": "", ';
+        }
+        
+        if ($this->getRelevamiento()){
+            $output .= '"relevamiento": ' . $this->getRelevamiento()->getJSON() .', ';
+        }else{
+            $output .= '"relevamiento": "", ';
+        }
+        
         $output .= '"fechaSolicitud": "' . $this->getFechaSolicitud() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"resumen": "' . $this->getResumen() .'"';
+        $output .= '"resumen": "' . $this->getResumen() .'", ';
+        $output .= '"planificaciones": ['.$planificaciones.']';
         
         return '{' . $output . '}';
     }

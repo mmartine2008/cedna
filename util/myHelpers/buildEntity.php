@@ -57,14 +57,14 @@
      }
      
 process([
-    'IdOrdenDeCompra', 
-'FechaLiberacion', 
-'IdSolicitante', 
-'IdEjecutor', 
-'IdNodo', 
-'IdResponsable', 
-'IdPlanificaTarea', 
-'Descripcion',  
+    'IdPlanificacion', 
+'IdTarea', 
+'FechaInicio', 
+'FechaFin', 
+'HoraInicio', 
+'HoraFin', 
+'Titulo', 
+'Observaciones',   
 ]);
      
      /*
