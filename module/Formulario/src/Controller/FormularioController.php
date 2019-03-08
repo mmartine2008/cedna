@@ -80,14 +80,16 @@ class FormularioController extends CednaController
         return new ViewModel([ ]);
     }
 
-    public function imprimirFormularioAction() {
+    public function imprimirAction() {
 
         $parametros = $this->params()->fromRoute();
-        $idTarea = $parametros['id'];
-        $Tarea = $this->catalogoManager->getTareas($idTarea);
-        $Relevamiento = $Tarea->getRelevamiento();
+        // $idTarea = $parametros['id'];
+        // $Tarea = $this->catalogoManager->getTareas($idTarea);
+        $idRelevamiento = $parametros['id'];
+        $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
         // $Formulario = $Relevamiento->getFormulario();
-        $json = $this->FormularioManager->getRespuestasJSON($Relevamiento);
+        $data = $this->FormularioManager->getRespuestas($Relevamiento);
+        // var_dump($data);
 
         // $data = $this->params()->fromRoute();
         // $idManifiesto = $data['id'];
@@ -100,7 +102,7 @@ class FormularioController extends CednaController
 
         $renderer = $this->renderer;
         $view->setTemplate('layout/pdfFormulario');
-        $view->setVariable('data', $json);
+        $view->setVariable('data', $data);
 
         $html = $renderer->render($view);
 
@@ -113,7 +115,38 @@ class FormularioController extends CednaController
         
         $pdf->AddPage('P', 'A4');
         $pdf->writeHTML($html, true, false, true, false, '');
+        
+        $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+
+        $pdf->SetFont('helvetica', 'BI', 18);
+        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'C');
+        $pdf->Ln(10);
+
+        // $pdf->SetFont('helvetica', '', 12);
+        foreach ($data['secciones'] as $seccion) {
+            $pdf->SetFont('helvetica', '', 16);
+            $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
+            $pdf->Ln(20);
+            $respuestas = $seccion['respuestas'];
+            foreach ( $respuestas as $respuesta) { 
+                $pregunta = $respuesta['pregunta'];
+                $pdf->SetFont('helvetica', '', 12);
+                $descripcion = $pregunta['descripcion']; 
+                // var_dump($descripcion);
+                if($descripcion == '') { $descripcion = ' ';}
+                $pdf->Cell(35, 5,  $descripcion);
+                // $pdf->TextField($pregunta['descripcion'], 50, 5);
+                $pdf->TextField( $descripcion, 60, 5, array(), array('v'=>$respuesta['respuesta'], 'dv'=>$respuesta['respuesta']));
+                $pdf->Ln(10);
+
+                
+                
+            }
+
+        }
 
         $pdf->Output();
     }
+
+    
 }

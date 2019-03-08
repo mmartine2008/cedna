@@ -8,6 +8,7 @@ use Formulario\Controller\FormularioController;
 use Formulario\Service\FormularioManager;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Zend\View\Renderer\RendererInterface;
 
 
 /**
@@ -23,9 +24,8 @@ class FormularioControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
         $tcpdf = $container->get(\TCPDF::class);
-        $renderer = $container->get(RendererInterface::class);        
+        $renderer = $container->get(RendererInterface::class);    
 
-        
         return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer);
     }
 }

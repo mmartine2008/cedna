@@ -163,7 +163,9 @@ class FormularioManager {
 
     private function getValorFuncion($funcion, $opcion){
         $opciones = $this->catalogoManager->{$funcion}();
-        foreach($opciones as $opcionFuncion) {
+        $objOpciones = json_decode(json_encode($opciones));
+        // var_dump($op);
+        foreach($objOpciones as $opcionFuncion) {
             if($opcionFuncion->id == $opcion){
                 return $opcionFuncion->descripcion;
             }
@@ -183,7 +185,9 @@ class FormularioManager {
             }
             $respuestaDec->respuesta = $valorOpcion;
         }
-        return json_encode($respuestaDec);
+        // var_dump(json_decode(json_encode($respuestaDec), true));
+        // return $respuestaDec;
+        return json_decode(json_encode($respuestaDec), true);
     } 
 
     private function getRespuestaPorSeccion($RespuestasRelevamiento, $idSeccion){
@@ -193,34 +197,31 @@ class FormularioManager {
                 $respuestas[] = $this->getRespuestaModificada($Respuesta);
             } //ver respuestas para los select multiple
         } 
-        $respuestas = implode(", ", $respuestas);
         
-        return '['.$respuestas .']';
+        return $respuestas ;
     } 
 
     private function getSeccionesPorFormulario($Relevamiento){
         $RespuestasRelevamiento = $this->getRespuestasSegunRelevamiento($Relevamiento);
         $secciones = $Relevamiento->getFormulario()->getSecciones();
         foreach($secciones as $seccion) {
+            
             $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
                     'respuestas' => $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId())];
         }
-    
-        $output = implode(", ", $output);
 
-        return '{'.$output.'}';
+        return $output;
     }
 
-    public function getRespuestasJSON($Relevamiento){
+    public function getRespuestas($Relevamiento){
         $output = [];
-        
-        $output = "";
-        $output .= '"idRelevamiento": "' . $Relevamiento->getId() .'", ';
-        $output .= '"descripcionFormulario": "' . $Relevamiento->getFormulario()->getNombre() .'", ';
-        $secciones = $this->getSeccionesPorFormulario($Relevamiento);
-        $output .=  '"secciones": '.$secciones;
-
-        return '{' . $output . '}';
+       
+        $output = ['idRelevamiento' =>$Relevamiento->getId(), 
+                    'descripcionFormulario' => $Relevamiento->getFormulario()->getNombre(),
+                    'secciones' => $this->getSeccionesPorFormulario($Relevamiento)
+                    ];
+     
+        return $output;
     }
 
     public function tieneRespuesta($respuesta) {

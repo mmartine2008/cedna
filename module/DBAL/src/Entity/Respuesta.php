@@ -231,7 +231,7 @@ class Respuesta
     public function getJSON(){
         $output = "";
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
-        $output .= '"pregunta": "' . $this->getPregunta()->getJson() .'", ';
+        $output .= '"pregunta": ' . $this->getPregunta()->getJson() .', ';
 
         if ($this->getPermiso()) {
              $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
