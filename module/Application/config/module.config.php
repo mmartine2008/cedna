@@ -133,6 +133,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'planificacion' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/planificacion[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\PlanificacionController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
             'ordenes-de-compra' => [
                 'type' => Segment::class,
                 'options' => [
@@ -159,6 +174,7 @@ return [
             Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
             Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
             Controller\OrdenesDeCompraController::class => Controller\Factory\OrdenesDeCompraControllerFactory::class,
+            Controller\PlanificacionController::class => Controller\Factory\PlanificacionControllerFactory::class,
         ],
     ],
     'service_manager' => [

@@ -23,36 +23,6 @@ class OrdenesDeCompra
     protected $FechaLiberacion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Usuarios")
-     * @ORM\JoinColumn(name="IdSolicitante", referencedColumnName="IdUsuario")
-     */
-    protected $Solicitante;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Usuarios")
-     * @ORM\JoinColumn(name="IdEjecutor", referencedColumnName="IdUsuario")
-     */
-    protected $Ejecutor;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Nodos")
-     * @ORM\JoinColumn(name="IdNodo", referencedColumnName="IdNodo")
-     */
-    protected $Nodo;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Usuarios")
-     * @ORM\JoinColumn(name="IdResponsable", referencedColumnName="IdUsuario")
-     */
-    protected $Responsable;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Usuarios")
-     * @ORM\JoinColumn(name="IdPlanificaTarea", referencedColumnName="IdUsuario")
-     */
-    protected $PlanificaTarea;
-
-    /**
      * @ORM\Column(name="Descripcion")
      */
     protected $Descripcion;
@@ -60,31 +30,6 @@ class OrdenesDeCompra
     public function setFechaLiberacion($FechaLiberacion)
     {
         $this->FechaLiberacion = $FechaLiberacion;
-    }
-
-    public function setSolicitante($Solicitante)
-    {
-        $this->Solicitante = $Solicitante;
-    }
-
-    public function setEjecutor($Ejecutor)
-    {
-        $this->Ejecutor = $Ejecutor;
-    }
-
-    public function setNodo($Nodo)
-    {
-        $this->Nodo = $Nodo;
-    }
-
-    public function setResponsable($Responsable)
-    {
-        $this->Responsable = $Responsable;
-    }
-
-    public function setPlanificaTarea($PlanificaTarea)
-    {
-        $this->PlanificaTarea = $PlanificaTarea;
     }
 
     public function setDescripcion($Descripcion)
@@ -107,29 +52,9 @@ class OrdenesDeCompra
         }
     }
 
-    public function getSolicitante()
-    {
-        return $this->Solicitante;
-    }
-
-    public function getEjecutor()
-    {
-        return $this->Ejecutor;
-    }
-
     public function getNodo()
     {
         return $this->Nodo;
-    }
-
-    public function getResponsable()
-    {
-        return $this->Responsable;
-    }
-
-    public function getPlanificaTarea()
-    {
-        return $this->PlanificaTarea;
     }
 
     public function getDescripcion()
@@ -142,12 +67,7 @@ class OrdenesDeCompra
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"fechaLiberacion": "' . $this->getFechaLiberacion() .'", ';
-        $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
-        $output .= '"ejecutor": ' . $this->getEjecutor()->getJSON() .', ';
-        $output .= '"responsable": ' . $this->getResponsable()->getJSON() .', ';
-        $output .= '"planificaTarea": ' . $this->getPlanificaTarea()->getJSON() .', ';
-        $output .= '"nodo": ' . $this->getNodo()->getJSON();
+        $output .= '"descripcion": "' . $this->getDescripcion().'"';
         
         return '{' . $output . '}';
     }

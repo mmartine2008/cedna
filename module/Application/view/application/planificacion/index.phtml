@@ -2,20 +2,22 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Listado de Ordenes de Compra</h3>
+                <h3 class="panel-title">Analisis de Tareas</h3>
             </div>
             <div class="panel-body mt-5">
-                <table id="tablaOrdenesDeCompra" class="table table-hover">
+                <table id="tablaTareas" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">Fecha de Liberación</th>
+                            <th class="text-center">ID</th>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Orden de Compra</th>
                             <th class="text-center">Solicitante</th>
-                            <th class="text-center">Nodo</th>
                             <th class="text-center">Ejecutor</th>
-                            <th class="text-center">Planifica Tarea</th>
+                            <th class="text-center">Planificación</th>
+                            <th class="text-center">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="bodyOrdenesDeCompra">
+                    <tbody id="bodyTareas">
                     
                     </tbody>
                 </table>
@@ -29,36 +31,40 @@
     var arrTareasJSON = <?= $arrTareasJSON; ?>;
 
     $( document ).ready(function() {
-        dibujarTablaOrdenesDeCompra();
+        dibujarTablaTareas();
     });
 
-    function dibujarTablaOrdenesDeCompra(){
-        $('#bodyOrdenesDeCompra').find('tr').remove();
+    function dibujarTablaTareas(){
+        $('#bodyTareas').find('tr').remove();
     
         for (var i = 0; i < arrTareasJSON.length; i++)
         {
             var tarea = arrTareasJSON[i];
 
-            var body = document.getElementById("bodyOrdenesDeCompra");
+            var body = document.getElementById("bodyTareas");
             var row = body.insertRow();
             row.id = i;
 
-            var fecha = row.insertCell(0);
-            var solicitante = row.insertCell(1);
-            var nodo = row.insertCell(2);
-            var ejecutor = row.insertCell(3);
-            var planificaTarea = row.insertCell(4);
+            var id = row.insertCell(0);
+            var fecha = row.insertCell(1);
+            var ordenDeCompra = row.insertCell(2);
+            var solicitante = row.insertCell(3);
+            var ejecutor = row.insertCell(4);
+            var planificacion = row.insertCell(5);
+            var estado = row.insertCell(6);
 
-            fecha.innerHTML = tarea.ordenDeCompra.fechaLiberacion;
+            id.innerHTML = tarea.id;
+            fecha.innerHTML = tarea.fechaSolicitud;
+            ordenDeCompra.innerHTML = '';
             solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
-            nodo.innerHTML = tarea.nodo.nombre;
-            ejecutor.innerHTML = tarea.ejecutor.nombre + ', ' + tarea.ejecutor.apellido;
-            planificaTarea.innerHTML = tarea.planificaTarea.nombre + ', ' + tarea.planificaTarea.apellido;
+            ejecutor.innerHTML = '';
+            planificacion.innerHTML = '';
+            estado.innerHTML = tarea.estadoTarea.descripcion;
         }
     }
 
     $(function() {
-        $('#tablaOrdenesDeCompra').on('click', 'tbody tr', function(event) {
+        $('#tablaTareas').on('click', 'tbody tr', function(event) {
             if (!$(this).hasClass('highlight')){
                 $('.highlight').removeClass('highlight');
 
@@ -79,7 +85,7 @@
         var tarea = arrTareasJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/ordenes-de-compra/borrar/' + tarea.ordenDeCompra.id,
+            url: url + '/tareas/borrar/' + tarea.id,
             type: 'post',
             dataType: 'json',
             async: false,
@@ -98,7 +104,7 @@
             swal({
                 title: 'Eliminar Tarea',
                 width: 600,
-                text: "Esta seguro que desea eliminar la orden de compra: "+ tarea.ordenDeCompra.descripcion +"?",
+                text: "Esta seguro que desea eliminar la tarea: "+ tarea.resumen +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -108,12 +114,12 @@
             }).then((result) => {
                 if (result.value) {
                     borrarTarea();
-                    window.location.replace(url + "/ordenes-de-compra");
+                    window.location.replace(url + "/tareas");
                 }
             });
         }else{
             swal('Tarea no seleccionado',
-                'Por favor seleccione el orden de compra que desea eliminar',
+                'Por favor seleccione el tarea que desea eliminar',
                 'error');
         }
     }
@@ -122,10 +128,10 @@
         if (filaSeleccionada >= 0){
             var tarea = arrTareasJSON[filaSeleccionada];
 
-            window.location.replace(url + "/ordenes-de-compra/editar/" + tarea.ordenDeCompra.id);
+            window.location.replace(url + "/tareas/editar/" + tarea.id);
         }else{
             swal('Tarea no seleccionado',
-                'Por favor seleccione la orden de compra que desea editar',
+                'Por favor seleccione la tarea que desea editar',
                 'error');
         }
     }

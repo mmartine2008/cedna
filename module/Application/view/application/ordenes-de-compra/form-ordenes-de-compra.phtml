@@ -98,7 +98,7 @@
 
 </div>
 <script>
-var OrdenesDeCompraJson = <?= $OrdenesDeCompraJson ?>;
+var TareaJson = <?= $TareaJson ?>;
 var arrNodosJSON = <?= $arrNodosJSON ?>;
 var arrUsuariosJSON = <?= $arrUsuariosJSON ?>;
 
@@ -141,15 +141,15 @@ $( document ).ready(function() {
     dibujarSelectEjecutor();
     dibujarSelectSolicitante();
 
-    if (OrdenesDeCompraJson !== ''){
-        var fecha = transformarFechaParaInput(OrdenesDeCompraJson.fechaLiberacion);
+    if (TareaJson !== ''){
+        var fecha = transformarFechaParaInput(TareaJson.ordenDeCompra.fechaLiberacion);
         $('#fechaOrdenDeCompra').val(fecha);
         seleccionarNodo();
-        seleccionarUsuarioPorPosicion(OrdenesDeCompraJson.solicitante, 'solicitanteOrdenDeCompra');
-        seleccionarUsuarioPorPosicion(OrdenesDeCompraJson.ejecutor, 'ejecutorOrdenDeCompra');
+        seleccionarUsuarioPorPosicion(TareaJson.solicitante, 'solicitanteOrdenDeCompra');
+        seleccionarUsuarioPorPosicion(TareaJson.ejecutor, 'ejecutorOrdenDeCompra');
         seleccionarResponsable();
         seleccionarPlanificaTarea();
-        $('#descripcionOrdenDeCompra').val(OrdenesDeCompraJson.descripcion);
+        $('#descripcionOrdenDeCompra').val(TareaJson.ordenDeCompra.descripcion);
     }
     
     verificarMostrarBotonGuardar();
@@ -177,7 +177,7 @@ function seleccionarNodo(){
     for (var i = 0; i < arrNodosJSON.length; i++){
         var nodo = arrNodosJSON[i];
 
-        if (nodo.id == OrdenesDeCompraJson.nodo.id){
+        if (nodo.id == TareaJson.nodo.id){
             $('#nodoOrdenDeCompra').val(i);
             $('#nodoOrdenDeCompra').change();
             break;
@@ -203,12 +203,12 @@ function seleccionarUsuarioPorPosicion(usuarioCargado, idDiv){
  * @return void
  */
 function seleccionarResponsable(){
-    var nodo = OrdenesDeCompraJson.nodo;
+    var nodo = TareaJson.nodo;
 
     for (var i = 0; i < nodo.jefes.length; i++){
         var jefe = nodo.jefes[i];
 
-        if (jefe.id == OrdenesDeCompraJson.responsable.id){
+        if (jefe.id == TareaJson.responsable.id){
             $('#responsableOrdenDeCompra').val(i);
             $('#responsableOrdenDeCompra').change();
         }
@@ -221,7 +221,7 @@ function seleccionarResponsable(){
  * @return void
  */
 function seleccionarPlanificaTarea(){
-    $('#planificaTarea').val(OrdenesDeCompraJson.planificaTarea.id);
+    $('#planificaTarea').val(TareaJson.planificaTarea.id);
 }
 
 function dibujarSelectNodos(){

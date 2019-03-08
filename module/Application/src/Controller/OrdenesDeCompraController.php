@@ -25,10 +25,10 @@ class OrdenesDeCompraController extends CednaController
     {
         $this->cargarAccionesDisponibles('ordenes de compra');
         
-        $arrOrdenesDeCompraJSON = $this->catalogoManager->getArrEntidadJSON('OrdenesDeCompra');
+        $arrTareasJSON = $this->ordenesDeCompraManager->getArrTareasJSONConOrdenesDeCompra();
 
         return new ViewModel([
-            'arrOrdenesDeCompraJSON' => $arrOrdenesDeCompraJSON
+            'arrTareasJSON' => $arrTareasJSON
         ]);
     }
 
@@ -50,7 +50,7 @@ class OrdenesDeCompraController extends CednaController
 
         $view = new ViewModel();
         
-        $view->setVariable('OrdenesDeCompraJson', '""');
+        $view->setVariable('TareaJson', '""');
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
         $view->setVariable('arrUsuariosJSON', $arrUsuariosJSON);
         $view->setTemplate('application/ordenes-de-compra/form-ordenes-de-compra.phtml');
@@ -79,8 +79,9 @@ class OrdenesDeCompraController extends CednaController
         $view = new ViewModel();
         
         $OrdenesDeCompra = $this->catalogoManager->getOrdenesDeCompra($idOrdenesDeCompra);
+        $Tarea = $this->catalogoManager->getTareaPorOrdenDeCompra($OrdenesDeCompra);
 
-        $view->setVariable('OrdenesDeCompraJson', $OrdenesDeCompra->getJSON());
+        $view->setVariable('TareaJson', $Tarea->getJSON());
         $view->setVariable('arrNodosJSON', $arrNodosJSON);
         $view->setVariable('arrUsuariosJSON', $arrUsuariosJSON);
         $view->setTemplate('application/ordenes-de-compra/form-ordenes-de-compra.phtml');
