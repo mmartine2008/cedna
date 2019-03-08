@@ -27,7 +27,19 @@ return [
                     'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     'id' => '[a-zA-Z0-9_-]*',
                 ],
-                'may_terminate' => true,
+            ],
+            'imprimir' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/imprimir/:id',
+                    'defaults' => [
+                        'action' => 'imprimir',
+                        'controller' => Controller\FormularioController::class,
+                    ],
+                    'constraints' => [
+                        'id' => '[1-9]\d*',
+                    ],
+                ],
             ],
         ],
     ],

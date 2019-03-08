@@ -32,7 +32,8 @@
         "zendframework/zend-console": "^2.7",
         "zfcampus/zf-console": "^1.4",
         "guzzlehttp/guzzle": "^6.3",
-        "zendframework/zend-mvc-i18n": "^1.1"
+        "zendframework/zend-mvc-i18n": "^1.1",
+        "tecnick.com/tcpdf": "^6.2"
     },
     "autoload": {
         "psr-4": {
