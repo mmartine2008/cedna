@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Asignar autoridades al nodo: <span id="NombreNodo"></span></h3>
+                <h3 class="panel-title"><?= $this->translate('__Asignar_autoridades_al_nodo__') ?>: <span id="NombreNodo"></span></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formAutoridades" name="formAutoridades">
@@ -10,7 +10,7 @@
                         <div class="col-lg-6">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <label for="idUsuario"><span class="obligatorio">(*) </span>Usuario:</label>
+                                    <label for="idUsuario"><span class="obligatorio">(*) </span><?= $this->translate('__Usuario__') ?>:</label>
                                 </div>  
                                 <div class="col-md-7">
                                     <select id="idUsuario" name="idUsuario" class="form-control">
@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-4">
-                                    <label for="idTipoJefe"><span class="obligatorio">(*) </span>Tipo de Autoridad:</label>
+                                    <label for="idTipoJefe"><span class="obligatorio">(*) </span><?= $this->translate('__Tipo_de_Autoridad__') ?>:</label>
                                 </div>  
                                 <div class="col-md-6">
                                     <select id="idTipoJefe" name="idTipoJefe" class="form-control">
@@ -29,7 +29,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="ordenAutoridad"><span class="obligatorio">(*) </span>Orden:</label>
+                                    <label for="ordenAutoridad"><span class="obligatorio">(*) </span><?= $this->translate('__Orden__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <select id="ordenAutoridad" name="ordenAutoridad" class="form-control">
@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-row mt-5">
                                 <div class="col-md-1 offset-8">
-                                    <div class="btn" onclick="agregarJefe();">Agregar</div>
+                                    <div class="btn" onclick="agregarJefe();"><?= $this->translate('__Agregar__') ?></div>
                                 </div>
                             </div>
                         </div>
@@ -48,9 +48,9 @@
                                 <table class="table table-hover" data-page-size="15">
                                     <thead>
                                         <tr>
-                                            <th>Nombre y Apellido</th>
-                                            <th>Tipo de Autoridad</th>
-                                            <th>Orden</th>
+                                            <th><?= $this->translate('__Nombre_y_Apellido__') ?></th>
+                                            <th><?= $this->translate('__Tipo_de_Autoridad__') ?></th>
+                                            <th><?= $this->translate('__Orden__') ?></th>
                                             <th></th>
                                         </tr>
                                     </thead>

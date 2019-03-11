@@ -48,7 +48,7 @@ class OperariosController extends CednaController
         $view = new ViewModel();
         
         $view->setVariable('OperariosJson', '""');
-        $view->setTemplate('application/operarios/form-operarios.phtml');
+        $view->setTemplate('application/operarios/alta-operarios.phtml');
         
         return $view;
     }
@@ -73,7 +73,7 @@ class OperariosController extends CednaController
         $Operarios = $this->catalogoManager->getOperarios($idOperarios);
 
         $view->setVariable('OperariosJson', $Operarios->getJSON());
-        $view->setTemplate('application/operarios/form-operarios.phtml');
+        $view->setTemplate('application/operarios/editar-operarios.phtml');
         
         return $view;
     }
