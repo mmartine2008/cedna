@@ -47,7 +47,7 @@
                 
                 if (planificacion.relevamiento.hasOwnProperty('formulario')){
                     var row = body.insertRow();
-                    row.id = j;
+                    row.id = planificacion.id;
 
                     var tareaID = row.insertCell(0);
                     var solicitante = row.insertCell(1);
@@ -87,9 +87,8 @@
 
     function preEditar(){
         if (filaSeleccionada >= 0){
-            var tarea = arrTareasJSON[filaSeleccionada];
-
-            window.location.replace(url + "/formulario/cargar/" + tarea.id);
+            //La fila seleccionada ya tiene el id de la planificacin
+            window.location.replace(url + "/formulario/cargar/" + filaSeleccionada);
         }else{
             swal('Tarea no seleccionado',
                 'Por favor seleccione la tarea que desea editar',
