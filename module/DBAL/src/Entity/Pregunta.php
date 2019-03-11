@@ -267,16 +267,19 @@ class Pregunta
         } else {
             $output .= '"funcion": "", ';
         }
+
+        $listaNombreDestinos = ["Disponibles","Seleccionados", "No seleccionados"];
         
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
             $cantDestinos = $this->getTipoPregunta()->getCantDestinos();
             if($cantDestinos > 0){
                 $output .= '"cantDestinos": "' . $cantDestinos .'", ';
+                // $output .=  '"nombreDestinos": "' . $listaNombreDestinos .'", ';
                 $resp = [];
-                $resp[] = '{"destino": "destino_0_id_'.$this->getId().'", "opcion": ['.$opciones.']}';
+                $resp[] = '{"destino": "destino_0_id_'.$this->getId().'", "opcion": ['.$opciones.'], "nombre" : "Disponibles"}';
                 for($i=1 ; $i<=$cantDestinos; $i++) {
-                    $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": []}';
+                    $resp[] = '{"destino": "destino_'.$i.'_id_'.$this->getId().'", "opcion": [], "nombre" : "'.$listaNombreDestinos[$i].'"}';
                 }
                 $resp = implode(", ", $resp);
                 $output .= '"respuesta": ['.$resp.']';

@@ -233,6 +233,41 @@ class Tareas
         }else{
             return null;
         }
+    } 
+
+    private function getJsonEjecutor(){
+        if($this->getEjecutor()) {
+             return $this->getEjecutor()()->getJSON();
+        }
+        return '" "';
+    }
+
+    private function getJsonResponsable(){
+        if($this->getResponsable()) {
+             return $this->getResponsable()->getJSON();
+        }
+        return '" "';
+    }
+
+    private function getJsonPlanificaTarea(){
+        if($this->getPlanificaTarea()) {
+             return $this->getPlanificaTarea()->getJSON();
+        }
+        return '" "';
+    }
+
+    private function getJsonNodo(){
+        if($this->getNodo()) {
+             return $this->getNodo()->getJSON();
+        }
+        return '" "';
+    }
+
+    private function getJsonEstadoTarea(){
+        if($this->getEstadoTarea()) {
+             return $this->getEstadoTarea()->getJSON();
+        }
+        return '" "';
     }
 
     public function getJSON(){
@@ -243,14 +278,14 @@ class Tareas
         $planificaciones = implode(", ", $planificaciones);
 
         $output = "";
-
+        
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"solicitante": ' . $this->getSolicitante()->getJSON() .', ';
-        $output .= '"ejecutor": ' . $this->getEjecutor()->getJSON() .', ';
-        $output .= '"responsable": ' . $this->getResponsable()->getJSON() .', ';
-        $output .= '"planificaTarea": ' . $this->getPlanificaTarea()->getJSON() .', ';
-        $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
-        $output .= '"estadoTarea": ' . $this->getEstadoTarea()->getJSON() .', ';
+        $output .= '"ejecutor": ' . $this->getJsonEjecutor() .', ';
+        $output .= '"responsable": ' . $this->getJsonResponsable() .', ';
+        $output .= '"planificaTarea": ' . $this->getJsonPlanificaTarea() .', ';
+        $output .= '"nodo": ' . $this->getJsonNodo() .', ';
+        $output .= '"estadoTarea": ' . $this->getJsonEstadoTarea() .', ';
         
         if ($this->getOrdenDeCompra()){
             $output .= '"ordenDeCompra": ' . $this->getOrdenDeCompra()->getJSON() .', ';

@@ -406,7 +406,7 @@
         button.className = "btn btn-primary";
         button.textContent = icon;
         button.disabled = disabled;
-        button.style.marginTop = "15px";
+        button.style.marginTop = "35px";
         button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino)};
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
@@ -425,14 +425,23 @@
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
+        createTextElement("P", div_class_sm_3, "Disponibles");
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
 
-        var div_class_sm_1 = createDivClass("col-sm-1", divRow);
-        var div_class_sm_3_2 = createDivClass("col-sm-5", divRow);
+        // var div_row_6 = createDivClass("form-row col-sm-6", divRow);
+        var div_row_6 = createDivClass("row col-sm-6", divRow);
+        var div_class_sm_1 = createDivClass("col-sm-2", div_row_6);
+        var div_class_sm_3_2 = createDivClass("col-sm-10", div_row_6);
         for(var i=1; i <= cantDestinos; i++){
+            
             createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
             createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
 
+            var text = "Seleccionados"
+            if(i == 2) { text = "No seleccionados";}
+            // var text = nombresDestinos[i].nombre;
+
+            createTextElement("P", div_class_sm_3_2, text);
             createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
         }
     }
@@ -463,6 +472,7 @@
             }
         } else {
                 var cantDestinos = item.cantDestinos;
+                // var nombresDestinos = item.nombreDestinos;
                 createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
         } 
     }

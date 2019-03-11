@@ -175,7 +175,9 @@ class FormularioManager {
     public function getRespuestaModificada($Respuesta) {
         $JSON = $Respuesta->getJSON();
         $respuestaDec = json_decode($JSON);
-
+        // var_dump($JSON);
+        // var_dump($respuestaDec);
+        // var_dump($respuestaDec->pregunta);
         $pregunta = $respuestaDec->pregunta;
         if($pregunta->cerrada == 1) {
             if($pregunta->funcion) {
@@ -190,11 +192,22 @@ class FormularioManager {
         return json_decode(json_encode($respuestaDec), true);
     } 
 
+    private function respuestaTipoArchivo($Respuesta) {
+        $pregunta = $Respuesta->getPregunta();
+        $tipoPregunta = $pregunta->getTipoPregunta();
+        if($tipoPregunta->getDescripcion() == 'file'){
+            return true;
+        }
+        return false;
+    }
+
     private function getRespuestaPorSeccion($RespuestasRelevamiento, $idSeccion){
         $respuestas = [];
         foreach($RespuestasRelevamiento as $Respuesta){
             if($Respuesta->getSeccion()->getId() == $idSeccion){
-                $respuestas[] = $this->getRespuestaModificada($Respuesta);
+                if(!$this->respuestaTipoArchivo($Respuesta)){
+                    $respuestas[] = $this->getRespuestaModificada($Respuesta);
+                }
             } //ver respuestas para los select multiple
         } 
         
@@ -270,7 +283,7 @@ class FormularioManager {
         $output = [];
         if($pregunta->getTipoPregunta()->esPeguntaMultiple()) {
             foreach ($respuestas as $resp) {
-                $destino = $resp->destino;
+                $destino = $resp->nombre; //nombre destino
                 $opciones = $resp->opcion;
                 if($opciones){
                     $opcionesDestinos = $this->getOpcionDestino($opciones, $destino);
@@ -323,10 +336,10 @@ class FormularioManager {
         }
     }
 
-    public function altaRespuestasFormulario($datos, $idTarea) {
+    public function altaRespuestasFormulario($datos, $idPlanificacion) {
         $secciones = $datos->secciones;
-        $Tarea = $this->catalogoManager->getTareas($idTarea);
-        $Relevamiento = $Tarea->getRelevamiento();
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+        $Relevamiento = $Planificacion->getRelevamiento();
         foreach ($secciones as $seccion) {
             $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }

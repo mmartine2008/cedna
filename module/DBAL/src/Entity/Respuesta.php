@@ -236,13 +236,15 @@ class Respuesta
         if ($this->getPermiso()) {
              $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
         }
+        $destino = "";
         if ($this->getOpcion()) {
             $output .= '"opcion": "' . $this->getOpcion().'", ';
             $output .= '"respuesta": "", ';
             if ($this->getPregunta()->getTipoPregunta()->esPeguntaMultiple()) {
-                $output .= '"destino": "' . $this->getDestino().'", ';
-            }
+                $destino = $this->getDestino();
+            } 
         }
+        $output .= '"destino": "' .$destino.'", ';
         $output .= '"respuesta": "' . $this->getDescripcion() .'"';
         return '{' . $output . '}';
     }

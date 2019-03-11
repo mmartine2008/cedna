@@ -51,17 +51,17 @@ class FormularioController extends CednaController
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - cargar');
         
         $parametros = $this->params()->fromRoute();
-        $idTarea = $parametros['id'];
-        $Tarea = $this->catalogoManager->getTareas($idTarea);
+        $idPlanificacion = $parametros['id'];
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
 
         if ($this->getRequest()->isPost()) {
             $JsonData = $this->params()->fromPost();
             $data = json_decode($JsonData['JsonData']);
-            $this->FormularioManager->altaRespuestasFormulario($data, $idTarea);
+            $this->FormularioManager->altaRespuestasFormulario($data, $idPlanificacion);
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
-        $Formulario = $Tarea->getRelevamiento()->getFormulario();
+        $Formulario = $Planificacion->getRelevamiento()->getFormulario();
         
         return new ViewModel([
             "formulario" => $this->FormularioManager->getJSONActualizado($Formulario),
@@ -83,22 +83,11 @@ class FormularioController extends CednaController
     public function imprimirAction() {
 
         $parametros = $this->params()->fromRoute();
-        // $idTarea = $parametros['id'];
-        // $Tarea = $this->catalogoManager->getTareas($idTarea);
         $idRelevamiento = $parametros['id'];
         $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
-        // $Formulario = $Relevamiento->getFormulario();
         $data = $this->FormularioManager->getRespuestas($Relevamiento);
-        // var_dump($data);
-
-        // $data = $this->params()->fromRoute();
-        // $idManifiesto = $data['id'];
-
+        
         $view = new ViewModel();
-
-        // $empresa = $this->getDatosEmpresa();
-        // $Manifiesto = $this->catalogoManager->getManifiestoPorId($idManifiesto);
-        // $data = $this->manifiestosManager->getDataPDF($Manifiesto);
 
         $renderer = $this->renderer;
         $view->setTemplate('layout/pdfFormulario');
@@ -109,7 +98,8 @@ class FormularioController extends CednaController
         $pdf = $this->tcpdf;
 
         $pdf->SetFont('arialnarrow', '', 8, '', false);
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 70, PDF_MARGIN_RIGHT);
+
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         
@@ -122,26 +112,29 @@ class FormularioController extends CednaController
         $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'C');
         $pdf->Ln(10);
 
-        // $pdf->SetFont('helvetica', '', 12);
         foreach ($data['secciones'] as $seccion) {
             $pdf->SetFont('helvetica', '', 16);
             $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
             $pdf->Ln(20);
             $respuestas = $seccion['respuestas'];
+
             foreach ( $respuestas as $respuesta) { 
                 $pregunta = $respuesta['pregunta'];
                 $pdf->SetFont('helvetica', '', 12);
                 $descripcion = $pregunta['descripcion']; 
-                // var_dump($descripcion);
                 if($descripcion == '') { $descripcion = ' ';}
-                $pdf->Cell(35, 5,  $descripcion);
-                // $pdf->TextField($pregunta['descripcion'], 50, 5);
-                $pdf->TextField( $descripcion, 60, 5, array(), array('v'=>$respuesta['respuesta'], 'dv'=>$respuesta['respuesta']));
-                $pdf->Ln(10);
 
-                
-                
+                if(!$respuesta['destino'] == '') { $descripcion = $respuesta['destino'] ;}
+
+
+                $pdf->Cell(35, 5,  $descripcion);
+                $pdf->TextField( $descripcion, 100, 5, array(), array('v'=>$respuesta['respuesta'], 'dv'=>$respuesta['respuesta']));
+                $pdf->Ln(10);
             }
+
+            // $pdf->Cell(35, 5, 'List:');
+            // $pdf->ListBox('listbox', 60, 15, array('', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7'), array('multipleSelection'=>'true'));
+            // $pdf->Ln(20);
 
         }
 
