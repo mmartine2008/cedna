@@ -50,12 +50,6 @@ ADD IdRelevamiento INT NULL;
 ALTER TABLE Planificaciones
 ADD CONSTRAINT FK_Planificaciones_Relevamientos FOREIGN KEY (IdRelevamiento)  REFERENCES Relevamientos (IdRelevamiento);
 
--- ALTER TABLE Tareas
--- DROP CONSTRAINT FK_Tareas_Relevamientos;
-
--- ALTER TABLE Tareas
--- DROP COLUMN IdRelevamiento;
-
 ALTER TABLE Tareas
 ADD IdTipoPlanificacion INT NULL;
 

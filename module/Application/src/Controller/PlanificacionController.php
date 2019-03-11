@@ -25,7 +25,8 @@ class PlanificacionController extends CednaController
     {
         $this->cargarAccionesDisponibles('planificacion de tareas');
         
-        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
+        $nombreUsuario = $this->userSessionManager->getUserName();
+        $arrTareasJSON = $this->tareasManager->getArrTareasParaPlanificar($nombreUsuario);
 
         return new ViewModel([
             'arrTareasJSON' => $arrTareasJSON

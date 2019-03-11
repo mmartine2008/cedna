@@ -10,6 +10,8 @@
 
 namespace Autenticacion\Service;
 
+use DBAL\Entity\Usuarios;
+
 class UserSessionManager
 {
     /**
@@ -161,5 +163,4 @@ class UserSessionManager
             return false;
         }
     }
-    
 }
