@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nuevo Nodo</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Nodo__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formNodo" name="formNodo">
@@ -10,7 +10,7 @@
                         <div class="col-lg-8 offset-2">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <label for="nombreNodo"><span class="obligatorio">(*) </span>Nombre:</label>
+                                    <label for="nombreNodo"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="text" id="nombreNodo" name="nombreNodo" class="form-control" required="true">
@@ -18,11 +18,11 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="idTipoNodo"><span class="obligatorio">(*) </span>Tipo de Nodo:</label>
+                                    <label for="idTipoNodo"><span class="obligatorio">(*) </span><?= $this->translate('__Tipo_de_Nodo__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <select id="idTipoNodo" name="idTipoNodo" class="form-control" required="true">
-                                        <option value="">-- Seleccione --</option>
+                                        <option value="">-- <?= $this->translate('__Seleccione__') ?> --</option>
                                         <?php foreach($arrTipoNodo as $TipoNodo) :?>
                                             <option value="<?= $TipoNodo->getId() ?>"><?= $TipoNodo->getDescripcion() ?></option>
                                         <?php endforeach;?>
@@ -31,11 +31,11 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="idNodoSuperior">Nodo Superior:</label>
+                                    <label for="idNodoSuperior"><?= $this->translate('__Nodo_Superior__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <select id="idNodoSuperior" name="idNodoSuperior" class="form-control">
-                                        <option value="">-- Seleccione --</option>
+                                        <option value="">-- <?= $this->translate('__Seleccione__') ?> --</option>
                                         <?php foreach($arrNodos as $Nodo) :?>
                                             <option value="<?= $Nodo->getId() ?>"><?= $Nodo->getNombre() ?></option>
                                         <?php endforeach;?>

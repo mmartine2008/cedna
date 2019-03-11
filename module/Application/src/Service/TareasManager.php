@@ -174,4 +174,26 @@ class TareasManager {
             $this->entityManager->rollBack();
         }
     }
+
+    /**
+     * Esta funcion recupera el listado de tareas para planificar del usuario conectado.
+     * Lo retorna transformado en JSON.
+     *
+     * @param [type] $nombreUsuario
+     * @return void
+     */
+    public function getArrTareasParaPlanificar($nombreUsuario){
+        $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
+        $arrTareas = $this->catalogoManager->getTareasParaPlanificar($Usuario);
+
+        $output = [];
+        
+        foreach($arrTareas as $Tarea){
+            $output[] = $Tarea->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
 }

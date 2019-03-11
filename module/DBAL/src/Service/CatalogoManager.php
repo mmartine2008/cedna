@@ -211,6 +211,12 @@ class CatalogoManager {
         return $Tareas;
     }
 
+    public function getTareasParaPlanificar($Usuario){
+        $Tareas = $this->entityManager->getRepository(Tareas::class)->findBy(['PlanificaTarea' => $Usuario]);
+
+        return $Tareas;
+    }
+
     /**
      * Funcion generica que busca una Entidad en particular, si se pasa el ID
      * como parametro, o de lo contrario recupera todas las entidades disponibles.

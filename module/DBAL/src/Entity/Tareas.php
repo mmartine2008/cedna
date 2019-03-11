@@ -61,12 +61,6 @@ class Tareas
     protected $OrdenDeCompra;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Relevamientos")
-     * @ORM\JoinColumn(name="IdRelevamiento", referencedColumnName="IdRelevamiento")
-     */
-    protected $Relevamiento;
-
-    /**
      * @ORM\ManyToOne(targetEntity="TipoPlanificacion")
      * @ORM\JoinColumn(name="IdTipoPlanificacion", referencedColumnName="IdTipoPlanificacion")
      */
@@ -136,11 +130,6 @@ class Tareas
         $this->OrdenDeCompra = $OrdenDeCompra;
     }
 
-    public function setRelevamiento($Relevamiento)
-    {
-        $this->Relevamiento = $Relevamiento;
-    }
-
     public function setFechaSolicitud($FechaSolicitud)
     {
         $this->FechaSolicitud = $FechaSolicitud;
@@ -199,11 +188,6 @@ class Tareas
     public function getOrdenDeCompra()
     {
         return $this->OrdenDeCompra;
-    }
-
-    public function getRelevamiento()
-    {
-        return $this->Relevamiento;
     }
 
     public function getFechaSolicitud()
@@ -297,12 +281,6 @@ class Tareas
             $output .= '"tipoPlanificacion": ' . $this->getTipoPlanificacion()->getJSON() .', ';
         }else{
             $output .= '"tipoPlanificacion": "", ';
-        }
-        
-        if ($this->getRelevamiento()){
-            $output .= '"relevamiento": ' . $this->getRelevamiento()->getJSON() .', ';
-        }else{
-            $output .= '"relevamiento": "", ';
         }
         
         $output .= '"fechaSolicitud": "' . $this->getFechaSolicitud() .'", ';

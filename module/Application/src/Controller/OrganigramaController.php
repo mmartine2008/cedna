@@ -58,10 +58,9 @@ class OrganigramaController extends CednaController
 
         $view = new ViewModel();
         
-        $view->setVariable('NodosJson', '""');
         $view->setVariable('arrTipoNodo', $arrTipoNodo);
         $view->setVariable('arrNodos', $arrNodos);
-        $view->setTemplate('application/organigrama/form-nodos.phtml');
+        $view->setTemplate('application/organigrama/alta-nodos.phtml');
         
         return $view;
     }
@@ -91,7 +90,7 @@ class OrganigramaController extends CednaController
         $view->setVariable('NodosJson', $Nodos->getJSON());
         $view->setVariable('arrTipoNodo', $arrTipoNodo);
         $view->setVariable('arrNodos', $arrNodos);
-        $view->setTemplate('application/organigrama/form-nodos.phtml');
+        $view->setTemplate('application/organigrama/editar-nodos.phtml');
         
         return $view;
     }

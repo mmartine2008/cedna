@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nuevo Operario</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Operario__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formOperario" name="formOperario">
@@ -10,7 +10,7 @@
                         <div class="col-lg-6">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <label for="nombreOperario"><span class="obligatorio">(*) </span>Nombre:</label>
+                                    <label for="nombreOperario"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="text" id="nombreOperario" name="nombreOperario" class="form-control" required="true">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="telOperario">Telefono:</label>
+                                    <label for="telOperario"><?= $this->translate('__Telefono__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <input type="number" id="telOperario" name="telOperario" class="form-control">
@@ -36,7 +36,7 @@
                         <div class="col-lg-6">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <label for="apellidoOperario"><span class="obligatorio">(*) </span>Apellido:</label>
+                                    <label for="apellidoOperario"><span class="obligatorio">(*) </span><?= $this->translate('__Apellido__') ?>:</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text" id="apellidoOperario" name="apellidoOperario" class="form-control" required="true">

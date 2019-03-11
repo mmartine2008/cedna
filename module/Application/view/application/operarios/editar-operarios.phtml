@@ -1,0 +1,115 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Editar_Operario__') ?></h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formOperario" name="formOperario">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="nombreOperario"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="text" id="nombreOperario" name="nombreOperario" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="cuitOperario"><span class="obligatorio">(*) </span>CUIT:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="cuitOperario" name="cuitOperario" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="telOperario"><?= $this->translate('__Telefono__') ?>:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="number" id="telOperario" name="telOperario" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="apellidoOperario"><span class="obligatorio">(*) </span><?= $this->translate('__Apellido__') ?>:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="apellidoOperario" name="apellidoOperario" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-2">
+                                    <label for="emailOperario">Email:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="emailOperario" name="emailOperario" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var operariosJson = <?= $OperariosJson ?>;
+
+function FormOperarioToJson(){
+    var formData = {
+        cuit: $('#cuitOperario').val(), 
+        telefono: $('#telOperario').val(), 
+        nombre: $('#nombreOperario').val(),
+        apellido: $('#apellidoOperario').val(),
+        email: $('#emailOperario').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormOperarioToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formOperario")[0].checkValidity()){
+        $("#formOperario").submit();
+    }else{
+        $("#formOperario")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    if (operariosJson !== ''){
+        $('#cuitOperario').val(operariosJson.cuit);
+        $('#nombreOperario').val(operariosJson.nombre);
+        $('#apellidoOperario').val(operariosJson.apellido);
+        $('#emailOperario').val(operariosJson.email);
+        $('#telOperario').val(operariosJson.telefono);
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+</script>
