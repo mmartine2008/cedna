@@ -32,8 +32,8 @@ class PlanificacionController extends CednaController
         ]);
     }
     
-    public function PorDiaAction(){
-        $this->cargarAccionesDisponibles('planificacion - por dia');
+    public function asignarAction(){
+        $this->cargarAccionesDisponibles('planificacion - asignar');
 
         $parametros = $this->params()->fromRoute();
         $idTareas = $parametros['id'];
@@ -45,14 +45,17 @@ class PlanificacionController extends CednaController
             $JsonData = json_decode($data['JsonData']);
 
             $userName = $this->userSessionManager->getUserName();
-            $this->tareasManager->guardarPlanificacionTareaPorDia($JsonData, $Tareas);
+            $this->tareasManager->guardarPlanificacionTarea($JsonData, $Tareas);
 
             $this->redirect()->toRoute("planificacion", ["action" => "index"]);
         }
 
+        $arrTipoPlanificacionJSON = $this->catalogoManager->getArrEntidadJSON('TipoPlanificacion');
+
         $view = new ViewModel();
         
         $view->setVariable('TareaJSON', $Tareas->getJSON());
+        $view->setVariable('arrTipoPlanificacionJSON', $arrTipoPlanificacionJSON);
         $view->setTemplate('application/planificacion/form-planificacion-por-dia.phtml');
         
         return $view;

@@ -55,10 +55,22 @@
 
             id.innerHTML = tarea.id;
             fecha.innerHTML = tarea.fechaSolicitud;
-            ordenDeCompra.innerHTML = '';
+
+            if (tarea.ordenDeCompra.hasOwnProperty('id')){
+                //Por el momento el numero de la orden de compra va a ser el ID
+                ordenDeCompra.innerHTML = tarea.ordenDeCompra.id;
+            }
+
             solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
-            ejecutor.innerHTML = '';
-            planificacion.innerHTML = '';
+
+            if (tarea.ejecutor.hasOwnProperty('id')){
+                ejecutor.innerHTML = tarea.ejecutor.nombre + ', ' + tarea.ejecutor.apellido;
+            }
+
+            if (tarea.tipoPlanificacion.hasOwnProperty('id')){
+                planificacion.innerHTML = tarea.tipoPlanificacion.descripcion;
+            }
+
             estado.innerHTML = tarea.estadoTarea.descripcion;
         }
     }
@@ -80,55 +92,11 @@
         });
     });
 
-    function borrarTarea() {
-        var result = null;
-        var tarea = arrTareasJSON[filaSeleccionada];
-
-        $.ajax({
-            url: url + '/tareas/borrar/' + tarea.id,
-            type: 'post',
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                
-            }
-        });
-        
-        return result;
-    }
-
-    function preBorrar(){
-        if (filaSeleccionada >= 0){
-            var tarea = arrTareasJSON[filaSeleccionada];
-            
-            swal({
-                title: 'Eliminar Tarea',
-                width: 600,
-                text: "Esta seguro que desea eliminar la tarea: "+ tarea.resumen +"?",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
-            }).then((result) => {
-                if (result.value) {
-                    borrarTarea();
-                    window.location.replace(url + "/tareas");
-                }
-            });
-        }else{
-            swal('Tarea no seleccionado',
-                'Por favor seleccione el tarea que desea eliminar',
-                'error');
-        }
-    }
-
     function preEditar(){
         if (filaSeleccionada >= 0){
             var tarea = arrTareasJSON[filaSeleccionada];
 
-            window.location.replace(url + "/tareas/editar/" + tarea.id);
+            window.location.replace(url + "/planificacion/asignar/" + tarea.id);
         }else{
             swal('Tarea no seleccionado',
                 'Por favor seleccione la tarea que desea editar',

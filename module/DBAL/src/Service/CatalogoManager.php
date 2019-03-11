@@ -19,6 +19,7 @@ use DBAL\Entity\Formulario;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\OrdenesDeCompra;
 use DBAL\Entity\Planificaciones;
+use DBAL\Entity\TipoPlanificacion;
 
 class CatalogoManager {
     
@@ -192,6 +193,16 @@ class CatalogoManager {
         }
 
         return $Planificaciones;
+    }
+
+    public function getTipoPlanificacion($idTipoPlanificacion = null){
+        if ($idTipoPlanificacion){
+            $TipoPlanificacion = $this->entityManager->getRepository(TipoPlanificacion::class)->findOneBy(['id' => $idTipoPlanificacion]);
+        }else{
+            $TipoPlanificacion = $this->entityManager->getRepository(TipoPlanificacion::class)->findAll();
+        }
+
+        return $TipoPlanificacion;
     }
 
     public function getTareaPorOrdenDeCompra($OrdenDeCompra){

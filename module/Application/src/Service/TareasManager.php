@@ -74,9 +74,9 @@ class TareasManager {
         $this->entityManager->flush();
     }
 
-    public function asignarFormularioTarea($jsonData, $Tareas){
+    public function asignarFormularioPlanificacion($jsonData, $Planificacion){
         $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
-        $Relevamiento = $Tareas->getRelevamiento();
+        $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
             $Relevamiento->setFormulario($Formulario);
@@ -89,10 +89,10 @@ class TareasManager {
             $this->entityManager->flush();
 
             
-            $Tareas->setRelevamiento($Relevamiento);
+            $Planificacion->setRelevamiento($Relevamiento);
         }
 
-        $this->entityManager->persist($Tareas);
+        $this->entityManager->persist($Planificacion);
         $this->entityManager->flush();
     }
 
@@ -108,9 +108,13 @@ class TareasManager {
      * @param [Tareas] $Tarea
      * @return void
      */
-    function guardarPlanificacionTareaPorDia($jsonData, $Tarea){
+    function guardarPlanificacionTarea($jsonData, $Tarea){
         $arrPlanificaciones = $jsonData->planificaciones;
         $arrPlanificacionesEliminadas = $jsonData->planificacionesEliminadas;
+
+        $TipoPlanificacion = $this->catalogoManager->getTipoPlanificacion($jsonData->tipoPlanificacion->id);
+        $Tarea->setTipoPlanificacion($TipoPlanificacion);
+        $this->entityManager->persist($Tarea);
 
         foreach($arrPlanificaciones as $planificacionJSON){
             if (property_exists($planificacionJSON, 'id')){
@@ -124,6 +128,7 @@ class TareasManager {
             $Planificaciones->setFechaFin($planificacionJSON->fechaFin);
             $Planificaciones->setHoraInicio($planificacionJSON->horaInicio);
             $Planificaciones->setHoraFin($planificacionJSON->horaFin);
+            $Planificaciones->setTitulo($planificacionJSON->titulo);
             $Planificaciones->setObservaciones($planificacionJSON->observaciones);
 
             $this->entityManager->persist($Planificaciones);
@@ -168,7 +173,5 @@ class TareasManager {
         } catch (Exception $e) {
             $this->entityManager->rollBack();
         }
-
-        return $mensaje;
     }
 }

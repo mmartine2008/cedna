@@ -67,6 +67,12 @@ class Tareas
     protected $Relevamiento;
 
     /**
+     * @ORM\ManyToOne(targetEntity="TipoPlanificacion")
+     * @ORM\JoinColumn(name="IdTipoPlanificacion", referencedColumnName="IdTipoPlanificacion")
+     */
+    protected $TipoPlanificacion;
+
+    /**
      * @ORM\Column(name="FechaSolicitud")
      */
     protected $FechaSolicitud;
@@ -108,6 +114,11 @@ class Tareas
     public function setResponsable($Responsable)
     {
         $this->Responsable = $Responsable;
+    }
+
+    public function setTipoPlanificacion($TipoPlanificacion)
+    {
+        $this->TipoPlanificacion = $TipoPlanificacion;
     }
 
     public function setPlanificaTarea($PlanificaTarea)
@@ -168,6 +179,11 @@ class Tareas
     public function getPlanificaTarea()
     {
         return $this->PlanificaTarea;
+    }
+
+    public function getTipoPlanificacion()
+    {
+        return $this->TipoPlanificacion;
     }
 
     public function getNodo()
@@ -240,6 +256,12 @@ class Tareas
             $output .= '"ordenDeCompra": ' . $this->getOrdenDeCompra()->getJSON() .', ';
         }else{
             $output .= '"ordenDeCompra": "", ';
+        }
+
+        if ($this->getTipoPlanificacion()){
+            $output .= '"tipoPlanificacion": ' . $this->getTipoPlanificacion()->getJSON() .', ';
+        }else{
+            $output .= '"tipoPlanificacion": "", ';
         }
         
         if ($this->getRelevamiento()){

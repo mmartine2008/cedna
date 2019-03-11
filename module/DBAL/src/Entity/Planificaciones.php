@@ -23,6 +23,11 @@ class Planificaciones
      */
     protected $Tarea;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Relevamientos")
+     * @ORM\JoinColumn(name="IdRelevamiento", referencedColumnName="IdRelevamiento")
+     */
+    protected $Relevamiento;
 
     /**
      * @ORM\Column(name="FechaInicio")
@@ -64,6 +69,11 @@ class Planificaciones
         $this->Tarea = $Tarea;
     }
 
+    public function setRelevamiento($Relevamiento)
+    {
+        $this->Relevamiento = $Relevamiento;
+    }
+
     public function setFechaInicio($FechaInicio)
     {
         $this->FechaInicio = $FechaInicio;
@@ -102,6 +112,11 @@ class Planificaciones
     public function getTarea()
     {
         return $this->Tarea;
+    }
+
+    public function getRelevamiento()
+    {
+        return $this->Relevamiento;
     }
 
     public function getFechaInicio()
@@ -148,11 +163,18 @@ class Planificaciones
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"fechaInicio": "' . $this->getFechaInicio() .'"';
-        $output .= '"fechaFin": "' . $this->getFechaFin() .'"';
-        $output .= '"horaInicio": "' . $this->getHoraInicio() .'"';
-        $output .= '"horaFin": "' . $this->getHoraFin() .'"';
-        $output .= '"titulo": "' . $this->getTitulo() .'"';
+        
+        if ($this->getRelevamiento()){
+            $output .= '"relevamiento": ' . $this->getRelevamiento()->getJSON() .', ';
+        }else{
+            $output .= '"relevamiento": "", ';
+        }
+
+        $output .= '"fechaInicio": "' . $this->getFechaInicio() .'", ';
+        $output .= '"fechaFin": "' . $this->getFechaFin() .'", ';
+        $output .= '"horaInicio": "' . $this->getHoraInicio() .'", ';
+        $output .= '"horaFin": "' . $this->getHoraFin() .'", ';
+        $output .= '"titulo": "' . $this->getTitulo() .'", ';
         $output .= '"observaciones": "' . $this->getObservaciones() .'"';
         
         return '{' . $output . '}';
