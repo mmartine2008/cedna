@@ -72,6 +72,19 @@ class FormularioManager {
         return $Secciones;
     }
 
+    /**
+     * Funcion que asignar un formulario a una planificacion.
+     */
+    public function asignarFormularioAPlanificacion($JsonData, $Planificacion){
+        $Formulario = $this->catalogoManager->getFormularios($JsonData->formulario->id);
+
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $Relevamiento->setFormulario($Formulario);
+
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
+    }
+
     public function getPreguntasxFormulario($formulario) {
         $secciones = $this->getSeccionesxFormulario($formulario);
         $arregloPreg = [];

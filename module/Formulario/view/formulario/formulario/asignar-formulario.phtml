@@ -1,0 +1,163 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Asignar Permiso a la Planificación</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formPlanificacion" name="formPlanificacion">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-5">
+                            <div class="form-row">
+                                <div class="col-md-5">
+                                    <label for="nroOrdenDeCompra">Orden de Compra Nº:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="nroOrdenDeCompra" name="nroOrdenDeCompra" class="form-control" readonly="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-5">
+                                    <label for="fechaLiberacion">Fecha de Liberación:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" id="fechaLiberacion" name="fechaLiberacion" class="form-control" readonly="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="solicitanteOrdenDeCompra">Solicitante:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="solicitanteOrdenDeCompra" name="solicitanteOrdenDeCompra" class="form-control" readonly="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="ejecutorOrdenDeCompra">Ejecutor:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" id="ejecutorOrdenDeCompra" name="ejecutorOrdenDeCompra" class="form-control" readonly="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="descripcionOrdenDeCompra">Descripcion:</label>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-11">
+                                    <textarea id="descripcionOrdenDeCompra" name="descripcionOrdenDeCompra" class="form-control" readonly="true" rows="12" maxlength="1000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="form-row mt-3">
+                                <div class="col-md-4">
+                                    <label for="formularioPlanificacion"><span class="obligatorio">(*) </span>Formulario:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select name="formularioPlanificacion" id="formularioPlanificacion" class="form-control" require="true">-- Seleccione --</select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var PlanificacionJSON = <?= $PlanificacionJSON ?>;
+var TareaJSON = <?= $TareaJSON ?>;
+var arrFormulariosJSON = <?= $arrFormulariosJSON ?>;
+
+function FormPlanificacionToJson(){
+    var formulario = {id : $('#formularioPlanificacion').val()};
+
+    var formData = {
+        formulario : formulario
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormPlanificacionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formPlanificacion")[0].checkValidity()){
+        $("#formPlanificacion").submit();
+    }else{
+        $("#formPlanificacion")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    dibujarDatosOrdenDeCompra();
+    dibujarSelectFormulario();
+
+    if (PlanificacionJSON.relevamiento.hasOwnProperty('formulario')){
+        $('#formularioPlanificacion').val(PlanificacionJSON.relevamiento.formulario.id);
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function dibujarSelectFormulario(){
+    $('#formularioPlanificacion')
+        .find('option')
+        .remove();
+
+    $('#formularioPlanificacion')
+        .append($("<option></option>")
+            .attr("value", -1)
+            .text('-- Seleccione --'));
+
+    for (var i = 0; i < arrFormulariosJSON.length; i++){
+        var formulario = arrFormulariosJSON[i];
+
+        var option = $("<option></option>")
+                            .attr("value", formulario.id)
+                            .text(formulario.nombre);
+
+        $('#formularioPlanificacion').append(option);
+    }
+}
+
+function dibujarDatosOrdenDeCompra(){
+    if (TareaJSON.ordenDeCompra.hasOwnProperty('id')){
+        //Por el momento el numero de la orden de compra va a ser el ID
+        $('#nroOrdenDeCompra').val(TareaJSON.ordenDeCompra.id);
+        $('#fechaLiberacion').val(TareaJSON.ordenDeCompra.fechaLiberacion);
+    }
+    
+    if (TareaJSON.solicitante.hasOwnProperty('id')){
+        $('#solicitanteOrdenDeCompra').val(TareaJSON.solicitante.nombre + ', ' + TareaJSON.solicitante.apellido);
+    }
+    
+    if (TareaJSON.solicitante.hasOwnProperty('id')){
+        $('#ejecutorOrdenDeCompra').val(TareaJSON.ejecutor.nombre + ', ' + TareaJSON.ejecutor.apellido);
+    }
+    
+    $('#descripcionOrdenDeCompra').val(TareaJSON.descripcion);
+}
+
+</script>
