@@ -221,7 +221,7 @@ class Tareas
 
     private function getJsonEjecutor(){
         if($this->getEjecutor()) {
-             return $this->getEjecutor()()->getJSON();
+             return $this->getEjecutor()->getJSON();
         }
         return '" "';
     }

@@ -57,7 +57,7 @@
                                     <label for="tipoPlanificacion"><span class="obligatorio">(*) </span>Tipo de Planificación:</label>
                                 </div>
                                 <div class="col-md-7">
-                                    <select name="tipoPlanificacion" id="tipoPlanificacion" class="form-control" require="true">-- Seleccione --</select>
+                                    <select name="tipoPlanificacion" id="tipoPlanificacion" class="form-control" required="true">-- Seleccione --</select>
                                 </div>
                             </div>
                             <div class="form-row mt-3">
@@ -215,17 +215,6 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
-function seleccionarFormulario(){
-    // for (var i = 0; i < arrFormularioJSON.length; i++){
-    //     var formulario = arrFormularioJSON[i];
-
-    //     if (formulario.idFormulario == tareasJson.relevamiento.formulario.idFormulario){
-    //         $('#formularioPlanificacion').val(i);
-    //         break;
-    //     }
-    // }
-}
-
 function dibujarSelectTipoPlanificacion(){
     $('#tipoPlanificacion')
         .find('option')
@@ -245,27 +234,6 @@ function dibujarSelectTipoPlanificacion(){
 
         $('#tipoPlanificacion').append(option);
     }
-}
-
-function dibujarSelectFormulario(){
-    // $('#formularioPlanificacion')
-    //     .find('option')
-    //     .remove();
-
-    // $('#formularioPlanificacion')
-    //     .append($("<option></option>")
-    //         .attr("value", -1)
-    //         .text('-- Seleccione --'));
-
-    // for (var i = 0; i < arrFormularioJSON.length; i++){
-    //     var formulario = arrFormularioJSON[i];
-
-    //     var option = $("<option></option>")
-    //                         .attr("value", i)
-    //                         .text(formulario.nombre);
-
-    //     $('#formularioPlanificacion').append(option);
-    // }
 }
 
 function dibujarDatosOrdenDeCompra(){

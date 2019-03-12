@@ -37,6 +37,15 @@ class FormularioController extends CednaController
         $this->cargarAccionesDisponibles('formularios');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios');
 
+        return new ViewModel([
+            "OperacionesJSON" => $OperacionesJSON
+        ]);
+    }
+
+    public function paraCargarAction() {
+        $this->cargarAccionesDisponibles('formularios - para cargar');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - para cargar');
+
         //Actualmente mostrará todas las planificaciones de todas las tareas creadas sin filtro alguno
         $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
 
@@ -83,10 +92,10 @@ class FormularioController extends CednaController
 
             $this->FormularioManager->asignarFormularioAPlanificacion($JsonData, $Planificacion);
 
-            $this->redirect()->toRoute("formularios", ["action" => "asignacion"]);
+            $this->redirect()->toRoute("formulario", ["action" => "asignacion"]);
         }
 
-        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formularios');
+        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
         $Tareas = $Planificacion->getTarea();
 
         $view = new ViewModel();

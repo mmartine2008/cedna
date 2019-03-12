@@ -64,10 +64,10 @@ class Tareas extends \DBAL\Entity\Tareas implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'Solicitante', 'Ejecutor', 'Responsable', 'PlanificaTarea', 'Nodo', 'EstadoTarea', 'OrdenDeCompra', 'Relevamiento', 'TipoPlanificacion', 'FechaSolicitud', 'Descripcion', 'Resumen', 'Planificaciones'];
+            return ['__isInitialized__', 'id', 'Solicitante', 'Ejecutor', 'Responsable', 'PlanificaTarea', 'Nodo', 'EstadoTarea', 'OrdenDeCompra', 'TipoPlanificacion', 'FechaSolicitud', 'Descripcion', 'Resumen', 'Planificaciones'];
         }
 
-        return ['__isInitialized__', 'id', 'Solicitante', 'Ejecutor', 'Responsable', 'PlanificaTarea', 'Nodo', 'EstadoTarea', 'OrdenDeCompra', 'Relevamiento', 'TipoPlanificacion', 'FechaSolicitud', 'Descripcion', 'Resumen', 'Planificaciones'];
+        return ['__isInitialized__', 'id', 'Solicitante', 'Ejecutor', 'Responsable', 'PlanificaTarea', 'Nodo', 'EstadoTarea', 'OrdenDeCompra', 'TipoPlanificacion', 'FechaSolicitud', 'Descripcion', 'Resumen', 'Planificaciones'];
     }
 
     /**
@@ -264,17 +264,6 @@ class Tareas extends \DBAL\Entity\Tareas implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setRelevamiento($Relevamiento)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRelevamiento', [$Relevamiento]);
-
-        return parent::setRelevamiento($Relevamiento);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setFechaSolicitud($FechaSolicitud)
     {
 
@@ -406,17 +395,6 @@ class Tareas extends \DBAL\Entity\Tareas implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getOrdenDeCompra', []);
 
         return parent::getOrdenDeCompra();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getRelevamiento()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRelevamiento', []);
-
-        return parent::getRelevamiento();
     }
 
     /**

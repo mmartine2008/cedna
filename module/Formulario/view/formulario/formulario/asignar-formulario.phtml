@@ -52,12 +52,84 @@
                             </div>
                         </div>
                         <div class="col-lg-7">
+                            <div class="form-row">
+                                <div class="card" id="divPlanificacion">
+                                    <div class="card-header">
+                                        Detalles de la Planificación
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-row">
+                                                    <div class="col-md-5">
+                                                        <label for="fechaInicio">Fecha Inicio:</label>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <input type="date" id="fechaInicio" name="fechaInicio" class="form-control" readonly="true">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-row">
+                                                    <div class="col-md-5">
+                                                        <label for="fechaFin">Fecha Fin:</label>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <input type="date" id="fechaFin" name="fechaFin" class="form-control" readonly="true">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-3">
+                                            <div class="col-md-6">
+                                                <div class="form-row">
+                                                    <div class="col-md-5">
+                                                        <label for="horaInicio">Hora Inicio:</label>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <input type="text" id="horaInicio" name="horaInicio" class="form-control" readonly="true">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-row">
+                                                    <div class="col-md-5">
+                                                        <label for="horaFin">Hora Fin:</label>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <input type="text" id="horaFin" name="horaFin" class="form-control" readonly="true">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-3">
+                                            <div class="col-md-2">
+                                                <label for="titulo">Título:</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <input type="text" id="titulo" name="titulo" class="form-control" readonly="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-3">
+                                            <div class="col-md-3">
+                                                <label for="observaciones">Observaciones:</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row mt-3">
+                                            <div class="col-md-12">
+                                                <textarea name="observaciones" id="observaciones" class="form-control" readonly="true"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="form-row mt-3">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label for="formularioPlanificacion"><span class="obligatorio">(*) </span>Formulario:</label>
                                 </div>
                                 <div class="col-md-7">
-                                    <select name="formularioPlanificacion" id="formularioPlanificacion" class="form-control" require="true">-- Seleccione --</select>
+                                    <select name="formularioPlanificacion" id="formularioPlanificacion" class="form-control" required="true">-- Seleccione --</select>
                                 </div>
                             </div>
                         </div>
@@ -102,9 +174,9 @@ function preSubmit(){
 $( document ).ready(function() {
     dibujarDatosOrdenDeCompra();
     dibujarSelectFormulario();
-
+    dibujarDetallePlanificacion();
     if (PlanificacionJSON.relevamiento.hasOwnProperty('formulario')){
-        $('#formularioPlanificacion').val(PlanificacionJSON.relevamiento.formulario.id);
+        $('#formularioPlanificacion').val(PlanificacionJSON.relevamiento.formulario.idFormulario);
     }
     
     verificarMostrarBotonGuardar();
@@ -121,6 +193,22 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
+function transformarFechaParaInput(fecha){
+    var arrFecha = fecha.split('-');
+    //[0] => dia; [1] => mes; [2] => anio
+
+    return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+}
+
+function dibujarDetallePlanificacion(){
+    $('#fechaInicio').val(transformarFechaParaInput(PlanificacionJSON.fechaInicio));
+    $('#fechaFin').val(transformarFechaParaInput(PlanificacionJSON.fechaFin));
+    $('#horaInicio').val(PlanificacionJSON.horaInicio);
+    $('#horaFin').val(PlanificacionJSON.horaFin);
+    $('#titulo').val(PlanificacionJSON.titulo);
+    $('#observaciones').val(PlanificacionJSON.observaciones);
+}
+
 function dibujarSelectFormulario(){
     $('#formularioPlanificacion')
         .find('option')
@@ -128,14 +216,14 @@ function dibujarSelectFormulario(){
 
     $('#formularioPlanificacion')
         .append($("<option></option>")
-            .attr("value", -1)
+            .attr("value", '')
             .text('-- Seleccione --'));
 
     for (var i = 0; i < arrFormulariosJSON.length; i++){
         var formulario = arrFormulariosJSON[i];
 
         var option = $("<option></option>")
-                            .attr("value", formulario.id)
+                            .attr("value", formulario.idFormulario)
                             .text(formulario.nombre);
 
         $('#formularioPlanificacion').append(option);

@@ -9,6 +9,7 @@ use DBAL\Entity\PreguntaOpcion;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
+use DBAL\Entity\Relevamientos;
 
 
 class FormularioManager {
@@ -76,12 +77,25 @@ class FormularioManager {
      * Funcion que asignar un formulario a una planificacion.
      */
     public function asignarFormularioAPlanificacion($JsonData, $Planificacion){
-        $Formulario = $this->catalogoManager->getFormularios($JsonData->formulario->id);
+        $Formulario = $this->catalogoManager->getFormulario($JsonData->formulario->id);
 
         $Relevamiento = $Planificacion->getRelevamiento();
-        $Relevamiento->setFormulario($Formulario);
 
-        $this->entityManager->persist($Relevamiento);
+        if ($Relevamiento){
+            $Relevamiento->setFormulario($Formulario);
+            $this->entityManager->persist($Relevamiento);
+        }else{
+            $Relevamiento = new Relevamientos();
+            $Relevamiento->setFormulario($Formulario);
+            
+            $this->entityManager->persist($Relevamiento);
+            $this->entityManager->flush();
+
+            
+            $Planificacion->setRelevamiento($Relevamiento);
+            $this->entityManager->persist($Planificacion);
+        }
+
         $this->entityManager->flush();
     }
 
