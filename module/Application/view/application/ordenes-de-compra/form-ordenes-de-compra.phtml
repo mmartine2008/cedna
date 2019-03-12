@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nueva Orden de Compra</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Orden_de_Compra__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formOrdenDeCompra" name="formOrdenDeCompra">
@@ -10,7 +10,7 @@
                         <div class="col-lg-10 offset-1">
                             <div class="form-row">
                                 <div class="col-md-3">
-                                    <label for="fechaOrdenDeCompra"><span class="obligatorio">(*) </span>Fecha de Liberación:</label>
+                                    <label for="fechaOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Fecha_de_Liberacion__') ?>:</label>
                                 </div>
                                 <div class="col-md-3">
                                     <input type="date" id="fechaOrdenDeCompra" name="fechaOrdenDeCompra" class="form-control" required="true">
@@ -20,7 +20,7 @@
                                 <div class="col-md-6">
                                     <div class="form-row">
                                         <div class="col-md-4">
-                                            <label for="solicitanteOrdenDeCompra"><span class="obligatorio">(*) </span>Solicitante:</label>
+                                            <label for="solicitanteOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Solicitante__') ?>:</label>
                                         </div>
                                         <div class="col-md-8">
                                             <select id="solicitanteOrdenDeCompra" name="solicitanteOrdenDeCompra" class="form-control" required="true">
@@ -32,7 +32,7 @@
                                 <div class="col-md-6">
                                     <div class="form-row">
                                         <div class="col-md-4">
-                                            <label for="ejecutorOrdenDeCompra"><span class="obligatorio">(*) </span>Ejecutor:</label>
+                                            <label for="ejecutorOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Ejecutor__') ?>:</label>
                                         </div>
                                         <div class="col-md-8">
                                             <select id="ejecutorOrdenDeCompra" onchange="dibujarPlanificadorDeTarea()" name="ejecutorOrdenDeCompra" class="form-control" required="true">
@@ -46,7 +46,7 @@
                                 <div class="col-md-6">
                                     <div class="form-row">
                                         <div class="col-md-4">
-                                            <label for="nodoOrdenDeCompra"><span class="obligatorio">(*) </span>Sección:</label>
+                                            <label for="nodoOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Seccion__') ?>:</label>
                                         </div>
                                         <div class="col-md-8">
                                             <select id="nodoOrdenDeCompra" name="nodoOrdenDeCompra" onchange="dibujarResponsables()" class="form-control" required="true">
@@ -58,11 +58,11 @@
                                 <div class="col-md-6">
                                     <div class="form-row">
                                         <div class="col-md-4">
-                                            <label for="responsableOrdenDeCompra"><span class="obligatorio">(*) </span>Responsable:</label>
+                                            <label for="responsableOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Responsable__') ?>:</label>
                                         </div>
                                         <div class="col-md-8">
                                             <select id="responsableOrdenDeCompra" name="responsableOrdenDeCompra" onchange="dibujarPlanificadorDeTarea()" class="form-control" required="true" disabled="true">
-                                                <option value="">-- Seleccione --</option>
+                                                <option value="">-- <?= $this->translate('__Seleccione__') ?> --</option>
                                             </select>
                                         </div>
                                     </div>
@@ -70,17 +70,17 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="planificaTarea"><span class="obligatorio">(*) </span>Quién planificará la tarea?</label>
+                                    <label for="planificaTarea"><span class="obligatorio">(*) </span><?= $this->translate('__Quien_planificara_la_tarea__') ?>?</label>
                                 </div>
                                 <div class="col-md-5">
                                     <select id="planificaTarea" name="planificaTarea" class="form-control" required="true" disabled="true">
-                                        <option value="">-- Seleccione --</option>
+                                        <option value="">-- <?= $this->translate('__Seleccione__') ?> --</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="descripcionOrdenDeCompra"><span class="obligatorio">(*) </span>Descripcion Tarea:</label>
+                                    <label for="descripcionOrdenDeCompra"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion_Tarea__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <textarea id="descripcionOrdenDeCompra" name="descripcionOrdenDeCompra" class="form-control" required="true" rows="7" maxlength="1000"></textarea>

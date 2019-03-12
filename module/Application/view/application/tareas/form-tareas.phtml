@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nueva Tarea</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Tarea__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formTarea" name="formTarea">
@@ -10,7 +10,7 @@
                         <div class="col-lg-8 offset-2">
                             <div class="form-row">
                                 <div class="col-md-2">
-                                    <label for="nodoTarea"><span class="obligatorio">(*) </span>Nodo:</label>
+                                    <label for="nodoTarea"><span class="obligatorio">(*) </span><?= $this->translate('__Nodo__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <select id="nodoTarea" name="nodoTarea" class="form-control" required="true">
@@ -20,7 +20,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="formularioTarea"><span class="obligatorio">(*) </span>Formulario:</label>
+                                    <label for="formularioTarea"><span class="obligatorio">(*) </span><?= $this->translate('__Formulario__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <select id="formularioTarea" name="formularioTarea" class="form-control" required="true">
@@ -30,7 +30,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="resumenTarea"><span class="obligatorio">(*) </span>Resumen:</label>
+                                    <label for="resumenTarea"><span class="obligatorio">(*) </span><?= $this->translate('__Resumen__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <input type="text" id="resumenTarea" name="resumenTarea" class="form-control" required="true" maxlenght="125">
@@ -38,7 +38,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-2">
-                                    <label for="descripcionTarea"><span class="obligatorio">(*) </span>Descripcion:</label>
+                                    <label for="descripcionTarea"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
                                 </div>
                                 <div class="col-md-9">
                                     <textarea id="descripcionTarea" name="descripcionTarea" class="form-control" required="true" rows="7" maxlength="1000"></textarea>

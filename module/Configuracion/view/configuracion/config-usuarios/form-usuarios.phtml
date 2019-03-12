@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nuevo Usuario</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Usuario__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formUsuario" name="formUsuario">
@@ -10,7 +10,7 @@
                         <div class="col-lg-6">
                             <div class="form-row">
                                 <div class="col-md-4">
-                                    <label for="userName"><span class="obligatorio">(*) </span>Nombre de Usuario:</label>
+                                    <label for="userName"><span class="obligatorio">(*) </span><?= $this->translate('__nombre_de_usuario__') ?>:</label>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" id="userName" name="userName" class="form-control" required="true">
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="contraseniaUsuario"><span class="obligatorio">(*) </span>Contraseña:</label>
+                                    <label for="contraseniaUsuario"><span class="obligatorio">(*) </span><?= $this->translate('__Contraseña__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="password" id="contraseniaUsuario" name="contraseniaUsuario" class="form-control" required="true">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="nombreUsuario"><span class="obligatorio">(*) </span>Nombre:</label>
+                                    <label for="nombreUsuario"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control" required="true">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-4">
-                                    <label for="contraseniaRepetida"><span class="obligatorio">(*) </span>Repetir Contraseña:</label>
+                                    <label for="contraseniaRepetida"><span class="obligatorio">(*) </span><?= $this->translate('__Repetir_Contraseña__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <input type="password" id="contraseniaRepetida" name="contraseniaRepetida" class="form-control" required="true">
@@ -52,7 +52,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="apellidoUsuario"><span class="obligatorio">(*) </span>Apellido:</label>
+                                    <label for="apellidoUsuario"><span class="obligatorio">(*) </span><?= $this->translate('__Apellido__') ?>:</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text" id="apellidoUsuario" name="apellidoUsuario" class="form-control" required="true">
@@ -62,7 +62,7 @@
                     </div>
                     <div class="form-row mt-5">
                         <div class="col-md-1">
-                            <label for="idPerfil">Perfil:</label>
+                            <label for="idPerfil"><?= $this->translate('__Perfil__') ?>:</label>
                         </div>  
                         <div class="col-md-4">
                             <select id="idPerfil" name="idPerfil" class="form-control">
@@ -73,14 +73,14 @@
                             </select>
                         </div>
                         <div class="col-md-1">
-                            <div class="btn" onclick="agregarPerfil();">Agregar</div>
+                            <div class="btn btn-primary" onclick="agregarPerfil();"><?= $this->translate('__Agregar__') ?></div>
                         </div>
                     </div>
                     <div class="form-row mt-5">
                         <table class="table table-hover" data-page-size="15">
                             <thead>
                                 <tr>
-                                    <th>Perfiles Asociados</th>
+                                    <th><?= $this->translate('__Perfiles_Asociados__') ?></th>
                                     <th></th>
                                 </tr>
                             </thead>
