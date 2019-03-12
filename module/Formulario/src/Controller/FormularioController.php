@@ -80,6 +80,14 @@ class FormularioController extends CednaController
         return new ViewModel([ ]);
     }
 
+    private function getListaRespuestas($respuestas) {
+        $output = [];
+        foreach($respuestas as $respuesta) {
+            $output[] = $respuesta['respuesta'];
+        }
+        return $output;
+    }
+
     public function imprimirAction() {
 
         $parametros = $this->params()->fromRoute();
@@ -113,29 +121,48 @@ class FormularioController extends CednaController
         $pdf->Ln(10);
 
         foreach ($data['secciones'] as $seccion) {
+            $pdf->Ln(5);
             $pdf->SetFont('helvetica', '', 16);
             $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
-            $pdf->Ln(20);
+            $pdf->Ln(18);
             $respuestas = $seccion['respuestas'];
 
-            foreach ( $respuestas as $respuesta) { 
-                $pregunta = $respuesta['pregunta'];
-                $pdf->SetFont('helvetica', '', 12);
-                $descripcion = $pregunta['descripcion']; 
-                if($descripcion == '') { $descripcion = ' ';}
+            foreach ( $respuestas as $respuestaxRespuesta) { 
+                foreach ( $respuestaxRespuesta as $respuesta) { 
+                //ver como diferenciar las respuestas
+                    $pdf->SetFont('helvetica', 'B', 12);
+            
+                    $descripcion = $respuesta['descripcionPregunta'];
+                    if($descripcion == '') { $descripcion = ' ';}
 
-                if(!$respuesta['destino'] == '') { $descripcion = $respuesta['destino'] ;}
-
-
-                $pdf->Cell(35, 5,  $descripcion);
-                $pdf->TextField( $descripcion, 100, 5, array(), array('v'=>$respuesta['respuesta'], 'dv'=>$respuesta['respuesta']));
-                $pdf->Ln(10);
+                    // var_dump();
+                    // var_dump(($respuesta));
+                    if(! $respuesta['poseeDestinos']) {
+                        $pdf->Cell(50, 5,  $descripcion);
+                        $pdf->SetFont('helvetica', '', 12);
+                        $resp = $respuesta['respuesta'];
+                        $pdf->Cell(45, 5, $resp['respuesta']);
+                        $pdf->Ln(10);
+                    } else {
+                        $respuestas = $respuesta['respuesta'];
+                        // var_dump($respuestas);
+                        foreach($respuestas as $resp) {
+                            $pdf->SetFont('helvetica', 'B', 12);
+                            $list = $this->getListaRespuestas($resp['respuestas']);
+                            // $list = [];
+                            $pdf->Cell(40, 5, $resp['destino']);
+                            $pdf->Ln(12);
+                            foreach ($list as $valor) {
+                                $pdf->SetFont('helvetica', '', 12);
+                                $pdf->Cell(25, 5, "");
+                                $pdf->Cell(100, 5,  $valor);
+                                $pdf->Ln(10);
+                            }
+                        }
+                    }
+                    
+                }
             }
-
-            // $pdf->Cell(35, 5, 'List:');
-            // $pdf->ListBox('listbox', 60, 15, array('', 'item1', 'item2', 'item3', 'item4', 'item5', 'item6', 'item7'), array('multipleSelection'=>'true'));
-            // $pdf->Ln(20);
-
         }
 
         $pdf->Output();
