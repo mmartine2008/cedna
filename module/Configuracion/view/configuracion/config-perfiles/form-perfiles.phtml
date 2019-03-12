@@ -2,13 +2,13 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Nuevo Perfil</h3>
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Perfil__') ?></h3>
             </div>
             <div class="panel-body mt-5">
                 <form method="post" name="formPerfil" id="formPerfil">
                     <div class="form-row">
                         <div class="col-md-3">
-                            <label for="perfilNombre"><span class="obligatorio">(*) </span>Nombre:</label>
+                            <label for="perfilNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="perfilNombre" name="perfilNombre" class="form-control" required="true">
@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-row mt-3">
                         <div class="col-md-3">
-                            <label for="perfilDescripcion"><span class="obligatorio">(*) </span>Descripción:</label>
+                            <label for="perfilDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="perfilDescripcion" name="perfilDescripcion" class="form-control" required="true">

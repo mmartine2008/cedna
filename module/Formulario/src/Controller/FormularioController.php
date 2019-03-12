@@ -37,13 +37,75 @@ class FormularioController extends CednaController
         $this->cargarAccionesDisponibles('formularios');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios');
 
-        //Actualmente mostrará todas las tareas creadas sin filtro alguno
+        return new ViewModel([
+            "OperacionesJSON" => $OperacionesJSON
+        ]);
+    }
+
+    public function paraCargarAction() {
+        $this->cargarAccionesDisponibles('formularios - para cargar');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - para cargar');
+
+        //Actualmente mostrará todas las planificaciones de todas las tareas creadas sin filtro alguno
         $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
 
         return new ViewModel([
             "OperacionesJSON" => $OperacionesJSON,
             'arrTareasJSON' => $arrTareasJSON
         ]);
+    }
+
+    /**
+     * Accion para listar las planificaciones para poder asignarle/modificarle
+     * un formulario o permiso de trabajo.
+     *
+     * @return ViewModel
+     */
+    public function asignacionAction(){
+        $this->cargarAccionesDisponibles('formularios - asignacion');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - asignacion');
+
+        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
+
+        return new ViewModel([
+            "OperacionesJSON" => $OperacionesJSON,
+            'arrTareasJSON' => $arrTareasJSON
+        ]);
+    }
+
+    /**
+     * Accion para asignarle a la planificacion un formulario especifico.
+     *
+     * @return ViewModel
+     */
+    public function asignarAction(){
+        $this->cargarAccionesDisponibles('formularios - asignar');
+
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->FormularioManager->asignarFormularioAPlanificacion($JsonData, $Planificacion);
+
+            $this->redirect()->toRoute("formulario", ["action" => "asignacion"]);
+        }
+
+        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+        $Tareas = $Planificacion->getTarea();
+
+        $view = new ViewModel();
+        
+        $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
+        $view->setVariable('TareaJSON', $Tareas->getJSON());
+        $view->setVariable('arrFormulariosJSON', $arrFormulariosJSON);
+        $view->setTemplate('formulario/formulario/asignar-formulario.phtml');
+        
+        return $view;
     }
 
     public function cargarAction(){

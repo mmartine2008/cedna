@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Planificación de Tarea por Día</h3>
+                <h3 class="panel-title"><?= $this->translate('__Planificacion_de_Tarea_por_Dia__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formPlanificacion" name="formPlanificacion">
@@ -10,7 +10,7 @@
                         <div class="col-lg-5">
                             <div class="form-row">
                                 <div class="col-md-5">
-                                    <label for="nroOrdenDeCompra">Orden de Compra Nº:</label>
+                                    <label for="nroOrdenDeCompra"><?= $this->translate('__Orden_de_Compra__') ?> Nº:</label>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" id="nroOrdenDeCompra" name="nroOrdenDeCompra" class="form-control" readonly="true">
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-5">
-                                    <label for="fechaLiberacion">Fecha de Liberación:</label>
+                                    <label for="fechaLiberacion"><?= $this->translate('__Fecha_de_Liberacion__') ?>:</label>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="text" id="fechaLiberacion" name="fechaLiberacion" class="form-control" readonly="true">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="solicitanteOrdenDeCompra">Solicitante:</label>
+                                    <label for="solicitanteOrdenDeCompra"><?= $this->translate('__Solicitante__') ?>:</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text" id="solicitanteOrdenDeCompra" name="solicitanteOrdenDeCompra" class="form-control" readonly="true">
@@ -34,7 +34,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="ejecutorOrdenDeCompra">Ejecutor:</label>
+                                    <label for="ejecutorOrdenDeCompra"><?= $this->translate('__Ejecutor__') ?>:</label>
                                 </div>
                                 <div class="col-md-8">
                                     <input type="text" id="ejecutorOrdenDeCompra" name="ejecutorOrdenDeCompra" class="form-control" readonly="true">
@@ -42,7 +42,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="descripcionOrdenDeCompra">Descripcion:</label>
+                                    <label for="descripcionOrdenDeCompra"><?= $this->translate('__Descripcion__') ?>:</label>
                                 </div>
                             </div>
                             <div class="form-row mt-3">
@@ -54,23 +54,23 @@
                         <div class="col-lg-7">
                             <div class="form-row mt-3">
                                 <div class="col-md-4">
-                                    <label for="tipoPlanificacion"><span class="obligatorio">(*) </span>Tipo de Planificación:</label>
+                                    <label for="tipoPlanificacion"><span class="obligatorio">(*) </span><?= $this->translate('__Tipo_de_Planificacion__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
-                                    <select name="tipoPlanificacion" id="tipoPlanificacion" class="form-control" require="true">-- Seleccione --</select>
+                                    <select name="tipoPlanificacion" id="tipoPlanificacion" class="form-control" required="true">-- <?= $this->translate('__Seleccione__') ?> --</select>
                                 </div>
                             </div>
                             <div class="form-row mt-3">
                                 <div class="card" id="divPlanificacion">
                                     <div class="card-header">
-                                        Tarea
+                                        <?= $this->translate('__Tarea__') ?>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="col-lg-6">
                                                 <div class="form-row">
                                                     <div class="col-md-4">
-                                                        <label for="diaInicioTarea">Día Inicio:</label>
+                                                        <label for="diaInicioTarea"><?= $this->translate('__Dia_Inicio__') ?>:</label>
                                                     </div>
                                                     <div class="col-md-8">
                                                         <input type="date" id="diaInicioTarea" name="diaInicioTarea" class="form-control">
@@ -78,7 +78,7 @@
                                                 </div>
                                                 <div class="form-row mt-3">
                                                     <div class="col-md-4">
-                                                        <label for="horaInicioTarea">Hora Inicio:</label>
+                                                        <label for="horaInicioTarea"><?= $this->translate('__Hora_Inicio__') ?>:</label>
                                                     </div>
                                                     <div class="col-md-8">
                                                         <input type="text" id="horaInicioTarea" name="horaInicioTarea" class="form-control" 
@@ -89,7 +89,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-row">
                                                     <div class="col-md-4">
-                                                        <label for="diaFinTarea">Día Fin:</label>
+                                                        <label for="diaFinTarea"><?= $this->translate('__Dia_Fin__') ?>:</label>
                                                     </div>
                                                     <div class="col-md-8">
                                                         <input type="date" id="diaFinTarea" name="diaFinTarea" class="form-control">
@@ -97,7 +97,7 @@
                                                 </div>
                                                 <div class="form-row mt-3">
                                                     <div class="col-md-4">
-                                                        <label for="horaFinTarea">Hora Fin:</label>
+                                                        <label for="horaFinTarea"><?= $this->translate('__Hora_Fin__') ?>:</label>
                                                     </div>
                                                     <div class="col-md-8">
                                                         <input type="text" id="horaFinTarea" name="horaFinTarea" class="form-control"
@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="form-row mt-3">
                                             <div class="col-md-2">
-                                                <label for="tituloPlanificacion">Titulo:</label>
+                                                <label for="tituloPlanificacion"><?= $this->translate('__Titulo__') ?>:</label>
                                             </div>
                                             <div class="col-md-10">
                                                 <input type="text" id="tituloPlanificacion" name="tituloPlanificacion" class="form-control" max-length="135">
@@ -116,7 +116,7 @@
                                         </div>
                                         <div class="form-row mt-3">
                                             <div class="col-md-3">
-                                                <label for="observacionTarea">Observaciones:</label>
+                                                <label for="observacionTarea"><?= $this->translate('__Observaciones__') ?>:</label>
                                             </div>
                                         </div>
                                         <div class="form-row mt-3">
@@ -126,18 +126,18 @@
                                         </div>
                                         <div class="form-row mt-3">
                                             <div class="col-md-2 offset-10">
-                                                <div class="btn btn-primary" id="AgregaPlanificacion" onclick="agregaPlanificacion()" style="cursor:pointer">Agregar</div>
-                                                <div class="btn btn-primary" id="EditaPlanificacion" onclick="editaPlanificacion()" style="cursor:pointer; display: none;">Modificar</div>
+                                                <div class="btn btn-primary" id="AgregaPlanificacion" onclick="agregaPlanificacion()" style="cursor:pointer"><?= $this->translate('__Agregar__') ?></div>
+                                                <div class="btn btn-primary" id="EditaPlanificacion" onclick="editaPlanificacion()" style="cursor:pointer; display: none;"><?= $this->translate('__Modificar__') ?></div>
                                             </div>
                                         </div>
                                         <div class="form-row mt-3">
                                             <table id="tablaPlanificacion" class="table table-hover" style="display: none;">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">Día</th>
-                                                        <th class="text-center">Inicio</th>
-                                                        <th class="text-center">Fin</th>
-                                                        <th class="text-center">Acciones</th>
+                                                        <th class="text-center"><?= $this->translate('__Dia__') ?></th>
+                                                        <th class="text-center"><?= $this->translate('__inicio__') ?></th>
+                                                        <th class="text-center"><?= $this->translate('__Fin__') ?></th>
+                                                        <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="bodyPlanificacion">
@@ -215,17 +215,6 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
-function seleccionarFormulario(){
-    // for (var i = 0; i < arrFormularioJSON.length; i++){
-    //     var formulario = arrFormularioJSON[i];
-
-    //     if (formulario.idFormulario == tareasJson.relevamiento.formulario.idFormulario){
-    //         $('#formularioPlanificacion').val(i);
-    //         break;
-    //     }
-    // }
-}
-
 function dibujarSelectTipoPlanificacion(){
     $('#tipoPlanificacion')
         .find('option')
@@ -245,27 +234,6 @@ function dibujarSelectTipoPlanificacion(){
 
         $('#tipoPlanificacion').append(option);
     }
-}
-
-function dibujarSelectFormulario(){
-    // $('#formularioPlanificacion')
-    //     .find('option')
-    //     .remove();
-
-    // $('#formularioPlanificacion')
-    //     .append($("<option></option>")
-    //         .attr("value", -1)
-    //         .text('-- Seleccione --'));
-
-    // for (var i = 0; i < arrFormularioJSON.length; i++){
-    //     var formulario = arrFormularioJSON[i];
-
-    //     var option = $("<option></option>")
-    //                         .attr("value", i)
-    //                         .text(formulario.nombre);
-
-    //     $('#formularioPlanificacion').append(option);
-    // }
 }
 
 function dibujarDatosOrdenDeCompra(){

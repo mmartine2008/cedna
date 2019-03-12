@@ -74,28 +74,6 @@ class TareasManager {
         $this->entityManager->flush();
     }
 
-    public function asignarFormularioPlanificacion($jsonData, $Planificacion){
-        $Formulario = $this->catalogoManager->getFormulario($jsonData->formulario->idFormulario);
-        $Relevamiento = $Planificacion->getRelevamiento();
-
-        if ($Relevamiento){
-            $Relevamiento->setFormulario($Formulario);
-            $this->entityManager->persist($Relevamiento);
-        }else{
-            $Relevamiento = new Relevamientos();
-            $Relevamiento->setFormulario($Formulario);
-            
-            $this->entityManager->persist($Relevamiento);
-            $this->entityManager->flush();
-
-            
-            $Planificacion->setRelevamiento($Relevamiento);
-        }
-
-        $this->entityManager->persist($Planificacion);
-        $this->entityManager->flush();
-    }
-
     /**
      * Esta funcion guarda las planificaciones de una tarea especifica.
      * Recibe un JSON con las planificaciones a guardar y otro con las que se deben
