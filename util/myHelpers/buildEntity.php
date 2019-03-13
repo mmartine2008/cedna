@@ -57,14 +57,9 @@
      }
      
 process([
-    'IdPlanificacion', 
-'IdTarea', 
-'FechaInicio', 
-'FechaFin', 
-'HoraInicio', 
-'HoraFin', 
-'Titulo', 
-'Observaciones',   
+    'IdNotificacionXPerfil', 
+'IdTipoEvento', 
+'IdPerfil', 
 ]);
      
      /*

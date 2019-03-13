@@ -1,0 +1,170 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Matriz de Notificaciones Por Perfil</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formNotificacionesXPerfil" id="formNotificacionesXPerfil">
+                    <table id="tablaNotificacionesXPerfil" class="table table-hover">
+                        
+                    </table>
+                    <input type="hidden" name="JsonData" id="JsonData">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var arrPerfilesJSON = [{id : 1, descripcion : 'Administrador'}, {id : 2, descripcion : 'Contador'}, {id : 3, descripcion : 'Comitente'}];
+var arrTiposEventoJSON = [{id : 1, descripcion : 'Crear Usuario'}, {id : 2, descripcion : 'Crear Perfil'}, {id : 3, descripcion : 'Crear Tarea'}];
+var arrNotificacionesXPerfilJSON = [{perfil : {id : 1, descripcion : 'Administrador'}, tipoEvento : {id : 2, descripcion : 'Crear Perfil'}}, 
+                                    {perfil : {id : 1, descripcion : 'Administrador'}, tipoEvento : {id : 3, descripcion : 'Crear Tarea'}}];
+
+function crearEncabezadoDeMatriz(){
+    var tHead = document.createElement("thead");
+    var trHead = document.createElement("tr");
+    
+    //El header de tipo evento lo hago de forma separada
+    var thTipoEvento = document.createElement("th");
+    
+    thTipoEvento.setAttribute('class', 'text-center');
+    thTipoEvento.innerHTML = 'Tipo Evento';
+    trHead.append(thTipoEvento);
+    
+    //Ahora creo los header de cada perfil
+    for (var i = 0; i < arrPerfilesJSON.length; i++){
+        var perfil = arrPerfilesJSON[i];
+        var th = document.createElement("th");
+        
+        th.setAttribute('class', 'text-center');
+        th.innerHTML = perfil.descripcion;
+        trHead.append(th);
+    }
+    tHead.append(trHead);
+
+    return tHead;
+}
+
+function crearCuerpoDeMatriz(){
+    var tBody = document.createElement("tbody");
+    
+    for (var i = 0; i < arrTiposEventoJSON.length; i++){
+        var tipoEvento = arrTiposEventoJSON[i];
+        var trBody = document.createElement("tr");
+
+        //El primer valor corresponde al tipo de evento
+        var tdTipoEvento = document.createElement("td");
+        
+        tdTipoEvento.setAttribute('class', 'text-center');
+        tdTipoEvento.innerHTML = tipoEvento.descripcion;
+        trBody.append(tdTipoEvento);
+        
+        //Ahora creo los header de cada perfil
+        for (var j = 0; j < arrPerfilesJSON.length; j++){
+            var perfil = arrPerfilesJSON[j];
+            var td = document.createElement("td");
+        
+            td.setAttribute('class', 'text-center');
+
+            var checkbox = document.createElement("input");
+            //El id del checkbox se compone del idTipoEvento_idPerfil
+            var IdCheckbox = tipoEvento.id + '_' + perfil.id;
+
+            checkbox.setAttribute('type', 'checkbox');
+            checkbox.setAttribute('id', IdCheckbox);
+            checkbox.setAttribute('name', IdCheckbox);
+            td.append(checkbox);
+            trBody.append(td);
+        }
+        tBody.append(trBody);
+    }
+
+    return tBody;
+}
+
+function crearMatrizTiposEventoXPerfiles(){
+    var tabla = $("#tablaNotificacionesXPerfil");
+    
+    var tHead = crearEncabezadoDeMatriz();
+    tabla.append(tHead);
+
+    var tBody = crearCuerpoDeMatriz();
+    tabla.append(tBody);
+}
+
+function dibujarOpcionesSeleccionadas(){
+    for (var i = 0; i < arrNotificacionesXPerfilJSON.length; i++){
+        var opcion = arrNotificacionesXPerfilJSON[i];
+
+        var IdCheckbox = opcion.tipoEvento.id + '_' + opcion.perfil.id;
+
+        $('#'+IdCheckbox).prop('checked', 'true');
+    }
+}
+
+function recuperarElementoPorId(arrElementos, idElemento){
+    for (var i = 0; i < arrElementos.length; i++){
+        var elemento = arrElementos[i];
+
+        if (elemento.id == idElemento){
+            return elemento;
+        }
+    }
+}
+
+function recuperarOpcionesSeleccionadas(){
+    var arrCheckboxSeleccionados = $("tbody input[type='checkbox']:checked");
+    var output = [];
+
+    for (var i = 0; i < arrCheckboxSeleccionados.length; i++){
+        var checkbox = arrCheckboxSeleccionados[i];
+        var idTipoEvento = checkbox.id.split('_')[0];
+        var idPerfil = checkbox.id.split('_')[1]; 
+
+        var tipoEvento = recuperarElementoPorId(arrTiposEventoJSON, idTipoEvento);
+        var perfil = recuperarElementoPorId(arrPerfilesJSON, idPerfil);
+
+        var elemento = {tipoEvento : tipoEvento, perfil : perfil};
+
+        output.push(elemento);
+    }
+
+    return output;
+}
+
+function FormNotificacionesXPerfilToJson(){
+    arrNotificacionesXPerfil = recuperarOpcionesSeleccionadas();
+
+    var formData = {
+        arrNotificacionesXPerfil: arrNotificacionesXPerfil
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormNotificacionesXPerfilToJson();
+    $('#JsonData').val(JsonData);
+
+    $("#formNotificacionesXPerfil").submit();
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+crearMatrizTiposEventoXPerfiles();
+dibujarOpcionesSeleccionadas();
+verificarMostrarBotonGuardar();
+</script>

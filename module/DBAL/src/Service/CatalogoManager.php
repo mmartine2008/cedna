@@ -20,6 +20,8 @@ use DBAL\Entity\Relevamientos;
 use DBAL\Entity\OrdenesDeCompra;
 use DBAL\Entity\Planificaciones;
 use DBAL\Entity\TipoPlanificacion;
+use DBAL\Entity\TiposEvento;
+use DBAL\Entity\NotificacionesXPerfil;
 
 class CatalogoManager {
     
@@ -205,6 +207,26 @@ class CatalogoManager {
         return $TipoPlanificacion;
     }
 
+    public function getTiposEvento($idTipoEvento = null){
+        if ($idTipoEvento){
+            $TiposEvento = $this->entityManager->getRepository(TiposEvento::class)->findOneBy(['id' => $idTipoEvento]);
+        }else{
+            $TiposEvento = $this->entityManager->getRepository(TiposEvento::class)->findAll();
+        }
+
+        return $TiposEvento;
+    }
+
+    public function getNotificacionesXPerfil($idNotificacionXPerfil = null){
+        if ($idNotificacionXPerfil){
+            $NotificacionesXPerfil = $this->entityManager->getRepository(NotificacionesXPerfil::class)->findOneBy(['id' => $idNotificacionXPerfil]);
+        }else{
+            $NotificacionesXPerfil = $this->entityManager->getRepository(NotificacionesXPerfil::class)->findAll();
+        }
+
+        return $NotificacionesXPerfil;
+    }
+
     public function getTareaPorOrdenDeCompra($OrdenDeCompra){
         $Tareas = $this->entityManager->getRepository(Tareas::class)->findOneBy(['OrdenDeCompra' => $OrdenDeCompra]);
 
@@ -215,6 +237,13 @@ class CatalogoManager {
         $Tareas = $this->entityManager->getRepository(Tareas::class)->findBy(['PlanificaTarea' => $Usuario]);
 
         return $Tareas;
+    }
+
+    public function getNotificacionesXPerfilPorTipoEventoPerfil($TipoEvento, $Perfil){
+        $NotificacionesXPerfil = $this->entityManager->getRepository(NotificacionesXPerfil::class)
+                                                        ->findOneBy(['TipoEvento' => $TipoEvento, 'Perfil' => $Perfil]);
+
+        return $NotificacionesXPerfil;
     }
 
     /**

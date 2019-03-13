@@ -8,6 +8,7 @@ use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
 use DBAL\Entity\Usuarios;
+use DBAL\Entity\NotificacionesXPerfil;
 
 class ConfiguracionManager {
     
@@ -94,5 +95,55 @@ class ConfiguracionManager {
         }
 
         return $mensaje;
+    }
+
+    private function crearNotificacionesXPerfiles($TipoEvento, $Perfil){
+        $NotificacionesXPerfil = new NotificacionesXPerfil();
+
+        $NotificacionesXPerfil->setTipoEvento($Perfil);
+        $NotificacionesXPerfil->setPerfil($TipoEvento);
+
+        $this->entityManager->persist($NotificacionesXPerfil);
+        $this->entityManager->flush();
+    }
+
+    private function borrarNotificacionesXPerfiles($NotificacionXPerfilesOriginal){
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($NotificacionXPerfilesOriginal);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+        }
+    }
+
+    public function guardarNotificacionesXPerfiles($JsonData){
+        $NotificacionesXPerfilesOriginal = $this->catalogoManager->getNotificacionesXPerfil();
+
+        foreach($JsonData->arrNotificacionesXPerfil as $NotificacionXPerfil){
+            $TipoEvento = $this->catalogoManager->getTiposEvento($NotificacionXPerfil->tipoEvento->id);
+            $Perfil = $this->catalogoManager->getPerfiles($NotificacionXPerfil->perfil->id);
+            //Compruebo si ya existe una entidad NotificacionesXPerfil para ese perfil y tipoEvento
+            $NotificacionesXPerfil = $this->catalogoManager->getNotificacionesXPerfilPorTipoEventoPerfil($TipoEvento, $Perfil);
+
+            if (!isset($NotificacionesXPerfil)){
+                $this->crearNotificacionesXPerfiles($TipoEvento, $Perfil);
+            }else{
+                //Si ya existe, la quito del arreglo $NotificacionesXPerfilesOriginal
+                for ($i = 0; $i < count($NotificacionesXPerfilesOriginal); $i){
+                    if ($NotificacionesXPerfilesOriginal[$i]->getId() == $NotificacionesXPerfil->getId()){
+                        unset($NotificacionesXPerfilesOriginal[$i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Borro las notificaciones originales que quedaron dentro del arreglo $NotificacionesXPerfilesOriginal
+        foreach($NotificacionesXPerfilesOriginal as $NotificacionXPerfilesOriginal){
+            $this->borrarNotificacionesXPerfiles($NotificacionXPerfilesOriginal);
+        }
     }
 }

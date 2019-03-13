@@ -70,6 +70,20 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'notificaciones-por-perfil' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/notificaciones-por-perfil[/:action]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigNotifXPerfilController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -81,6 +95,7 @@ return [
             Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
+            Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
         ],
     ],
     'service_manager' => [
