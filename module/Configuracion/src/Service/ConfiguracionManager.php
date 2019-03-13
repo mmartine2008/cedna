@@ -100,8 +100,8 @@ class ConfiguracionManager {
     private function crearNotificacionesXPerfiles($TipoEvento, $Perfil){
         $NotificacionesXPerfil = new NotificacionesXPerfil();
 
-        $NotificacionesXPerfil->setTipoEvento($Perfil);
-        $NotificacionesXPerfil->setPerfil($TipoEvento);
+        $NotificacionesXPerfil->setTipoEvento($TipoEvento);
+        $NotificacionesXPerfil->setPerfil($Perfil);
 
         $this->entityManager->persist($NotificacionesXPerfil);
         $this->entityManager->flush();
@@ -121,7 +121,8 @@ class ConfiguracionManager {
 
     public function guardarNotificacionesXPerfiles($JsonData){
         $NotificacionesXPerfilesOriginal = $this->catalogoManager->getNotificacionesXPerfil();
-
+        $YaCargados = [];
+        
         foreach($JsonData->arrNotificacionesXPerfil as $NotificacionXPerfil){
             $TipoEvento = $this->catalogoManager->getTiposEvento($NotificacionXPerfil->tipoEvento->id);
             $Perfil = $this->catalogoManager->getPerfiles($NotificacionXPerfil->perfil->id);
@@ -131,19 +132,24 @@ class ConfiguracionManager {
             if (!isset($NotificacionesXPerfil)){
                 $this->crearNotificacionesXPerfiles($TipoEvento, $Perfil);
             }else{
-                //Si ya existe, la quito del arreglo $NotificacionesXPerfilesOriginal
-                for ($i = 0; $i < count($NotificacionesXPerfilesOriginal); $i){
-                    if ($NotificacionesXPerfilesOriginal[$i]->getId() == $NotificacionesXPerfil->getId()){
-                        unset($NotificacionesXPerfilesOriginal[$i]);
+                // Si ya existe, la quito del arreglo $NotificacionesXPerfilesOriginal
+                for ($i = 0; $i < count($NotificacionesXPerfilesOriginal); $i++){
+                    if (array_key_exists($i, $NotificacionesXPerfilesOriginal) 
+                        && $NotificacionesXPerfilesOriginal[$i]->getId() == $NotificacionesXPerfil->getId()){
+                        $YaCargados[] = $i;
                         break;
                     }
                 }
             }
         }
 
-        //Borro las notificaciones originales que quedaron dentro del arreglo $NotificacionesXPerfilesOriginal
-        foreach($NotificacionesXPerfilesOriginal as $NotificacionXPerfilesOriginal){
-            $this->borrarNotificacionesXPerfiles($NotificacionXPerfilesOriginal);
+        // Borro las notificaciones originales que quedaron dentro del arreglo $NotificacionesXPerfilesOriginal
+        foreach($NotificacionesXPerfilesOriginal as $key => $NotificacionXPerfilesOriginal){
+            
+            if (!in_array($key, $YaCargados)){
+                $this->borrarNotificacionesXPerfiles($NotificacionXPerfilesOriginal);
+            }
+            
         }
     }
 }
