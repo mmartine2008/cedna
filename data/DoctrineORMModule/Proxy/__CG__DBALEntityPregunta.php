@@ -389,6 +389,17 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function getListaDestinos()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getListaDestinos', []);
+
+        return parent::getListaDestinos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getJSON()
     {
 

@@ -256,6 +256,10 @@ class Pregunta
         return false;
     }
 
+    public function getListaDestinos() {
+       return ["0" => "Disponibles", "1" => "Seleccionados", "2" => "No seleccionados"];
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -294,7 +298,7 @@ class Pregunta
             $output .= '"funcion": "", ';
         }
 
-        $listaNombreDestinos = ["0" => "Disponibles", "1" => "Seleccionados", "2" => "No seleccionados"];
+        $listaNombreDestinos = $this->getListaDestinos();
         // $preguntasGen = implode(", ", $preguntasGen);
         
         if ($this->tieneOpciones()) {
