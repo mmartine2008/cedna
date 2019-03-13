@@ -288,11 +288,14 @@
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
-    function createSimpleSelector(idPregunta, opciones, divElement, idSeccion, preguntasGeneradas) {
+    function createSimpleSelector(idPregunta, opciones, divElement, idSeccion, preguntasGeneradas, required) {
         
         var selector = document.createElement("select");
         var idSelector = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
         selector.id = idSelector;
+        if(required == '1'){
+            selector.required = true;
+        }
         var selectorModificado = createListFromJSONLista(selector, opciones, true);
         selectorModificado.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idSelector);
                                                     if(preguntasGeneradas) { 
@@ -439,14 +442,13 @@
 
             var text = "Seleccionados"
             if(i == 2) { text = "No seleccionados";}
-            // var text = nombresDestinos[i].nombre;
 
             createTextElement("P", div_class_sm_3_2, text);
             createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
         }
     }
 
-    function createInput(infoType, idPregunta, divElement, idSeccion){
+    function createInput(infoType, idPregunta, divElement, idSeccion, required){
         
         ele = document.createElement('input');
         ele.type = infoType;
@@ -454,6 +456,9 @@
         ele.name = idEle;
         ele.id = idEle;
         ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
+        if (required == '1') {
+            ele.required = 'true';
+        }
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
@@ -462,11 +467,11 @@
         div.appendChild(ele);
     } 
 
-    function createSelector(item, divElement, idSeccion, divSeccion){
+    function createSelector(item, divElement, idSeccion, divSeccion, required){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
             preguntasGeneradas = item.preguntasGeneradas;
-            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion, preguntasGeneradas);
+            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion, preguntasGeneradas, required);
             if(preguntasGeneradas) { 
                 generateQuestionsBlock(preguntasGeneradas, divSeccion, idSeccion);
             }
@@ -477,13 +482,16 @@
         } 
     }
 
-    function createTextArea(item, divElement, idSeccion){
+    function createTextArea(item, divElement, idSeccion, required){
         var div = createDivClass("col-sm-3 text-right", divElement);
         ele = document.createElement('textarea');
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
         ele.className = "form-control";
+        if (required == '1') {
+            ele.required = 'true';
+        }
         div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
@@ -498,23 +506,29 @@
         div.appendChild(ele);
     }
     
-    function createAnswer(item, divElement, idSeccion, divSeccion){
+    function createAnswer(item, divElement, idSeccion, divSeccion, required){
         if ((item.tipoPregunta.descripcion == 'simple') || (item.tipoPregunta.descripcion == 'multiple')){
-            createSelector(item, divElement, idSeccion, divSeccion);
+            createSelector(item, divElement, idSeccion, divSeccion, required);
         } else {
             if(item.tipoPregunta.descripcion == 'image'){
                 createImage(item, divElement, idSeccion);
             } else if(item.tipoPregunta.descripcion == 'textarea'){
-                createTextArea(item, divElement, idSeccion);
+                createTextArea(item, divElement, idSeccion, required);
             } else {
-                createInput(item.tipoPregunta.descripcion, item.idPregunta, divElement, idSeccion);
+                createInput(item.tipoPregunta.descripcion, item.idPregunta, divElement, idSeccion, required);
             }
         }
     }
 
-    function createTextElement(type, div, info){
+    function createTextElement(type, div, info, required = '0'){
         var element = document.createElement(type);
         var text = document.createTextNode(info);
+        if (required == '1') {
+            var span = document.createElement("span");
+            span.style = "color: #f00;font-weight: bold; font-size: 10pt;";
+            span.textContent = "(*) ";
+            element.appendChild(span);
+        }
         element.appendChild(text);
         div.appendChild(element);
     }
@@ -524,14 +538,14 @@
             div.className='form-row';
             div.style.padding = "15px";
             divElement.appendChild(div);
-           
+            var required = question.requerido;
             var divText = createDivClass("col-sm-3 text-right", div);
             var text = question.descripcion;
             if(text) text = text+": ";
-            createTextElement("P", divText, text);
+            createTextElement("P", divText, text, required);
             // var preguntasGeneradas = null;
             
-            createAnswer(question, div, idSeccion, divElement);
+            createAnswer(question, div, idSeccion, divElement, required);
             
     }
 
