@@ -17,10 +17,9 @@
 </div>
 
 <script>
-var arrPerfilesJSON = [{id : 1, descripcion : 'Administrador'}, {id : 2, descripcion : 'Contador'}, {id : 3, descripcion : 'Comitente'}];
-var arrTiposEventoJSON = [{id : 1, descripcion : 'Crear Usuario'}, {id : 2, descripcion : 'Crear Perfil'}, {id : 3, descripcion : 'Crear Tarea'}];
-var arrNotificacionesXPerfilJSON = [{perfil : {id : 1, descripcion : 'Administrador'}, tipoEvento : {id : 2, descripcion : 'Crear Perfil'}}, 
-                                    {perfil : {id : 1, descripcion : 'Administrador'}, tipoEvento : {id : 3, descripcion : 'Crear Tarea'}}];
+var arrPerfilesJSON = <?= $arrPerfilesJSON ?>;
+var arrTiposEventoJSON = <?= $arrTiposEventoJSON ?>;
+var arrNotificacionesXPerfilJSON = <?= $arrNotificacionesXPerfilJSON ?>;
 
 function crearEncabezadoDeMatriz(){
     var tHead = document.createElement("thead");
@@ -39,7 +38,7 @@ function crearEncabezadoDeMatriz(){
         var th = document.createElement("th");
         
         th.setAttribute('class', 'text-center');
-        th.innerHTML = perfil.descripcion;
+        th.innerHTML = perfil.nombre;
         trHead.append(th);
     }
     tHead.append(trHead);
@@ -166,5 +165,9 @@ function verificarMostrarBotonGuardar(){
 
 crearMatrizTiposEventoXPerfiles();
 dibujarOpcionesSeleccionadas();
-verificarMostrarBotonGuardar();
+
+$( document ).ready(function() {
+    verificarMostrarBotonGuardar();
+});
+
 </script>
