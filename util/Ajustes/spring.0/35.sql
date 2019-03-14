@@ -1,6 +1,6 @@
 UPDATE cedna.dbo.Operacion
-SET nombre='formularios', titulo='Formularios', icono='permisos zoom', grupoId=6, orden=1, url='formulario'
-WHERE Id=31;
+SET nombre='formularios - cargar', titulo='Cargar formulario', icono='tareas zoom', grupoId=40, orden=1, url='formulario/cargar'
+WHERE Id=32;
 
 UPDATE cedna.dbo.Operacion
 SET nombre='formularios - para cargar', titulo='Formularios para cargar', icono='tareas zoom', grupoId=31, orden=1, url='formulario/para-cargar'
