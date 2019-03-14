@@ -512,7 +512,7 @@
         var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion;
         ele.name = idEle;
         ele.id = idEle;
-        ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
+        ele.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
         }
@@ -602,7 +602,6 @@
             createTextElement("P", divText, text, required);
 
             createAnswer(question, div, idSeccion, divElement, required);
-            
     }
 
     function createQuestions(item, divElement){
