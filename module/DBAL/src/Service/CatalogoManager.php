@@ -22,6 +22,7 @@ use DBAL\Entity\Planificaciones;
 use DBAL\Entity\TipoPlanificacion;
 use DBAL\Entity\TiposEvento;
 use DBAL\Entity\NotificacionesXPerfil;
+use DBAL\Entity\UsuariosxPerfiles;
 
 class CatalogoManager {
     
@@ -244,6 +245,25 @@ class CatalogoManager {
                                                         ->findOneBy(['TipoEvento' => $TipoEvento, 'Perfil' => $Perfil]);
 
         return $NotificacionesXPerfil;
+    }
+
+    public function getNotificacionesXPerfilPorTipoEvento($TipoEvento){
+        $NotificacionesXPerfil = $this->entityManager->getRepository(NotificacionesXPerfil::class)
+                                                        ->findBy(['TipoEvento' => $TipoEvento]);
+
+        return $NotificacionesXPerfil;
+    }
+
+    public function getTiposEventoPorDescripcion($Descripcion){
+        $TiposEvento = $this->entityManager->getRepository(TiposEvento::class)->findOneBy(['Descripcion' => $Descripcion]);
+
+        return $TiposEvento;
+    }
+
+    public function getUsuariosXPerfilesPorPerfil($Perfil){
+        $UsuariosxPerfiles = $this->entityManager->getRepository(UsuariosxPerfiles::class)->findBy(['Perfil' => $Perfil]);
+
+        return $UsuariosxPerfiles;
     }
 
     /**

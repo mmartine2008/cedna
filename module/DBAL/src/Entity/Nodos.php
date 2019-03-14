@@ -44,8 +44,14 @@ class Nodos
      */
     protected $Jefes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Nodos", mappedBy="NodoSuperior")
+     */
+    protected $nodosHijos;
+
     public function __construct() {
         $this->Jefes = new ArrayCollection();
+        $this->nodosHijos = new ArrayCollection();
     }
 
     public function setTipoNodo($TipoNodo)
@@ -92,6 +98,15 @@ class Nodos
         }
     }
 
+    public function getNodosHijos()
+    {
+        if ($this->nodosHijos){
+            return $this->nodosHijos->toArray();
+        }else{
+            return null;
+        }
+    }
+
     public function getJSON(){
         $jefes = [];
         foreach ($this->getJefes() as $jefe) {
@@ -110,6 +125,22 @@ class Nodos
         }else{
             $output .= '"nodoSuperior": ""';
         }
+        
+        return '{' . $output . '}';
+    }
+
+    public function getJSONOrganigrama(){
+        $nodosHijos = [];
+        foreach ($this->getNodosHijos() as $nodo) {
+            $nodosHijos[] = $nodo->getJSONOrganigrama();
+        }
+        $nodosHijos = implode(", ", $nodosHijos);
+
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"tipoNodo": ' . $this->getTipoNodo()->getJSON() .', ';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"nodosHijos": ['.$nodosHijos.']';
         
         return '{' . $output . '}';
     }

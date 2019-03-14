@@ -116,6 +116,16 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'dibujar' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/dibujar',
+                            'defaults' => [
+                                'action'     => 'dibujar',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
             'tareas' => [

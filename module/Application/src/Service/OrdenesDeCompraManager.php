@@ -13,17 +13,18 @@ class OrdenesDeCompraManager {
     private $entityManager; 
     
     private $catalogoManager;
-
     private $tareasManager;
+    private $mailManager;
 
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager, $tareasManager) 
+    public function __construct($entityManager, $catalogoManager, $tareasManager, $mailManager) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
         $this->tareasManager = $tareasManager;
+        $this->mailManager = $mailManager;
     }
 
     /**
@@ -69,8 +70,10 @@ class OrdenesDeCompraManager {
 
         if ($Tarea){
             $this->tareasManager->altaEdicionTareas($jsonData, $jsonData->solicitante->userName, $Tarea->getId());
+            $this->mailManager->notificarEdicionOrdenDeCompra($OrdenesDeCompra);
         }else{
             $this->tareasManager->altaEdicionTareas($jsonData, $jsonData->solicitante->userName);
+            $this->mailManager->notificarNuevaOrdenDeCompra($OrdenesDeCompra);
         }
     }
     

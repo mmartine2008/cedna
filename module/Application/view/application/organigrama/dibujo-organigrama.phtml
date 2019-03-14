@@ -1,0 +1,58 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Organigrama__') ?></h3>
+            </div>
+            <div class="panel-body" id="divIndex">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var nodoRaiz = <?= $nodoRaiz ?>;
+
+function dibujarNodo(contenedor, nodoActual){
+    var a = document.createElement('a');
+    a.setAttribute('href', '#');
+    a.innerHTML = nodoActual.nombre;
+    
+    var li = document.createElement('li');
+    li.appendChild(a);
+    
+    var nodosHijos = nodoActual.nodosHijos;
+
+    if (nodosHijos.length > 0){
+        var ul = document.createElement('ul');
+
+        for (var i = 0; i < nodosHijos.length; i++){
+            var nodo = nodosHijos[i];
+            
+            dibujarNodo(ul, nodo);
+        }
+
+        li.appendChild(ul);
+    }
+
+    contenedor.appendChild(li);
+}
+
+function dibujarOrganigrama(){
+    var divIndex = document.getElementById("divIndex");
+    var divFila = document.createElement('div');
+    divFila.setAttribute('class','NodoOrganigrama');
+    var ul = document.createElement('ul');
+    
+    dibujarNodo(ul, nodoRaiz);
+    
+    divFila.appendChild(ul);
+    divIndex.appendChild(divFila);
+}
+
+dibujarOrganigrama();
+
+$( document ).ready(function() {
+    
+});
+</script>

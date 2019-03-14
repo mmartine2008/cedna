@@ -64,10 +64,10 @@ class Nodos extends \DBAL\Entity\Nodos implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'TipoNodo', 'Nombre', 'NodoSuperior', 'Jefes'];
+            return ['__isInitialized__', 'id', 'TipoNodo', 'Nombre', 'NodoSuperior', 'Jefes', 'nodosHijos'];
         }
 
-        return ['__isInitialized__', 'id', 'TipoNodo', 'Nombre', 'NodoSuperior', 'Jefes'];
+        return ['__isInitialized__', 'id', 'TipoNodo', 'Nombre', 'NodoSuperior', 'Jefes', 'nodosHijos'];
     }
 
     /**
@@ -268,12 +268,34 @@ class Nodos extends \DBAL\Entity\Nodos implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
+    public function getNodosHijos()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNodosHijos', []);
+
+        return parent::getNodosHijos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getJSON()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
 
         return parent::getJSON();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getJSONOrganigrama()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSONOrganigrama', []);
+
+        return parent::getJSONOrganigrama();
     }
 
 }

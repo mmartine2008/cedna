@@ -149,4 +149,17 @@ class OrganigramaController extends CednaController
         return $view;
     }
 
+    public function dibujarAction(){
+        $this->cargarAccionesDisponibles('organigrama - dibujar');
+
+        $nodoRaiz = $this->organigramaManager->getNodoRaiz();
+
+        $view = new ViewModel();
+        
+        $view->setVariable('nodoRaiz', $nodoRaiz->getJSONOrganigrama());
+        $view->setTemplate('application/organigrama/dibujo-organigrama.phtml');
+        
+        return $view;
+    }
+
 }

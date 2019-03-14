@@ -67,5 +67,5 @@ return [
         'default_subject' => 'CEDNA - Sistema de Permisos de Trabajo',
         'default_from_mail' => 'support@cedna.com.ar',
         'default_from_alias' => 'CEDNA',
-],
+    ],
 ];

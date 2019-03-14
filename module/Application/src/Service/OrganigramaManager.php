@@ -159,4 +159,23 @@ class OrganigramaManager {
 
         return '[' . $output . ']';
     }
+
+    /**
+     * Funcion que recupera el nodo Raiz del organigrama.
+     * Se considera que el nodo raiz, es aquel que no posee nodo superior.
+     *
+     * @return Nodos | null
+     */
+    public function getNodoRaiz(){
+        $arrNodos = $this->catalogoManager->getNodos();
+
+        foreach($arrNodos as $Nodo){
+            $NodoSuperior = $Nodo->getNodoSuperior();
+            if (!isset($NodoSuperior)){
+                return $Nodo;
+            }
+        }
+
+        return null;
+    }
 }
