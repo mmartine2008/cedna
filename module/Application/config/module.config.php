@@ -163,6 +163,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'mail' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/mail[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\MailController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
         ],
     ],
 
@@ -175,6 +190,7 @@ return [
             Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
             Controller\OrdenesDeCompraController::class => Controller\Factory\OrdenesDeCompraControllerFactory::class,
             Controller\PlanificacionController::class => Controller\Factory\PlanificacionControllerFactory::class,
+            Controller\MailController::class => Controller\Factory\MailControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -189,6 +205,7 @@ return [
             Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
             Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
             Service\OrdenesDeCompraManager::class => Service\Factory\OrdenesDeCompraManagerFactory::class,
+            Service\MailManager::class => Service\Factory\MailManagerFactory::class,
         ],
     ],
     'view_manager' => [

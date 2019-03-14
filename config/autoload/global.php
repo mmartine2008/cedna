@@ -38,8 +38,8 @@ return [
 
         
     'translator' => [
-        //'locale' => 'es_ES',
-        'locale' => 'en_US',
+        'locale' => 'es_ES',
+        // 'locale' => 'en_US',
         'translation_file_patterns' => [
             [
                 'base_dir' => __DIR__.'/../data/languag/phpArray',
@@ -53,4 +53,19 @@ return [
             ],
         ],
     ],
+
+    'smtp_options' => [
+        'name' => 'gmail.com',
+        'host' => 'smtp.gmail.com',
+        'connection_class' => 'login',
+        'port' => '587',
+        'connection_config' => [
+            'ssl' => 'tls',
+            'username' => 'mads.trp.2018@gmail.com',
+            'password' => 'mads.trp.20181234',
+        ],
+        'default_subject' => 'CEDNA - Sistema de Permisos de Trabajo',
+        'default_from_mail' => 'support@cedna.com.ar',
+        'default_from_alias' => 'CEDNA',
+],
 ];
