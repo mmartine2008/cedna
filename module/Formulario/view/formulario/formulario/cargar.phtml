@@ -16,7 +16,6 @@
     var listMultipleSelectDestino0 = [];
     var listMultipleSelectDestino1 = [];
     var listaRespuestasInput = [];
-    var listaPreguntasInput = [];
 
     function updateAnswerOfPreguntaGenerada(pregGeneradas, idPregunta, answer) {
         for (var k = 0; k < pregGeneradas.length; k++){ 
@@ -109,15 +108,6 @@
             }
         }
     }
-
-    // function obtenerValoresSelector(id) {
-    //     var values = [];
-    //     var options =$('#'+id+' option');
-    //     for(var i=0; i < options.length; i++){
-    //         values.push(options[i].value);
-    //     }
-    //     return values;
-    // }
     
     function getOptionOfMultiSelectQuestion(preguntas, idPregunta, idSelector) {
         for (var j = 0; j < preguntas.length; j++){
@@ -238,9 +228,52 @@
             divElement.appendChild(div);
             createOneQuestion(idSeccion, question.preguntaGenerada, div);
         }
-        
-        
     }
+
+    function eliminarElementoLista(elemento, lista) {
+        var pos = lista.indexOf(elemento);
+        if(pos != -1) {
+            lista.splice(pos, 1); 
+        }  
+    }
+
+    function eliminarElementoListasRequired(idPregunta) {
+        eliminarElementoLista(idPregunta, listaRespuestasInput);
+        eliminarElementoLista(idPregunta, listMultipleSelectDestino0);
+        eliminarElementoLista(idPregunta, listMultipleSelectDestino1);
+    }
+
+    function quitarPreguntasGeneradasListaRequired(idSeccion, preguntasGeneradas) {
+        // for(var i = 0; i < preguntasGeneradas.length; i++){ 
+        idPregunta = preguntasGeneradas.idPregunta;
+        idReal = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
+        eliminarElementoListasRequired(idReal);
+        // }
+    }
+
+    function agregarElementoLista(elemento, lista) {
+        var pos = lista.indexOf(elemento);
+        if(pos == -1) {
+            lista.push(elemento);
+        } 
+    }
+
+    function agregarPreguntasGeneradasListaRequired(idSeccion, preguntasGeneradas) {
+        if(preguntasGeneradas.requerido) {
+            tipo = preguntasGeneradas.tipoPregunta;
+            var idReal = "pregunta_"+preguntasGeneradas.idPregunta+"_seccion_"+idSeccion;
+            if(tipo.descripcion == "multiple") {
+                if(tipo.destinos >1) { 
+                    agregarElementoLista(idReal, listMultipleSelectDestino0);
+                } else {
+                    agregarElementoLista(idReal, listMultipleSelectDestino1);
+                }
+            } else {
+                agregarElementoLista(idReal, listaRespuestasInput);
+            }
+        }
+    }
+
 
     function updateStateQuestion(idOpcion, preguntasGeneradas, idSeccion, idPregunta) {
         for(var i = 0; i < preguntasGeneradas.length; i++){
@@ -248,13 +281,14 @@
             var idDiv = "div_id_"+question.idPreguntaGenerada;
             if (question.opcion.id == idOpcion) {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'block');
-                var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
-	            document.getElementById(idDiv).style.display = state;
+                agregarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
             } else {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'none');
-                var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
-                document.getElementById(idDiv).style.display = state;
+                quitarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
+                
             }
+            var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
+            document.getElementById(idDiv).style.display = state;
         }
     }
 
@@ -297,12 +331,11 @@
         selector.id = idSelector;
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
-            listRequiredPregunta.push(pregunta.descripcion);
         }
         var selectorModificado = createListFromJSONLista(selector, opciones, true);
         selectorModificado.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idSelector);
                                                     if(preguntasGeneradas) { 
-                                                    blockUnlockQuestion(this, preguntasGeneradas, idSeccion, pregunta.idPregunta);
+                                                        blockUnlockQuestion(this, preguntasGeneradas, idSeccion, pregunta.idPregunta);
                                                 }};
         divElement.appendChild(selectorModificado);
     }
@@ -425,6 +458,20 @@
             .end();
     }
 
+    function crearWarningAlert(div, id) {
+
+        var divElement = document.createElement("Div");
+        divElement.id = "div_"+id;
+        divElement.classList = "alert alert-warning alert-dismissible"
+        divElement.style.display = "none";
+        div.appendChild(divElement);
+
+        var strong = document.createElement("strong");
+        var t = document.createTextNode("Debe vaciar la lista de elementos");
+        strong.appendChild(t);
+        divElement.appendChild(strong);
+    }
+
     function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos, required){
         var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
@@ -436,6 +483,7 @@
 
         if (cantDestinos >1) {
             listMultipleSelectDestino0.push('destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
+            crearWarningAlert(div_class_sm_3, 'destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
         } else {
             listMultipleSelectDestino1.push('destino_1_id_'+idPregunta+"_seccion_"+idSeccion);
         }
@@ -466,7 +514,6 @@
         ele.id = idEle;
         ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
         if(required == '1'){
-            listRequiredPregunta.push(pregunta.descripcion);
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
         }
         // accept = getInputAccept(item);
@@ -501,7 +548,6 @@
         ele.className = "form-control";
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+item.idPregunta+"_seccion_"+idSeccion);
-            listRequiredPregunta.push(item.descripcion);
         }
         div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
@@ -640,44 +686,100 @@
         }
     }
 
-    $(document).ready(function () {
-        $('a[data-toggle="tab"]').bind('click', function (e) {
-		    console.log(e.target);
-        });
+    // $(document).ready(function () {
+    //     $('a[data-toggle="tab"]').bind('click', function (e) {
+	// 	    console.log(e.target);
+    //     });
 
- 	  });
+ 	//   });
 
-    function validarSelectMultiplesDestinosVacio() {
-        for (var i = 0; i < listMultipleSelectDestino0.length; i++){ 
-            var value = $("#"+listMultipleSelectDestino0[i]+' option').length
-            if (value >0) {
-                alert("Todos los elementos de la lista de Disponibles deben ser seleccionados.");
-                return false;
+    function getNombreSeccion(idSeccion) {
+        secciones = formulario.secciones;
+        for (var i = 0; i < secciones.length; i++) {
+            var seccion = secciones[i];
+            if(seccion.id == idSeccion) {
+                return seccion.nombre;
             }
         }
-        return true;
+    }
+
+    function validarSelectMultiplesDestinosVacio() {
+        var output = [];
+        for (var i = 0; i < listMultipleSelectDestino0.length; i++){ 
+            var value = $("#"+listMultipleSelectDestino0[i]+' option').length;
+            if (value > 0) {
+                document.getElementById("div_"+listMultipleSelectDestino0[i]).style.display = "block";
+                var idSeccion = listMultipleSelectDestino0[i].split("_", 6)[5];
+                var nombreSeccion = getNombreSeccion(idSeccion);
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                } 
+            } else {
+                document.getElementById("div_"+listMultipleSelectDestino0[i]).style.display = "none";
+            }
+        }
+        return output;
     }
 
     function validarSelectMultiplesSeleccionado() {
+        var output = [];
         for (var i = 0; i < listMultipleSelectDestino1.length; i++){ 
-            var value = $("#"+listMultipleSelectDestino1[i]+' option').length
-            if (value >0) {
-                alert("Debes seleccionar al menos un elemento de la lista de Disponibles.");
-                return false;
+            var value = $("#"+listMultipleSelectDestino1[i]+' option').length;
+            if (value == 0) {
+                var idSeccion = listMultipleSelectDestino1[i].split("_", 6)[5];
+                var nombreSeccion = getNombreSeccion(idSeccion);
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                } 
             }
         }
-        return true;
+        return output;
     }
 
-    function validarPreguntas() {
+    function concatenarArreglosSinRepetidos(list1, list2) {
+        output = list1;
+        for (var i = 0; i < list2.length; i++){ 
+            if (! output.includes(list2[i])) {
+                    output.push(list2[i]);
+            } 
+        }
+        return output;
+    }
+
+    function obtenerSeccionesSinResponder() {
+        var list1 = validarSelectMultiplesSeleccionado();
+        var list2 = validarSelectMultiplesDestinosVacio();
+        var output = concatenarArreglosSinRepetidos(list1, list2);
         for (var i = 0; i < listaRespuestasInput.length; i++){ 
             var value = $("#"+listaRespuestasInput[i]).val();
             if((value == "") || (value == -1)) {
-                // console.log(listaRespuestasInput[i]);
-                console.log(listRequiredPregunta[i]);
-
+                var idSeccion = listaRespuestasInput[i].split("_", 4)[3];
+                var nombreSeccion = getNombreSeccion(idSeccion); 
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                }
             }
         }
+        return output;
+    }
+
+    function mostrarCartelErrorSubmit(secciones) {
+
+        swal({
+            type: 'error',
+            title: 'Faltan responder preguntas',
+            text: 'Responda las preguntas de las secciones : '+secciones.join(", "),
+        })
+    }
+
+    function validarPreguntas(){
+        var secciones = obtenerSeccionesSinResponder();
+        console.log(secciones);
+        if(secciones.length > 0) {
+            mostrarCartelErrorSubmit(secciones);
+            return false;
+        } 
+        return true;
     }
 
     function updateInput() {
@@ -688,10 +790,11 @@
         if (validarPreguntas()) {
         // &&($("#formFormulario")[0].checkValidity()) ){
             $("#formFormulario").submit();
-        }else{
+        }
+        // else{
             // $("#formFormulario")[0].reportValidity();
             // alert
-        }
+        // }
     }
 
     function createFormulario(){
