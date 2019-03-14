@@ -1,10 +1,9 @@
 <script type="text/javascript" src="<?= $this->basePath('/js/operation/permits/forms/jquery.multi-select.js') ?>"></script>
 
-
-<div class="form-row" id="divFormulario">
-
-</div>
 <form method="post"  id="formFormulario" name="formFormulario" >
+    <div class="form-row" id="divFormulario">
+
+    </div>  
     <div class="row col-lg-12">
         <div class="form-row margin-top-5" style="display: flex; align-items: center; margin: auto;">
             <input type="hidden" name="JsonData" id="JsonData">
@@ -14,7 +13,9 @@
 
 <script>
     var formulario = <?= $formulario ?>;
-
+    var listMultipleSelectDestino0 = [];
+    var listMultipleSelectDestino1 = [];
+    var listaRespuestasInput = [];
 
     function updateAnswerOfPreguntaGenerada(pregGeneradas, idPregunta, answer) {
         for (var k = 0; k < pregGeneradas.length; k++){ 
@@ -107,15 +108,6 @@
             }
         }
     }
-
-    // function obtenerValoresSelector(id) {
-    //     var values = [];
-    //     var options =$('#'+id+' option');
-    //     for(var i=0; i < options.length; i++){
-    //         values.push(options[i].value);
-    //     }
-    //     return values;
-    // }
     
     function getOptionOfMultiSelectQuestion(preguntas, idPregunta, idSelector) {
         for (var j = 0; j < preguntas.length; j++){
@@ -236,9 +228,52 @@
             divElement.appendChild(div);
             createOneQuestion(idSeccion, question.preguntaGenerada, div);
         }
-        
-        
     }
+
+    function eliminarElementoLista(elemento, lista) {
+        var pos = lista.indexOf(elemento);
+        if(pos != -1) {
+            lista.splice(pos, 1); 
+        }  
+    }
+
+    function eliminarElementoListasRequired(idPregunta) {
+        eliminarElementoLista(idPregunta, listaRespuestasInput);
+        eliminarElementoLista(idPregunta, listMultipleSelectDestino0);
+        eliminarElementoLista(idPregunta, listMultipleSelectDestino1);
+    }
+
+    function quitarPreguntasGeneradasListaRequired(idSeccion, preguntasGeneradas) {
+        // for(var i = 0; i < preguntasGeneradas.length; i++){ 
+        idPregunta = preguntasGeneradas.idPregunta;
+        idReal = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
+        eliminarElementoListasRequired(idReal);
+        // }
+    }
+
+    function agregarElementoLista(elemento, lista) {
+        var pos = lista.indexOf(elemento);
+        if(pos == -1) {
+            lista.push(elemento);
+        } 
+    }
+
+    function agregarPreguntasGeneradasListaRequired(idSeccion, preguntasGeneradas) {
+        if(preguntasGeneradas.requerido) {
+            tipo = preguntasGeneradas.tipoPregunta;
+            var idReal = "pregunta_"+preguntasGeneradas.idPregunta+"_seccion_"+idSeccion;
+            if(tipo.descripcion == "multiple") {
+                if(tipo.destinos >1) { 
+                    agregarElementoLista(idReal, listMultipleSelectDestino0);
+                } else {
+                    agregarElementoLista(idReal, listMultipleSelectDestino1);
+                }
+            } else {
+                agregarElementoLista(idReal, listaRespuestasInput);
+            }
+        }
+    }
+
 
     function updateStateQuestion(idOpcion, preguntasGeneradas, idSeccion, idPregunta) {
         for(var i = 0; i < preguntasGeneradas.length; i++){
@@ -246,13 +281,14 @@
             var idDiv = "div_id_"+question.idPreguntaGenerada;
             if (question.opcion.id == idOpcion) {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'block');
-                var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
-	            document.getElementById(idDiv).style.display = state;
+                agregarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
             } else {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'none');
-                var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
-                document.getElementById(idDiv).style.display = state;
+                quitarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
+                
             }
+            var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
+            document.getElementById(idDiv).style.display = state;
         }
     }
 
@@ -288,18 +324,20 @@
         updateJson(idSeccion, idPregunta, respuesta);
     }
 
-    function createSimpleSelector(idPregunta, opciones, divElement, idSeccion, preguntasGeneradas) {
+    function createSimpleSelector(pregunta, opciones, divElement, idSeccion, preguntasGeneradas, required) {
         
         var selector = document.createElement("select");
-        var idSelector = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
+        var idSelector = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion;
         selector.id = idSelector;
+        if(required == '1'){
+            listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
+        }
         var selectorModificado = createListFromJSONLista(selector, opciones, true);
-        selectorModificado.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idSelector);
+        selectorModificado.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idSelector);
                                                     if(preguntasGeneradas) { 
-                                                    blockUnlockQuestion(this, preguntasGeneradas, idSeccion, idPregunta);
+                                                        blockUnlockQuestion(this, preguntasGeneradas, idSeccion, pregunta.idPregunta);
                                                 }};
         divElement.appendChild(selectorModificado);
-        
     }
 
     function createMultipleSelector(id, divElement, size, idPregunta, idSeccion) {
@@ -420,13 +458,35 @@
             .end();
     }
 
-    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos){
+    function crearWarningAlert(div, id) {
+
+        var divElement = document.createElement("Div");
+        divElement.id = "div_"+id;
+        divElement.classList = "alert alert-warning alert-dismissible"
+        divElement.style.display = "none";
+        div.appendChild(divElement);
+
+        var strong = document.createElement("strong");
+        var t = document.createTextNode("Debe vaciar la lista de elementos");
+        strong.appendChild(t);
+        divElement.appendChild(strong);
+    }
+
+    function createMultipleSelectorSkeleton(idPregunta, divElement, idSeccion, cantDestinos, required){
         var divRow = createDivClass("row col-sm-9", divElement);
         var div_class_sm_3 = createDivClass("col-sm-5", divRow);
         updateIdDestinoJsonSelectores(idSeccion, idPregunta);
 
         createTextElement("P", div_class_sm_3, "Disponibles");
+        
         createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
+
+        if (cantDestinos >1) {
+            listMultipleSelectDestino0.push('destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
+            crearWarningAlert(div_class_sm_3, 'destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
+        } else {
+            listMultipleSelectDestino1.push('destino_1_id_'+idPregunta+"_seccion_"+idSeccion);
+        }
 
         // var div_row_6 = createDivClass("form-row col-sm-6", divRow);
         var div_row_6 = createDivClass("row col-sm-6", divRow);
@@ -438,22 +498,24 @@
             createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
 
             var text = "Seleccionados"
-            if(i == 2) { text = "No seleccionados";}
-            // var text = nombresDestinos[i].nombre;
+            if(i == 2) { text = "No seleccionados"; }
 
             createTextElement("P", div_class_sm_3_2, text);
             createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
         }
     }
 
-    function createInput(infoType, idPregunta, divElement, idSeccion){
+    function createInput(infoType, pregunta, divElement, idSeccion, required){
         
         ele = document.createElement('input');
         ele.type = infoType;
-        var idEle = "pregunta_"+idPregunta+"_seccion_"+idSeccion;
+        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion;
         ele.name = idEle;
         ele.id = idEle;
-        ele.onchange = function() {updateJsonSimple(idSeccion, idPregunta, idEle)};
+        ele.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
+        if(required == '1'){
+            listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
+        }
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
@@ -462,28 +524,31 @@
         div.appendChild(ele);
     } 
 
-    function createSelector(item, divElement, idSeccion, divSeccion){
+    function createSelector(item, divElement, idSeccion, divSeccion, required){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
             preguntasGeneradas = item.preguntasGeneradas;
-            createSimpleSelector(item.idPregunta, opciones, divElement, idSeccion, preguntasGeneradas);
+            createSimpleSelector(item, opciones, divElement, idSeccion, preguntasGeneradas, required);
             if(preguntasGeneradas) { 
                 generateQuestionsBlock(preguntasGeneradas, divSeccion, idSeccion);
             }
         } else {
                 var cantDestinos = item.cantDestinos;
                 // var nombresDestinos = item.nombreDestinos;
-                createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos);  
+                createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos, required);  
         } 
     }
 
-    function createTextArea(item, divElement, idSeccion){
+    function createTextArea(item, divElement, idSeccion, required){
         var div = createDivClass("col-sm-3 text-right", divElement);
         ele = document.createElement('textarea');
         var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
         ele.name = id;
         ele.id = id;
         ele.className = "form-control";
+        if(required == '1'){
+            listaRespuestasInput.push("pregunta_"+item.idPregunta+"_seccion_"+idSeccion);
+        }
         div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
@@ -498,23 +563,29 @@
         div.appendChild(ele);
     }
     
-    function createAnswer(item, divElement, idSeccion, divSeccion){
+    function createAnswer(item, divElement, idSeccion, divSeccion, required){
         if ((item.tipoPregunta.descripcion == 'simple') || (item.tipoPregunta.descripcion == 'multiple')){
-            createSelector(item, divElement, idSeccion, divSeccion);
+            createSelector(item, divElement, idSeccion, divSeccion, required);
         } else {
             if(item.tipoPregunta.descripcion == 'image'){
                 createImage(item, divElement, idSeccion);
             } else if(item.tipoPregunta.descripcion == 'textarea'){
-                createTextArea(item, divElement, idSeccion);
+                createTextArea(item, divElement, idSeccion, required);
             } else {
-                createInput(item.tipoPregunta.descripcion, item.idPregunta, divElement, idSeccion);
+                createInput(item.tipoPregunta.descripcion, item, divElement, idSeccion, required);
             }
         }
     }
 
-    function createTextElement(type, div, info){
+    function createTextElement(type, div, info, required = '0'){
         var element = document.createElement(type);
         var text = document.createTextNode(info);
+        if (required == '1') {
+            var span = document.createElement("span");
+            span.style = "color: #f00;font-weight: bold; font-size: 10pt;";
+            span.textContent = "(*) ";
+            element.appendChild(span);
+        }
         element.appendChild(text);
         div.appendChild(element);
     }
@@ -524,15 +595,13 @@
             div.className='form-row';
             div.style.padding = "15px";
             divElement.appendChild(div);
-           
+            var required = question.requerido;
             var divText = createDivClass("col-sm-3 text-right", div);
             var text = question.descripcion;
             if(text) text = text+": ";
-            createTextElement("P", divText, text);
-            // var preguntasGeneradas = null;
-            
-            createAnswer(question, div, idSeccion, divElement);
-            
+            createTextElement("P", divText, text, required);
+
+            createAnswer(question, div, idSeccion, divElement, required);
     }
 
     function createQuestions(item, divElement){
@@ -569,7 +638,7 @@
     function createLiNav(navPills, item, active) {
         var liNav = document.createElement("li");
         
-        liNav.className = " nav-item";
+        liNav.className = "nav-item";
         navPills.appendChild(liNav);
 
 
@@ -582,6 +651,8 @@
         }
         aNav.classList="nav-link";
         aNav.setAttribute("data-toggle", "tab");
+        aNav.setAttribute("name", "Seccion_id_"+item.id);
+        
         liNav.appendChild(aNav);
 
         createTextElement("p", aNav, item.nombre);
@@ -608,11 +679,106 @@
         divElement.appendChild(itemSeccion);
 
         for (var i = 1; i < childs.length; i++){
-
             var item = childs[i];
             var itemSeccion = crearItemSeccion(item, contenedor, false);
             divElement.appendChild(itemSeccion);
         }
+    }
+
+    // $(document).ready(function () {
+    //     $('a[data-toggle="tab"]').bind('click', function (e) {
+	// 	    console.log(e.target);
+    //     });
+
+ 	//   });
+
+    function getNombreSeccion(idSeccion) {
+        secciones = formulario.secciones;
+        for (var i = 0; i < secciones.length; i++) {
+            var seccion = secciones[i];
+            if(seccion.id == idSeccion) {
+                return seccion.nombre;
+            }
+        }
+    }
+
+    function validarSelectMultiplesDestinosVacio() {
+        var output = [];
+        for (var i = 0; i < listMultipleSelectDestino0.length; i++){ 
+            var value = $("#"+listMultipleSelectDestino0[i]+' option').length;
+            if (value > 0) {
+                document.getElementById("div_"+listMultipleSelectDestino0[i]).style.display = "block";
+                var idSeccion = listMultipleSelectDestino0[i].split("_", 6)[5];
+                var nombreSeccion = getNombreSeccion(idSeccion);
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                } 
+            } else {
+                document.getElementById("div_"+listMultipleSelectDestino0[i]).style.display = "none";
+            }
+        }
+        return output;
+    }
+
+    function validarSelectMultiplesSeleccionado() {
+        var output = [];
+        for (var i = 0; i < listMultipleSelectDestino1.length; i++){ 
+            var value = $("#"+listMultipleSelectDestino1[i]+' option').length;
+            if (value == 0) {
+                var idSeccion = listMultipleSelectDestino1[i].split("_", 6)[5];
+                var nombreSeccion = getNombreSeccion(idSeccion);
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                } 
+            }
+        }
+        return output;
+    }
+
+    function concatenarArreglosSinRepetidos(list1, list2) {
+        output = list1;
+        for (var i = 0; i < list2.length; i++){ 
+            if (! output.includes(list2[i])) {
+                    output.push(list2[i]);
+            } 
+        }
+        return output;
+    }
+
+    function obtenerSeccionesSinResponder() {
+        var list1 = validarSelectMultiplesSeleccionado();
+        var list2 = validarSelectMultiplesDestinosVacio();
+        var output = concatenarArreglosSinRepetidos(list1, list2);
+        for (var i = 0; i < listaRespuestasInput.length; i++){ 
+            var value = $("#"+listaRespuestasInput[i]).val();
+            if((value == "") || (value == -1)) {
+                var idSeccion = listaRespuestasInput[i].split("_", 4)[3];
+                var nombreSeccion = getNombreSeccion(idSeccion); 
+                if (! output.includes(nombreSeccion)) {
+                    output.push(nombreSeccion);
+                }
+            }
+        }
+        return output;
+    }
+
+    function mostrarCartelErrorSubmit(secciones) {
+
+        swal({
+            type: 'error',
+            title: 'Faltan responder preguntas',
+            text: 'Responda las preguntas de las secciones : '+secciones.join(", "),
+        })
+    }
+
+    function validarPreguntas(){
+        var secciones = obtenerSeccionesSinResponder();
+        console.log(secciones);
+        if(secciones.length > 0) {
+            mostrarCartelErrorSubmit(secciones);
+            return false;
+        } 
+        return true;
     }
 
     function updateInput() {
@@ -620,11 +786,14 @@
         $("#JsonData").val(data);
         console.log($("#JsonData").val());
 
-        if ($("#formFormulario")[0].checkValidity()){
+        if (validarPreguntas()) {
+        // &&($("#formFormulario")[0].checkValidity()) ){
             $("#formFormulario").submit();
-        }else{
-            $("#formFormulario")[0].reportValidity();
         }
+        // else{
+            // $("#formFormulario")[0].reportValidity();
+            // alert
+        // }
     }
 
     function createFormulario(){

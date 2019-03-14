@@ -36,6 +36,11 @@ class Pregunta
     protected $tieneOpciones;
 
     /**
+     * @ORM\Column(name="Required",  nullable=false, type="integer", length=1)
+     */
+    protected $requerido;
+
+    /**
      * @ORM\Column(name="Funcion",  nullable=true, type="string", length=1000)
      */
     protected $funcion;
@@ -224,11 +229,35 @@ class Pregunta
         return $this;
     }
 
+    /**
+     * Get the value of requerido
+     */ 
+    public function getRequerido()
+    {
+        return $this->requerido;
+    }
+
+    /**
+     * Set the value of requerido
+     *
+     * @return  self
+     */ 
+    public function setRequerido($requerido)
+    {
+        $this->requerido = $requerido;
+
+        return $this;
+    }
+
     public function tieneFuncion() {
         if($this->funcion) {
             return true;
         }
         return false;
+    }
+
+    public function getListaDestinos() {
+       return ["0" => "Disponibles", "1" => "Seleccionados", "2" => "No seleccionados"];
     }
 
     public function getJSON(){
@@ -261,6 +290,7 @@ class Pregunta
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
         $output .= '"preguntasGeneradas": '.$preguntasGeneradasJSON.', ';
+        $output .= '"requerido": '.$this->getRequerido().', ';
         $funcion = $this->getFuncion();
         if($funcion) {
             $output .= '"funcion": "'.$this->getFuncion().'", ';
@@ -268,7 +298,8 @@ class Pregunta
             $output .= '"funcion": "", ';
         }
 
-        $listaNombreDestinos = ["Disponibles","Seleccionados", "No seleccionados"];
+        $listaNombreDestinos = $this->getListaDestinos();
+        // $preguntasGen = implode(", ", $preguntasGen);
         
         if ($this->tieneOpciones()) {
             $output .= '"cerrada": "' . 1 .'", ';
@@ -293,4 +324,5 @@ class Pregunta
         }        
         return '{' . $output . '}';
     }
+
 }

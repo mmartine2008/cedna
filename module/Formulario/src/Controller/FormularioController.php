@@ -193,12 +193,8 @@ class FormularioController extends CednaController
                 foreach ( $respuestaxRespuesta as $respuesta) { 
                 //ver como diferenciar las respuestas
                     $pdf->SetFont('helvetica', 'B', 12);
-            
                     $descripcion = $respuesta['descripcionPregunta'];
                     if($descripcion == '') { $descripcion = ' ';}
-
-                    // var_dump();
-                    // var_dump(($respuesta));
                     if(! $respuesta['poseeDestinos']) {
                         $pdf->Cell(50, 5,  $descripcion);
                         $pdf->SetFont('helvetica', '', 12);
@@ -207,11 +203,9 @@ class FormularioController extends CednaController
                         $pdf->Ln(10);
                     } else {
                         $respuestas = $respuesta['respuesta'];
-                        // var_dump($respuestas);
                         foreach($respuestas as $resp) {
                             $pdf->SetFont('helvetica', 'B', 12);
                             $list = $this->getListaRespuestas($resp['respuestas']);
-                            // $list = [];
                             $pdf->Cell(40, 5, $resp['destino']);
                             $pdf->Ln(12);
                             foreach ($list as $valor) {
