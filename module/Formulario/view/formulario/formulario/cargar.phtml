@@ -16,6 +16,7 @@
     var listMultipleSelectDestino0 = [];
     var listMultipleSelectDestino1 = [];
     var listaRespuestasInput = [];
+    var destinos = <?= json_encode($destinos) ?>;
 
     function updateAnswerOfPreguntaGenerada(pregGeneradas, idPregunta, answer) {
         for (var k = 0; k < pregGeneradas.length; k++){ 
@@ -279,6 +280,7 @@
         for(var i = 0; i < preguntasGeneradas.length; i++){
             var question = preguntasGeneradas[i];
             var idDiv = "div_id_"+question.idPreguntaGenerada;
+            // console.log(idDiv);
             if (question.opcion.id == idOpcion) {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'block');
                 agregarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
@@ -288,11 +290,13 @@
                 
             }
             var state = getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question);
-            document.getElementById(idDiv).style.display = state;
+            if(document.getElementById(idDiv)) {
+                document.getElementById(idDiv).style.display = state;
+            }
         }
     }
 
-    function blockUnlockQuestion(selector, preguntasGeneradas, idSeccion, idPregunta) {
+    function blockUnlockQuestion(selector, preguntasGeneradas, idSeccion, idPregunta, opcion = null) {
         for (var i = 0; i < selector.length; i++) {
             if (selector.options[i].selected) {
                 updateStateQuestion(selector.options[i].value, preguntasGeneradas, idSeccion, idPregunta);
@@ -314,6 +318,9 @@
             option.value = item.id;
             option.text = item.descripcion;
             option.title = item.descripcion;
+            // if(optionSelected == item.id) {
+            //     option.selected = true;
+            // }
             selector.appendChild(option);
         }
         return selector;
@@ -334,10 +341,14 @@
         }
         var selectorModificado = createListFromJSONLista(selector, opciones, true);
         selectorModificado.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idSelector);
-                                                    if(preguntasGeneradas) { 
+                                                    if(preguntasGeneradas.length > 0) { 
                                                         blockUnlockQuestion(this, preguntasGeneradas, idSeccion, pregunta.idPregunta);
                                                 }};
+        if(pregunta.respuesta != "") {
+            $(selector).val(pregunta.respuesta);
+        }
         divElement.appendChild(selectorModificado);
+        return selectorModificado;
     }
 
     function createMultipleSelector(id, divElement, size, idPregunta, idSeccion) {
@@ -459,7 +470,6 @@
     }
 
     function crearWarningAlert(div, id) {
-
         var divElement = document.createElement("Div");
         divElement.id = "div_"+id;
         divElement.classList = "alert alert-warning alert-dismissible"
@@ -500,7 +510,7 @@
             var text = "Seleccionados"
             if(i == 2) { text = "No seleccionados"; }
 
-            createTextElement("P", div_class_sm_3_2, text);
+            createTextElement("P", div_class_sm_3_2, destinos[i]);
             createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
         }
     }
@@ -512,10 +522,14 @@
         var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion;
         ele.name = idEle;
         ele.id = idEle;
+        if((pregunta.respuesta != " ")&&(infoType != "file")) {
+            ele.value = pregunta.respuesta;
+        }
         ele.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
         }
+        
         // accept = getInputAccept(item);
         // ele.accept= accept;
         // ele.accept="image/png, image/jpeg"
@@ -527,14 +541,16 @@
     function createSelector(item, divElement, idSeccion, divSeccion, required){
         if(item.tipoPregunta.descripcion == 'simple'){
             var opciones = item.opciones;
-            preguntasGeneradas = item.preguntasGeneradas;
-            createSimpleSelector(item, opciones, divElement, idSeccion, preguntasGeneradas, required);
-            if(preguntasGeneradas) { 
+            var preguntasGeneradas = item.preguntasGeneradas;
+            var selector = createSimpleSelector(item, opciones, divElement, idSeccion, preguntasGeneradas, required);
+            if(preguntasGeneradas.length > 0) { 
+                if(item.respuesta != "") {
+                    blockUnlockQuestion(selector, preguntasGeneradas, idSeccion, item.idPregunta, opcion = null)
+                } 
                 generateQuestionsBlock(preguntasGeneradas, divSeccion, idSeccion);
             }
         } else {
                 var cantDestinos = item.cantDestinos;
-                // var nombresDestinos = item.nombreDestinos;
                 createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos, required);  
         } 
     }
@@ -546,6 +562,9 @@
         ele.name = id;
         ele.id = id;
         ele.className = "form-control";
+        if(item.respuesta != "") {
+            ele.val = item.respuesta;
+        }
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+item.idPregunta+"_seccion_"+idSeccion);
         }
@@ -684,13 +703,6 @@
             divElement.appendChild(itemSeccion);
         }
     }
-
-    // $(document).ready(function () {
-    //     $('a[data-toggle="tab"]').bind('click', function (e) {
-	// 	    console.log(e.target);
-    //     });
-
- 	//   });
 
     function getNombreSeccion(idSeccion) {
         secciones = formulario.secciones;

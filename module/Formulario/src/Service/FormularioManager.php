@@ -152,50 +152,126 @@ class FormularioManager {
         return $form;
     }
 
-    public function getJSONActualizado($formulario){
-        $preguntas = $this->getPreguntasxFormulario($formulario);
-        $JSON = $formulario->getJSON();
-        $formJSON = json_decode($JSON);
-        foreach($preguntas as $pregunta) {
-            if($pregunta->tieneFuncion()){
-                $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();
-                if($cantDestinos > 0){
-                    $formJSON = $this->getJSONModificadoSelectMultiple($pregunta, $formJSON);
-                } else {
-                    $formJSON = $this->getJSONModificadoSelectSimple($pregunta, $formJSON);
-                }  
+    private function getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $idSeccion, $idPregunta) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findBy(['pregunta' => $idPregunta, 'seccion' => $idSeccion, 'relevamiento' => $idRelevamiento]); 
+        
+        return $respuesta;
+    }
+
+    private function getDescripcionOpcion($opciones, $idOpcion) {
+        foreach($opciones->opcion as $opcion) {
+            if($opcion['id'] == $idOpcion) {
+                return $opcion['descripcion'];
             }
         }
-        return json_encode($formJSON);
     }
 
-    public function getFormularioJSON($id) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $id]); 
-
-        return  $this->getJSONActualizado($formulario);
-    }
-
-    private function reagruparPorDestino($Respuestas) {
-        $destinoAcum = "";
+    private function getListaValoresPorDesino($respuestas, $opciones, $idSeccion, $idPregunta, $eliminar = false){
+        $destinoAcum = '';
         $ArrayAcum = [];
         $output = [];
-        foreach($Respuestas as $Respuesta) {
-            $destino = $Respuesta->getDestino();
-            if($destinoAcum == $destino) {
-                $ArrayAcum[] = $Respuesta;
-            }
+        foreach($respuestas as $respuesta) {
+            $destino = $respuesta->getDestino();
+            // var_dump($destino);
             if($destinoAcum != $destino) {
-                $destinoAcum = $destino;
                 if($ArrayAcum) {
-                    $output[] = $ArrayAcum;
+                    $output[] = ['destino' => $destinoAcum, 'opciones' => $ArrayAcum];
+                    // var_dump($output);
+                    // var_dump( ['destino' => $destinoAcum, 'opciones' => $ArrayAcum]);
                     $ArrayAcum = [];
                 }
+                $destinoAcum = $destino;
             }
+            $descripcionOpcion = $this->getDescripcionOpcion($opciones, $respuesta->getOpcion());
+            $ArrayAcum[] = ['id' => '"'.$respuesta->getOpcion().'"', 'descripcion' => $descripcionOpcion];
+        }
+        $output[] = ['destino' => $destino, 'opciones' => $ArrayAcum];
+        if($eliminar) {
+            $output[] = ['destino' => "destino_0_id_".$idPregunta."_seccion_".$idSeccion, 'opciones' => []];
+        }
+        // var_dump(['destino' => $destinoAcum, 'opciones' => $ArrayAcum]);
+        // var_dump($output);
+        // die();
+
+        return $output;
+    }
+
+    private function modificarOpcionesDeDestino($resp, $seccion, $destino){
+        // $resp->opcion = [];
+        if($destino['destino'] == $resp->destino."_seccion_".$seccion->id) {
+            // var_dump($destino['destino']);
+            $resp->opcion = $destino['opciones'];
+            // var_dump($resp->opcion);
+        }
+        return $resp;
+    }
+
+    private function getJSONActualizadoPorRespuestasRelevamiento($form, $idRelevamiento) {
+        $secciones = $form->secciones;
+        foreach($secciones as $seccion) {
+            $preguntas = $seccion->preguntas;
+            foreach($preguntas as $preguntaJSON) {
+                $tipoPregunta = $preguntaJSON->tipoPregunta;
+                $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaJSON->idPregunta);
+                if($respuesta) {
+                    if($tipoPregunta->descripcion == 'multiple'){
+                        if($preguntaJSON->cantDestinos > 1){
+                            $eliminarElementosDestino0 = true;
+                        } else {
+                            $eliminarElementosDestino0 = false;
+                        }
+                        $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta, $eliminarElementosDestino0);
+                        foreach($listaDestinos as $destino) {
+                            foreach($preguntaJSON->respuesta as $resp) {
+                                $resp = $this->modificarOpcionesDeDestino($resp, $seccion, $destino);
+                            }
+                        }
+                    } else {
+                            if($respuesta[0]->getDescripcion()) {
+                                $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
+                            } else {
+                                $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
+                            }
+                    }
+                }
+            }
+        } 
+        // die();
+        return $form;
+    }
+
+    private function getJSONActualizadoPorFuncion($pregunta, $formJSON) {
+        $output = $formJSON;
+        if($pregunta->tieneFuncion()){
+            $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();
+            if($cantDestinos > 0){
+                $output = $this->getJSONModificadoSelectMultiple($pregunta, $formJSON);
+            } else {
+                $output = $this->getJSONModificadoSelectSimple($pregunta, $formJSON);
+            }  
         }
         return $output;
     }
 
+    public function getJSONActualizado($formulario, $idRelevamiento){
+        $preguntas = $this->getPreguntasxFormulario($formulario);
+        $JSON = $formulario->getJSON();
+        $formJSON = json_decode($JSON);
+        foreach($preguntas as $pregunta) {
+            $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
+        }
+        $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $idRelevamiento);
+
+        return json_encode($output);
+    }
+
+    public function getFormularioJSON($idFormulario, $idRelevamiento) {
+        $formulario = $this->entityManager->getRepository(Formulario::class)
+                                            ->findOneBy(['id' => $idFormulario]); 
+
+        return  $this->getJSONActualizado($formulario, $idRelevamiento);
+    }
 
     private function getRespuestasAgrupadasPorPregunta($Respuestas) {
         $idAcum = -1;
@@ -403,7 +479,7 @@ class FormularioManager {
         $output = [];
         if($pregunta->getTipoPregunta()->esPeguntaMultiple()) {
             foreach ($respuestas as $resp) {
-                $destino = $resp->nombre; //nombre destino
+                $destino = $resp->destino; //nombre destino
                 $opciones = $resp->opcion;
                 if($opciones){
                     $opcionesDestinos = $this->getOpcionDestino($opciones, $destino);

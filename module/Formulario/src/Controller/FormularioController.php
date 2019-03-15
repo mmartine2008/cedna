@@ -108,6 +108,11 @@ class FormularioController extends CednaController
         return $view;
     }
 
+    private function getDestinos(){
+        $destinos = ['Disponible', 'Seleccionados', 'No seleccionados'];
+        return $destinos;
+    }
+
     public function cargarAction(){
         $this->cargarAccionesDisponibles('formularios - cargar');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - cargar');
@@ -124,10 +129,12 @@ class FormularioController extends CednaController
         }
 
         $Formulario = $Planificacion->getRelevamiento()->getFormulario();
+        $destinos = $this->getDestinos();
         
         return new ViewModel([
-            "formulario" => $this->FormularioManager->getJSONActualizado($Formulario),
+            "formulario" => $this->FormularioManager->getJSONActualizado($Formulario, $Planificacion->getRelevamiento()->getId()),
             "OperacionesJSON" => $OperacionesJSON,
+            "destinos" => $destinos
         ]);
     }
 
@@ -206,7 +213,9 @@ class FormularioController extends CednaController
                         foreach($respuestas as $resp) {
                             $pdf->SetFont('helvetica', 'B', 12);
                             $list = $this->getListaRespuestas($resp['respuestas']);
-                            $pdf->Cell(40, 5, $resp['destino']);
+                            $destino = substr($resp['destino'], 8, 1);
+                            $listaDestinos = $this->getDestinos();
+                            $pdf->Cell(40, 5, $listaDestinos[$destino]);
                             $pdf->Ln(12);
                             foreach ($list as $valor) {
                                 $pdf->SetFont('helvetica', '', 12);
