@@ -131,6 +131,22 @@ class FormularioController extends CednaController
         ]);
     }
 
+    /**
+     * Funcion que cambia el estado de un permiso de trabajo para ser firmado
+     *
+     * @return void
+     */
+    public function paraFirmarAction(){
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+
+        if ($this->getRequest()->isPost()) {
+            $this->FormularioManager->colocarRelevamientoParaFimar($idPlanificacion);
+        }
+
+        $this->redirect()->toRoute("formulario",["action" => "index"]);
+    }
+
     public function showFormAction() {
         $idFormulario = 1;
         $request = $this->getRequest();

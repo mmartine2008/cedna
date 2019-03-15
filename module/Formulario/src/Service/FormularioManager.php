@@ -103,6 +103,24 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
+    /**
+     * Funcion que cambia el estado del relevamiento, y lo coloca disponible
+     * para ser firmado por los responsables.
+     *
+     * @param [integer] $idPlanificacion
+     * @return void
+     */
+    public function colocarRelevamientoParaFimar($idPlanificacion){
+        $EstadoCompleto = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_COMPLETO);
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $Relevamiento->setEstadoRelevamiento($EstadoCompleto);
+
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
+    }
+
     public function getPreguntasxFormulario($formulario) {
         $secciones = $this->getSeccionesxFormulario($formulario);
         $arregloPreg = [];
