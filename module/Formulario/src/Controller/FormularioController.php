@@ -140,11 +140,9 @@ class FormularioController extends CednaController
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
 
-        if ($this->getRequest()->isPost()) {
-            $this->FormularioManager->colocarRelevamientoParaFimar($idPlanificacion);
-        }
+        $this->FormularioManager->colocarRelevamientoParaFimar($idPlanificacion);
 
-        $this->redirect()->toRoute("formulario",["action" => "index"]);
+        $this->redirect()->toRoute("formulario", ["action" => "paraCargar"]);
     }
 
     public function showFormAction() {

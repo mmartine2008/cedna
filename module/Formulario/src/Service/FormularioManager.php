@@ -485,6 +485,12 @@ class FormularioManager {
         foreach ($secciones as $seccion) {
             $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }
+
+        $EstadoEditado = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_EDITADO);
+        $Relevamiento->setEstadoRelevamiento($EstadoEditado);
+
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
     }
 
     
