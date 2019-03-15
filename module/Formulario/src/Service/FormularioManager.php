@@ -10,6 +10,7 @@ use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
+use DBAL\Entity\EstadosRelevamiento;
 
 
 class FormularioManager {
@@ -85,8 +86,11 @@ class FormularioManager {
             $Relevamiento->setFormulario($Formulario);
             $this->entityManager->persist($Relevamiento);
         }else{
+            $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
+            
             $Relevamiento = new Relevamientos();
             $Relevamiento->setFormulario($Formulario);
+            $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
             
             $this->entityManager->persist($Relevamiento);
             $this->entityManager->flush();

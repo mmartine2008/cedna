@@ -29,6 +29,12 @@ class Relevamientos
      */
     protected $Respuestas;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="EstadosRelevamiento")
+     * @ORM\JoinColumn(name="IdEstadoRelevamiento", referencedColumnName="IdEstadoRelevamiento")
+     */
+    protected $EstadoRelevamiento;
+
     public function __construct() {
         $this->Respuestas = new ArrayCollection();
     }
@@ -36,6 +42,11 @@ class Relevamientos
     public function setFormulario($Formulario)
     {
         $this->Formulario = $Formulario;
+    }
+
+    public function setEstadoRelevamiento($EstadoRelevamiento)
+    {
+        $this->EstadoRelevamiento = $EstadoRelevamiento;
     }
 
     public function getId()
@@ -46,6 +57,11 @@ class Relevamientos
     public function getFormulario()
     {
         return $this->Formulario;
+    }
+
+    public function getEstadoRelevamiento()
+    {
+        return $this->EstadoRelevamiento;
     }
 
     public function getRespuestas()
@@ -68,6 +84,7 @@ class Relevamientos
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"perfiles": ['.$respuestas.'],';
+        $output .= '"estadoRelevamiento": ' . $this->getEstadoRelevamiento()->getJSON() .', ';
         $output .= '"formulario": ' . $this->getFormulario()->getJSON();
         
         return '{' . $output . '}';
