@@ -14,7 +14,7 @@
                             <th class="text-center"><?= $this->translate('__Estado__') ?></th>
                             <th class="text-center"><?= $this->translate('__Fecha_de_Solicitud__') ?></th>
                             <th class="text-center"><?= $this->translate('__Formulario__') ?></th>
-                            <th class="text-center">Acciones</th>
+                            <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
                         </tr>
                     </thead>
                     <tbody id="bodyTareas">
@@ -88,17 +88,43 @@
         contenedor.appendChild(a);
     }
 
+    /**
+     * Funcion que muestra el boton de ver PDF de un permiso de trabajo.
+     */
+    function agregarBotonVerPDF(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','far p16 fa-file-pdf');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-success btn-circle btn-outline');
+        a.setAttribute('target', '_blank');
+        a.setAttribute('href', url + '/formulario/imprimir/' +planificacion.relevamiento.id);
+
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+    }
+
     function dibujarAccionesDePlanificacion(contenedor, planificacion){
         var divFila = document.createElement('div');
         divFila.setAttribute('class','form-row');
 
         if (planificacion.relevamiento.estadoRelevamiento.esEditado){
-            var div = document.createElement('div');
-            div.setAttribute('class','col-md-6');
+            var divCerrar = document.createElement('div');
+            divCerrar.setAttribute('class','col-md-6');
             
-            agregarBotonCerrarPermiso(div, planificacion);
+            agregarBotonCerrarPermiso(divCerrar, planificacion);
             
-            divFila.appendChild(div);
+            divFila.appendChild(divCerrar);
+        }
+
+        if (planificacion.relevamiento.estadoRelevamiento.esFinalizado){
+            var divPDF = document.createElement('div');
+            divPDF.setAttribute('class','col-md-6');
+            
+            agregarBotonVerPDF(divPDF, planificacion);
+            
+            divFila.appendChild(divPDF);
         }
 
         contenedor.appendChild(divFila);
