@@ -182,6 +182,13 @@ class FormularioManager {
         return $respuesta;
     }
 
+    private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findOneBy(['pregunta' => $pregunta, 'seccion' => $seccion, 'relevamiento' => $relevamiento, 'destino' => $destino]); 
+        
+        return $respuesta;
+    }
+
     private function getDescripcionOpcion($opciones, $idOpcion) {
         foreach($opciones->opcion as $opcion) {
             if($opcion['id'] == $idOpcion) {
@@ -293,8 +300,7 @@ class FormularioManager {
             $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
         }
 
-        if($Relevamiento->getEstadoRelevamiento()->esParaEditar()){
-            // if($Relevamiento->getEstadoRelevamiento()->esEditado()){
+        if($Relevamiento->getEstadoRelevamiento()->esEditado()){
             $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $Relevamiento->getId());
             return json_encode($output);
         }
@@ -548,11 +554,31 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
+    public function actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion) {
+        $Respuesta->setDestino($destino);
+        if($opcion){
+            $Respuesta->setOpcion($opcion);
+        } else {
+            $Respuesta->setDescripcion($respuesta);
+        }
+        $this->entityManager->persist($Respuesta);
+        $this->entityManager->flush();
+    }
+
+    public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
+        $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
+        if($Respuesta) {
+            $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
+        } else {
+            $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
+        }
+    }
+
     public function altaRespuestasDestino($pregunta, $seccion, $Relevamiento, $respuesta, $listaDestinos){
         foreach($listaDestinos as $item) {
             $destino = $item[0];
             $opcion = $item[1]->id;
-            $this->altaRespuesta($pregunta, $seccion, $Relevamiento, $respuesta, $destino, $opcion);
+            $this->altaEdicionRespuesta($pregunta, $seccion, $Relevamiento, $respuesta, $destino, $opcion);
         }
     }
 
@@ -591,7 +617,7 @@ class FormularioManager {
             if ($preguntaEnt->tieneOpciones()) {
                 $opcion = $respuesta;
             }   
-            $this->altaRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
+            $this->altaEdicionRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
         }
     }
 

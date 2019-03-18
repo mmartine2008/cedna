@@ -36,8 +36,6 @@ class CednaController extends AbstractActionController
         $PerfilActivo = $this->userSessionManager->getPerfilActivo();
 
         $arrAccionesDisponibles = $this->catalogoManager->getAccionesPorPerfil($nombreOperacion, $PerfilActivo);
-        // var_dump($arrAccionesDisponibles);
-        // var_dump($PerfilActivo);
         $arrAccionesDisponiblesJSON = [];
 
         foreach($arrAccionesDisponibles as $AccionDisponible){
