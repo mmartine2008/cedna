@@ -175,50 +175,131 @@ class FormularioManager {
         return $form;
     }
 
-    public function getJSONActualizado($formulario){
-        $preguntas = $this->getPreguntasxFormulario($formulario);
-        $JSON = $formulario->getJSON();
-        $formJSON = json_decode($JSON);
-        foreach($preguntas as $pregunta) {
-            if($pregunta->tieneFuncion()){
-                $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();
-                if($cantDestinos > 0){
-                    $formJSON = $this->getJSONModificadoSelectMultiple($pregunta, $formJSON);
-                } else {
-                    $formJSON = $this->getJSONModificadoSelectSimple($pregunta, $formJSON);
-                }  
+    private function getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $idSeccion, $idPregunta) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findBy(['pregunta' => $idPregunta, 'seccion' => $idSeccion, 'relevamiento' => $idRelevamiento]); 
+        
+        return $respuesta;
+    }
+
+    private function getDescripcionOpcion($opciones, $idOpcion) {
+        foreach($opciones->opcion as $opcion) {
+            if($opcion['id'] == $idOpcion) {
+                return $opcion['descripcion'];
             }
         }
-        return json_encode($formJSON);
     }
 
-    public function getFormularioJSON($id) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $id]); 
-
-        return  $this->getJSONActualizado($formulario);
-    }
-
-    private function reagruparPorDestino($Respuestas) {
-        $destinoAcum = "";
+    private function getListaValoresPorDesino($respuestas, $opciones, $idSeccion, $idPregunta){
+        $destinoAcum = '';
         $ArrayAcum = [];
         $output = [];
-        foreach($Respuestas as $Respuesta) {
-            $destino = $Respuesta->getDestino();
-            if($destinoAcum == $destino) {
-                $ArrayAcum[] = $Respuesta;
-            }
+        foreach($respuestas as $respuesta) {
+            $destino = $respuesta->getDestino();
             if($destinoAcum != $destino) {
-                $destinoAcum = $destino;
                 if($ArrayAcum) {
-                    $output[] = $ArrayAcum;
+                    $output[] = ['destino' => $destinoAcum, 'opciones' => $ArrayAcum];
                     $ArrayAcum = [];
                 }
+                $destinoAcum = $destino;
             }
+            $descripcionOpcion = $this->getDescripcionOpcion($opciones, $respuesta->getOpcion());
+            $ArrayAcum[] = ['id' => '"'.$respuesta->getOpcion().'"', 'descripcion' => $descripcionOpcion];
+        }
+        $output[] = ['destino' => $destino, 'opciones' => $ArrayAcum];
+
+        return $output;
+    }
+
+    private function modificarOpcionesDeDestino($resp, $seccion, $destino){
+        if($destino['destino'] == $resp->destino."_seccion_".$seccion->id) {
+            $resp->opcion = $destino['opciones'];
+        }
+        return $resp;
+    }
+
+    private function vaciarRespuestas($respuestasJSON) {
+        foreach ($respuestasJSON as $respuesta) {
+            $opciones = $respuesta->opcion;
+            if($opciones) {
+                $respuesta->opcion = [];
+            }
+        }
+        return $respuestasJSON;
+    }
+
+    private function getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion){
+        if($tipoPregunta->descripcion == 'multiple'){
+            $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta);
+            $preguntaJSON->respuesta = $this->vaciarRespuestas($preguntaJSON->respuesta);
+            foreach($listaDestinos as $destino) {
+                foreach($preguntaJSON->respuesta as $resp) {
+                    $resp = $this->modificarOpcionesDeDestino($resp, $seccion, $destino);
+                }
+            }
+        } else {
+                if($respuesta[0]->getDescripcion()) {
+                    $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
+                } else {
+                    $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
+                }
+        }
+        return $preguntaJSON;
+    }
+
+    private function getJSONActualizadoPorRespuestasRelevamiento($form, $idRelevamiento) {
+        $secciones = $form->secciones;
+        foreach($secciones as $seccion) {
+            $preguntas = $seccion->preguntas;
+            foreach($preguntas as $preguntaJSON) {
+                $tipoPregunta = $preguntaJSON->tipoPregunta;
+                $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaJSON->idPregunta);
+                if($respuesta) {
+                    $preguntaJSON = $this->getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion);
+                    $preguntasGeneradoras = $preguntaJSON->preguntasGeneradas;
+                    if($preguntasGeneradoras) {
+                        foreach($preguntasGeneradoras as $preguntaGeneradora) {
+                            $opcionGeneradora = $preguntaGeneradora->opcion;
+                            if($preguntaJSON->respuesta == $opcionGeneradora->id) {
+                                $respuestaPregGeneradora= $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaGeneradora->preguntaGenerada->idPregunta);
+                                $preguntaGeneradora->preguntaGenerada = $this->getPreguntaJSONConRespuesta($preguntaGeneradora->preguntaGenerada->tipoPregunta, $respuestaPregGeneradora, $preguntaGeneradora->preguntaGenerada, $seccion);
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+        return $form;
+    }
+
+    private function getJSONActualizadoPorFuncion($pregunta, $formJSON) {
+        $output = $formJSON;
+        if($pregunta->tieneFuncion()){
+            $cantDestinos = $pregunta->getTipoPregunta()->getCantDestinos();
+            if($cantDestinos > 0){
+                $output = $this->getJSONModificadoSelectMultiple($pregunta, $formJSON);
+            } else {
+                $output = $this->getJSONModificadoSelectSimple($pregunta, $formJSON);
+            }  
         }
         return $output;
     }
 
+    public function getJSONActualizado($formulario, $Relevamiento){
+        $preguntas = $this->getPreguntasxFormulario($formulario);
+        $JSON = $formulario->getJSON();
+        $formJSON = json_decode($JSON);
+        foreach($preguntas as $pregunta) {
+            $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
+        }
+
+        if($Relevamiento->getEstadoRelevamiento()->esParaEditar()){
+            // if($Relevamiento->getEstadoRelevamiento()->esEditado()){
+            $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $Relevamiento->getId());
+            return json_encode($output);
+        }
+        return json_encode($formJSON);
+    }
 
     private function getRespuestasAgrupadasPorPregunta($Respuestas) {
         $idAcum = -1;
@@ -431,7 +512,6 @@ class FormularioManager {
             $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
                     'respuestas' => $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId())];
         }
-
         return $output;
     }
 
@@ -486,13 +566,12 @@ class FormularioManager {
         }
         return $output;
     }
-    
 
     public function getListaOpcionDestinoPregunta($pregunta, $respuestas) {
         $output = [];
         if($pregunta->getTipoPregunta()->esPeguntaMultiple()) {
             foreach ($respuestas as $resp) {
-                $destino = $resp->nombre; //nombre destino
+                $destino = $resp->destino; //nombre destino
                 $opciones = $resp->opcion;
                 if($opciones){
                     $opcionesDestinos = $this->getOpcionDestino($opciones, $destino);
