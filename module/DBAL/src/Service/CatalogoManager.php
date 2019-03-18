@@ -441,10 +441,9 @@ class CatalogoManager {
 
     public function getFirmasPermiso() {
         $resultado = [];
-        $elementos = ['Solicitante del trabajo', 'Dueño del área', 'Seguridad e Higiene', 'Contratista'];
-        $id = 5;
+        $elementos = $this->getNodos();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getNombre()];
             $id++;
         }
         return $resultado;
