@@ -238,5 +238,45 @@ class FormularioController extends CednaController
         $pdf->Output();
     }
 
+    public function perfilesFirmantesAction(){
+        $this->cargarAccionesDisponibles('formularios - perfiles firmantes');
+
+        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+
+        $view = new ViewModel();
+        
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
+        $view->setTemplate('formulario/formulario/perfiles-firmantes.phtml');
+        
+        return $view;
+    }
+
+    public function cargarPerfilesFirmantesAction(){
+        $this->cargarAccionesDisponibles('formularios - cargar perfiles firmantes');
+
+        $parametros = $this->params()->fromRoute();
+        $idFormulario = $parametros['id'];
+
+        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
+
+        if ($this->getRequest()->isPost()) {
+            $JsonData = $this->params()->fromPost();
+            $data = json_decode($JsonData['JsonData']);
+            
+            $this->FormularioManager->cargarPerfilesFirmantes($data, $Formulario);
+            
+            $this->redirect()->toRoute("formulario",["action" => "perfilesFirmantes"]);
+        }
+        
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
+
+        $view = new ViewModel();
+        
+        $view->setVariable('FormularioJSON', $Formulario->getJSON());
+        $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setTemplate('formulario/formulario/cargar-perfiles-firmantes.phtml');
+        
+        return $view;
+    }
     
 }

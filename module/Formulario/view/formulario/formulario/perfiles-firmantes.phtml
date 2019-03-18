@@ -1,0 +1,87 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Formularios</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaFormularios" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Formulario</th>
+                            <th class="text-center">Perfiles Firmantes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyFormularios">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var arrFormularioJSON = <?= $arrFormularioJSON ?>;
+
+function getNombresPerfilesFirmantes(arrPerfiles){
+    var arrNombres = [];
+
+    for (var i = 0; i < arrPerfiles.length; i++){
+        var perfil = arrPerfiles[i];
+
+        arrNombres.push(perfil.nombre);
+    }
+
+    var stringOutput = arrNombres.join(' - ');
+
+    return stringOutput;
+}
+
+function dibujarFormulariosParaPerfilesFirmantes(){
+    $('#bodyFormularios').find('tr').remove();
+    
+
+    for (var i = 0; i < arrFormularioJSON.length; i++)
+    {
+        var formulario = arrFormularioJSON[i];
+        var body = document.getElementById("bodyFormularios");
+        var row = body.insertRow();
+
+        row.id = i;
+
+        var formularioNombre = row.insertCell(0);
+        var perfilesFirmantes = row.insertCell(1);
+
+        formularioNombre.innerHTML = formulario.nombre;
+        perfilesFirmantes.innerHTML = getNombresPerfilesFirmantes(formulario.perfilesFirmantes);
+    }
+}
+
+function preEditar(){
+    if (filaSeleccionada >= 0){
+        var formulario = arrFormularioJSON[filaSeleccionada];
+        window.location.replace(url + "/formulario/cargar-perfiles-firmantes/" + formulario.idFormulario);
+    }
+}
+
+$(function() {
+    $('#tablaFormularios').on('click', 'tbody tr', function(event) {
+        if (!$(this).hasClass('highlight')){
+            $('.highlight').removeClass('highlight');
+
+            $(this).addClass('highlight').siblings();
+            filaSeleccionada = $(this)[0].id;
+
+            cambiarVisibilidadBotones(true);
+        }else{
+            $(this).removeClass('highlight');
+            filaSeleccionada = -1;
+            cambiarVisibilidadBotones(false);
+        }
+    });
+});
+
+$( document ).ready(function() {
+    dibujarFormulariosParaPerfilesFirmantes();
+});
+</script>

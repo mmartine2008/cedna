@@ -11,6 +11,7 @@ use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\EstadosRelevamiento;
+use DBAL\Entity\FirmanFormulario;
 
 
 class FormularioManager {
@@ -250,6 +251,51 @@ class FormularioManager {
             }
         }
         return $this->getRespuestasAgrupadasPorPregunta($output);
+    }
+
+    public function cargarPerfilesFirmantes($data, $Formulario){
+        $arrPerfiles = $data->perfiles;
+        $arrPerfilesOriginales = $Formulario->getPerfilesFirmantes();
+
+        foreach($arrPerfiles as $perfil){
+            $Perfil = $this->catalogoManager->getPerfiles($perfil->id);
+
+            $asignadoAnteriormente = false;
+
+            for ($i = 0; $i < count($arrPerfilesOriginales); $i++){
+                if ($arrPerfilesOriginales[$i] == $Perfil){
+                    unset($arrPerfilesOriginales[$i]);
+                    $asignadoAnteriormente = true;
+                    break;
+                }
+            }
+
+            if (!$asignadoAnteriormente){
+                $Formulario->addPerfilFirmante($Perfil);
+            }
+        }
+
+        //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
+        $this->borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales);
+
+        $this->entityManager->persist($Formulario);
+        $this->entityManager->flush();
+    }
+
+    private function borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales){
+        foreach($arrPerfilesOriginales as $PerfilOriginal){
+            $FirmanFormulario = $this->entityManager->getRepository(FirmanFormulario::class)
+                                                        ->findOneBy(['Formulario' => $Formulario, 'Perfil' => $PerfilOriginal]);
+            $this->entityManager->beginTransaction();         
+            try {
+                $this->entityManager->remove($FirmanFormulario);
+                $this->entityManager->flush();
+    
+                $this->entityManager->commit();
+            } catch (Exception $e) {
+                $this->entityManager->rollBack();
+            }
+        }
     }
 
     private function getValorFuncion($funcion, $opcion){
