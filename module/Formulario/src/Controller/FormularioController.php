@@ -278,5 +278,16 @@ class FormularioController extends CednaController
         
         return $view;
     }
+
+    public function formulariosParaFirmarAction(){
+        $this->cargarAccionesDisponibles('formularios - para firmar');
+
+        $userName = $this->userSessionManager->getUserName();
+        $arrTareasJSON = $this->FormularioManager->getArrTareasJSONFormulariosA($userName);
+
+        return new ViewModel([
+            'arrTareasJSON' => $arrTareasJSON
+        ]);
+    }
     
 }

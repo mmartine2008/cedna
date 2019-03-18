@@ -363,6 +363,27 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
+    public function getArrTareasJSONFormulariosA($userName){
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $arrTareas = $this->catalogoManager->getTareas();
+        $output = [];
+        foreach ($arrTareas as $Tarea){
+            $arrPlanificaciones = $Tarea->getPlanificaciones();
+
+            foreach ($arrPlanificaciones as $Planificacion){
+                $Relevamiento = $Planificacion->getRelevamiento();
+                $arrNodosFirmantes = $Relevamiento->getNodosFirmantes();
+
+                foreach ($arrNodosFirmantes as $NodoFirmante){
+                    if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
+                        $output[] = $Tarea;
+                    }
+                }
+            }
+        }
+    }
+
     private function borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales){
         foreach($arrPerfilesOriginales as $PerfilOriginal){
             $FirmanFormulario = $this->entityManager->getRepository(FirmanFormulario::class)
