@@ -23,6 +23,7 @@ use DBAL\Entity\TipoPlanificacion;
 use DBAL\Entity\TiposEvento;
 use DBAL\Entity\NotificacionesXPerfil;
 use DBAL\Entity\UsuariosxPerfiles;
+use DBAL\Entity\EstadosRelevamiento;
 
 class CatalogoManager {
     
@@ -226,6 +227,16 @@ class CatalogoManager {
         }
 
         return $NotificacionesXPerfil;
+    }
+
+    public function getEstadosRelevamiento($idEstadoRelevamiento = null){
+        if ($idEstadoRelevamiento){
+            $EstadosRelevamiento = $this->entityManager->getRepository(EstadosRelevamiento::class)->findOneBy(['id' => $idEstadoRelevamiento]);
+        }else{
+            $EstadosRelevamiento = $this->entityManager->getRepository(EstadosRelevamiento::class)->findAll();
+        }
+
+        return $EstadosRelevamiento;
     }
 
     public function getTareaPorOrdenDeCompra($OrdenDeCompra){

@@ -2,18 +2,18 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Planificaciones sin permiso asignado</h3>
+                <h3 class="panel-title"><?= $this->translate('__Asignacion_de_Permisos_para_Planificaciones__') ?></h3>
             </div>
             <div class="panel-body mt-5">
                 <table id="tablaTareas" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">Tarea ID</th>
-                            <th class="text-center">Solicitante</th>
-                            <th class="text-center">Nodo</th>
-                            <th class="text-center">Estado</th>
-                            <th class="text-center">Fecha de Solicitud</th>
-                            <th class="text-center">Formulario</th> 
+                            <th class="text-center"><?= $this->translate('__Tarea_ID__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Solicitante__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Estado__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Fecha_de_Solicitud__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Formulario__') ?></th> 
                         </tr>
                     </thead>
                     <tbody id="bodyTareas">

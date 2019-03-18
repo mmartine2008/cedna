@@ -75,4 +75,13 @@ return [
     '__Perfiles_Asociados__' => 'Associated Profiles',
     '__Listado_de_Perfiles__' => 'List of Profiles',
     '__Nuevo_Perfil__' => 'New Profile',
+    '__Matriz_de_Notificaciones_Por_Perfil__' => 'Notifications Matrix By Profile',
+    '__Formularios__' => 'Forms',
+    '__Listado_de_Planificaciones__' => 'List of Schedules',
+    '__Tarea ID__' => 'Task ID',
+    '__Asignar_Permiso_a_la_Planificacion__' => 'Assign Planning Permission',
+    '__Detalles_de_la_Planificacion__' => 'Planning details',
+    '__Fecha_Inicio__' => 'Start date',
+    '__Fecha_Fin__' => 'End date',
+    '__Asignacion_de_Permisos_para_Planificaciones__' => 'Assignment of Permits for Planning',
 ];

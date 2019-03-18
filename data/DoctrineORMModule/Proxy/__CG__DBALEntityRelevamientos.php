@@ -64,10 +64,10 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'Formulario', 'Respuestas'];
+            return ['__isInitialized__', 'id', 'Formulario', 'Respuestas', 'EstadoRelevamiento'];
         }
 
-        return ['__isInitialized__', 'id', 'Formulario', 'Respuestas'];
+        return ['__isInitialized__', 'id', 'Formulario', 'Respuestas', 'EstadoRelevamiento'];
     }
 
     /**
@@ -187,6 +187,17 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
+    public function setEstadoRelevamiento($EstadoRelevamiento)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEstadoRelevamiento', [$EstadoRelevamiento]);
+
+        return parent::setEstadoRelevamiento($EstadoRelevamiento);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -208,6 +219,17 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormulario', []);
 
         return parent::getFormulario();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEstadoRelevamiento()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEstadoRelevamiento', []);
+
+        return parent::getEstadoRelevamiento();
     }
 
     /**

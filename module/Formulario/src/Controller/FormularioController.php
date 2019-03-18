@@ -128,25 +128,30 @@ class FormularioController extends CednaController
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
-        $Formulario = $Planificacion->getRelevamiento()->getFormulario();
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
+        $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
         
         return new ViewModel([
-            "formulario" => $this->FormularioManager->getJSONActualizado($Formulario, $Planificacion->getRelevamiento()->getId()),
+            "formulario" => $FormularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $destinos
         ]);
     }
 
-    public function showFormAction() {
-        $idFormulario = 1;
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $JsonData = $this->params()->fromPost();
-            $data = json_decode($JsonData['JsonData']);
-            $this->FormularioManager->altaRespuestasFormulario($data);
-        }
-        return new ViewModel([ ]);
+    /**
+     * Funcion que cambia el estado de un permiso de trabajo para ser firmado
+     *
+     * @return void
+     */
+    public function paraFirmarAction(){
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+
+        $this->FormularioManager->colocarRelevamientoParaFimar($idPlanificacion);
+
+        $this->redirect()->toRoute("formulario", ["action" => "paraCargar"]);
     }
 
     private function getListaRespuestas($respuestas) {
@@ -233,5 +238,45 @@ class FormularioController extends CednaController
         $pdf->Output();
     }
 
+    public function perfilesFirmantesAction(){
+        $this->cargarAccionesDisponibles('formularios - perfiles firmantes');
+
+        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+
+        $view = new ViewModel();
+        
+        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
+        $view->setTemplate('formulario/formulario/perfiles-firmantes.phtml');
+        
+        return $view;
+    }
+
+    public function cargarPerfilesFirmantesAction(){
+        $this->cargarAccionesDisponibles('formularios - cargar perfiles firmantes');
+
+        $parametros = $this->params()->fromRoute();
+        $idFormulario = $parametros['id'];
+
+        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
+
+        if ($this->getRequest()->isPost()) {
+            $JsonData = $this->params()->fromPost();
+            $data = json_decode($JsonData['JsonData']);
+            
+            $this->FormularioManager->cargarPerfilesFirmantes($data, $Formulario);
+            
+            $this->redirect()->toRoute("formulario",["action" => "perfilesFirmantes"]);
+        }
+        
+        $arrPerfiles = $this->catalogoManager->getPerfiles();
+
+        $view = new ViewModel();
+        
+        $view->setVariable('FormularioJSON', $Formulario->getJSON());
+        $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setTemplate('formulario/formulario/cargar-perfiles-firmantes.phtml');
+        
+        return $view;
+    }
     
 }

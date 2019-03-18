@@ -2,18 +2,19 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Listado de Planificaciones</h3>
+                <h3 class="panel-title"><?= $this->translate('__Listado_de_Planificaciones__') ?></h3>
             </div>
             <div class="panel-body mt-5">
                 <table id="tablaTareas" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">Tarea ID</th>
-                            <th class="text-center">Solicitante</th>
-                            <th class="text-center">Nodo</th>
-                            <th class="text-center">Estado</th>
-                            <th class="text-center">Fecha de Solicitud</th>
-                            <th class="text-center">Formulario</th>
+                            <th class="text-center"><?= $this->translate('__Tarea_ID__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Solicitante__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Estado__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Fecha_de_Solicitud__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Formulario__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
                         </tr>
                     </thead>
                     <tbody id="bodyTareas">
@@ -56,15 +57,89 @@
                     var estado = row.insertCell(3);
                     var fecha = row.insertCell(4);
                     var formulario = row.insertCell(5);
+                    var acciones = row.insertCell(6);
 
                     tareaID.innerHTML = tarea.id;
                     solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
                     nodo.innerHTML = tarea.nodo.nombre;
-                    estado.innerHTML = tarea.estadoTarea.descripcion;
+                    estado.innerHTML = planificacion.relevamiento.estadoRelevamiento.descripcion;
 
                     fecha.innerHTML = tarea.fechaSolicitud;
                     formulario.innerHTML = planificacion.relevamiento.formulario.nombre;
+                    dibujarAccionesDePlanificacion(acciones, planificacion);
                 }   
+            }
+        }
+    }
+
+    /**
+     * Funcion que muestra el boton de cerrado de un permiso de trabajo.
+     */
+    function agregarBotonCerrarPermiso(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','fas p16 fa-lock');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-primary btn-circle btn-outline');
+        a.setAttribute('href', url + '/formulario/para-firmar/' +planificacion.id);
+
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+    }
+
+    /**
+     * Funcion que muestra el boton de ver PDF de un permiso de trabajo.
+     */
+    function agregarBotonVerPDF(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','far p16 fa-file-pdf');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-success btn-circle btn-outline');
+        a.setAttribute('target', '_blank');
+        a.setAttribute('href', url + '/formulario/imprimir/' +planificacion.relevamiento.id);
+
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+    }
+
+    function dibujarAccionesDePlanificacion(contenedor, planificacion){
+        var divFila = document.createElement('div');
+        divFila.setAttribute('class','form-row');
+
+        if (planificacion.relevamiento.estadoRelevamiento.esEditado){
+            var divCerrar = document.createElement('div');
+            divCerrar.setAttribute('class','col-md-6');
+            
+            agregarBotonCerrarPermiso(divCerrar, planificacion);
+            
+            divFila.appendChild(divCerrar);
+        }
+
+        if (planificacion.relevamiento.estadoRelevamiento.esFinalizado){
+            var divPDF = document.createElement('div');
+            divPDF.setAttribute('class','col-md-6');
+            
+            agregarBotonVerPDF(divPDF, planificacion);
+            
+            divFila.appendChild(divPDF);
+        }
+
+        contenedor.appendChild(divFila);
+    }
+
+    function buscarPlanificacionPorId(){
+        for (var i = 0; i < arrTareasJSON.length; i++){
+            var tarea = arrTareasJSON[i];
+
+            for (var j = 0; j < tarea.planificaciones.length; j++){
+                var planificacion = tarea.planificaciones[j];
+
+                if (planificacion.id == filaSeleccionada){
+                    return planificacion;
+                }
             }
         }
     }
@@ -77,7 +152,14 @@
                 $(this).addClass('highlight').siblings();
                 filaSeleccionada = $(this)[0].id;
 
-                cambiarVisibilidadBotones(true);
+                var planificacion = buscarPlanificacionPorId();
+
+                if (planificacion.relevamiento.estadoRelevamiento.esEditado
+                    || planificacion.relevamiento.estadoRelevamiento.esParaEditar){
+                    cambiarVisibilidadBotones(true);
+                }else{
+                    cambiarVisibilidadBotones(false);
+                }
             }else{
                 $(this).removeClass('highlight');
                 filaSeleccionada = -1;

@@ -38,16 +38,35 @@ class Formulario
      * @ORM\OneToMany(targetEntity="Seccion", mappedBy="formulario")
      */
     protected $secciones;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Perfiles", inversedBy="Formulario", cascade={"persist"})
+     * @ORM\JoinTable(name="FirmanFormulario",
+     *      joinColumns={@ORM\JoinColumn(name="IdFormulario", referencedColumnName="IdFormulario")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdPerfil", referencedColumnName="IdPerfil")}
+     *      )
+     */
+    protected $PerfilesFirmantes;
     
     public function __construct()
     {
         $this->secciones = new ArrayCollection();
+        $this->PerfilesFirmantes = new ArrayCollection();
     }
 
     public function getSecciones()
     {
         if ($this->secciones){
             return $this->secciones->toArray();
+        }else{
+            return null;
+        }
+    }
+
+    public function getPerfilesFirmantes()
+    {
+        if ($this->PerfilesFirmantes){
+            return $this->PerfilesFirmantes->toArray();
         }else{
             return null;
         }
@@ -137,6 +156,13 @@ class Formulario
         return $this;
     }
 
+    public function addPerfilFirmante(Perfiles $perfil = null)
+    {
+        if (!$this->PerfilesFirmantes->contains($perfil)) {
+            $this->PerfilesFirmantes->add($perfil);
+        }
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -146,10 +172,18 @@ class Formulario
         }
         $secciones = implode(", ", $secciones);
 
+        $perfilesFirmantes = [];
+        foreach ($this->getPerfilesFirmantes() as $perfil) {
+            $perfilesFirmantes[] = $perfil->getJSON();
+        }
+        $perfilesFirmantes = implode(", ", $perfilesFirmantes);
+
         $output .= '"idFormulario": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"secciones": ['.$secciones.']';
+        $output .= '"secciones": ['.$secciones.'], ';
+        $output .= '"perfilesFirmantes": ['.$perfilesFirmantes.']';
+        
         return '{' . $output . '}';
     }
 

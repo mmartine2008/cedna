@@ -10,6 +10,8 @@ use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
+use DBAL\Entity\EstadosRelevamiento;
+use DBAL\Entity\FirmanFormulario;
 
 
 class FormularioManager {
@@ -85,8 +87,11 @@ class FormularioManager {
             $Relevamiento->setFormulario($Formulario);
             $this->entityManager->persist($Relevamiento);
         }else{
+            $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
+            
             $Relevamiento = new Relevamientos();
             $Relevamiento->setFormulario($Formulario);
+            $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
             
             $this->entityManager->persist($Relevamiento);
             $this->entityManager->flush();
@@ -96,6 +101,24 @@ class FormularioManager {
             $this->entityManager->persist($Planificacion);
         }
 
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Funcion que cambia el estado del relevamiento, y lo coloca disponible
+     * para ser firmado por los responsables.
+     *
+     * @param [integer] $idPlanificacion
+     * @return void
+     */
+    public function colocarRelevamientoParaFimar($idPlanificacion){
+        $EstadoCompleto = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_COMPLETO);
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $Relevamiento->setEstadoRelevamiento($EstadoCompleto);
+
+        $this->entityManager->persist($Relevamiento);
         $this->entityManager->flush();
     }
 
@@ -167,18 +190,15 @@ class FormularioManager {
         }
     }
 
-    private function getListaValoresPorDesino($respuestas, $opciones, $idSeccion, $idPregunta, $eliminar = false){
+    private function getListaValoresPorDesino($respuestas, $opciones, $idSeccion, $idPregunta){
         $destinoAcum = '';
         $ArrayAcum = [];
         $output = [];
         foreach($respuestas as $respuesta) {
             $destino = $respuesta->getDestino();
-            // var_dump($destino);
             if($destinoAcum != $destino) {
                 if($ArrayAcum) {
                     $output[] = ['destino' => $destinoAcum, 'opciones' => $ArrayAcum];
-                    // var_dump($output);
-                    // var_dump( ['destino' => $destinoAcum, 'opciones' => $ArrayAcum]);
                     $ArrayAcum = [];
                 }
                 $destinoAcum = $destino;
@@ -187,24 +207,44 @@ class FormularioManager {
             $ArrayAcum[] = ['id' => '"'.$respuesta->getOpcion().'"', 'descripcion' => $descripcionOpcion];
         }
         $output[] = ['destino' => $destino, 'opciones' => $ArrayAcum];
-        if($eliminar) {
-            $output[] = ['destino' => "destino_0_id_".$idPregunta."_seccion_".$idSeccion, 'opciones' => []];
-        }
-        // var_dump(['destino' => $destinoAcum, 'opciones' => $ArrayAcum]);
-        // var_dump($output);
-        // die();
 
         return $output;
     }
 
     private function modificarOpcionesDeDestino($resp, $seccion, $destino){
-        // $resp->opcion = [];
         if($destino['destino'] == $resp->destino."_seccion_".$seccion->id) {
-            // var_dump($destino['destino']);
             $resp->opcion = $destino['opciones'];
-            // var_dump($resp->opcion);
         }
         return $resp;
+    }
+
+    private function vaciarRespuestas($respuestasJSON) {
+        foreach ($respuestasJSON as $respuesta) {
+            $opciones = $respuesta->opcion;
+            if($opciones) {
+                $respuesta->opcion = [];
+            }
+        }
+        return $respuestasJSON;
+    }
+
+    private function getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion){
+        if($tipoPregunta->descripcion == 'multiple'){
+            $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta);
+            $preguntaJSON->respuesta = $this->vaciarRespuestas($preguntaJSON->respuesta);
+            foreach($listaDestinos as $destino) {
+                foreach($preguntaJSON->respuesta as $resp) {
+                    $resp = $this->modificarOpcionesDeDestino($resp, $seccion, $destino);
+                }
+            }
+        } else {
+                if($respuesta[0]->getDescripcion()) {
+                    $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
+                } else {
+                    $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
+                }
+        }
+        return $preguntaJSON;
     }
 
     private function getJSONActualizadoPorRespuestasRelevamiento($form, $idRelevamiento) {
@@ -215,29 +255,20 @@ class FormularioManager {
                 $tipoPregunta = $preguntaJSON->tipoPregunta;
                 $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaJSON->idPregunta);
                 if($respuesta) {
-                    if($tipoPregunta->descripcion == 'multiple'){
-                        if($preguntaJSON->cantDestinos > 1){
-                            $eliminarElementosDestino0 = true;
-                        } else {
-                            $eliminarElementosDestino0 = false;
-                        }
-                        $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta, $eliminarElementosDestino0);
-                        foreach($listaDestinos as $destino) {
-                            foreach($preguntaJSON->respuesta as $resp) {
-                                $resp = $this->modificarOpcionesDeDestino($resp, $seccion, $destino);
+                    $preguntaJSON = $this->getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion);
+                    $preguntasGeneradoras = $preguntaJSON->preguntasGeneradas;
+                    if($preguntasGeneradoras) {
+                        foreach($preguntasGeneradoras as $preguntaGeneradora) {
+                            $opcionGeneradora = $preguntaGeneradora->opcion;
+                            if($preguntaJSON->respuesta == $opcionGeneradora->id) {
+                                $respuestaPregGeneradora= $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaGeneradora->preguntaGenerada->idPregunta);
+                                $preguntaGeneradora->preguntaGenerada = $this->getPreguntaJSONConRespuesta($preguntaGeneradora->preguntaGenerada->tipoPregunta, $respuestaPregGeneradora, $preguntaGeneradora->preguntaGenerada, $seccion);
                             }
                         }
-                    } else {
-                            if($respuesta[0]->getDescripcion()) {
-                                $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
-                            } else {
-                                $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
-                            }
                     }
                 }
             }
         } 
-        // die();
         return $form;
     }
 
@@ -254,40 +285,20 @@ class FormularioManager {
         return $output;
     }
 
-    public function getJSONActualizado($formulario, $idRelevamiento){
+    public function getJSONActualizado($formulario, $Relevamiento){
         $preguntas = $this->getPreguntasxFormulario($formulario);
         $JSON = $formulario->getJSON();
         $formJSON = json_decode($JSON);
         foreach($preguntas as $pregunta) {
             $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
+        }
+
+        if($Relevamiento->getEstadoRelevamiento()->esParaEditar()){
+            // if($Relevamiento->getEstadoRelevamiento()->esEditado()){
+            $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $Relevamiento->getId());
+            return json_encode($output);
         }
         return json_encode($formJSON);
-    }
-
-    public function getJSONActualizadoParaEditar($formulario, $idRelevamiento){
-        $preguntas = $this->getPreguntasxFormulario($formulario);
-        $JSON = $formulario->getJSON();
-        $formJSON = json_decode($JSON);
-        foreach($preguntas as $pregunta) {
-            $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
-        }
-        $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $idRelevamiento);
-
-        return json_encode($output);
-    }
-
-    public function getFormularioJSON($idFormulario, $idRelevamiento) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $idFormulario]); 
-
-        return  $this->getJSONActualizado($formulario, $idRelevamiento);
-    }
-
-    public function getFormularioJSONParaModificar($idFormulario, $idRelevamiento) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $idFormulario]); 
-
-        return  $this->getJSONActualizado($formulario, $idRelevamiento);
     }
 
     private function getRespuestasAgrupadasPorPregunta($Respuestas) {
@@ -321,6 +332,51 @@ class FormularioManager {
             }
         }
         return $this->getRespuestasAgrupadasPorPregunta($output);
+    }
+
+    public function cargarPerfilesFirmantes($data, $Formulario){
+        $arrPerfiles = $data->perfiles;
+        $arrPerfilesOriginales = $Formulario->getPerfilesFirmantes();
+
+        foreach($arrPerfiles as $perfil){
+            $Perfil = $this->catalogoManager->getPerfiles($perfil->id);
+
+            $asignadoAnteriormente = false;
+
+            for ($i = 0; $i < count($arrPerfilesOriginales); $i++){
+                if ($arrPerfilesOriginales[$i] == $Perfil){
+                    unset($arrPerfilesOriginales[$i]);
+                    $asignadoAnteriormente = true;
+                    break;
+                }
+            }
+
+            if (!$asignadoAnteriormente){
+                $Formulario->addPerfilFirmante($Perfil);
+            }
+        }
+
+        //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
+        $this->borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales);
+
+        $this->entityManager->persist($Formulario);
+        $this->entityManager->flush();
+    }
+
+    private function borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales){
+        foreach($arrPerfilesOriginales as $PerfilOriginal){
+            $FirmanFormulario = $this->entityManager->getRepository(FirmanFormulario::class)
+                                                        ->findOneBy(['Formulario' => $Formulario, 'Perfil' => $PerfilOriginal]);
+            $this->entityManager->beginTransaction();         
+            try {
+                $this->entityManager->remove($FirmanFormulario);
+                $this->entityManager->flush();
+    
+                $this->entityManager->commit();
+            } catch (Exception $e) {
+                $this->entityManager->rollBack();
+            }
+        }
     }
 
     private function getValorFuncion($funcion, $opcion){
@@ -554,6 +610,12 @@ class FormularioManager {
         foreach ($secciones as $seccion) {
             $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }
+
+        $EstadoEditado = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_EDITADO);
+        $Relevamiento->setEstadoRelevamiento($EstadoEditado);
+
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
     }
 
     

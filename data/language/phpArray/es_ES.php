@@ -2,7 +2,6 @@
 
 return [
     '__Sistema_de_Permisos_de_Trabajo__' => 'Sistema de Permisos de Trabajo',
-
     '__configuracion__' => 'Configuración',
     '__tipo_pregunta__' => 'Tipo de pregunta',
     '__perfiles__' => 'Perfiles',
@@ -38,7 +37,7 @@ return [
     '__Nodo__' => 'Nodo',
     '__Ejecutor__' => 'Ejecutor',
     '__Planifica_Tarea__' => 'Planifica Tarea',
-    '__Nueva_Orden_de_Compra__' => 'Nueva Orden de Compra',
+    '__Nueva_Orden_de_Compra__' => 'Nueva Órden de Compra',
     '__Seccion__' => 'Sección',
     '__Responsable__' => 'Responsable',
     '__Quien_planificara_la_tarea__' => 'Quién planificará la tarea',
@@ -75,4 +74,13 @@ return [
     '__Perfiles_Asociados__' => 'Perfiles Asociados',
     '__Listado_de_Perfiles__' => 'Listado de Perfiles',
     '__Nuevo_Perfil__' => 'Nuevo Perfil',
+    '__Matriz_de_Notificaciones_Por_Perfil__' => 'Matriz de Notificaciones Por Perfil',
+    '__Formularios__' => 'Formularios',
+    '__Listado_de_Planificaciones__' => 'Listado de Planificaciones',
+    '__Tarea_ID__' => 'Tarea ID',
+    '__Asignar_Permiso_a_la_Planificacion__' => 'Asignar Permiso a la Planificación',
+    '__Detalles_de_la_Planificacion__' => 'Detalles de la Planificación',
+    '__Fecha_Inicio__' => 'Fecha Inicio',
+    '__Fecha_Fin__' => 'Fecha Fin',
+    '__Asignacion_de_Permisos_para_Planificaciones__' => 'Asignacion de Permisos para Planificaciones',
 ];
