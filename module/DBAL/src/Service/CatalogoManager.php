@@ -442,7 +442,6 @@ class CatalogoManager {
         $elementos = $this->getNodos();
         foreach($elementos as $elemento){
             $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getNombre()];
-            $id++;
         }
         return $resultado;
     }
