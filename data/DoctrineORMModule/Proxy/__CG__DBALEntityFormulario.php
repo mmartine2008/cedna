@@ -64,10 +64,10 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones'];
+            return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
         }
 
-        return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones'];
+        return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
     }
 
     /**
@@ -187,6 +187,17 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
     /**
      * {@inheritDoc}
      */
+    public function getPerfilesFirmantes()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPerfilesFirmantes', []);
+
+        return parent::getPerfilesFirmantes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -274,6 +285,17 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPermiso', [$permiso]);
 
         return parent::setPermiso($permiso);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addPerfilFirmante(\DBAL\Entity\Perfiles $perfil = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPerfilFirmante', [$perfil]);
+
+        return parent::addPerfilFirmante($perfil);
     }
 
     /**
