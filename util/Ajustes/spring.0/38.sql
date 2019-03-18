@@ -90,4 +90,15 @@ INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion, Required) VALUES
 
 INSERT SeccionPregunta(idSeccion, idPregunta) VALUES (6,15); 
 
+DELETE FROM cedna.dbo.Operacion
+WHERE Id=6;
+
+INSERT INTO cedna.dbo.Relevamientos (IdFormulario,IdEstadoRelevamiento)
+VALUES (2,1);
+
+UPDATE cedna.dbo.Planificaciones
+SET IdRelevamiento=2
+WHERE IdPlanificacion=6;
+
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('38.sql', GETDATE ( ), 0, 38);
+
