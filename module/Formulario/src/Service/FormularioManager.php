@@ -261,12 +261,29 @@ class FormularioManager {
         foreach($preguntas as $pregunta) {
             $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
         }
+        return json_encode($formJSON);
+    }
+
+    public function getJSONActualizadoParaEditar($formulario, $idRelevamiento){
+        $preguntas = $this->getPreguntasxFormulario($formulario);
+        $JSON = $formulario->getJSON();
+        $formJSON = json_decode($JSON);
+        foreach($preguntas as $pregunta) {
+            $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
+        }
         $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $idRelevamiento);
 
         return json_encode($output);
     }
 
     public function getFormularioJSON($idFormulario, $idRelevamiento) {
+        $formulario = $this->entityManager->getRepository(Formulario::class)
+                                            ->findOneBy(['id' => $idFormulario]); 
+
+        return  $this->getJSONActualizado($formulario, $idRelevamiento);
+    }
+
+    public function getFormularioJSONParaModificar($idFormulario, $idRelevamiento) {
         $formulario = $this->entityManager->getRepository(Formulario::class)
                                             ->findOneBy(['id' => $idFormulario]); 
 
@@ -418,7 +435,6 @@ class FormularioManager {
             $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
                     'respuestas' => $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId())];
         }
-
         return $output;
     }
 
@@ -473,7 +489,6 @@ class FormularioManager {
         }
         return $output;
     }
-    
 
     public function getListaOpcionDestinoPregunta($pregunta, $respuestas) {
         $output = [];
