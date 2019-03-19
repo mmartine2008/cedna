@@ -238,56 +238,58 @@ class FormularioController extends CednaController
         $pdf->Output();
     }
 
-    public function perfilesFirmantesAction(){
-        $this->cargarAccionesDisponibles('formularios - perfiles firmantes');
-
-        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
-
-        $view = new ViewModel();
-        
-        $view->setVariable('arrFormularioJSON', $arrFormularioJSON);
-        $view->setTemplate('formulario/formulario/perfiles-firmantes.phtml');
-        
-        return $view;
-    }
-
-    public function cargarPerfilesFirmantesAction(){
-        $this->cargarAccionesDisponibles('formularios - cargar perfiles firmantes');
-
-        $parametros = $this->params()->fromRoute();
-        $idFormulario = $parametros['id'];
-
-        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
-
-        if ($this->getRequest()->isPost()) {
-            $JsonData = $this->params()->fromPost();
-            $data = json_decode($JsonData['JsonData']);
-            
-            $this->FormularioManager->cargarPerfilesFirmantes($data, $Formulario);
-            
-            $this->redirect()->toRoute("formulario",["action" => "perfilesFirmantes"]);
-        }
-        
-        $arrPerfiles = $this->catalogoManager->getPerfiles();
-
-        $view = new ViewModel();
-        
-        $view->setVariable('FormularioJSON', $Formulario->getJSON());
-        $view->setVariable('arrPerfiles', $arrPerfiles);
-        $view->setTemplate('formulario/formulario/cargar-perfiles-firmantes.phtml');
-        
-        return $view;
-    }
-
     public function formulariosParaFirmarAction(){
         $this->cargarAccionesDisponibles('formularios - para firmar');
 
         $userName = $this->userSessionManager->getUserName();
-        $arrTareasJSON = $this->FormularioManager->getArrTareasJSONFormulariosA($userName);
-
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+    
+        $arrTareasJSON = $this->FormularioManager->getArrTareasJSONFormulariosAFirmar($UsuarioActivo);
+    
         return new ViewModel([
-            'arrTareasJSON' => $arrTareasJSON
+            'arrTareasJSON' => $arrTareasJSON,
+            'UsuarioActivoJSON' => $UsuarioActivo->getJSON()
         ]);
+    }
+
+    public function firmarFormularioAction(){
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+        $this->FormularioManager->firmarFormulario($idPlanificacion, $UsuarioActivo);
+
+        $this->redirect()->toRoute("formulario", ["action" => "formulariosParaFirmar"]);
+    }
+
+    public function delegarFirmaAction(){
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+        $this->FormularioManager->delegarFirmaFormulario($idPlanificacion, $UsuarioActivo);
+
+        $this->redirect()->toRoute("formulario", ["action" => "formulariosParaFirmar"]);
+    }
+
+    public function puedeDelegarAction(){
+        $parametros = $this->params()->fromRoute();
+        $idNodo = $parametros['id'];
+
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $resultado = $this->FormularioManager->comprobarUsuarioPuedeDelegar($idNodo, $UsuarioActivo);
+
+        $view = new ViewModel();
+        
+        $view->setVariable('mostrarJson', json_encode(['resultado' => $resultado]));
+        $view->setTerminal(true);
+        $view->setTemplate('formulario/formulario/mostrarJSON.phtml');
+        
+        return $view;
     }
     
 }

@@ -35,8 +35,14 @@ class Relevamientos
      */
     protected $EstadoRelevamiento;
 
+    /**
+     * @ORM\OneToMany(targetEntity="NodosFirmantesRelevamiento", mappedBy="Relevamiento")
+     */
+    protected $NodosFirmantesRelevamiento;
+
     public function __construct() {
         $this->Respuestas = new ArrayCollection();
+        $this->NodosFirmantesRelevamiento = new ArrayCollection();
     }
 
     public function setFormulario($Formulario)
@@ -73,6 +79,15 @@ class Relevamientos
         }
     }
 
+    public function getNodosFirmantesRelevamiento()
+    {
+        if ($this->NodosFirmantesRelevamiento){
+            return $this->NodosFirmantesRelevamiento->toArray();
+        }else{
+            return null;
+        }
+    }
+
     public function getJSON(){
         $respuestas = [];
         foreach ($this->getRespuestas() as $respuesta) {
@@ -80,10 +95,17 @@ class Relevamientos
         }
         $respuestas = implode(", ", $respuestas);
 
+        $nodosFirmantes = [];
+        foreach ($this->getNodosFirmantesRelevamiento() as $nodoFirmante) {
+            $nodosFirmantes[] = $nodoFirmante->getJSON();
+        }
+        $nodosFirmantes = implode(", ", $nodosFirmantes);
+
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"perfiles": ['.$respuestas.'],';
+        $output .= '"nodosFirmantes": ['.$nodosFirmantes.'],';
         $output .= '"estadoRelevamiento": ' . $this->getEstadoRelevamiento()->getJSON() .', ';
         $output .= '"formulario": ' . $this->getFormulario()->getJSON();
         

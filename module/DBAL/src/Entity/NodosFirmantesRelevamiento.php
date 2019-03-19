@@ -35,6 +35,11 @@ class NodosFirmantesRelevamiento
      */
     protected $Relevamiento;
 
+    /**
+     * @ORM\Column(name="FechaFirma")
+     */
+    protected $FechaFirma;
+
     public function setNodo($Nodo)
     {
         $this->Nodo = $Nodo;
@@ -48,6 +53,11 @@ class NodosFirmantesRelevamiento
     public function setRelevamiento($Relevamiento)
     {
         $this->Relevamiento = $Relevamiento;
+    }
+
+    public function setFechaFirma($FechaFirma)
+    {
+        $this->FechaFirma = $FechaFirma;
     }
 
     public function getId()
@@ -70,4 +80,29 @@ class NodosFirmantesRelevamiento
         return $this->Relevamiento;
     }
 
+    public function getFechaFirma()
+    {
+        if ($this->FechaFirma){
+            if (is_string($this->FechaFirma)){
+                $fecha = date("d-m-Y", strtotime($this->FechaFirma));
+                return $fecha;
+            }else{
+                return $this->FechaFirma->format('d-m-Y');
+            }
+        }else{
+            return null;
+        }
+    }
+
+    public function getJSON(){
+        $output = "";
+
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"fechaFirma": "' . $this->getFechaFirma() .'", ';
+        $output .= '"nodo": ' . $this->getNodo()->getJSON() .', ';
+        $output .= '"usuarioFirmante": ' . $this->getUsuarioFirmante()->getJSON();
+        //No incluye la informacion del Relevamiento porque el relevamiento es el que pide este JSON
+        
+        return '{' . $output . '}';
+    }
 }
