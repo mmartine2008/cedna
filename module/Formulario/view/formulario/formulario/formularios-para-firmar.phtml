@@ -1,0 +1,234 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Firmas de Permisos de Trabajo</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaTareas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Tarea_ID__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
+                            <th class="text-center">Planificación Inicio</th>
+                            <th class="text-center">Planificación Fin</th>
+                            <th class="text-center"><?= $this->translate('__Formulario__') ?></th> 
+                            <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTareas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrTareasJSON = <?= $arrTareasJSON; ?>;
+    var UsuarioActivoJSON = <?= $UsuarioActivoJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaTareas();
+    });
+
+    function usuarioNoFirmoTodavia(relevamiento){
+        var nodosFirmantes = relevamiento.nodosFirmantes;
+
+        for (var i = 0; i < nodosFirmantes.length; i++){
+            var nodoFirmante = nodosFirmantes[i];
+            var usuarioFirmante = nodoFirmante.usuarioFirmante;
+
+            if (usuarioFirmante.id == UsuarioActivoJSON.id 
+                    && nodoFirmante.fechaFirma == ''){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
+
+    function buscarIdNodo(relevamiento){
+        var nodosFirmantes = relevamiento.nodosFirmantes;
+
+        for (var i = 0; i < nodosFirmantes.length; i++){
+            var nodoFirmante = nodosFirmantes[i];
+            var usuarioFirmante = nodoFirmante.usuarioFirmante;
+
+            if (usuarioFirmante.id == UsuarioActivoJSON.id 
+                    && nodoFirmante.fechaFirma == ''){
+                
+                return nodoFirmante.nodo.id;
+            }
+        }
+    }
+
+    function dibujarTablaTareas(){
+        $('#bodyTareas').find('tr').remove();
+
+        for (var i = 0; i < arrTareasJSON.length; i++)
+        {
+            var tarea = arrTareasJSON[i];
+            var body = document.getElementById("bodyTareas");
+
+            for(var j = 0; j < tarea.planificaciones.length; j++){
+                var planificacion = tarea.planificaciones[j];
+                var relevamiento = planificacion.relevamiento;
+
+                if (relevamiento.estadoRelevamiento.esCompleto
+                    && usuarioNoFirmoTodavia(relevamiento)){
+                    var row = body.insertRow();
+                    row.id = planificacion.id;
+
+                    var tareaID = row.insertCell(0);
+                    var nodo = row.insertCell(1);
+                    var inicioPlanificacion = row.insertCell(2);
+                    var finPlanificacion = row.insertCell(3);
+                    var formularioNombre = row.insertCell(4);
+                    var acciones = row.insertCell(5);
+
+                    tareaID.innerHTML = tarea.id;
+                    nodo.innerHTML = tarea.nodo.nombre;
+                    inicioPlanificacion.innerHTML = planificacion.fechaInicio;
+                    finPlanificacion.innerHTML = planificacion.fechaFin;
+                    formularioNombre.innerHTML = planificacion.relevamiento.formulario.nombre;
+                    dibujarAccionesDePermiso(acciones, planificacion);
+                }
+            }
+        }
+    }
+
+    function comprobarPuedeDelegar(idNodo){
+        var result = null;
+    
+        $.ajax({
+            url: url + '/formulario/puede-delegar/' + idNodo,
+            type: 'get',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                result = data.resultado;
+            }
+        });
+        
+        return result;
+    }
+
+    /**
+     * Funcion que muestra el boton de firmar de un permiso de trabajo.
+     */
+    function agregarBotonFirmarPermiso(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','fas p16 fa-file-signature');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-primary btn-circle btn-outline');
+        a.setAttribute('href', url + '/formulario/firmar-formulario/' +planificacion.id);
+
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+        contenedor.setAttribute('title', 'Firmar Permiso de Trabajo');
+    }
+
+    /**
+     * Funcion que muestra el boton de ver PDF de un permiso de trabajo.
+     */
+    function agregarBotonVerPDF(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','far p16 fa-file-pdf');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-success btn-circle btn-outline');
+        a.setAttribute('target', '_blank');
+        a.setAttribute('href', url + '/formulario/imprimir/' +planificacion.relevamiento.id);
+
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+        contenedor.setAttribute('title', 'Ver PDF');
+    }
+
+    function mostrarMensajeNoPuedeDelegar(){
+        swal('No Puede Delegar',
+        'No existe ningún usuario responsable en el area de trabajo por debajo de usted a quien delegarle la firma del permiso.',
+        'error');
+    }
+
+    /**
+     * Funcion que muestra el boton de delegar la firma de un permiso de trabajo.
+     */
+    function agregarBotonDelegarFirma(contenedor, planificacion){
+        var icon = document.createElement('i');
+        icon.setAttribute('class','fas p16 fa-fast-forward');
+
+        var a = document.createElement('a');
+        a.setAttribute('class','btn btn-warning btn-circle btn-outline');
+        
+        //Supone que será jefe de un solo nodo...
+        var idNodo = buscarIdNodo(planificacion.relevamiento);
+
+        if (comprobarPuedeDelegar(idNodo)){
+            a.setAttribute('href', url + '/formulario/delegar-firma/' +planificacion.id);
+        }else{
+            a.setAttribute('href', '#');
+            contenedor.setAttribute('onclick', 'mostrarMensajeNoPuedeDelegar()');
+        }
+        
+        a.appendChild(icon);
+
+        contenedor.appendChild(a);
+        contenedor.setAttribute('title', 'Delegar Firma de Permiso de Trabajo');
+    }
+
+    function dibujarAccionesDePermiso(contenedor, planificacion){
+        var divFila = document.createElement('div');
+        divFila.setAttribute('class','form-row');
+
+        // Agrega boton de PDF
+        var divPDF = document.createElement('div');
+        divPDF.setAttribute('class','col-md-4');
+        
+        agregarBotonVerPDF(divPDF, planificacion);
+        divFila.appendChild(divPDF);
+
+        // Agrega boton para Firmar
+        var divFirmar = document.createElement('div');
+        divFirmar.setAttribute('class','col-md-4');
+        
+        agregarBotonFirmarPermiso(divFirmar, planificacion);
+        divFila.appendChild(divFirmar);
+
+        // Agrega boton de delegar
+        var divDelegar = document.createElement('div');
+        divDelegar.setAttribute('class','col-md-4');
+        
+        agregarBotonDelegarFirma(divDelegar, planificacion);
+        divFila.appendChild(divDelegar);
+        
+        //Fin de agregar botones
+        contenedor.appendChild(divFila);
+    }
+
+    $(function() {
+        $('#tablaTareas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    
+
+  </script>

@@ -290,7 +290,13 @@ class Pregunta
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
         $output .= '"preguntasGeneradas": '.$preguntasGeneradasJSON.', ';
-        $output .= '"requerido": '.$this->getRequerido().', ';
+        
+        if ($this->getRequerido()){
+            $output .= '"requerido": '.$this->getRequerido().', ';
+        }else{
+            $output .= '"requerido": 0, ';
+        }
+
         $funcion = $this->getFuncion();
         if($funcion) {
             $output .= '"funcion": "'.$this->getFuncion().'", ';

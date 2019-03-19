@@ -167,6 +167,12 @@ class CatalogoManager {
         return $arrEsJefeDe;
     }
 
+    public function getEsJefeDePorNodoOrden($Nodo, $Orden){
+        $arrEsJefeDe = $this->entityManager->getRepository(esJefeDe::class)->findOneBy(['Nodo' => $Nodo, 'Orden' => $Orden]);
+
+        return $arrEsJefeDe;
+    }
+
     public function getRelevamientos($idRelevamiento = null){
         if ($idRelevamiento){
             $Relevamientos = $this->entityManager->getRepository(Relevamientos::class)->findOneBy(['id' => $idRelevamiento]);

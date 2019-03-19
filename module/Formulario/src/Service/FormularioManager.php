@@ -11,7 +11,6 @@ use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\EstadosRelevamiento;
-use DBAL\Entity\FirmanFormulario;
 
 
 class FormularioManager {
@@ -120,6 +119,140 @@ class FormularioManager {
 
         $this->entityManager->persist($Relevamiento);
         $this->entityManager->flush();
+    }
+
+    /**
+     * Funcion que cambia de estado el relevamiento, y lo coloca como Finalizado
+     *
+     * @param [Relevamientos] $Relevamiento
+     * @return void
+     */
+    private function finalizarRelevamiento($Relevamiento){
+        $EstadoFinalizado = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_FINALIZADO);
+        $Relevamiento->setEstadoRelevamiento($EstadoFinalizado);
+
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Funcion que comprueba si todos los usuarios firmaron el permiso de trabajo.
+     *
+     * @param [array] $NodosFirmantes
+     * @return boolean
+     */
+    private function todosFirmaronRelevamiento($NodosFirmantes){
+        foreach($NodosFirmantes as $NodoFirmante){
+            $fechaFirma = $NodoFirmante->getFechaFirma();
+            if (!isset($fechaFirma)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Funcion que procesa la firma de un permiso de trabajo por parte del usuario.
+     * 
+     * Si todos los usuarios firmaron, entonces cambia el estado del relevamiento.
+     *
+     * @param [integer] $idPlanificacion
+     * @param [Usuarios] $UsuarioActivo
+     * @return void
+     */
+    public function firmarFormulario($idPlanificacion, $UsuarioActivo){
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+        $Relevamiento = $Planificacion->getRelevamiento();
+
+        $NodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
+
+        foreach($NodosFirmantes as $NodoFirmante){
+            if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
+                $NodoFirmante->setFechaFirma(new \DateTime("now"));
+
+                $this->entityManager->persist($NodoFirmante);
+                $this->entityManager->flush();
+                break;
+            }
+        }
+
+        $todosFirmaron = $this->todosFirmaronRelevamiento($NodosFirmantes);
+        
+        if ($todosFirmaron){
+            $this->finalizarRelevamiento($Relevamiento);
+        }
+    }
+
+    /**
+     * Funcion que se encarga de procesar la delegacion de la 
+     * firma del usuario, hacia otro usuario que tenga un orden siguiente
+     * en la jerarquia del nodo.
+     *
+     * @param [integer] $idPlanificacion
+     * @param [Usuarios] $UsuarioActivo
+     * @return void
+     */
+    public function delegarFirmaFormulario($idPlanificacion, $UsuarioActivo){
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+        $Relevamiento = $Planificacion->getRelevamiento();
+
+        $NodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
+
+        foreach($NodosFirmantes as $NodoFirmante){
+            if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
+                
+                $this->cambiarUsuarioFirmante($NodoFirmante, $UsuarioActivo);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Funcion que cambia en la base de datos, el usuario 
+     * que tiene que firmar el permiso de trabajo.
+     *
+     * @param [Nodos] $NodoFirmante
+     * @param [Usuarios] $UsuarioActivo
+     * @return void
+     */
+    private function cambiarUsuarioFirmante($NodoFirmante, $UsuarioActivo){
+        $Nodo = $NodoFirmante->getNodo();
+
+        $esJefeDe = $this->catalogoManager->getEsJefeDePorNodoUsuario($Nodo, $UsuarioActivo);
+        $OrdenJefeInferior = $esJefeDe->getOrden() + 1;
+        $esJefeDeInferior = $this->catalogoManager->getEsJefeDePorNodoOrden($Nodo, $OrdenJefeInferior);
+
+        $NodoFirmante->setUsuarioFirmante($esJefeDeInferior->getUsuario());
+
+        $this->entityManager->persist($NodoFirmante);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * Funcion que comprueba si el usuario activo puede delegar
+     * la firma de un permiso de trabajo.
+     * 
+     * Para ello, debe existir otra persona responsable en el nodo, 
+     * que se dea un orden inferior a él.
+     *
+     * @param [integer] $idNodo
+     * @param [Usuarios] $UsuarioActivo
+     * @return boolean
+     */
+    public function comprobarUsuarioPuedeDelegar($idNodo, $UsuarioActivo){
+        $Nodo = $this->catalogoManager->getNodos($idNodo);
+
+        $esJefeDe = $this->catalogoManager->getEsJefeDePorNodoUsuario($Nodo, $UsuarioActivo);
+        $OrdenJefeInferior = $esJefeDe->getOrden() + 1;
+        
+        $esJefeDeInferior = $this->catalogoManager->getEsJefeDePorNodoOrden($Nodo, $OrdenJefeInferior);
+
+        if ($esJefeDeInferior){
+            return true;
+        }
+
+        return false;
     }
 
     public function getPreguntasxFormulario($formulario) {
@@ -334,70 +467,28 @@ class FormularioManager {
         return $this->getRespuestasAgrupadasPorPregunta($output);
     }
 
-    public function cargarPerfilesFirmantes($data, $Formulario){
-        $arrPerfiles = $data->perfiles;
-        $arrPerfilesOriginales = $Formulario->getPerfilesFirmantes();
-
-        foreach($arrPerfiles as $perfil){
-            $Perfil = $this->catalogoManager->getPerfiles($perfil->id);
-
-            $asignadoAnteriormente = false;
-
-            for ($i = 0; $i < count($arrPerfilesOriginales); $i++){
-                if ($arrPerfilesOriginales[$i] == $Perfil){
-                    unset($arrPerfilesOriginales[$i]);
-                    $asignadoAnteriormente = true;
-                    break;
-                }
-            }
-
-            if (!$asignadoAnteriormente){
-                $Formulario->addPerfilFirmante($Perfil);
-            }
-        }
-
-        //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
-        $this->borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales);
-
-        $this->entityManager->persist($Formulario);
-        $this->entityManager->flush();
-    }
-
-    public function getArrTareasJSONFormulariosA($userName){
-        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
-
+    public function getArrTareasJSONFormulariosAFirmar($UsuarioActivo){
         $arrTareas = $this->catalogoManager->getTareas();
         $output = [];
+        
         foreach ($arrTareas as $Tarea){
             $arrPlanificaciones = $Tarea->getPlanificaciones();
 
             foreach ($arrPlanificaciones as $Planificacion){
                 $Relevamiento = $Planificacion->getRelevamiento();
-                $arrNodosFirmantes = $Relevamiento->getNodosFirmantes();
+                if ($Relevamiento){
+                    $arrNodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
 
-                foreach ($arrNodosFirmantes as $NodoFirmante){
-                    if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
-                        $output[] = $Tarea;
+                    foreach ($arrNodosFirmantes as $NodoFirmante){
+                        if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
+                            $output[] = $Tarea->getJSON();
+                        }
                     }
                 }
             }
         }
-    }
 
-    private function borrarPerfilesFirmanteDelFormulario($Formulario, $arrPerfilesOriginales){
-        foreach($arrPerfilesOriginales as $PerfilOriginal){
-            $FirmanFormulario = $this->entityManager->getRepository(FirmanFormulario::class)
-                                                        ->findOneBy(['Formulario' => $Formulario, 'Perfil' => $PerfilOriginal]);
-            $this->entityManager->beginTransaction();         
-            try {
-                $this->entityManager->remove($FirmanFormulario);
-                $this->entityManager->flush();
-    
-                $this->entityManager->commit();
-            } catch (Exception $e) {
-                $this->entityManager->rollBack();
-            }
-        }
+        return "[". implode(', ', $output) . "]";
     }
 
     private function getValorFuncion($funcion, $opcion){
