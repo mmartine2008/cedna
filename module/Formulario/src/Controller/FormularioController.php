@@ -162,6 +162,103 @@ class FormularioController extends CednaController
         return $output;
     }
 
+    private function imprimirSelectoresMultiples($respuesta, $pdf) {
+        $respuestas = $respuesta['respuesta'];
+        foreach($respuestas as $resp) {
+            $pdf->SetFont('helvetica', 'B', 12);
+            $list = $this->getListaRespuestas($resp['respuestas']);
+            $destino = substr($resp['destino'], 8, 1);
+            $listaDestinos = $this->getDestinos();
+            $pdf->Cell(40, 5, $listaDestinos[$destino]);
+            $pdf->Ln(12);
+            foreach ($list as $valor) {
+                $pdf->SetFont('helvetica', '', 12);
+                $pdf->Cell(25, 5, "");
+                $pdf->Cell(100, 5,  $valor);
+                $pdf->Ln(10);
+            }
+        }
+    }
+
+    private function imprimirPregunta($respuesta, $pdf, $descripcion){
+        $pdf->Cell(50, 5,  $descripcion);
+        $pdf->SetFont('helvetica', '', 12);
+        $resp = $respuesta['respuesta'];
+        $pdf->Cell(45, 5, $resp['respuesta']);
+        $pdf->Ln(10);
+    }
+
+    private function imprimirPreguntas($respuestas, $pdf){
+        foreach ( $respuestas as $respuestaxRespuesta) { 
+            foreach ( $respuestaxRespuesta as $respuesta) { 
+                $pdf->SetFont('helvetica', 'B', 12);
+                $descripcion = $respuesta['descripcionPregunta'];
+                if($descripcion == '') { $descripcion = ' ';}
+                if(! $respuesta['poseeDestinos']) {
+                    $this->imprimirPregunta($respuesta, $pdf, $descripcion);
+                } else {
+                    $this->imprimirSelectoresMultiples($respuesta, $pdf);
+                }
+            }
+        }
+    }
+
+    private function imprimirFirmas($respuestas, $pdf) {
+        $pdf->Ln(20);
+        // $pdf->Cell(20, 5,  "");
+        foreach ( $respuestas as $respuestaxRespuesta) { 
+            foreach ( $respuestaxRespuesta as $respuesta) { 
+                $respuestas = $respuesta['respuesta'];
+                foreach($respuestas as $resp) {
+                    $pdf->SetFont('helvetica', 'B', 12);
+                    $list = $this->getListaRespuestas($resp['respuestas']);
+                    $destino = substr($resp['destino'], 8, 1);
+                    $listaDestinos = $this->getDestinos();
+                    if($listaDestinos[$destino] == "Seleccionados") {
+                        // for($i = 0; $i < count($list); $i++){
+                        $i = 0;
+                        $cantFirmas = count($list);
+                        $modulo = $cantFirmas%3;
+                        $pdf->SetFont('helvetica', '', 12);
+                        while($i < count($list)){
+                            if($i+3 >= count($list)) {
+                                if($modulo == 2) {
+                                    $pdf->Cell(40, 5,  "");
+                                    $pdf->Cell(60, 5,  $list[$i]);
+                                    $pdf->Cell(60, 5,  $list[$i+1]);
+                                } else {
+                                    $pdf->Cell(80, 5,  "");
+                                    $pdf->Cell(60, 5,  $list[$i]);
+                                }
+                            } else {
+                                $pdf->Cell(20, 5,  "");
+                                $pdf->Cell(60, 5,  $list[$i]);
+                                $pdf->Cell(60, 5,  $list[$i+1]);
+                                $pdf->Cell(60, 5,  $list[$i+2]);
+                            }
+                            $pdf->Ln(30);
+                            $i = $i+3;
+                        }    
+                    }
+                }
+            }
+        }
+    }
+
+
+    private function imprimirSecciones($pdf, $seccion){
+        $pdf->Ln(5);
+        $pdf->SetFont('helvetica', '', 16);
+        $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
+        $pdf->Ln(18);
+        $respuestas = $seccion['respuestas'];
+        if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
+            $this->imprimirFirmas($respuestas, $pdf);
+        } else {
+            $this->imprimirPreguntas($respuestas, $pdf);
+        }
+    }
+
     public function imprimirAction() {
 
         $parametros = $this->params()->fromRoute();
@@ -195,46 +292,8 @@ class FormularioController extends CednaController
         $pdf->Ln(10);
 
         foreach ($data['secciones'] as $seccion) {
-            $pdf->Ln(5);
-            $pdf->SetFont('helvetica', '', 16);
-            $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
-            $pdf->Ln(18);
-            $respuestas = $seccion['respuestas'];
-
-            foreach ( $respuestas as $respuestaxRespuesta) { 
-                foreach ( $respuestaxRespuesta as $respuesta) { 
-                //ver como diferenciar las respuestas
-                    $pdf->SetFont('helvetica', 'B', 12);
-                    $descripcion = $respuesta['descripcionPregunta'];
-                    if($descripcion == '') { $descripcion = ' ';}
-                    if(! $respuesta['poseeDestinos']) {
-                        $pdf->Cell(50, 5,  $descripcion);
-                        $pdf->SetFont('helvetica', '', 12);
-                        $resp = $respuesta['respuesta'];
-                        $pdf->Cell(45, 5, $resp['respuesta']);
-                        $pdf->Ln(10);
-                    } else {
-                        $respuestas = $respuesta['respuesta'];
-                        foreach($respuestas as $resp) {
-                            $pdf->SetFont('helvetica', 'B', 12);
-                            $list = $this->getListaRespuestas($resp['respuestas']);
-                            $destino = substr($resp['destino'], 8, 1);
-                            $listaDestinos = $this->getDestinos();
-                            $pdf->Cell(40, 5, $listaDestinos[$destino]);
-                            $pdf->Ln(12);
-                            foreach ($list as $valor) {
-                                $pdf->SetFont('helvetica', '', 12);
-                                $pdf->Cell(25, 5, "");
-                                $pdf->Cell(100, 5,  $valor);
-                                $pdf->Ln(10);
-                            }
-                        }
-                    }
-                    
-                }
-            }
+            $this->imprimirSecciones($pdf, $seccion);
         }
-
         $pdf->Output();
     }
 
