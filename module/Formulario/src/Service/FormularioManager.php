@@ -211,7 +211,7 @@ class FormularioManager {
                 $destinoAcum = $destino;
             }
             $descripcionOpcion = $this->getDescripcionOpcion($opciones, $respuesta->getOpcion());
-            $ArrayAcum[] = ['id' => '"'.$respuesta->getOpcion().'"', 'descripcion' => $descripcionOpcion];
+            $ArrayAcum[] = ['id' => $respuesta->getOpcion(), 'descripcion' => $descripcionOpcion];
         }
         $output[] = ['destino' => $destino, 'opciones' => $ArrayAcum];
 
@@ -567,9 +567,10 @@ class FormularioManager {
 
     public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
-        if($Respuesta) {
+        if(($Respuesta)&& (!$destino)) { //var
             $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
         } else {
+
             $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
         }
     }
@@ -608,16 +609,42 @@ class FormularioManager {
         return $output;
     }
 
-    public function altaRespuestaSegunTipoRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta){
-        $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEnt, $respuesta);
+    private function elminarEntidad($Entidad) {
+        $this->entityManager->beginTransaction();
+        try {
+            $entityManager = $this->entityManager;
+            $entityManager->remove($Entidad);
+            $entityManager->flush();
+
+            $this->entityManager->commit();
+
+            return true;
+        } catch (\Exception $e) {
+
+            $this->entityManager->rollBack();
+
+            return false;
+        }
+    }
+
+    private function eliminarRespuestasSelectores($preguntaEntidad, $seccionEnt, $Relevamiento) {
+        $entidades = $this->getRespuestaPreguntaPorRelevamientoSeccion($Relevamiento, $seccionEnt, $preguntaEntidad);
+        foreach($entidades as $entidad) {
+            $this->elminarEntidad($entidad);
+        }
+    }
+
+    public function altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta){
+        $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEntidad, $respuesta);
         if ($listaOpcionDestino){
-            $this->altaRespuestasDestino($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
+            $this->eliminarRespuestasSelectores($preguntaEntidad, $seccionEnt, $Relevamiento);
+            $this->altaRespuestasDestino($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
         } else {
             $opcion = null;
-            if ($preguntaEnt->tieneOpciones()) {
+            if ($preguntaEntidad->tieneOpciones()) {
                 $opcion = $respuesta;
             }   
-            $this->altaEdicionRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
+            $this->altaEdicionRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
         }
     }
 
@@ -625,8 +652,8 @@ class FormularioManager {
         $respuesta = $pregunta->respuesta;
         if ($this->tieneRespuesta($respuesta)){
             $idPregunta = $pregunta->idPregunta;
-            $preguntaEnt = $this->getPregunta($idPregunta);
-            $this->altaRespuestaSegunTipoRespuesta($preguntaEnt, $seccionEnt, $Relevamiento, $respuesta);
+            $preguntaEntidad = $this->getPregunta($idPregunta);
+            $this->altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta);
         }
     }
 
