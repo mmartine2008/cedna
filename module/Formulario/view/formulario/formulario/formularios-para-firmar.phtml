@@ -100,6 +100,11 @@
         }
     }
 
+    /**
+     * Funcion que consulta en el servidor, si un usuario puede delegar la firma del permiso.
+     * Para poder delegarla a la firma, necesita tener a otro usuario como jefe del nodo, que
+     * este en un orden inferior a el.
+     */
     function comprobarPuedeDelegar(idNodo){
         var result = null;
     
@@ -114,6 +119,21 @@
         });
         
         return result;
+    }
+
+    function delegarFirma(idPlanificacion){
+        $.ajax({
+            url: url + '/formulario/delegar-firma/' + idPlanificacion,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                var mensaje = data.mensaje;
+                arrTareasJSON = data.arrTareasJSON;
+                swal('Delegación exitosa!', mensaje, 'success');
+                dibujarTablaTareas();
+            }
+        });
     }
 
     /**
@@ -171,9 +191,9 @@
         var idNodo = buscarIdNodo(planificacion.relevamiento);
 
         if (comprobarPuedeDelegar(idNodo)){
-            a.setAttribute('href', url + '/formulario/delegar-firma/' +planificacion.id);
-        }else{
             a.setAttribute('href', '#');
+            contenedor.setAttribute('onclick', 'delegarFirma('+planificacion.id+')');
+        }else{
             contenedor.setAttribute('onclick', 'mostrarMensajeNoPuedeDelegar()');
         }
         

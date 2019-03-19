@@ -191,21 +191,25 @@ class FormularioManager {
      *
      * @param [integer] $idPlanificacion
      * @param [Usuarios] $UsuarioActivo
-     * @return void
+     * @return String
      */
     public function delegarFirmaFormulario($idPlanificacion, $UsuarioActivo){
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
         $Relevamiento = $Planificacion->getRelevamiento();
 
         $NodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
-
+        $UsuarioDelegado = '';
         foreach($NodosFirmantes as $NodoFirmante){
             if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
                 
-                $this->cambiarUsuarioFirmante($NodoFirmante, $UsuarioActivo);
+                $UsuarioDelegado = $this->cambiarUsuarioFirmante($NodoFirmante, $UsuarioActivo);
                 break;
             }
         }
+
+        $mensaje = "Se delegó la firma del permiso de trabajo al usuario: ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
+        
+        return $mensaje;
     }
 
     /**
@@ -214,7 +218,7 @@ class FormularioManager {
      *
      * @param [Nodos] $NodoFirmante
      * @param [Usuarios] $UsuarioActivo
-     * @return void
+     * @return Usuarios
      */
     private function cambiarUsuarioFirmante($NodoFirmante, $UsuarioActivo){
         $Nodo = $NodoFirmante->getNodo();
@@ -227,6 +231,8 @@ class FormularioManager {
 
         $this->entityManager->persist($NodoFirmante);
         $this->entityManager->flush();
+
+        return $esJefeDeInferior->getUsuario();
     }
 
     /**
