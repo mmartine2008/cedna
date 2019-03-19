@@ -139,7 +139,7 @@
     function createJSONOptions(opciones){
         var array = [];
         for(var i=0 ; i < opciones.length; i++){
-            array.push('{"id": "' + opciones[i][0] +'", "descripcion": "' + opciones[i][1] +'" }');
+            array.push('{"id": ' + opciones[i][0] +', "descripcion": "' + opciones[i][1] +'" }');
         }
         array.join(',');
         return '[' + array + ']';
@@ -151,6 +151,7 @@
         if(!borrarAnteriores){
             opcionesAnt = resp.opcion;
             for (var z = 0; z < opcionesAnt.length; z++){
+                console.log(opcionesAnt[z]);
                 obj.push(opcionesAnt[z]);
             }
         }
@@ -159,6 +160,7 @@
     }
 
     function updateSelectAnswerOfQuestion(resp, idSelector, borrarAnteriores, opciones) {
+        console.log(resp);
         for (var k = 0; k < resp.length; k++){
             if(resp[k].destino == idSelector) {
                 resp[k].opcion = getJsonAnswerOfQuestion(opciones, resp[k], borrarAnteriores);
@@ -182,6 +184,7 @@
         for (var j = 0; j < preguntas.length; j++){
             if(preguntas[j].idPregunta == idPregunta){
                 encontre =  true;
+                console.log(preguntas[j].respuesta);
                 updateSelectAnswerOfQuestion(preguntas[j].respuesta, idSelector, borrarAnteriores, opciones);
             }
             var pregGeneradas = preguntas[j].preguntasGeneradas
@@ -280,7 +283,6 @@
         for(var i = 0; i < preguntasGeneradas.length; i++){
             var question = preguntasGeneradas[i];
             var idDiv = "div_id_"+question.idPreguntaGenerada;
-            // console.log(idDiv);
             if (question.opcion.id == idOpcion) {
                 updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, 'block');
                 agregarPreguntasGeneradasListaRequired(idSeccion, question.preguntaGenerada);
@@ -318,9 +320,6 @@
             option.value = item.id;
             option.text = item.descripcion;
             option.title = item.descripcion;
-            // if(optionSelected == item.id) {
-            //     option.selected = true;
-            // }
             selector.appendChild(option);
         }
         return selector;
@@ -429,6 +428,7 @@
             } else {
                 $("#button_"+i+"_L_id_"+idPregunta+"_seccion_"+idSeccion).prop('disabled', false);
             }
+            console.log(opciones);
         }
     }
     
@@ -494,21 +494,24 @@
         if (cantDestinos >1) {
             listMultipleSelectDestino0.push('destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
             crearWarningAlert(div_class_sm_3, 'destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
-        } else {
+        } else if(required){
             listMultipleSelectDestino1.push('destino_1_id_'+idPregunta+"_seccion_"+idSeccion);
         }
 
-        // var div_row_6 = createDivClass("form-row col-sm-6", divRow);
         var div_row_6 = createDivClass("row col-sm-6", divRow);
         var div_class_sm_1 = createDivClass("col-sm-2", div_row_6);
         var div_class_sm_3_2 = createDivClass("col-sm-10", div_row_6);
         for(var i=1; i <= cantDestinos; i++){
-            
+            var idSelector = "destino_"+i+"_id_"+idPregunta+"_seccion_"+idSeccion ;
+            var opciones = getOptionsOfMultiSelectOfJson(idSelector, idSeccion, idPregunta);
+            if(opciones.length > 0) {
+                var deshabilitarBotonL = false;
+            }
+            else {
+                var deshabilitarBotonL = true;
+            }
             createButton("button", 'button_'+i+'_R_id_'+idPregunta+"_seccion_"+idSeccion, "Añadir seleccionados", div_class_sm_1, ">", false, "destino_0_id_", 'destino_'+i+'_id_', idPregunta,idSeccion, cantDestinos, i);
-            createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", true, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
-
-            var text = "Seleccionados"
-            if(i == 2) { text = "No seleccionados"; }
+            createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", deshabilitarBotonL, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
 
             createTextElement("P", div_class_sm_3_2, destinos[i]);
             createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
@@ -552,6 +555,7 @@
         } else {
                 var cantDestinos = item.cantDestinos;
                 createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos, required);  
+                // manageButtons(item.idPregunta, idSeccion, cantDestinos);
         } 
     }
 
