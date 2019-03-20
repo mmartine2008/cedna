@@ -210,7 +210,7 @@ class FormularioManager {
             }
         }
 
-        $mensaje = "Se delegó la firma del permiso de trabajo al usuario: ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
+        $mensaje = $this->translate('__mensaje_delegacion_exitosa__').": ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
         
         return $mensaje;
     }

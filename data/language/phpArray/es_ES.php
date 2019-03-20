@@ -127,4 +127,9 @@ return [
     '__El_perfil_ha_sido_eliminado__' => 'El perfil ha sido eliminado',
     '__mensaje_eliminar_usuario__' => 'Está seguro que desea eliminar el usuario',
     '__mensaje_nombre_usuario_duplicado__' => 'El nombre de usuario ingresado ya se encuentra en uso. Por favor, seleccione uno distinto',
+    '__Asignar_Perfiles_Firmantes_al_Formulario__' => 'Asignar Perfiles Firmantes al Formulario',
+    '__Perfiles_Firmantes__' => 'Perfiles Firmantes',
+    '__Delegacion_exitosa__' => 'Delegación exitosa',
+    '__mensaje_delegacion_exitosa__' => 'Se delegó la firma del permiso de trabajo al usuario',
+    
 ];

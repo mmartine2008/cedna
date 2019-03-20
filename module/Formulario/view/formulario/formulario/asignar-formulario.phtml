@@ -217,7 +217,7 @@ function dibujarSelectFormulario(){
     $('#formularioPlanificacion')
         .append($("<option></option>")
             .attr("value", '')
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrFormulariosJSON.length; i++){
         var formulario = arrFormulariosJSON[i];
