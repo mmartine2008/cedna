@@ -223,14 +223,29 @@ class FormularioController extends CednaController
                         while($i < count($list)){
                             if($i+3 >= count($list)) {
                                 if($modulo == 2) {
+                                    $pdf->Cell(30, 5,  "");
+                                    $pdf->Cell(60, 5,  "__________________");
+                                    $pdf->Cell(60, 5,  "__________________");
+                                    $pdf->Ln(10);
+
                                     $pdf->Cell(40, 5,  "");
                                     $pdf->Cell(60, 5,  $list[$i]);
                                     $pdf->Cell(60, 5,  $list[$i+1]);
                                 } else {
+                                    $pdf->Cell(50, 5,  "");
+                                    $pdf->Cell(60, 5,  "__________________");
+                                    $pdf->Ln(10);
+
                                     $pdf->Cell(80, 5,  "");
                                     $pdf->Cell(60, 5,  $list[$i]);
                                 }
                             } else {
+                                $pdf->Cell(10, 5,  "");
+                                $pdf->Cell(60, 5,  "__________________");
+                                $pdf->Cell(60, 5,  "__________________");
+                                $pdf->Cell(60, 5,  "__________________");
+                                $pdf->Ln(10);
+
                                 $pdf->Cell(20, 5,  "");
                                 $pdf->Cell(60, 5,  $list[$i]);
                                 $pdf->Cell(60, 5,  $list[$i+1]);
@@ -247,15 +262,17 @@ class FormularioController extends CednaController
 
 
     private function imprimirSecciones($pdf, $seccion){
-        $pdf->Ln(5);
-        $pdf->SetFont('helvetica', '', 16);
-        $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
-        $pdf->Ln(18);
         $respuestas = $seccion['respuestas'];
-        if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
-            $this->imprimirFirmas($respuestas, $pdf);
-        } else {
-            $this->imprimirPreguntas($respuestas, $pdf);
+        if($respuestas) {
+            $pdf->Ln(5);
+            $pdf->SetFont('helvetica', '', 16);
+            $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
+            $pdf->Ln(18);
+            if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
+                $this->imprimirFirmas($respuestas, $pdf);
+            } else {
+                $this->imprimirPreguntas($respuestas, $pdf);
+            }
         }
     }
 
