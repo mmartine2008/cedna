@@ -3,7 +3,7 @@ namespace Formulario\Controller\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Formulario\Controller\FormularioController;
+use Formulario\Controller\BaseFormularioController;
 
 use Formulario\Service\FormularioManager;
 use DBAL\Service\CatalogoManager;
@@ -16,7 +16,7 @@ use Formulario\Service\CednaTcpdf;
  * This is the factory for AuthController. Its purpose is to instantiate the controller
  * and inject dependencies into its constructor.
  */
-class FormularioControllerFactory implements FactoryInterface
+class BaseFormularioControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
@@ -28,6 +28,6 @@ class FormularioControllerFactory implements FactoryInterface
 
         $renderer = $container->get(RendererInterface::class);    
 
-        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer);
+        return new BaseFormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer);
     }
 }

@@ -45,12 +45,15 @@ return [
     ],
     'controllers' => [
         'factories' => [
+            Controller\BaseFormularioController::class => Controller\Factory\BaseFormularioControllerFactory::class,
             Controller\FormularioController::class => Controller\Factory\FormularioControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'factories' => [
             Service\FormularioManager::class => Service\Factory\FormularioManagerFactory::class,
+            Service\CednaTcpdf::class => Service\Factory\CednaTcpdfFactory::class
+
         ],
     ],
     'view_manager' => [

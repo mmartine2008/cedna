@@ -30,6 +30,11 @@ class SeccionPregunta
     protected $pregunta;
 
     /**
+     * @ORM\Column(name="Required",  nullable=false, type="integer", length=1)
+     */
+    protected $requerido;
+
+    /**
      * Get the value of id
      */ 
     public function getId()
@@ -85,6 +90,26 @@ class SeccionPregunta
     public function setPregunta($pregunta)
     {
         $this->pregunta = $pregunta;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of requerido
+     */ 
+    public function getRequerido()
+    {
+        return $this->requerido;
+    }
+
+    /**
+     * Set the value of requerido
+     *
+     * @return  self
+     */ 
+    public function setRequerido($requerido)
+    {
+        $this->requerido = $requerido;
 
         return $this;
     }

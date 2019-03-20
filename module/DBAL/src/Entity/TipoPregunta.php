@@ -86,6 +86,14 @@ class TipoPregunta
         }
     }
 
+    public function esPeguntaArchivo(){
+        if($this->descripcion == 'file'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';

@@ -51,12 +51,9 @@ class Seccion
      */
     protected $preguntas;
 
-
-
     public function __construct() {
         $this->preguntas = new ArrayCollection();
     }
-    
 
     /**
      * Get the value of id
