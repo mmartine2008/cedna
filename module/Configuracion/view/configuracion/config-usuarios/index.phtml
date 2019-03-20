@@ -93,25 +93,21 @@
             var usuarios = arrUsuariosJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Usuario',
+                title: '<?= $this->translate('__Eliminar_Usuario__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar el usuario: "+ usuario.userName +"?",
+                text: "<?= $this->translate('__mensaje_eliminar_usuario__') ?>: "+ usuario.userName +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarUsuario();
                     window.location.replace(url + "/configuracion/usuarios");
                 }
             });
-        }else{
-            swal('Usuario no seleccionado',
-                'Por favor seleccione el usuario que desea eliminar',
-                'error');
         }
     }
 
@@ -120,10 +116,6 @@
             var usuario = arrUsuariosJSON[filaSeleccionada];
 
             window.location.replace(url + "/configuracion/usuarios/editar/" + usuario.id);
-        }else{
-            swal('Usuario no seleccionado',
-                'Por favor seleccione el usuario que desea editar',
-                'error');
         }
     }
 

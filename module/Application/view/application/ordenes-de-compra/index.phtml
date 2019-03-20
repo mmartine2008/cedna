@@ -96,25 +96,21 @@
             var tarea = arrTareasJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Tarea',
+                title: '<?= $this->translate('__Eliminar_Tarea__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar la orden de compra: "+ tarea.ordenDeCompra.descripcion +"?",
+                text: "<?= $this->translate('__preg_confirmar_eliminar_ord_de_compra__') ?>: "+ tarea.ordenDeCompra.descripcion +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarTarea();
                     window.location.replace(url + "/ordenes-de-compra");
                 }
             });
-        }else{
-            swal('Tarea no seleccionado',
-                'Por favor seleccione el orden de compra que desea eliminar',
-                'error');
         }
     }
 
@@ -123,10 +119,6 @@
             var tarea = arrTareasJSON[filaSeleccionada];
 
             window.location.replace(url + "/ordenes-de-compra/editar/" + tarea.ordenDeCompra.id);
-        }else{
-            swal('Tarea no seleccionado',
-                'Por favor seleccione la orden de compra que desea editar',
-                'error');
         }
     }
 

@@ -10,7 +10,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Prueba de Envios de Emails</h3>
+                <h3 class="panel-title"><?= $this->translate('__Prueba_de_Envios_de_Emails__') ?></h3>
             </div>
             <div class="panel-body mt-5">
                 <div class="form-row">
@@ -41,7 +41,7 @@
                             <div class="col-md-6">
                                 <div class="form-row">
                                     <div class="col-md-2">
-                                        <label>Puerto:</label>
+                                        <label><?= $this->translate('__Puerto__') ?>:</label>
                                     </div>
                                     <div class="col-md-8">
                                         <input name="port" class="form-control" value="<?php echo($port); ?>">      
@@ -121,7 +121,7 @@
                         </div>
                         <div class="form-row mt-3">
                             <div class="col-md-2 offset-10">
-                                <button class="btn btn-primary">Enviar</button>
+                                <button class="btn btn-primary"><?= $this->translate('__Enviar__') ?></button>
                             </div>
                         </div>
                     </form>

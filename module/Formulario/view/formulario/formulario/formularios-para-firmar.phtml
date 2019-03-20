@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Firmas de Permisos de Trabajo</h3>
+                <h3 class="panel-title"><?= $this->translate('__Firmas_de_Permisos_de_Trabajo__') ?></h3>
             </div>
             <div class="panel-body mt-5">
                 <table id="tablaTareas" class="table table-hover">
@@ -10,8 +10,8 @@
                         <tr>
                             <th class="text-center"><?= $this->translate('__Tarea_ID__') ?></th>
                             <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
-                            <th class="text-center">Planificación Inicio</th>
-                            <th class="text-center">Planificación Fin</th>
+                            <th class="text-center"><?= $this->translate('__Inicio_de_Planificacion__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Fin_de_Planificación__') ?></th>
                             <th class="text-center"><?= $this->translate('__Formulario__') ?></th> 
                             <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
                         </tr>
@@ -34,6 +34,9 @@
         dibujarTablaTareas();
     });
 
+    /**
+     * Compueba si el usuario firmó o no, el un permiso.
+     */
     function usuarioNoFirmoTodavia(relevamiento){
         var nodosFirmantes = relevamiento.nodosFirmantes;
 
@@ -156,9 +159,9 @@
             dataType: 'json',
             async: false,
             success: function (data) {
-                var mensaje = 'Se ha firmado el permiso de trabajo correctamente.';
+                var mensaje = '<?= $this->translate('__firma_mensaje_exito__') ?>';
                 arrTareasJSON = data.arrTareasJSON;
-                swal('Firma exitosa!', mensaje, 'success');
+                swal('<?= $this->translate('__Firma_exitosa__') ?>!', mensaje, 'success');
                 dibujarTablaTareas();
             }
         });
@@ -180,7 +183,7 @@
         a.appendChild(icon);
 
         contenedor.appendChild(a);
-        contenedor.setAttribute('title', 'Firmar Permiso de Trabajo');
+        contenedor.setAttribute('title', '<?= $this->translate('__Firma_exitosa__') ?>');
     }
 
     /**
@@ -202,8 +205,8 @@
     }
 
     function mostrarMensajeNoPuedeDelegar(){
-        swal('No Puede Delegar',
-        'No existe ningún usuario responsable en el area de trabajo por debajo de usted a quien delegarle la firma del permiso.',
+        swal('<?= $this->translate('__Firma_exitosa__') ?>',
+        '<?= $this->translate('__texto_no_puede_delegar__') ?>',
         'error');
     }
 
@@ -230,9 +233,13 @@
         a.appendChild(icon);
 
         contenedor.appendChild(a);
-        contenedor.setAttribute('title', 'Delegar Firma de Permiso de Trabajo');
+        contenedor.setAttribute('title', '<?= $this->translate('__title_boton_delegar_firma__') ?>');
     }
 
+    /**
+     * Funcion que procesa el dibujo de los botones de acciones.
+     * Los botones que dibuja, son: ver PDF, Firmar y Delegar Firma.
+     */
     function dibujarAccionesDePermiso(contenedor, planificacion){
         var divFila = document.createElement('div');
         divFila.setAttribute('class','form-row');

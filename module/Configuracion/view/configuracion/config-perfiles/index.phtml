@@ -87,25 +87,21 @@
             var perfil = arrPerfilesJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Perfil',
+                title: '<?= $this->translate('__Eliminar_Perfil__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar el perfil: "+ perfil.descripcion +"?",
+                text: "<?= $this->translate('__mensaje_eliminar_perfil__') ?>: "+ perfil.descripcion +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarPerfil();
                     window.location.replace(url + "/configuracion/perfiles");
                 }
             });
-        }else{
-            swal('Perfil no seleccionado',
-                'Por favor seleccione el perfil que desea eliminar',
-                'error');
         }
     }
 
@@ -114,10 +110,6 @@
             var perfil = arrPerfilesJSON[filaSeleccionada];
 
             window.location.replace(url + "/configuracion/perfiles/editar/" + perfil.id);
-        }else{
-            swal('Perfil no seleccionado',
-                'Por favor seleccione el perfil que desea editar',
-                'error');
         }
     }
 
