@@ -96,25 +96,21 @@
             var tarea = arrTareasJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Tarea',
+                title: '<?= $this->translate('__Eliminar_Tarea__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar la tarea: "+ tarea.resumen +"?",
+                text: "<?= $this->translate('__mensaje_eliminar_tarea__') ?>: "+ tarea.resumen +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarTarea();
                     window.location.replace(url + "/tareas");
                 }
             });
-        }else{
-            swal('Tarea no seleccionado',
-                'Por favor seleccione el tarea que desea eliminar',
-                'error');
         }
     }
 
@@ -123,10 +119,6 @@
             var tarea = arrTareasJSON[filaSeleccionada];
 
             window.location.replace(url + "/tareas/editar/" + tarea.id);
-        }else{
-            swal('Tarea no seleccionado',
-                'Por favor seleccione la tarea que desea editar',
-                'error');
         }
     }
 

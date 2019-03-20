@@ -96,25 +96,21 @@
             var operario = arrOperariosJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Usuario',
+                title: '<?= $this->translate('__Eliminar_Usuario__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar el operario: "+ operario.nombre+', '+operario.apellido +"?",
+                text: "<?= $this->translate('__pregunta_confirmacion_eliminar_operario__') ?>: "+ operario.nombre+', '+operario.apellido +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Cancelar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarOperario();
                     window.location.replace(url + "/operarios");
                 }
             });
-        }else{
-            swal('Operario no seleccionado',
-                'Por favor seleccione el operario que desea eliminar',
-                'error');
         }
     }
 
@@ -123,10 +119,6 @@
             var operario = arrOperariosJSON[filaSeleccionada];
 
             window.location.replace(url + "/operarios/editar/" + operario.id);
-        }else{
-            swal('Operario no seleccionado',
-                'Por favor seleccione el operario que desea editar',
-                'error');
         }
     }
 

@@ -142,7 +142,7 @@ function dibujarSelectNodos(){
     $('#nodoTarea')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrNodosJSON.length; i++){
         var nodo = arrNodosJSON[i];
@@ -163,7 +163,7 @@ function dibujarSelectFormulario(){
     $('#formularioTarea')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrFormularioJSON.length; i++){
         var formulario = arrFormularioJSON[i];

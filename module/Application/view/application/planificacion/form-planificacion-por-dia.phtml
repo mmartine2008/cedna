@@ -223,7 +223,7 @@ function dibujarSelectTipoPlanificacion(){
     $('#tipoPlanificacion')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrTipoPlanificacionJSON.length; i++){
         var tipoPlanificacion = arrTipoPlanificacionJSON[i];
@@ -289,9 +289,7 @@ function agregaPlanificacion(){
     var observaciones = $('#observacionTarea').val();
 
     if (!planificacionEstaCompleta(fechaInicio, fechaFin, horaInicio, horaFin, observaciones)){
-        swal('Información Incompleta',
-            'Por favor complete todos los campos de fecha, hora y observaciones.',
-            'error');
+        mostrarMensajeInformacionIncompleta();
         
         return;
     }
@@ -311,6 +309,12 @@ function agregaPlanificacion(){
     clearFormularioPlanificacion();
 }
 
+function mostrarMensajeInformacionIncompleta(){
+    swal('<?= $this->translate('__Informacion_Incompleta__') ?>',
+        '<?= $this->translate('__mensaje_informacion_incompleta_planificacion__') ?>',
+        'error');
+}
+
 function editaPlanificacion(){
     var fechaInicio = $('#diaInicioTarea').val();
     var fechaFin = $('#diaFinTarea').val();
@@ -320,9 +324,7 @@ function editaPlanificacion(){
     var observaciones = $('#observacionTarea').val();
 
     if (!planificacionEstaCompleta(fechaInicio, fechaFin, horaInicio, horaFin, observaciones)){
-        swal('Información Incompleta',
-            'Por favor complete todos los campos de fecha, hora y observaciones.',
-            'error');
+        mostrarMensajeInformacionIncompleta();
         
         return;
     }
@@ -406,21 +408,21 @@ function agregaBotonesEdicionBorradoPlanificacion(contenedor, iPosPlanificacion)
 function confirmarBorrarPlanificacion(iPosPlanificacion){
     var dia = iPosPlanificacion + 1;
     swal({
-        title: 'Eliminar Planificación',
+        title: '<?= $this->translate('__Eliminar_Planificacion__') ?>',
         width: 600,
-        text: "Esta seguro que desea eliminar la planificaciñon del día: " + dia + "?",
+        text: "<?= $this->translate('__mensaje_eliminar_planificacion__') ?>: " + dia + "?",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Confirmar'
+        cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+        confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
     }).then((result) => {
         if (result.value) {
             eliminarPlanificacion(iPosPlanificacion);
             swal(
-                'Eliminada!',
-                'La planificacion ha sido eliminada.',
+                '<?= $this->translate('__Eliminada__') ?>!',
+                '<?= $this->translate('__mensaje_planificacion_eliminada__') ?>',
                 'success'
             )
         }

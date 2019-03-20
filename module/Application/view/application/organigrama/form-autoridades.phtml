@@ -102,7 +102,7 @@ function dibujarSelectTipoJefe(){
     $('#idTipoJefe')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrTipoJefeJSON.length; i++){
         var tipoJefe = arrTipoJefeJSON[i];
@@ -123,7 +123,7 @@ function actualizarSelectUsuarios(){
     $('#idUsuario')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrUsuariosJSON.length; i++){
         var usuario = arrUsuariosJSON[i];
@@ -144,7 +144,7 @@ function actualizarSelectOrden(){
     $('#ordenAutoridad')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrOrden.length; i++){
         var valor = arrOrden[i];
@@ -167,8 +167,8 @@ function agregarJefe(){
     }
     else{
         swal(
-            'Datos incompletos',
-            'Por favor cargue todos los datos para poder asignar correctamente la autoridad al nodo.',
+            '<?= $this->translate('__Datos_incompletos__') ?>',
+            '<?= $this->translate('__mensaje_datos_incompletos_autoridades__') ?>',
             'error'
         );  
     }
@@ -234,21 +234,21 @@ function borrarJefe(idPosJefe){
     var usuario = arrJefes[idPosJefe].usuario;
 
     swal({
-        title: 'Eliminar Jefe',
+        title: '<?= $this->translate('__Eliminar_Jefe__') ?>',
         width: 600,
-        text: "Esta seguro que desea eliminar la asignacion del usuario: " + usuario.nombre +', ' + usuario.apellido + " como autoridad?",
+        text: "<?= $this->translate('__confirmacion_quitar_asignacion_autoridad__') ?>: " + usuario.nombre +', ' + usuario.apellido + " como autoridad?",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        cancelButtonText: 'Cancelar',
-        confirmButtonText: 'Confirmar'
+        cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+        confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
     }).then((result) => {
         if (result.value) {
             eliminarJefe(idPosJefe);
             swal(
-                'Eliminado!',
-                'El usuario ha sido eliminado como autoridad.',
+                '<?= $this->translate('__Eliminado__') ?>!',
+                '<?= $this->translate('__mensaje_eliminado_autoridad__') ?>',
                 'success'
             )
         }

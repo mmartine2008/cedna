@@ -232,7 +232,7 @@ function dibujarSelectNodos(){
     $('#nodoOrdenDeCompra')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrNodosJSON.length; i++){
         var nodo = arrNodosJSON[i];
@@ -253,7 +253,7 @@ function dibujarSelectSolicitante(){
     $('#solicitanteOrdenDeCompra')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrUsuariosJSON.length; i++){
         var usuario = arrUsuariosJSON[i];
@@ -288,7 +288,7 @@ function dibujarResponsables(){
     $('#responsableOrdenDeCompra')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
     
     var iPosNodo = $('#nodoOrdenDeCompra').val();
     
@@ -338,7 +338,7 @@ function dibujarPlanificadorDeTarea(){
     $('#planificaTarea')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     var iPosJefe = $('#responsableOrdenDeCompra').val();
     var iPosEjecutor = $('#ejecutorOrdenDeCompra').val();
@@ -377,7 +377,7 @@ function dibujarSelectEjecutor(){
     $('#ejecutorOrdenDeCompra')
         .append($("<option></option>")
             .attr("value", -1)
-            .text('-- Seleccione --'));
+            .text('-- <?= $this->translate('__Seleccione__') ?> --'));
 
     for (var i = 0; i < arrUsuariosJSON.length; i++){
         var usuario = arrUsuariosJSON[i];

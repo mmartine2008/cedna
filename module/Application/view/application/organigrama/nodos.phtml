@@ -95,25 +95,21 @@
             var nodo = arrNodosJSON[filaSeleccionada];
             
             swal({
-                title: 'Eliminar Nodo',
+                title: '<?= $this->translate('__Eliminar_Nodo__') ?>',
                 width: 600,
-                text: "Esta seguro que desea eliminar el nodo: "+ nodo.nombre +"?",
+                text: "<?= $this->translate('__pregunta_eliminar_nodo__') ?>: "+ nodo.nombre +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Confirmar'
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
                     borrarNodo();
                     window.location.replace(url + "/organigrama/nodos");
                 }
             });
-        }else{
-            swal('Nodo no seleccionado',
-                'Por favor seleccione el nodo que desea eliminar',
-                'error');
         }
     }
 
@@ -122,10 +118,6 @@
             var nodo = arrNodosJSON[filaSeleccionada];
 
             window.location.replace(url + "/organigrama/nodos/editar/" + nodo.id);
-        }else{
-            swal('Nodo no seleccionado',
-                'Por favor seleccione el nodo que desea editar',
-                'error');
         }
     }
 
