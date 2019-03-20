@@ -127,4 +127,5 @@ return [
     '__Seleccione_un_perfil__' => 'Select a profile',
     '__El_perfil_ha_sido_eliminado__' => 'The profile has been removed',
     '__mensaje_eliminar_usuario__' => 'Are you sure you want to delete the user',
+    '__mensaje_nombre_usuario_duplicado__' => 'The username entered is already in use. Please, select a different one',
 ];

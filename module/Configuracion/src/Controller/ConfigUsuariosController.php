@@ -96,4 +96,18 @@ class ConfigUsuariosController extends ConfiguracionController
         return $this->redirect()->toRoute("configuracion/usuarios",["action" => "index"]);
     } 
 
+    public function nombreUsuarioValidoAction(){
+        $parametros = $this->params()->fromRoute();
+        $futuroNombreUsuario = $parametros['id'];
+
+        $esValido = $this->configUsuariosManager->comprobarNombreUsuarioEsValido($futuroNombreUsuario);
+
+        $view = new ViewModel();
+        
+        $view->setVariable('mostrarJson', json_encode(['esValido' => $esValido]));
+        $view->setTerminal(true);
+        $view->setTemplate('formulario/formulario/mostrarJSON.phtml');
+        
+        return $view;
+    }
 }
