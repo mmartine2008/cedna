@@ -50,6 +50,12 @@
         }
     }
 
+    /**
+     * Funcion que busca el id del nodo al que pertenece 
+     * como autoridad el usuario activo.
+     *
+     * IMPORTANTE: Considera que pertenece a un solo nodo.
+     */
     function buscarIdNodo(relevamiento){
         var nodosFirmantes = relevamiento.nodosFirmantes;
 
@@ -77,6 +83,7 @@
                 var planificacion = tarea.planificaciones[j];
                 var relevamiento = planificacion.relevamiento;
 
+                //Muestro la fila si su estado es Completo y si el usuario todavia no firmo el permiso
                 if (relevamiento.estadoRelevamiento.esCompleto
                     && usuarioNoFirmoTodavia(relevamiento)){
                     var row = body.insertRow();
@@ -121,6 +128,9 @@
         return result;
     }
 
+    /**
+     * Funcion que delega la firma del permiso de trabajo a otro usuario.
+     */
     function delegarFirma(idPlanificacion){
         $.ajax({
             url: url + '/formulario/delegar-firma/' + idPlanificacion,
@@ -137,6 +147,24 @@
     }
 
     /**
+     * Funcion que aplica la firma del permiso de trabajo.
+     */
+    function firmarFormulario(idPlanificacion){
+        $.ajax({
+            url: url + '/formulario/firmar-formulario/' + idPlanificacion,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                var mensaje = 'Se ha firmado el permiso de trabajo correctamente.';
+                arrTareasJSON = data.arrTareasJSON;
+                swal('Firma exitosa!', mensaje, 'success');
+                dibujarTablaTareas();
+            }
+        });
+    }
+
+    /**
      * Funcion que muestra el boton de firmar de un permiso de trabajo.
      */
     function agregarBotonFirmarPermiso(contenedor, planificacion){
@@ -145,7 +173,9 @@
 
         var a = document.createElement('a');
         a.setAttribute('class','btn btn-primary btn-circle btn-outline');
-        a.setAttribute('href', url + '/formulario/firmar-formulario/' +planificacion.id);
+        //a.setAttribute('href', url + '/formulario/firmar-formulario/' +planificacion.id);
+        a.setAttribute('href', '#');
+        contenedor.setAttribute('onclick', 'firmarFormulario('+planificacion.id+')');
 
         a.appendChild(icon);
 

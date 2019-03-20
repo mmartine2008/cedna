@@ -76,6 +76,10 @@ class FormularioManager {
 
     /**
      * Funcion que asignar un formulario a una planificacion.
+     *
+     * @param [JSON] $JsonData
+     * @param [Planificaciones] $Planificacion
+     * @return void
      */
     public function asignarFormularioAPlanificacion($JsonData, $Planificacion){
         $Formulario = $this->catalogoManager->getFormulario($JsonData->formulario->id);
@@ -95,7 +99,6 @@ class FormularioManager {
             $this->entityManager->persist($Relevamiento);
             $this->entityManager->flush();
 
-            
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
         }

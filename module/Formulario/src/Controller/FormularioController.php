@@ -319,7 +319,15 @@ class FormularioController extends CednaController
         $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
         $this->FormularioManager->firmarFormulario($idPlanificacion, $UsuarioActivo);
 
-        $this->redirect()->toRoute("formulario", ["action" => "formulariosParaFirmar"]);
+        //$this->redirect()->toRoute("formulario", ["action" => "formulariosParaFirmar"]);
+        $arrTareasJSON = $this->FormularioManager->getArrTareasJSONFormulariosAFirmar($UsuarioActivo);
+        $view = new ViewModel();
+        
+        $view->setVariable('mostrarJson', json_encode(['arrTareasJSON' => $arrTareasJSON]));
+        $view->setTerminal(true);
+        $view->setTemplate('formulario/formulario/mostrarJSON.phtml');
+        
+        return $view;
     }
 
     public function delegarFirmaAction(){
