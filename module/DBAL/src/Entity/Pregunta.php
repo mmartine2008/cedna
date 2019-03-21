@@ -8,7 +8,7 @@ use DBAL\Entity\Opcion;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Pregunta")
+ * @ORM\Table(name="app.Pregunta")
  */
 class Pregunta
 {

@@ -8,7 +8,7 @@ use DBAL\Entity\Pregunta;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Seccion")
+ * @ORM\Table(name="app.Seccion")
  */
 class Seccion
 {

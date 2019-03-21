@@ -131,5 +131,7 @@ return [
     '__Perfiles_Firmantes__' => 'Perfiles Firmantes',
     '__Delegacion_exitosa__' => 'Delegación exitosa',
     '__mensaje_delegacion_exitosa__' => 'Se delegó la firma del permiso de trabajo al usuario',
-    
+    '__Edición_de_Orden_de_Compra__' => 'Edición de Órden de Compra',
+    '__mail_edicion_orden_de_compra__' => 'Se han editado los datos de la Órden de Compra, con el número', 
+    '__mail_nueva_orden_de_compra__' => 'Se ha generado una nueva Órden de Compra, con el número',   
 ];

@@ -16,19 +16,23 @@ class TareasManager {
     private $entityManager; 
     
     private $catalogoManager;
+    private $mailManager;
 
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager) 
+    public function __construct($entityManager, $catalogoManager, $mailManager) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
+        $this->mailManager = $mailManager;
     }
 
     public function altaEdicionTareas($jsonData, $userName, $idTareas = null){
         if ($idTareas){
             $Tareas = $this->catalogoManager->getTareas($idTareas);
+
+            $this->mailManager->notificarEdicionDeTarea($Tareas);
         }else{
             $EstadoTarea = $this->catalogoManager->getEstadoTarea(EstadoTarea::ID_ESTADO_SOLICITADA);
             
@@ -36,6 +40,8 @@ class TareasManager {
 
             $Tareas->setFechaSolicitud(new \DateTime("now"));
             $Tareas->setEstadoTarea($EstadoTarea);
+
+            $this->mailManager->notificarNuevaTarea($Tareas);
         }
         $Solicitante = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
         $Tareas->setSolicitante($Solicitante);

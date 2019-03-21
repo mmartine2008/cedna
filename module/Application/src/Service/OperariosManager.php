@@ -13,14 +13,16 @@ class OperariosManager {
     private $entityManager; 
     
     private $catalogoManager;
+    private $mailManager;
 
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager) 
+    public function __construct($entityManager, $catalogoManager, $mailManager) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
+        $this->mailManager = $mailManager;
     }
 
     public function altaEdicionOperarios($jsonData, $idOperarios = null){
@@ -38,6 +40,12 @@ class OperariosManager {
 
         $this->entityManager->persist($Operarios);
         $this->entityManager->flush();
+
+        if ($idOperarios){
+            $this->mailManager->notificarEdicionDeOperario($Operarios);
+        }else{
+            $this->mailManager->notificarAltaDeOperario($Operarios);
+        }
     }
     
     public function borrarOperarios($idOperarios){

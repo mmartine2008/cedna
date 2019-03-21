@@ -22,18 +22,19 @@ class FormularioManager {
     private $entityManager; 
     private $catalogoManager;
     private $datosEmpresa;
-
+    private $mailManager;
+    private $translator;
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager, $datosEmpresa) 
-    // public function __construct($entityManager, $catalogoManager) 
+    public function __construct($entityManager, $catalogoManager, $datosEmpresa, $mailManager, $translator) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
         $this->datosEmpresa = $datosEmpresa;
-        
+        $this->mailManager = $mailManager;
+        $this->translator = $translator;
     }
 
     public function getDatosEmpresa()
@@ -120,6 +121,7 @@ class FormularioManager {
         }
 
         $this->entityManager->flush();
+        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
 
     /**
@@ -200,6 +202,7 @@ class FormularioManager {
         
         if ($todosFirmaron){
             $this->finalizarRelevamiento($Relevamiento);
+            $this->mailManager->notificarPermisoFirmadoCompletamente($Planificacion);
         }
     }
 
@@ -226,7 +229,9 @@ class FormularioManager {
             }
         }
 
-        $mensaje = $this->translate('__mensaje_delegacion_exitosa__').": ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
+        $this->mailManager->notificarFirmaDePermisoDelegada($Planificacion, $UsuarioActivo, $UsuarioDelegado);
+
+        $mensaje = $this->translator->translate('__mensaje_delegacion_exitosa__').": ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
         
         return $mensaje;
     }

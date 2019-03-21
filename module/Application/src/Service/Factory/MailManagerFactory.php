@@ -22,6 +22,7 @@ class MailManagerFactory implements FactoryInterface
             throw new \Exception("Opciones de envio de correo (SMTP) no definidas", 1);
         }
 
-        return new MailManager($entityManager, $config['smtp_options'], $catalogoManager);
+        $translator = $container->get('translator');
+        return new MailManager($entityManager, $config['smtp_options'], $catalogoManager, $translator);
     }
 }

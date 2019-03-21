@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="TipoPregunta")
+ * @ORM\Table(name="app.TipoPregunta")
  */
 class TipoPregunta
 {
