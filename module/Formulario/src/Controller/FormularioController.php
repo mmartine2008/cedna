@@ -100,10 +100,22 @@ class FormularioController extends BaseFormularioController
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
 
         if ($this->getRequest()->isPost()) {
-            $JsonData = $this->params()->fromPost();
-            $data = json_decode($JsonData['JsonData']);
+            $params = $this->params()->fromPost();
+            $data = json_decode($params['JsonData']);
             $this->FormularioManager->altaRespuestasFormulario($data, $idPlanificacion);
-            $this->redirect()->toRoute("formulario",["action" => "index"]);
+            
+            $listaArchivos = json_decode($params['archivos']);
+            for($i = 0; $i < count($listaArchivos); $i++) {
+                $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
+                if ($archivo) {
+                    $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($Planificacion->getRelevamiento()->getId());
+                    $fecha_hoy = date("Y-m-d-H:i:s");
+                    $file_ext = pathinfo($archivo['name'][$i], PATHINFO_EXTENSION);
+                    $ruta_destino_archivo = "file/".$nombreUsuario."-".$fecha_hoy.".".$file_ext;
+                    $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
+                }
+            }
+            // $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
         $Relevamiento = $Planificacion->getRelevamiento();
