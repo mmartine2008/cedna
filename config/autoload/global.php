@@ -68,4 +68,10 @@ return [
         'default_from_mail' => 'support@cedna.com.ar',
         'default_from_alias' => 'CEDNA',
     ],
+
+    'datos_empresa' => [
+        'name' => 'Nombre Empresa',
+        'phone' => '+5492262772277',
+        'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
+    ],
 ];

@@ -21,15 +21,31 @@ class FormularioManager {
      */
     private $entityManager; 
     private $catalogoManager;
+    private $datosEmpresa;
+
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager) 
+    public function __construct($entityManager, $catalogoManager, $datosEmpresa) 
+    // public function __construct($entityManager, $catalogoManager) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
+        $this->datosEmpresa = $datosEmpresa;
         
+    }
+
+    public function getDatosEmpresa()
+    {
+        $output = [];
+        
+        foreach ($this->datosEmpresa as $index => $valor)
+        {
+            $output[$index] = $valor;
+        }        
+        
+        return $output;
     }
 
     public function getPregunta($id) {
@@ -670,8 +686,10 @@ class FormularioManager {
         if(($Respuesta)&& (!$destino)) { //var
             $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
         } else {
-
             $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
+            if($pregunta->getTipoPregunta()->esPeguntaArchivo()) {
+                $pregunta->setRequerido(0);
+            }
         }
     }
 

@@ -14,7 +14,14 @@ class FormularioManagerFactory implements FactoryInterface
     {        
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $catalogoManager = $container->get(CatalogoManager::class); 
+        $config = $container->get('config');
+        if (!(isset($config['datos_empresa'])))
+        {
+            throw new \Exception("Datos de empresa no definidos", 1);
+        }
                         
-        return new FormularioManager($entityManager, $catalogoManager);
+        return new FormularioManager($entityManager, $catalogoManager, $config['datos_empresa']);
+        // return new FormularioManager($entityManager, $catalogoManager);
+
     }
 }

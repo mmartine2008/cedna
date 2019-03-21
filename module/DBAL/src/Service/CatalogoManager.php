@@ -281,6 +281,11 @@ class CatalogoManager {
         return $UsuariosxPerfiles;
     }
 
+    public function getUsuarioPorRelevamiento($idRelevamiento) {
+        $Planificacion = $this->entityManager->getRepository(Planificaciones::class)->findOneBy(['Relevamiento' => $idRelevamiento]);
+        return $Planificacion->getTarea()->getSolicitante()->getNombreUsuario();
+    }
+
     /**
      * Funcion generica que busca una Entidad en particular, si se pasa el ID
      * como parametro, o de lo contrario recupera todas las entidades disponibles.
