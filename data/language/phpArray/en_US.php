@@ -127,4 +127,12 @@ return [
     '__Seleccione_un_perfil__' => 'Select a profile',
     '__El_perfil_ha_sido_eliminado__' => 'The profile has been removed',
     '__mensaje_eliminar_usuario__' => 'Are you sure you want to delete the user',
+    '__mensaje_nombre_usuario_duplicado__' => 'The username entered is already in use. Please, select a different one',
+    '__Asignar_Perfiles_Firmantes_al_Formulario__' => 'Assign Signatory Profiles to the Form',
+    '__Perfiles_Firmantes__' => 'Signatory Profiles',
+    '__Delegacion_exitosa__' => 'Successful delegation',
+    '__mensaje_delegacion_exitosa__' => 'The signature of the work permit was delegated to the user',
+    '__Edición_de_Orden_de_Compra__' => 'Purchase Order Edition',
+    '__mail_edicion_orden_de_compra__' => 'The data of the Purchase Order have been edited, with the number',
+    '__mail_nueva_orden_de_compra__' => 'A new Purchase Order has been generated, with the number',
 ];

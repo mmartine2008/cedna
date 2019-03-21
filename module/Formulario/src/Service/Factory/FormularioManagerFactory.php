@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Formulario\Service\FormularioManager;
 use DBAL\Service\CatalogoManager;
+use Application\Service\MailManager;
 
 
 class FormularioManagerFactory implements FactoryInterface
@@ -19,9 +20,9 @@ class FormularioManagerFactory implements FactoryInterface
         {
             throw new \Exception("Datos de empresa no definidos", 1);
         }
-                        
-        return new FormularioManager($entityManager, $catalogoManager, $config['datos_empresa']);
-        // return new FormularioManager($entityManager, $catalogoManager);
-
+         
+        $mailManager = $container->get(MailManager::class); 
+        $translator = $container->get('translator');
+        return new FormularioManager($entityManager, $catalogoManager, $config['datos_empresa'], $mailManager, $translator);
     }
 }

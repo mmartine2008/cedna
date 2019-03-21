@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Application\Service\OperariosManager;
 use DBAL\Service\CatalogoManager;
+use Application\Service\TareasManager;
 
 
 class OperariosManagerFactory implements FactoryInterface
@@ -14,7 +15,8 @@ class OperariosManagerFactory implements FactoryInterface
     {        
         $entityManager = $container->get('doctrine.entitymanager.orm_default'); 
         $catalogoManager = $container->get(CatalogoManager::class); 
+        $mailManager = $container->get(MailManager::class); 
 
-        return new OperariosManager($entityManager, $catalogoManager);
+        return new OperariosManager($entityManager, $catalogoManager, $mailManager);
     }
 }

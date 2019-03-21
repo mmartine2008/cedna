@@ -129,4 +129,21 @@ class ConfigUsuariosManager {
         //Los perfiles que quedaron en el arreglo origen, son perfiles q hay q eliminar
         $this->borrarPerfilesFromArreglo($Usuarios, $arrPerfilesOriginales);
     }
+
+    /**
+     * Funcion que comprueba si ya existe en la base de datos un usuario con 
+     * el nombre de usuario que intenta darse de alta en el sistema
+     *
+     * @param [type] $futuroNombreUsuario
+     * @return void
+     */
+    public function comprobarNombreUsuarioEsValido($futuroNombreUsuario){
+        $UsuarioExistente = $this->catalogoManager->getUsuarioPorNombreUsuario($futuroNombreUsuario);
+
+        if ($UsuarioExistente){
+            return false;
+        }
+
+        return true;
+    }
 }

@@ -17,6 +17,11 @@
                                 </div>
                             </div>
                             <div class="form-row mt-3">
+                                <div class="col-md-10 alert alert-danger" id="divErrorNombreUsuario" style="display:none;">
+                                    <?= $this->translate('__mensaje_nombre_usuario_duplicado__') ?>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
                                 <div class="col-md-3">
                                     <label for="contraseniaUsuario"><span class="obligatorio">(*) </span><?= $this->translate('__Contraseña__') ?>:</label>
                                 </div>
@@ -156,15 +161,16 @@ $( document ).ready(function() {
         actualizarPerfiles();
     }
     
-    // $('#nombreUsuario').change(function (){
-    //     nombreUsuarioValido = getNombreUsuarioEsValido(this.value);
+    $('#userName').change(function (){
+        var nombreUsuarioValido = getNombreUsuarioEsValido(this.value);
         
-    //     if (!nombreUsuarioValido){
-    //         $('#divErrorNombreUsuario').show(500);
-    //     }else{
-    //         $('#divErrorNombreUsuario').hide(500);
-    //     }
-    // });
+        if (!nombreUsuarioValido){
+            $('#divErrorNombreUsuario').show(500);
+        }else{
+            $('#divErrorNombreUsuario').hide(500);
+        }
+    });
+
     verificarMostrarBotonGuardar();
 });
 
@@ -291,20 +297,20 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
-// function getNombreUsuarioEsValido(nombreUsuario) {
-//     var result = null;
+function getNombreUsuarioEsValido(nombreUsuario) {
+    var result = null;
     
-//     $.ajax({
-//         url: url + '/usuarios/nombreusuariovalido/' + nombreUsuario,
-//         type: 'get',
-//         dataType: 'json',
-//         async: false,
-//         success: function (data) {
-//             result = data.esValido;
-//         }
-//     });
+    $.ajax({
+        url: url + '/configuracion/usuarios/nombreusuariovalido/' + nombreUsuario,
+        type: 'get',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            result = data.esValido;
+        }
+    });
     
-//     return result;
-// }
+    return result;
+}
 
 </script>

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="Operacion")
+ * @ORM\Table(name="app.Operacion")
  */
 class Operacion
 {

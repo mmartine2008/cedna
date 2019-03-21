@@ -126,4 +126,12 @@ return [
     '__Seleccione_un_perfil__' => 'Seleccione un perfil',
     '__El_perfil_ha_sido_eliminado__' => 'El perfil ha sido eliminado',
     '__mensaje_eliminar_usuario__' => 'Está seguro que desea eliminar el usuario',
+    '__mensaje_nombre_usuario_duplicado__' => 'El nombre de usuario ingresado ya se encuentra en uso. Por favor, seleccione uno distinto',
+    '__Asignar_Perfiles_Firmantes_al_Formulario__' => 'Asignar Perfiles Firmantes al Formulario',
+    '__Perfiles_Firmantes__' => 'Perfiles Firmantes',
+    '__Delegacion_exitosa__' => 'Delegación exitosa',
+    '__mensaje_delegacion_exitosa__' => 'Se delegó la firma del permiso de trabajo al usuario',
+    '__Edición_de_Orden_de_Compra__' => 'Edición de Órden de Compra',
+    '__mail_edicion_orden_de_compra__' => 'Se han editado los datos de la Órden de Compra, con el número', 
+    '__mail_nueva_orden_de_compra__' => 'Se ha generado una nueva Órden de Compra, con el número',   
 ];

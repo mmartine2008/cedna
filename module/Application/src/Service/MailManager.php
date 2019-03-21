@@ -19,18 +19,19 @@ class MailManager {
     private $entityManager;
     
     private $smtp_options;
-
     private $catalogoManager;
+    private $translator;
     
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $smtp_options, $catalogoManager) 
+    public function __construct($entityManager, $smtp_options, $catalogoManager, $translator) 
     {
         $this->entityManager = $entityManager;
         $this->smtp_options = $smtp_options;
         $this->catalogoManager = $catalogoManager;
+        $this->translator = $translator;
     }
 
     /**
@@ -132,7 +133,7 @@ class MailManager {
      * @param [array] $arrNotificacionesXPerfil
      * @return array
      */
-    private function recuperarUsuariosPorPefiles($arrNotificacionesXPerfil){
+    private function recuperarUsuariosPorPerfiles($arrNotificacionesXPerfil){
         $output = [];
 
         foreach($arrNotificacionesXPerfil as $NotificacionXPerfil){
@@ -164,8 +165,20 @@ class MailManager {
     private function procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo){
         $arrNotificacionesXPerfil = $this->catalogoManager->getNotificacionesXPerfilPorTipoEvento($TipoEvento);
 
-        $arrUsuariosANotificar = $this->recuperarUsuariosPorPefiles($arrNotificacionesXPerfil);
+        $arrUsuariosANotificar = $this->recuperarUsuariosPorPerfiles($arrNotificacionesXPerfil);
 
+        $this->procesarEnvioMailAUsuarios($arrUsuariosANotificar, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que se encarga de enviar un mail a un conjunto de usuarios.
+     *
+     * @param [array] $arrUsuariosANotificar
+     * @param [string] $mensaje
+     * @param [string] $titulo
+     * @return void
+     */
+    private function procesarEnvioMailAUsuarios($arrUsuariosANotificar, $mensaje, $titulo){
         foreach($arrUsuariosANotificar as $Usuario){
             $parametrosMail = [
                 'Body' => $mensaje, 
@@ -187,11 +200,11 @@ class MailManager {
      * @return void
      */
     public function notificarNuevaOrdenDeCompra($OrdenDeCompra){
-        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion('Alta de Ordenes de Compra');
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ALTA_ORD_COMPRA);
 
-        $mensaje = 'Se ha generado una nueva Órden de Compra, con el número: ' . $OrdenDeCompra->getId();
+        $mensaje = $this->translator->translate('__mail_nueva_orden_de_compra__') . ': ' . $OrdenDeCompra->getId();
 
-        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, 'Nueva Órden de Compra');
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translate('__Nueva_Orden_de_Compra__'));
     }
 
     /**
@@ -202,11 +215,177 @@ class MailManager {
      * @return void
      */
     public function notificarEdicionOrdenDeCompra($OrdenDeCompra){
-        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion('Editar Ordenes de Compra');
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::EDICION_ORD_COMPRA);
 
-        $mensaje = 'Se han editado los datos de la Órden de Compra, con el número: ' . $OrdenDeCompra->getId();
+        $mensaje = $this->translator->translate('__Edición_de_Orden_de_Compra__') . ': ' . $OrdenDeCompra->getId();
 
-        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, 'Edicón de Órden de Compra');
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translate('__Edición_de_Orden_de_Compra__'));
     }
-    
+
+    /**
+     * Funcion para notificar por mail a los usuarios firmantes, que el permiso de trabajo se encuentra
+     * disponible para firmar.
+     *
+     * @param [Planificaciones] $Planificacion
+     * @return void
+     */
+    public function notificarPermisoDisponibleParaFirmar($Planificacion){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_PARA_FIRMAR);
+
+        $mensaje = "Ya se encuentra disponible para firmar el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
+
+        $parametrosTexto = ['titulo' => 'Permiso de trabajo disponible para firmar',
+                            'mensaje' => $mensaje];
+        
+        $this->procesarEnviarNotificacionesNodoFirmantes($TipoEvento, $Planificacion, $parametrosTexto);
+    }
+
+    /**
+     * Funcion que recupera todos los usuarios que tienen que firmar un permiso de trabajo,
+     * a partir de un relevamiento.
+     *
+     * @param [Relevamientos] $Relevamiento
+     * @return array
+     */
+    private function procesarGetUsuariosFirmantes($Relevamiento){
+        $NodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
+
+        $output = [];
+        foreach($NodosFirmantes as $NodoFirmante){
+            $output[] = $NodoFirmante->getUsuarioFirmante();
+        }
+
+        return $output;
+    }
+
+    /**
+     * Funcion que procesa el envio de mails a los usuarios que pertenecen al nodo firmante
+     *
+     * @param [type] $TipoEvento
+     * @param [type] $Planificacion
+     * @param [type] $parametrosTexto
+     * @return void
+     */
+    private function procesarEnviarNotificacionesNodoFirmantes($TipoEvento, $Planificacion, $parametrosTexto){
+        $Relevamiento = $Planificacion->getRelevamiento();
+
+        $arrUsuariosANotificar = $this->procesarGetUsuariosFirmantes($Relevamiento);
+
+        $this->procesarEnvioMailAUsuarios($arrUsuariosANotificar, $parametrosTexto['mensaje'], $parametrosTexto['titulo']);
+    }
+
+    /**
+     * Funcion que notifica por mail a los usuarios que poseen los perfiles 
+     * correspondiente segun la configuracion del sistema, que un permiso de trabajo
+     * fue completamente firmado.
+     *
+     * @param [Planificaciones] $Planificacion
+     * @return void
+     */
+    public function notificarPermisoFirmadoCompletamente($Planificacion){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_FIRMADO);
+
+        $mensaje = "Se ha firmado por completo el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
+        $titulo = 'Permiso de trabajo completamente firmado';
+        
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondientes que un permiso de trabajo
+     * ya se encuentra disponible para comenzar su edicion.
+     *
+     * @param [Planificaciones] $Planificacion
+     * @return void
+     */
+    public function notificarPermisoDisponibleParaEditar($Planificacion){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_PARA_EDITAR);
+
+        $mensaje = "Ya se encuentra disponible para editar el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
+        $titulo = 'Permiso de trabajo disponible para editar';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que un usuario del sistema
+     * ha delegado su firma en un permiso de trabajo.
+     *
+     * @param [Planificaciones] $Planificacion
+     * @param [Usuarios] $UsuarioActivo
+     * @param [Usuarios] $NuevoFirmante
+     * @return void
+     */
+    public function notificarFirmaDePermisoDelegada($Planificacion, $UsuarioActivo, $NuevoFirmante){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::FIRMA_DELEGADA);
+
+        $mensaje = "El usuario: ".$UsuarioActivo->getNombre().", ".$UsuarioActivo->getApellido()." ha delegado su firma en el Permiso de Trabajo"
+            .", correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId()." al usuario: ".$NuevoFirmante->getNombre().", ".$NuevoFirmante->getApellido();
+        $titulo = 'Firma de Permiso de trabajo delegada';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que se ha generado una nueva tarea en el sistema.
+     *
+     * @param [Tareas] $Tarea
+     * @return void
+     */
+    public function notificarNuevaTarea($Tarea){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ALTA_TAREAS);
+
+        $mensaje = "Se ha generado una nueva Tarea en el sistema, con el ID: ".$Tarea->getId();
+        $titulo = 'Nueva Tarea creada';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que se ha editado 
+     * los datos de una tarea en el sistema.
+     *
+     * @param [Tareas] $Tarea
+     * @return void
+     */
+    public function notificarEdicionDeTarea($Tarea){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::EDITAR_TAREAS);
+
+        $mensaje = "La tarea con ID: ".$Tarea->getId()." ha sido modificada";
+        $titulo = 'Tarea Editada';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que se ha creado 
+     * un nuevo operario en el sistema.
+     *
+     * @param [Operarios] $Operario
+     * @return void
+     */
+    public function notificarAltaDeOperario($Operario){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ALTA_OPERARIOS);
+
+        $mensaje = "Se ha registrado el alta de un nuevo Operario en el sistema. Operario: ".$Operario->getNombre().", ".$Operario->getApellido();
+        $titulo = 'Nuevo Operario';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que se han editado 
+     * los datos de un operario del sistema.
+     *
+     * @param [Operarios] $Operario
+     * @return void
+     */
+    public function notificarEdicionDeOperario($Operario){
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::EDITAR_OPERARIOS);
+
+        $mensaje = "Se han editado los datos del Operario: ".$Operario->getNombre().", ".$Operario->getApellido();
+        $titulo = 'Edición de Operario';
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
 }
