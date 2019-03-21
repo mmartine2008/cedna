@@ -44,7 +44,7 @@ class Seccion
     /**
      *
      * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
-     * @ORM\JoinTable(name="SeccionPregunta",
+     * @ORM\JoinTable(name="app.SeccionPregunta",
      *      joinColumns={@ORM\JoinColumn(name="IdSeccion", referencedColumnName="IdSeccion")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")}
      *      )

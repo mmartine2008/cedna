@@ -98,6 +98,7 @@ class FormularioController extends BaseFormularioController
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+        $idRelevamiento = $Planificacion->getRelevamiento()->getId();
 
         if ($this->getRequest()->isPost()) {
             $params = $this->params()->fromPost();
@@ -105,17 +106,20 @@ class FormularioController extends BaseFormularioController
             $this->FormularioManager->altaRespuestasFormulario($data, $idPlanificacion);
             
             $listaArchivos = json_decode($params['archivos']);
+            $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
+            var_dump($archivo);
+            die();
+
             for($i = 0; $i < count($listaArchivos); $i++) {
-                $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
                 if ($archivo) {
-                    $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($Planificacion->getRelevamiento()->getId());
+                    $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
                     $fecha_hoy = date("Y-m-d-H:i:s");
                     $file_ext = pathinfo($archivo['name'][$i], PATHINFO_EXTENSION);
                     $ruta_destino_archivo = "file/".$nombreUsuario."-".$fecha_hoy.".".$file_ext;
                     $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
                 }
             }
-            // $this->redirect()->toRoute("formulario",["action" => "index"]);
+            $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
         $Relevamiento = $Planificacion->getRelevamiento();
@@ -126,7 +130,8 @@ class FormularioController extends BaseFormularioController
         return new ViewModel([
             "formulario" => $FormularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
-            "destinos" => $destinos
+            "destinos" => $destinos,
+            "idRelevamiento" => $idRelevamiento
         ]);
     }
 

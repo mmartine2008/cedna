@@ -19,3 +19,5 @@ ALTER SCHEMA app TRANSFER dbo.TipoPlanificacion;
 ALTER SCHEMA app TRANSFER dbo.TipoPregunta;
 ALTER SCHEMA app TRANSFER dbo.TipoSeccion;
 ALTER SCHEMA app TRANSFER dbo.TiposEvento;
+
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('44.sql', GETDATE ( ), 0, 44);

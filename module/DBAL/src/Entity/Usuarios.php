@@ -61,7 +61,7 @@ class Usuarios
 
     /**
      * @ORM\ManyToMany(targetEntity="Perfiles", inversedBy="Usuario", cascade={"persist"})
-     * @ORM\JoinTable(name="UsuariosxPerfiles",
+     * @ORM\JoinTable(name="dbo.UsuariosxPerfiles",
      *      joinColumns={@ORM\JoinColumn(name="IdUsuario", referencedColumnName="IdUsuario")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="IdPerfil", referencedColumnName="IdPerfil")}
      *      )

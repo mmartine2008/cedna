@@ -12,6 +12,7 @@
     var listaRespuestasInput = [];
     var destinos = <?= json_encode($destinos) ?>;
     var listaFileInput = [];
+    var idRelevamiento = <?= $idRelevamiento ?>;
 
     function updateAnswerOfPreguntaGenerada(pregGeneradas, idPregunta, answer) {
         for (var k = 0; k < pregGeneradas.length; k++){ 
@@ -515,13 +516,13 @@
     function createInput(infoType, pregunta, divElement, idSeccion, required){
         
         ele = document.createElement('input');
-        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion;
+        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion+"_relevamiento_"+idRelevamiento;
        
         ele.id = idEle;
         if((pregunta.respuesta != " ")&&(infoType != "file")) {
             ele.value = pregunta.respuesta;
         }
-        ele.onchange = function() {updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
+            ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
         }

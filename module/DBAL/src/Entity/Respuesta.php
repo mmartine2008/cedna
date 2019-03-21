@@ -23,6 +23,11 @@ class Respuesta
      */
     protected $descripcion;
 
+    /**
+     * @ORM\Column(name="NombreArchivo",  nullable=true, type="string", length=300)
+     */
+    protected $nombreArchivo;
+
      /**
      * @ORM\ManyToOne(targetEntity="Permiso")
      * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
@@ -225,6 +230,26 @@ class Respuesta
 
     public function poseeMultiplesDestinos(){
         $this->getPregunta()->getTipoPregunta()->esPeguntaMultiple();
+    }
+
+    /**
+     * Get the value of nombreArchivo
+     */ 
+    public function getNombreArchivo()
+    {
+        return $this->nombreArchivo;
+    }
+
+    /**
+     * Set the value of nombreArchivo
+     *
+     * @return  self
+     */ 
+    public function setNombreArchivo($nombreArchivo)
+    {
+        $this->nombreArchivo = $nombreArchivo;
+
+        return $this;
     }
 
 

@@ -603,7 +603,8 @@ class FormularioManager {
         foreach($Respuestas as $Respuesta) {
             $pregunta = $Respuesta->getPregunta();
             $tipoPregunta = $pregunta->getTipoPregunta();
-            if($tipoPregunta->getDescripcion() == 'file'){
+            if(($tipoPregunta->getDescripcion() == 'file_file')||
+                ($tipoPregunta->getDescripcion() == 'file_image')){
                 return true;
             }
             return false;
@@ -686,15 +687,20 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
+    // private function modificarRuta($respuesta) {
+        // return str_replace("/\/", '/\\/', $respuesta);
+    // }
+
     public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
-        if(($Respuesta)&& (!$destino)) { //var
+        if(($Respuesta)&& (!$destino)) { 
             $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
         } else {
-            $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
             if($pregunta->getTipoPregunta()->esPeguntaArchivo()) {
                 $pregunta->setRequerido(0);
+                // $respuesta = $this->modificarRuta($respuesta);
             }
+            $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
         }
     }
 

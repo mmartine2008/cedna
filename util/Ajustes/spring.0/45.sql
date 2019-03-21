@@ -1,7 +1,7 @@
-UPDATE cedna.dbo.TipoPregunta
+UPDATE cedna.app.TipoPregunta
 SET Descripcion='file_image'
 WHERE Descripcion='image' ;
-UPDATE cedna.dbo.TipoPregunta
+UPDATE cedna.app.TipoPregunta
 SET Descripcion='file_file'
 WHERE Descripcion='file' ;
 

@@ -87,7 +87,7 @@ class TipoPregunta
     }
 
     public function esPeguntaArchivo(){
-        if($this->descripcion == 'file'){
+        if(($this->descripcion == 'file_file')||($this->descripcion == 'file_image')){
             return true;
         } else {
             return false;

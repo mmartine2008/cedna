@@ -41,7 +41,7 @@ class Formulario
 
     /**
      * @ORM\ManyToMany(targetEntity="Perfiles", inversedBy="Formulario", cascade={"persist"})
-     * @ORM\JoinTable(name="FirmanFormulario",
+     * @ORM\JoinTable(name="dbo.FirmanFormulario",
      *      joinColumns={@ORM\JoinColumn(name="IdFormulario", referencedColumnName="IdFormulario")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="IdPerfil", referencedColumnName="IdPerfil")}
      *      )
