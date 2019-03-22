@@ -48,7 +48,7 @@ class Pregunta
     /**
      *
      * @ORM\ManyToMany(targetEntity="Opcion", inversedBy="Pregunta", cascade={"persist"})
-     * @ORM\JoinTable(name="PreguntaOpcion",
+     * @ORM\JoinTable(name="app.PreguntaOpcion",
      *      joinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="IdOpcion", referencedColumnName="IdOpcion")}
      *      )
