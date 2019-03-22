@@ -23,6 +23,7 @@ return [
     'Autenticacion',
     'DBAL',
     'Configuracion',
+    'Admin',
     'Formulario',
     'TCPDFModule'
 ];

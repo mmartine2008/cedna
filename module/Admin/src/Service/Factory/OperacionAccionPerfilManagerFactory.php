@@ -1,14 +1,13 @@
 <?php
-namespace Application\Service\Factory;
+namespace Admin\Service\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-use Application\Service\AccionManager;
+use Admin\Service\AccionManager;
+use Admin\Service\OperacionManager;
+use Admin\Service\OperacionAccionPerfilManager;
 use Application\Service\PerfilesManager;
-use Application\Service\OperacionManager;
-
-use Application\Service\OperacionAccionPerfilManager;
 
 
 class OperacionAccionPerfilManagerFactory implements FactoryInterface

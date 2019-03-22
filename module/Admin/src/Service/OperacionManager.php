@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Service;
+namespace Admin\Service;
 
 use DBAL\Entity\Operacion;
 

@@ -75,4 +75,5 @@ return array(
     'Autenticacion\\' => array($baseDir . '/module/Autenticacion/src'),
     'Application\\' => array($baseDir . '/module/Application/src'),
     'ApplicationTest\\' => array($baseDir . '/module/Application/test'),
+    'Admin\\' => array($baseDir . '/module/Admin/src'),
 );

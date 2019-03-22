@@ -30,11 +30,8 @@ return array (
       'doctrine.cli' => 'DoctrineModule\\Service\\CliFactory',
       'Doctrine\\ORM\\EntityManager' => 'DoctrineORMModule\\Service\\EntityManagerAliasCompatFactory',
       'translator' => 'Zend\\I18n\\Translator\\TranslatorServiceFactory',
-      'Application\\Service\\AccionManager' => 'Application\\Service\\Factory\\AccionManagerFactory',
-      'Application\\Service\\OperacionManager' => 'Application\\Service\\Factory\\OperacionManagerFactory',
       'Application\\Service\\UsuariosManager' => 'Application\\Service\\Factory\\UsuariosManagerFactory',
       'Application\\Service\\PerfilesManager' => 'Application\\Service\\Factory\\PerfilesManagerFactory',
-      'Application\\Service\\OperacionAccionPerfilManager' => 'Application\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
       'Application\\Service\\OperariosManager' => 'Application\\Service\\Factory\\OperariosManagerFactory',
       'Application\\Service\\OrganigramaManager' => 'Application\\Service\\Factory\\OrganigramaManagerFactory',
       'Application\\Service\\TareasManager' => 'Application\\Service\\Factory\\TareasManagerFactory',
@@ -54,6 +51,9 @@ return array (
       'Formulario\\Service\\FormularioManager' => 'Formulario\\Service\\Factory\\FormularioManagerFactory',
       'Formulario\\Service\\CednaTcpdf' => 'Formulario\\Service\\Factory\\CednaTcpdfFactory',
       'TCPDF' => 'TCPDFModule\\Factory\\TCPDFFactory',
+      'Admin\\Service\\AccionManager' => 'Admin\\Service\\Factory\\AccionManagerFactory',
+      'Admin\\Service\\OperacionManager' => 'Admin\\Service\\Factory\\OperacionManagerFactory',
+      'Admin\\Service\\OperacionAccionPerfilManager' => 'Admin\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
     ),
     'abstract_factories' => 
     array (
@@ -145,42 +145,6 @@ return array (
           array (
             'controller' => 'Application\\Controller\\CednaController',
             'action' => 'index',
-          ),
-        ),
-      ),
-      'abm' => 
-      array (
-        'type' => 'Zend\\Router\\Http\\Segment',
-        'options' => 
-        array (
-          'route' => '/abm',
-          'defaults' => 
-          array (
-            'controller' => 'Application\\Controller\\ABMController',
-            'action' => 'abm',
-          ),
-        ),
-        'may_terminate' => true,
-        'child_routes' => 
-        array (
-          'entidad' => 
-          array (
-            'type' => 'Zend\\Router\\Http\\Segment',
-            'options' => 
-            array (
-              'route' => '/:entidad[/:action[/:id]]',
-              'defaults' => 
-              array (
-                'action' => 'listar',
-              ),
-            ),
-            'constraints' => 
-            array (
-              'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'id' => '[a-zA-Z0-9_-]*',
-            ),
-            'may_terminate' => true,
           ),
         ),
       ),
@@ -700,6 +664,42 @@ return array (
           ),
         ),
       ),
+      'abm' => 
+      array (
+        'type' => 'Zend\\Router\\Http\\Segment',
+        'options' => 
+        array (
+          'route' => '/abm',
+          'defaults' => 
+          array (
+            'controller' => 'Admin\\Controller\\ABMController',
+            'action' => 'abm',
+          ),
+        ),
+        'may_terminate' => true,
+        'child_routes' => 
+        array (
+          'entidad' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/:entidad[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'action' => 'listar',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
+        ),
+      ),
     ),
   ),
   'filters' => 
@@ -952,7 +952,7 @@ return array (
         'cache' => 'array',
         'paths' => 
         array (
-          0 => '/home/juano/cedna/cedna/cedna/module/Autenticacion/config/../src/Entity',
+          0 => '/home/juano/cedna/cedna/module/Autenticacion/config/../src/Entity',
         ),
       ),
       'DBAL_driver' => 
@@ -961,7 +961,7 @@ return array (
         'cache' => 'array',
         'paths' => 
         array (
-          0 => '/home/juano/cedna/cedna/cedna/module/DBAL/config/../src/Entity',
+          0 => '/home/juano/cedna/cedna/module/DBAL/config/../src/Entity',
         ),
       ),
     ),
@@ -1062,7 +1062,6 @@ return array (
     'factories' => 
     array (
       'DoctrineModule\\Controller\\Cli' => 'DoctrineModule\\Service\\CliControllerFactory',
-      'Application\\Controller\\ABMController' => 'Application\\Controller\\Factory\\ABMControllerFactory',
       'Application\\Controller\\CednaController' => 'Application\\Controller\\Factory\\CednaControllerFactory',
       'Application\\Controller\\OperariosController' => 'Application\\Controller\\Factory\\OperariosControllerFactory',
       'Application\\Controller\\OrganigramaController' => 'Application\\Controller\\Factory\\OrganigramaControllerFactory',
@@ -1078,6 +1077,7 @@ return array (
       'Configuracion\\Controller\\ConfigNotifXPerfilController' => 'Configuracion\\Controller\\Factory\\ConfigNotifXPerfilControllerFactory',
       'Formulario\\Controller\\BaseFormularioController' => 'Formulario\\Controller\\Factory\\BaseFormularioControllerFactory',
       'Formulario\\Controller\\FormularioController' => 'Formulario\\Controller\\Factory\\FormularioControllerFactory',
+      'Admin\\Controller\\ABMController' => 'Admin\\Controller\\Factory\\ABMControllerFactory',
     ),
   ),
   'console' => 
@@ -1119,13 +1119,14 @@ return array (
   array (
     'template_map' => 
     array (
-      'zend-developer-tools/toolbar/doctrine-orm-queries' => '/home/juano/cedna/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-queries.phtml',
-      'zend-developer-tools/toolbar/doctrine-orm-mappings' => '/home/juano/cedna/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-mappings.phtml',
-      'layout/layout' => '/home/juano/cedna/cedna/cedna/module/Formulario/config/../view/layout/layout.phtml',
-      'application/index/index' => '/home/juano/cedna/cedna/cedna/module/Formulario/config/../view/application/index/index.phtml',
-      'error/404' => '/home/juano/cedna/cedna/cedna/module/Formulario/config/../view/error/404.phtml',
-      'error/index' => '/home/juano/cedna/cedna/cedna/module/Formulario/config/../view/error/index.phtml',
-      'configuracion/index/index' => '/home/juano/cedna/cedna/cedna/module/Configuracion/config/../view/configuracion/index/index.phtml',
+      'zend-developer-tools/toolbar/doctrine-orm-queries' => '/home/juano/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-queries.phtml',
+      'zend-developer-tools/toolbar/doctrine-orm-mappings' => '/home/juano/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-mappings.phtml',
+      'layout/layout' => '/home/juano/cedna/cedna/module/Admin/config/../view/layout/layout.phtml',
+      'application/index/index' => '/home/juano/cedna/cedna/module/Formulario/config/../view/application/index/index.phtml',
+      'error/404' => '/home/juano/cedna/cedna/module/Admin/config/../view/error/404.phtml',
+      'error/index' => '/home/juano/cedna/cedna/module/Admin/config/../view/error/index.phtml',
+      'configuracion/index/index' => '/home/juano/cedna/cedna/module/Configuracion/config/../view/configuracion/index/index.phtml',
+      'admin/index/index' => '/home/juano/cedna/cedna/module/Admin/config/../view/admin/index/index.phtml',
     ),
     'display_not_found_reason' => true,
     'display_exceptions' => true,
@@ -1134,10 +1135,11 @@ return array (
     'exception_template' => 'error/index',
     'template_path_stack' => 
     array (
-      0 => '/home/juano/cedna/cedna/cedna/module/Application/config/../view',
-      1 => '/home/juano/cedna/cedna/cedna/module/Autenticacion/config/../view',
-      2 => '/home/juano/cedna/cedna/cedna/module/Configuracion/config/../view',
-      3 => '/home/juano/cedna/cedna/cedna/module/Formulario/config/../view',
+      0 => '/home/juano/cedna/cedna/module/Application/config/../view',
+      1 => '/home/juano/cedna/cedna/module/Autenticacion/config/../view',
+      2 => '/home/juano/cedna/cedna/module/Configuracion/config/../view',
+      3 => '/home/juano/cedna/cedna/module/Formulario/config/../view',
+      4 => '/home/juano/cedna/cedna/module/Admin/config/../view',
     ),
   ),
   'zenddevelopertools' => 
@@ -1165,6 +1167,7 @@ return array (
     1 => 'RegistroUsuario',
     2 => 'RegistroUsuario',
     3 => 'RegistroUsuario',
+    4 => 'RegistroUsuario',
   ),
   'translator' => 
   array (
@@ -1173,25 +1176,37 @@ return array (
     array (
       0 => 
       array (
-        'base_dir' => '/home/juano/cedna/cedna/cedna/data/language/phpArray',
+        'base_dir' => '/home/juano/cedna/cedna/data/language/phpArray',
         'type' => 'phpArray',
         'pattern' => '%s.php',
       ),
       1 => 
       array (
-        'base_dir' => '/home/juano/cedna/cedna/cedna/data/language/gettext',
+        'base_dir' => '/home/juano/cedna/cedna/data/language/gettext',
         'type' => 'gettext',
         'pattern' => '%s.mo',
       ),
       2 => 
       array (
-        'base_dir' => '/home/juano/cedna/cedna/cedna/config/autoload/../data/languag/phpArray',
+        'base_dir' => '/home/juano/cedna/cedna/data/language/phpArray',
         'type' => 'phpArray',
         'pattern' => '%s.php',
       ),
       3 => 
       array (
-        'base_dir' => '/home/juano/cedna/cedna/cedna/config/autoload/../data/languag/gettext',
+        'base_dir' => '/home/juano/cedna/cedna/data/language/gettext',
+        'type' => 'gettext',
+        'pattern' => '%s.mo',
+      ),
+      4 => 
+      array (
+        'base_dir' => '/home/juano/cedna/cedna/config/autoload/../data/languag/phpArray',
+        'type' => 'phpArray',
+        'pattern' => '%s.php',
+      ),
+      5 => 
+      array (
+        'base_dir' => '/home/juano/cedna/cedna/config/autoload/../data/languag/gettext',
         'type' => 'gettext',
         'pattern' => '%s.mo',
       ),

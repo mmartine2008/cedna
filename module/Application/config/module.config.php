@@ -34,34 +34,6 @@ return [
                     ],
                 ],
             ],
-            'abm' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/abm',
-                    'defaults' => [
-                        'controller' => Controller\ABMController::class,
-                        'action'     => 'abm',
-                    ],
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'entidad' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/:entidad[/:action[/:id]]',
-                            'defaults' => [
-                                'action'     => 'listar',
-                            ],
-                        ],
-                        'constraints' => [
-                            'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'id' => '[a-zA-Z0-9_-]*',
-                        ],
-                        'may_terminate' => true,
-                    ],
-                ],
-            ],
             'operarios' => [
                 'type' => Segment::class,
                 'options' => [
@@ -193,7 +165,6 @@ return [
 
     'controllers' => [
         'factories' => [
-            Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
             Controller\CednaController::class => Controller\Factory\CednaControllerFactory::class,
             Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
             Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
@@ -206,11 +177,8 @@ return [
     'service_manager' => [
         'factories' => [
             'translator' => \Zend\I18n\Translator\TranslatorServiceFactory::class,
-            Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
-            Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,
             Service\UsuariosManager::class => Service\Factory\UsuariosManagerFactory::class,
             Service\PerfilesManager::class => Service\Factory\PerfilesManagerFactory::class,
-            Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
             Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
             Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
             Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,

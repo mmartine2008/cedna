@@ -1,15 +1,13 @@
 <?php
-namespace Application\Controller\Factory;
+namespace Admin\Controller\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Controller\ABMController;
+use Admin\Controller\ABMController;
 
-use Application\Service\AccionManager;
-use Application\Service\OperacionManager;
-use Application\Service\UsuariosManager;
-use Application\Service\PerfilesManager;
-use Application\Service\OperacionAccionPerfilManager;
+use Admin\Service\AccionManager;
+use Admin\Service\OperacionManager;
+use Admin\Service\OperacionAccionPerfilManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,11 +19,8 @@ class ABMControllerFactory implements FactoryInterface
     {
         $accionManager = $container->get(AccionManager::class);
         $operacionManager = $container->get(OperacionManager::class);
-        $usuariosManager = $container->get(UsuariosManager::class);
-        $perfilesManager = $container->get(PerfilesManager::class);
         $operacionAccionPerfilManager = $container->get(OperacionAccionPerfilManager::class);
         
-        return new ABMController($accionManager, $operacionManager, 
-                $usuariosManager, $perfilesManager, $operacionAccionPerfilManager);
+        return new ABMController($accionManager, $operacionManager, $operacionAccionPerfilManager);
     }
 }

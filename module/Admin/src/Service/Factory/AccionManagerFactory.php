@@ -1,9 +1,9 @@
 <?php
-namespace Application\Service\Factory;
+namespace Admin\Service\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Service\AccionManager;
+use Admin\Service\AccionManager;
 
 
 class AccionManagerFactory implements FactoryInterface

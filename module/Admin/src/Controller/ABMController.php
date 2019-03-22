@@ -5,7 +5,7 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application\Controller;
+namespace Admin\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -14,17 +14,12 @@ class ABMController extends AbstractActionController
 {
     private $accionManager;
     private $operacionManager;
-    private $usuariosManager;
-    private $perfilesManager;
     private $operacionAccionPerfilManager;
 
-    public function __construct($accionManager, $operacionManager, $usuariosManager,
-                                    $perfilesManager, $operacionAccionPerfilManager)
+    public function __construct($accionManager, $operacionManager, $operacionAccionPerfilManager)
     {
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;
-        $this->usuariosManager = $usuariosManager;
-        $this->perfilesManager = $perfilesManager;
         $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
 
         $this->layout()->arrAccionesDisponibles = null;
@@ -56,7 +51,7 @@ class ABMController extends AbstractActionController
 
         $view->setVariable('arrEntidades', $arrEntidades);
 
-        $view->setTemplate('application/abm/'.$nombreEntidad.'.phtml');
+        $view->setTemplate('admin/abm/'.$nombreEntidad.'.phtml');
         return $view;
     }
 
@@ -81,7 +76,7 @@ class ABMController extends AbstractActionController
         
         $view->setVariable('Entidad', null);
         $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
+        $view->setTemplate('admin/abm/alta-'.$nombreEntidad.'.phtml');
         
         return $view;      
     }
@@ -109,7 +104,7 @@ class ABMController extends AbstractActionController
         
         $view->setVariable('Entidad', $Entidad);
         $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('application/abm/alta-'.$nombreEntidad.'.phtml');
+        $view->setTemplate('admin/abm/alta-'.$nombreEntidad.'.phtml');
         
         return $view;      
     }
