@@ -107,13 +107,15 @@ class FormularioController extends BaseFormularioController
             
             $listaArchivos = json_decode($params['archivos']);
             $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
-
+    
             for($i = 0; $i < count($listaArchivos); $i++) {
                 if ($archivo) {
                     $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
                     $fecha_hoy = date("Y-m-d-H:i:s");
                     $file_ext = pathinfo($archivo['name'][$i], PATHINFO_EXTENSION);
+                    
                     $ruta_destino_archivo = "file/".$nombreUsuario."-".$fecha_hoy.".".$file_ext;
+
                     $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
                     //agregar nombre nuevo archivo
                 }
