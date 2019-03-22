@@ -232,9 +232,9 @@ class MailManager {
     public function notificarPermisoDisponibleParaFirmar($Planificacion){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_PARA_FIRMAR);
 
-        $mensaje = "Ya se encuentra disponible para firmar el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
+        $mensaje = $this->translator->translate('__cuerpo_mail_permiso_para_firmar__') .": ".$Planificacion->getTarea()->getId();
 
-        $parametrosTexto = ['titulo' => 'Permiso de trabajo disponible para firmar',
+        $parametrosTexto = ['titulo' => $this->translator->translate('__titulo_mail_permiso_para_firmar__'),
                             'mensaje' => $mensaje];
         
         $this->procesarEnviarNotificacionesNodoFirmantes($TipoEvento, $Planificacion, $parametrosTexto);
@@ -285,8 +285,8 @@ class MailManager {
     public function notificarPermisoFirmadoCompletamente($Planificacion){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_FIRMADO);
 
-        $mensaje = "Se ha firmado por completo el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
-        $titulo = 'Permiso de trabajo completamente firmado';
+        $mensaje = $this->translator->translate('__cuerpo_mail_permiso_firmado__') .": ".$Planificacion->getTarea()->getId();
+        $titulo = $this->translator->translate('__titulo_mail_permiso_firmado__');
         
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -301,8 +301,8 @@ class MailManager {
     public function notificarPermisoDisponibleParaEditar($Planificacion){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::PERMISO_PARA_EDITAR);
 
-        $mensaje = "Ya se encuentra disponible para editar el Permiso de Trabajo, correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId();
-        $titulo = 'Permiso de trabajo disponible para editar';
+        $mensaje = $this->translator->translate('__cuerpo_mail_permiso_para_editar__') .": ".$Planificacion->getTarea()->getId();
+        $titulo = $this->translator->translate('__titulo_mail_permiso_para_editar__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -321,7 +321,7 @@ class MailManager {
 
         $mensaje = "El usuario: ".$UsuarioActivo->getNombre().", ".$UsuarioActivo->getApellido()." ha delegado su firma en el Permiso de Trabajo"
             .", correspondiente a la Tarea con ID: ".$Planificacion->getTarea()->getId()." al usuario: ".$NuevoFirmante->getNombre().", ".$NuevoFirmante->getApellido();
-        $titulo = 'Firma de Permiso de trabajo delegada';
+        $titulo = $this->translator->translate('__titulo_mail_firma_delegada__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -335,8 +335,8 @@ class MailManager {
     public function notificarNuevaTarea($Tarea){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ALTA_TAREAS);
 
-        $mensaje = "Se ha generado una nueva Tarea en el sistema, con el ID: ".$Tarea->getId();
-        $titulo = 'Nueva Tarea creada';
+        $mensaje = $this->translator->translate('__cuerpo_mail_nueva_tarea__') . ": ".$Tarea->getId();
+        $titulo = $this->translator->translate('__titulo_mail_nueva_tarea__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -351,8 +351,8 @@ class MailManager {
     public function notificarEdicionDeTarea($Tarea){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::EDITAR_TAREAS);
 
-        $mensaje = "La tarea con ID: ".$Tarea->getId()." ha sido modificada";
-        $titulo = 'Tarea Editada';
+        $mensaje = $this->translator->translate('__cuerpo_mail_tarea_editada__') .": ".$Tarea->getId();
+        $titulo = $this->translator->translate('__titulo_mail_tarea_editada__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -367,8 +367,8 @@ class MailManager {
     public function notificarAltaDeOperario($Operario){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ALTA_OPERARIOS);
 
-        $mensaje = "Se ha registrado el alta de un nuevo Operario en el sistema. Operario: ".$Operario->getNombre().", ".$Operario->getApellido();
-        $titulo = 'Nuevo Operario';
+        $mensaje = $this->translator->translate('__cuerpo_mail_nuevo_operario__') .": ".$Operario->getNombre().", ".$Operario->getApellido();
+        $titulo = $this->translator->translate('__Nuevo_Operario__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
@@ -383,8 +383,8 @@ class MailManager {
     public function notificarEdicionDeOperario($Operario){
         $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::EDITAR_OPERARIOS);
 
-        $mensaje = "Se han editado los datos del Operario: ".$Operario->getNombre().", ".$Operario->getApellido();
-        $titulo = 'Edición de Operario';
+        $mensaje = $this->translator->translate('__cuerpo_mail_edicion_operario__') .": ".$Operario->getNombre().", ".$Operario->getApellido();
+        $titulo = $this->translator->translate('__cuerpo_mail_edicion_operario__');
 
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
