@@ -1,7 +1,7 @@
 <div class="form-row">
     
-        <div class="col-md-3">
-            <a href="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "alta"])?>">Nueva Acción</a>
+        <div class="col-md-2 offset-10">
+            <a href="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "alta"])?>" class="btn btn-primary">Nueva Acción</a>
         </div>
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -27,17 +27,17 @@
                                 <td>
                                     <a href="<?=$this->url("abm/entidad",
                                         ["entidad" => "accion", "action" => "editar", "id" => $Accion->getId()]
-                                        )?>">Editar</a> | 
+                                        )?>" class="btn btn-success">Editar</a> | 
                                     <a href="<?=$this->url("abm/entidad",
                                         ["entidad" => "accion", "action" => "borrar", "id" => $Accion->getId()]
-                                        )?>">Borrar</a>
+                                        )?>" class="btn btn-danger">Borrar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
                     </table>
                     <div class="flex">
-                        <a href="<?=$this->url("abm",["action" => "listar"])?>">Volver</a>
+                        <a href="<?=$this->url("abm",["action" => "listar"])?>" class="btn btn-primary">Volver</a>
                     </div>
                 </div>
             </div>

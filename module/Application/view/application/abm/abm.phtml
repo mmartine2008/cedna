@@ -6,20 +6,14 @@
                 <h3 class="panel-title">Listado de ABM</h3>
             </div>
             <div class="panel-body">
-                <div class="row">
-                    <a href="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "listar"])?>">Acciones</a>
+                <div class="flex">
+                    <a href="<?=$this->url("abm/entidad",["entidad" => "accion", "action" => "listar"])?>" class="btn btn-outline-primary">Acciones</a>
                 </div>
-                <div class="row">
-                    <a href="<?=$this->url("abm/entidad",["entidad" => "operacion", "action" => "listar"])?>">Operaciones</a>
+                <div class="flex mt-3">
+                    <a href="<?=$this->url("abm/entidad",["entidad" => "operacion", "action" => "listar"])?>" class="btn btn-outline-primary">Operaciones</a>
                 </div>
-                <div class="row">
-                    <a href="<?=$this->url("abm/entidad",["entidad" => "perfiles", "action" => "listar"])?>">Perfiles</a>
-                </div>
-                <div class="row">
-                    <a href="<?=$this->url("abm/entidad",["entidad" => "usuarios", "action" => "listar"])?>">Usuarios</a>
-                </div>
-                <div class="row">
-                    <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>">Acciones - Operaciones Por Perfil</a>
+                <div class="flex mt-3">
+                    <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "listar"])?>" class="btn btn-outline-primary">Acciones - Operaciones Por Perfil</a>
                 </div>
             </div>
         </div>

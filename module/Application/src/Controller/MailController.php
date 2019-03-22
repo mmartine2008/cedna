@@ -21,6 +21,11 @@ class MailController extends CednaController
         $this->mailManager = $mailManager;
     }
 
+    /**
+     * Este action sirve para mostrar la pantalla de testeo de envio de mails.
+     *
+     * @return void
+     */
     public function indexAction()
     {
         $this->cargarAccionesDisponibles('mail - index');
