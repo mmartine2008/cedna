@@ -107,8 +107,6 @@ class FormularioController extends BaseFormularioController
             
             $listaArchivos = json_decode($params['archivos']);
             $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
-            var_dump($archivo);
-            die();
 
             for($i = 0; $i < count($listaArchivos); $i++) {
                 if ($archivo) {
@@ -117,6 +115,7 @@ class FormularioController extends BaseFormularioController
                     $file_ext = pathinfo($archivo['name'][$i], PATHINFO_EXTENSION);
                     $ruta_destino_archivo = "file/".$nombreUsuario."-".$fecha_hoy.".".$file_ext;
                     $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
+                    //agregar nombre nuevo archivo
                 }
             }
             $this->redirect()->toRoute("formulario",["action" => "index"]);
