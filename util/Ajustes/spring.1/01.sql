@@ -1,4 +1,4 @@
-SET IDENTITY_INSERT cedna.dbo.Operacion ON;
+SET IDENTITY_INSERT cedna.app.Operacion ON;
 
 INSERT INTO cedna.app.Operacion (Id, nombre, titulo, icono, grupoId, orden, url)
 VALUES(46, 'abm acciones', 'ABM de Acciones', '', NULL, 1, 'abm/accion');
@@ -27,9 +27,9 @@ VALUES(53, 'abm operacionAccionPerfil - alta', 'Alta de Operación - Acción - P
 INSERT INTO cedna.app.Operacion (Id, nombre, titulo, icono, grupoId, orden, url)
 VALUES(54, 'abm operacionAccionPerfil - editar', 'Editar de Operación - Acción - Perfil', '', 52, 0, 'abm/operacionAccionPerfil/editar');
 
-SET IDENTITY_INSERT cedna.dbo.Operacion OFF;
+SET IDENTITY_INSERT cedna.app.Operacion OFF;
 
-SET IDENTITY_INSERT cedna.dbo.OperacionAccionPerfil ON;
+SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil ON;
 
 INSERT INTO cedna.app.OperacionAccionPerfil (Id, IdOperacion, IdAccion, IdPerfil, jsFunction, urlDestino, ordenUbicacion, idHTMLElement)
 VALUES(157, 46, 1, 1, '', 'abm', 2, '');
@@ -130,6 +130,6 @@ VALUES(189, 54, 7, 1, '', 'logout', 11, '');
 INSERT INTO cedna.app.OperacionAccionPerfil (Id, IdOperacion, IdAccion, IdPerfil, jsFunction, urlDestino, ordenUbicacion, idHTMLElement)
 VALUES(190, 54, 2, 1, 'preSubmit()', '', 9, 'botonGuardar');
 
-SET IDENTITY_INSERT cedna.dbo.OperacionAccionPerfil OFF;
+SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil OFF;
 
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 1, 1);

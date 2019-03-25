@@ -16,7 +16,7 @@ CREATE TABLE dbo.InduccionXOperario(
     CONSTRAINT FK_InduccionXOperario_Inducciones FOREIGN KEY (IdInduccion) REFERENCES Inducciones (IdInduccion)
 );
 
-SET IDENTITY_INSERT cedna.dbo.Operacion ON;
+SET IDENTITY_INSERT cedna.app.Operacion ON;
 
 INSERT INTO cedna.app.Operacion (Id, nombre, titulo, icono, grupoId, orden, url)
 VALUES(55, 'inducciones', 'Inducciones', 'inducciones zoom', 6, 6, 'inducciones');
@@ -27,9 +27,9 @@ VALUES(56, 'inducciones - alta', 'Nueva Inducción', '', 55, 0, 'inducciones/alt
 INSERT INTO cedna.app.Operacion (Id, nombre, titulo, icono, grupoId, orden, url)
 VALUES(57, 'inducciones - edicion', 'Editar Inducción', '', 55, 0, 'inducciones/editar');
 
-SET IDENTITY_INSERT cedna.dbo.Operacion OFF;
+SET IDENTITY_INSERT cedna.app.Operacion OFF;
 
-SET IDENTITY_INSERT cedna.dbo.OperacionAccionPerfil ON;
+SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil ON;
 
 INSERT INTO cedna.app.OperacionAccionPerfil (Id, IdOperacion, IdAccion, IdPerfil, jsFunction, urlDestino, ordenUbicacion, idHTMLElement)
 VALUES(191, 55, 1, 2, '', 'index', 2, '');
@@ -64,7 +64,7 @@ VALUES(200, 57, 7, 2, '', 'logout', 11, '');
 INSERT INTO cedna.app.OperacionAccionPerfil (Id, IdOperacion, IdAccion, IdPerfil, jsFunction, urlDestino, ordenUbicacion, idHTMLElement)
 VALUES(201, 57, 2, 2, 'preSubmit()', '', 9, 'botonGuardar');
 
-SET IDENTITY_INSERT cedna.dbo.OperacionAccionPerfil OFF;
+SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil OFF;
 
 ALTER TABLE Operarios
 ADD IdContratista INT NULL;
