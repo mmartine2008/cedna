@@ -532,7 +532,9 @@
             ele.type = "file";
             ele.accept="image/png, image/jpeg";
             listaFileInput.push(idEle);
+            console.log(pregunta.respuesta);
         } else if (infoType == "file_file"){
+            console.log(pregunta.respuesta);
             ele.name = "archivo[]";
             ele.type = "file";
             ele.accept="application/pdf";
@@ -808,13 +810,8 @@
         console.log($("#JsonData").val());
 
         if (validarPreguntas()) {
-        // &&($("#formFormulario")[0].checkValidity()) ){
             $("#formFormulario").submit();
         }
-        // else{
-            // $("#formFormulario")[0].reportValidity();
-            // alert
-        // }
     }
 
     function createFormulario(){

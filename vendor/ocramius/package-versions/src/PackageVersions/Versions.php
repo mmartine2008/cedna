@@ -85,7 +85,7 @@ final class Versions
   'zendframework/zend-view' => '2.11.1@0428d6b2a67c7058451394921c90c5576ac5b373',
   'zfcampus/zf-console' => '1.4.0@e4dd16760fe219d8b2745865a883b0e0a492a3ed',
   'zfcampus/zf-development-mode' => '3.2.0@419004a320bab017d28f2bc5e7857dde7e19aecf',
-  'zendframework/skeleton-application' => 'dev-master@cbde5bd7f8f4b1b7760fb9a89debb0deefb0d968',
+  'zendframework/skeleton-application' => 'dev-master@b41f74ec3204ec28d85233830d05fb7d271605df',
 );
 
     private function __construct()

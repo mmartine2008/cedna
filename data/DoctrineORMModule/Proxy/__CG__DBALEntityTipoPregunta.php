@@ -257,6 +257,28 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
     /**
      * {@inheritDoc}
      */
+    public function esImagen()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'esImagen', []);
+
+        return parent::esImagen();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function esPdf()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'esPdf', []);
+
+        return parent::esPdf();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getJSON()
     {
 

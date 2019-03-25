@@ -94,6 +94,22 @@ class TipoPregunta
         }
     }
 
+    public function esImagen(){
+        if($this->descripcion == 'file_image'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function esPdf(){
+        if($this->descripcion == 'file_file'){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';

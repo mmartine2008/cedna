@@ -107,19 +107,8 @@ class FormularioController extends BaseFormularioController
             
             $listaArchivos = json_decode($params['archivos']);
             $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
-    
-            for($i = 0; $i < count($listaArchivos); $i++) {
-                if ($archivo) {
-                    $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
-                    $fecha_hoy = date("Y-m-d-H:i:s");
-                    $file_ext = pathinfo($archivo['name'][$i], PATHINFO_EXTENSION);
-                    
-                    $ruta_destino_archivo = "file/".$nombreUsuario."-".$fecha_hoy.".".$file_ext;
+            $this->FormularioManager->guardarArchivos($listaArchivos, $archivo, $idRelevamiento);
 
-                    $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
-                    //agregar nombre nuevo archivo
-                }
-            }
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
 
@@ -127,9 +116,11 @@ class FormularioController extends BaseFormularioController
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
+        $archivos = $this->FormularioManager->getArchivosRelevamiento($Relevamiento);
         
         return new ViewModel([
             "formulario" => $FormularioJSON,
+            "archivos" => $archivos,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $destinos,
             "idRelevamiento" => $idRelevamiento
@@ -173,9 +164,9 @@ class FormularioController extends BaseFormularioController
 
         $pdf = $this->tcpdf;
 
-        $pdf->SetFont('arialnarrow', '', 8, '', false);
+        $pdf->SetFont('helvetica', '', 8, '', false);
 
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 55, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -187,16 +178,16 @@ class FormularioController extends BaseFormularioController
         $pdf->writeHTML($html, true, false, true, false, '');
         
         $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
-        $pdf->SetFont('helvetica', 'BI', 16);
-        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'C');
-        $pdf->Ln(10);
+        $pdf->SetFont('helvetica', 'BI', 14);
+        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'L');
+        $pdf->Ln(5);
 
         foreach ($data['secciones'] as $seccion) {
             $this->imprimirSecciones($pdf, $seccion);
         }
 
-        $pdf->Ln(10);
-        $pdf->SetFont('helvetica', 'I', 10);
+        $pdf->Ln(5);
+        $pdf->SetFont('helvetica', 'I', 8);
         $pdf->Cell(0, 5, "Emitido por ".$nombreUsuario." - Cedna Software - ".$fecha_hoy, 0, 1, 'R');
 
         $pdf->Output();

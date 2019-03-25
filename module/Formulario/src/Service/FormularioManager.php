@@ -557,24 +557,19 @@ class FormularioManager {
 
     private function getArrayRespuestasModificadas($Respuestas) {
         $output = [];
-        $destinoAcum = "";
+        $destinoSeleccionado = 1;
         $ArrayAcum = [];
         foreach($Respuestas as $Respuesta){
             $destino = $Respuesta->getDestino();
-            if($destinoAcum != $destino) {
-                if($ArrayAcum) {
-                    $output[] = ['destino' => $destinoAcum,
-                                'respuestas' => $ArrayAcum];
-                    
-                    $ArrayAcum = [];
-                }
-                $destinoAcum = $destino;
+            list($dest, $nroDestino, $id, $idPregunta, $seccion, $idSeccion) = explode("_", $destino);
+            if($nroDestino == 1) {
+                $ArrayAcum[] = $this->getRespuestaModificada($Respuesta);
             }
-            $ArrayAcum[] = $this->getRespuestaModificada($Respuesta);
         }
-        $output[] = ['destino' => $destinoAcum,
-                    'respuestas' => $ArrayAcum];
-        
+        if($ArrayAcum) {
+            $output[] = ['destino' => $destinoSeleccionado,
+                                'respuestas' => $ArrayAcum];
+        }
         return $output;
     }
 
@@ -582,29 +577,42 @@ class FormularioManager {
         $output = [];
         foreach($Respuestas as $Respuesta) {
             $pregunta = $Respuesta->getPregunta()->getDescripcion(); 
-            $destinos = $Respuesta->getPregunta()->getTipoPregunta()->esPeguntaMultiple();
-            if(!$destinos) {
+            $tipoPregunta = $Respuesta->getPregunta()->getTipoPregunta();
+            $destinos = $tipoPregunta->esPeguntaMultiple();
+            $esArchivo = $tipoPregunta->esImagen();
+
+            if(!$tipoPregunta->esPeguntaMultiple()) {
                 $respuestaOutput = $this->getRespuestaModificada($Respuesta);
+            }
+            $nombreArchivo = "";
+            if($esArchivo) {
+                $nombreArchivo = $Respuesta->getNombreArchivo();
             }
         }
 
-        if($destinos) {
+        if($tipoPregunta->esPeguntaMultiple()) {
             $respuestaOutput = $this->getArrayRespuestasModificadas($Respuestas);
         }
-
-        $output[]= ['descripcionPregunta' => $pregunta,
-                    'poseeDestinos' => $destinos,
-                    'respuesta' => $respuestaOutput];
+        
+        if($respuestaOutput) {
+            $output[]= ['descripcionPregunta' => $pregunta,
+                    'tipoPregunta' => $tipoPregunta->getDescripcion(),
+                    'respuesta' => $respuestaOutput,
+                    'archivo' => $nombreArchivo];
+        }
         return $output;
     } 
 
+    public function getArchivosRelevamiento($Relevamiento) {
+        
+    }
 
-    private function respuestasSonTipoArchivo($Respuestas) {
+
+    private function respuestasSonTipoPDF($Respuestas) {
         foreach($Respuestas as $Respuesta) {
             $pregunta = $Respuesta->getPregunta();
             $tipoPregunta = $pregunta->getTipoPregunta();
-            if(($tipoPregunta->getDescripcion() == 'file_file')||
-                ($tipoPregunta->getDescripcion() == 'file_image')){
+            if($tipoPregunta->esPDF()){
                 return true;
             }
             return false;
@@ -623,13 +631,13 @@ class FormularioManager {
     private function getRespuestaPorSeccion($RespuestasRelevamiento, $idSeccion){
         $respuestas = [];
         foreach($RespuestasRelevamiento as $Respuestas){
-            if($this->respuestasPertenecenASeccion($Respuestas, $idSeccion)){
-                if(!$this->respuestasSonTipoArchivo($Respuestas)){
-                    $respuestas[] = $this->getRespuestasPorPreguntas($Respuestas);
-                }
+            if(($this->respuestasPertenecenASeccion($Respuestas, $idSeccion)) 
+                && (!$this->respuestasSonTipoPDF($Respuestas) )){
+                    if($this->getRespuestasPorPreguntas($Respuestas)) {
+                        $respuestas[] = $this->getRespuestasPorPreguntas($Respuestas);
+                    }
             } 
         } 
-        
         return $respuestas ;
     } 
 
@@ -637,8 +645,11 @@ class FormularioManager {
         $RespuestasRelevamiento = $this->getRespuestasSegunRelevamiento($Relevamiento);
         $secciones = $Relevamiento->getFormulario()->getSecciones();
         foreach($secciones as $seccion) {
-            $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
-                    'respuestas' => $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId())];
+            $respuestas = $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId());
+            if($respuestas) {
+                $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
+                    'respuestas' => $respuestas];
+            }
         }
         return $output;
     }
@@ -687,10 +698,6 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
-    // private function modificarRuta($respuesta) {
-        // return str_replace("/\/", '/\\/', $respuesta);
-    // }
-
     public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
         if(($Respuesta)&& (!$destino)) { 
@@ -698,7 +705,6 @@ class FormularioManager {
         } else {
             if($pregunta->getTipoPregunta()->esPeguntaArchivo()) {
                 $pregunta->setRequerido(0);
-                // $respuesta = $this->modificarRuta($respuesta);
             }
             $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
         }
@@ -736,6 +742,35 @@ class FormularioManager {
             }
         }
         return $output;
+    }
+
+    private function modificarNombresArchivo($idRespuestaPregunta, $nombreArchivo, $nombreReal) {
+        list($pregunta, $idPregunta, $seccion, $idSeccion, $relevamiento, $idRelevamiento) = explode("_", $idRespuestaPregunta);
+        $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $idSeccion, $idPregunta);
+
+        foreach($Respuesta as $resp) {
+            $resp->setNombreArchivo($nombreArchivo);
+            $resp->setDescripcion($nombreReal);
+            
+            $this->entityManager->persist($resp);
+            $this->entityManager->flush();
+        }
+
+    }
+
+    public function guardarArchivos($listaArchivos, $archivo, $idRelevamiento) {
+        for($i = 0; $i < count($listaArchivos); $i++) {
+            if ($archivo) {
+                $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
+                $fecha_hoy = date("Y-m-d-H:i:s");
+                $nombreReal = $archivo['name'][$i];
+                $file_ext = pathinfo($nombreReal, PATHINFO_EXTENSION);
+                $nombreArchivo = $nombreUsuario."-".$fecha_hoy.".".$file_ext;
+                $ruta_destino_archivo = "file/".$nombreArchivo;
+                $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
+                $this->modificarNombresArchivo($listaArchivos[$i], $nombreArchivo, $nombreReal);
+            }
+        }
     }
 
     private function elminarEntidad($Entidad) {
