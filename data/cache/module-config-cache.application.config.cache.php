@@ -48,12 +48,12 @@ return array (
       'DBAL\\Service\\CatalogoManager' => 'DBAL\\Service\\Factory\\CatalogoManagerFactory',
       'Configuracion\\Service\\ConfiguracionManager' => 'Configuracion\\Service\\Factory\\ConfiguracionManagerFactory',
       'Configuracion\\Service\\ConfigUsuariosManager' => 'Configuracion\\Service\\Factory\\ConfigUsuariosManagerFactory',
-      'Formulario\\Service\\FormularioManager' => 'Formulario\\Service\\Factory\\FormularioManagerFactory',
-      'Formulario\\Service\\CednaTcpdf' => 'Formulario\\Service\\Factory\\CednaTcpdfFactory',
-      'TCPDF' => 'TCPDFModule\\Factory\\TCPDFFactory',
       'Admin\\Service\\AccionManager' => 'Admin\\Service\\Factory\\AccionManagerFactory',
       'Admin\\Service\\OperacionManager' => 'Admin\\Service\\Factory\\OperacionManagerFactory',
       'Admin\\Service\\OperacionAccionPerfilManager' => 'Admin\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
+      'Formulario\\Service\\FormularioManager' => 'Formulario\\Service\\Factory\\FormularioManagerFactory',
+      'Formulario\\Service\\CednaTcpdf' => 'Formulario\\Service\\Factory\\CednaTcpdfFactory',
+      'TCPDF' => 'TCPDFModule\\Factory\\TCPDFFactory',
     ),
     'abstract_factories' => 
     array (
@@ -629,6 +629,80 @@ return array (
           ),
         ),
       ),
+      'abm' => 
+      array (
+        'type' => 'Zend\\Router\\Http\\Segment',
+        'options' => 
+        array (
+          'route' => '/abm',
+          'defaults' => 
+          array (
+            'controller' => 'Admin\\Controller\\ABMController',
+            'action' => 'index',
+          ),
+        ),
+        'may_terminate' => true,
+        'child_routes' => 
+        array (
+          'accion' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/accion[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Admin\\Controller\\AccionController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
+          'operacion' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/operacion[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Admin\\Controller\\OperacionController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
+          'operacionAccionPerfil' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/operacionAccionPerfil[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Admin\\Controller\\OperacionAccionPerfilController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
+        ),
+      ),
       'formulario' => 
       array (
         'type' => 'Zend\\Router\\Http\\Segment',
@@ -661,42 +735,6 @@ return array (
           'constraints' => 
           array (
             'id' => '[1-9]\\d*',
-          ),
-        ),
-      ),
-      'abm' => 
-      array (
-        'type' => 'Zend\\Router\\Http\\Segment',
-        'options' => 
-        array (
-          'route' => '/abm',
-          'defaults' => 
-          array (
-            'controller' => 'Admin\\Controller\\ABMController',
-            'action' => 'abm',
-          ),
-        ),
-        'may_terminate' => true,
-        'child_routes' => 
-        array (
-          'entidad' => 
-          array (
-            'type' => 'Zend\\Router\\Http\\Segment',
-            'options' => 
-            array (
-              'route' => '/:entidad[/:action[/:id]]',
-              'defaults' => 
-              array (
-                'action' => 'listar',
-              ),
-            ),
-            'constraints' => 
-            array (
-              'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'id' => '[a-zA-Z0-9_-]*',
-            ),
-            'may_terminate' => true,
           ),
         ),
       ),
@@ -1075,9 +1113,12 @@ return array (
       'Configuracion\\Controller\\ConfigPerfilesController' => 'Configuracion\\Controller\\Factory\\ConfigPerfilesControllerFactory',
       'Configuracion\\Controller\\ConfigUsuariosController' => 'Configuracion\\Controller\\Factory\\ConfigUsuariosControllerFactory',
       'Configuracion\\Controller\\ConfigNotifXPerfilController' => 'Configuracion\\Controller\\Factory\\ConfigNotifXPerfilControllerFactory',
+      'Admin\\Controller\\ABMController' => 'Admin\\Controller\\Factory\\ABMControllerFactory',
+      'Admin\\Controller\\AccionController' => 'Admin\\Controller\\Factory\\AccionControllerFactory',
+      'Admin\\Controller\\OperacionController' => 'Admin\\Controller\\Factory\\OperacionControllerFactory',
+      'Admin\\Controller\\OperacionAccionPerfilController' => 'Admin\\Controller\\Factory\\OperacionAccionPerfilControllerFactory',
       'Formulario\\Controller\\BaseFormularioController' => 'Formulario\\Controller\\Factory\\BaseFormularioControllerFactory',
       'Formulario\\Controller\\FormularioController' => 'Formulario\\Controller\\Factory\\FormularioControllerFactory',
-      'Admin\\Controller\\ABMController' => 'Admin\\Controller\\Factory\\ABMControllerFactory',
     ),
   ),
   'console' => 
@@ -1121,10 +1162,10 @@ return array (
     array (
       'zend-developer-tools/toolbar/doctrine-orm-queries' => '/home/juano/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-queries.phtml',
       'zend-developer-tools/toolbar/doctrine-orm-mappings' => '/home/juano/cedna/cedna/vendor/doctrine/doctrine-orm-module/config/../view/zend-developer-tools/toolbar/doctrine-orm-mappings.phtml',
-      'layout/layout' => '/home/juano/cedna/cedna/module/Admin/config/../view/layout/layout.phtml',
+      'layout/layout' => '/home/juano/cedna/cedna/module/Formulario/config/../view/layout/layout.phtml',
       'application/index/index' => '/home/juano/cedna/cedna/module/Formulario/config/../view/application/index/index.phtml',
-      'error/404' => '/home/juano/cedna/cedna/module/Admin/config/../view/error/404.phtml',
-      'error/index' => '/home/juano/cedna/cedna/module/Admin/config/../view/error/index.phtml',
+      'error/404' => '/home/juano/cedna/cedna/module/Formulario/config/../view/error/404.phtml',
+      'error/index' => '/home/juano/cedna/cedna/module/Formulario/config/../view/error/index.phtml',
       'configuracion/index/index' => '/home/juano/cedna/cedna/module/Configuracion/config/../view/configuracion/index/index.phtml',
       'admin/index/index' => '/home/juano/cedna/cedna/module/Admin/config/../view/admin/index/index.phtml',
     ),
@@ -1138,8 +1179,8 @@ return array (
       0 => '/home/juano/cedna/cedna/module/Application/config/../view',
       1 => '/home/juano/cedna/cedna/module/Autenticacion/config/../view',
       2 => '/home/juano/cedna/cedna/module/Configuracion/config/../view',
-      3 => '/home/juano/cedna/cedna/module/Formulario/config/../view',
-      4 => '/home/juano/cedna/cedna/module/Admin/config/../view',
+      3 => '/home/juano/cedna/cedna/module/Admin/config/../view',
+      4 => '/home/juano/cedna/cedna/module/Formulario/config/../view',
     ),
   ),
   'zenddevelopertools' => 

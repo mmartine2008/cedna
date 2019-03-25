@@ -1,0 +1,70 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Acción</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formEditarAccion" onsubmit="preSubmit()">
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="nombreAccion"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreAccion" name="nombreAccion" class="form-control" required="true"
+                            value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="tituloAccion"><span class="obligatorio">(*) </span>Titulo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="tituloAccion" name="tituloAccion" class="form-control" required="true"
+                            value="<?= ($Entidad) ? $Entidad->getTitulo() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="iconoAccion">Icono:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="iconoAccion" name="iconoAccion" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getIcono() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/accion", ["action" => "index"])?>" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary ml-3">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormAltaAccionToJson(){
+    var formData = {
+        nombre: $('#nombreAccion').val(), 
+        titulo: $('#tituloAccion').val(), 
+        icono: $('#iconoAccion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaAccionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formEditarAccion")[0].checkValidity()){
+        $("#formEditarAccion").submit();
+    }else{
+        $("#formEditarAccion")[0].reportValidity();
+    }
+}
+</script>

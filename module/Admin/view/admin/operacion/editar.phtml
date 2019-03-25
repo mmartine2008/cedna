@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Editar Operación</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" name="formEditarOperacion" onsubmit="preSubmit()">
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="nombreOperacion"><span class="obligatorio">(*) </span>Nombre:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="nombreOperacion" name="nombreOperacion" class="form-control" required="true"
+                            value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="tituloOperacion"><span class="obligatorio">(*) </span>Titulo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="tituloOperacion" name="tituloOperacion" class="form-control" required="true"
+                            value="<?= ($Entidad) ? $Entidad->getTitulo() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="iconoOperacion">Icono:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="iconoOperacion" name="iconoOperacion" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getIcono() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="iconoOperacion">Grupo:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="grupoOperacion" name="grupoOperacion" class="form-control">
+                                <option value="">-- Seleccione --</option>
+                            <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
+                                <option value="<?= $Operacion->getId() ?>"
+                                <?= ($Entidad && $Entidad->getGrupo() && $Entidad->getGrupo()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
+                                ><?= $Operacion->getTitulo() ?></option>
+                            <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="ordenOperacion">Orden:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="ordenOperacion" name="ordenOperacion" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getOrden() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3">
+                            <label for="urlOperacion">URL:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="urlOperacion" name="urlOperacion" class="form-control"
+                            value="<?= ($Entidad) ? $Entidad->getUrl() : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                        <a href="<?=$this->url("abm/operacion", ["action" => "index"])?>" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary ml-3">Confirmar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+function FormAltaOperacionToJson(){
+    var formData = {
+        nombre: $('#nombreOperacion').val(), 
+        titulo: $('#tituloOperacion').val(), 
+        icono: $('#iconoOperacion').val(),
+        id_grupo: $('#grupoOperacion').val(),
+        orden: $('#ordenOperacion').val(),
+        url: $('#urlOperacion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormAltaOperacionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formEditarOperacion")[0].checkValidity()){
+        $("#formEditarOperacion").submit();
+    }else{
+        $("#formEditarOperacion")[0].reportValidity();
+    }
+}
+</script>

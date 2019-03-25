@@ -25,100 +25,16 @@ class ABMController extends AbstractActionController
         $this->layout()->arrAccionesDisponibles = null;
     }
 
+    /**
+     * Esta funcion lista todas las posibles configuraciones internas del sistema
+     *
+     * @return void
+     */
     public function indexAction()
     {
 
         return new ViewModel();
     }
 
-    public function abmAction()
-    {
-        return new ViewModel();
-    }
-
     
-    public function listarAction()
-    {
-        $parametros = $this->params()->fromRoute();
-
-        $nombreEntidad = $parametros['entidad'];
-        $manager = $nombreEntidad.'Manager';
-
-        //construir manager dinamicamente
-        $arrEntidades = $this->$manager->getListado();
-        
-        $view = new ViewModel();
-
-        $view->setVariable('arrEntidades', $arrEntidades);
-
-        $view->setTemplate('admin/abm/'.$nombreEntidad.'.phtml');
-        return $view;
-    }
-
-    public function altaAction(){
-        $parametros = $this->params()->fromRoute();
-
-        $nombreEntidad = $parametros['entidad'];
-
-        $manager = $nombreEntidad.'Manager';
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            
-            $JsonData = json_decode($data['JsonData']);
-
-            $this->$manager->procesarAlta($JsonData);
-
-            $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
-        }
-
-        $view = new ViewModel();
-        
-        $view->setVariable('Entidad', null);
-        $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('admin/abm/alta-'.$nombreEntidad.'.phtml');
-        
-        return $view;      
-    }
-
-    public function editarAction(){
-        $parametros = $this->params()->fromRoute();
-
-        $nombreEntidad = $parametros['entidad'];
-        $idEntidad = $parametros['id'];
-
-        $manager = $nombreEntidad.'Manager';
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            
-            $JsonData = json_decode($data['JsonData']);
-
-            $this->$manager->procesarAlta($JsonData, $idEntidad);
-
-            $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
-        }
-
-        $Entidad = $this->$manager->getEntidadPorId($idEntidad);
-        $view = new ViewModel();
-        
-        $view->setVariable('Entidad', $Entidad);
-        $view->setVariable('arrVariables', $this->$manager->getArrVariablesAltaEntidad());
-        $view->setTemplate('admin/abm/alta-'.$nombreEntidad.'.phtml');
-        
-        return $view;      
-    }
-
-    public function borrarAction(){
-        $parametros = $this->params()->fromRoute();
-
-        $nombreEntidad = $parametros['entidad'];
-        $idEntidad = $parametros['id'];
-
-        $manager = $nombreEntidad.'Manager';
-
-        $mensaje = $this->$manager->borrarEntidad($idEntidad);
-
-        return $this->redirect()->toRoute("abm/entidad",["entidad" => $nombreEntidad, "action" => "listar"]);
-    } 
 }

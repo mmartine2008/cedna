@@ -20,21 +20,51 @@ return [
                     'route'    => '/abm',
                     'defaults' => [
                         'controller' => Controller\ABMController::class,
-                        'action'     => 'abm',
+                        'action'     => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'entidad' => [
+                    'accion' => [
                         'type' => Segment::class,
                         'options' => [
-                            'route' => '/:entidad[/:action[/:id]]',
+                            'route' => '/accion[/:action[/:id]]',
                             'defaults' => [
-                                'action'     => 'listar',
+                                'controller' => Controller\AccionController::class,
+                                'action'     => 'index',
                             ],
                         ],
                         'constraints' => [
-                            'entidad' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'operacion' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/operacion[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\OperacionController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'operacionAccionPerfil' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/operacionAccionPerfil[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\OperacionAccionPerfilController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
                             'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             'id' => '[a-zA-Z0-9_-]*',
                         ],
@@ -48,6 +78,9 @@ return [
     'controllers' => [
         'factories' => [
             Controller\ABMController::class => Controller\Factory\ABMControllerFactory::class,
+            Controller\AccionController::class => Controller\Factory\AccionControllerFactory::class,
+            Controller\OperacionController::class => Controller\Factory\OperacionControllerFactory::class,
+            Controller\OperacionAccionPerfilController::class => Controller\Factory\OperacionAccionPerfilControllerFactory::class,
         ],
     ],
     'service_manager' => [

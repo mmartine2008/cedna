@@ -1,6 +1,6 @@
 <div class="form-row">
     <div class="col-md-2 offset-10">
-        <a href="<?=$this->url("abm/entidad",["entidad" => "operacion", "action" => "alta"])?>" class="btn btn-primary">Nueva Operación</a>
+        <a href="<?=$this->url("abm/operacion", ["action" => "alta"])?>" class="btn btn-primary">Nueva Operación</a>
     </div>
     <div class="col-md-12">
         <div class="panel panel-default">
@@ -27,13 +27,13 @@
                             <td><?= ($Operacion->getGrupo()) ? $Operacion->getGrupo()->getTitulo() : '' ?></td>
                             <td class="form-row">
                                 <div class="col-md-5">
-                                    <a href="<?=$this->url("abm/entidad",
-                                        ["entidad" => "operacion", "action" => "editar", "id" => $Operacion->getId()]
+                                    <a href="<?=$this->url("abm/operacion",
+                                        ["action" => "editar", "id" => $Operacion->getId()]
                                         )?>" class="btn btn-success">Editar</a>
                                 </div>
                                 <div class="col-md-5 offset-2">
-                                    <a href="<?=$this->url("abm/entidad",
-                                        ["entidad" => "operacion", "action" => "borrar", "id" => $Operacion->getId()]
+                                    <a href="<?=$this->url("abm/operacion",
+                                        ["action" => "borrar", "id" => $Operacion->getId()]
                                         )?>" class="btn btn-danger">Borrar</a>
                                 </div>
                             </td>
@@ -42,7 +42,7 @@
                     </tbody>
                 </table>
                 <div class="flex">
-                    <a href="<?=$this->url("abm",["action" => "listar"])?>" class="btn btn-primary">Volver</a>
+                    <a href="<?=$this->url("abm", ["action" => "index"])?>" class="btn btn-primary">Volver</a>
                 </div>
             </div>
         </div>

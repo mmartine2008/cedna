@@ -12,7 +12,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="nombreOperacion" name="nombreOperacion" class="form-control" required="true"
-                            value="<?= ($Entidad) ? $Entidad->getNombre() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="tituloOperacion" name="tituloOperacion" class="form-control" required="true"
-                            value="<?= ($Entidad) ? $Entidad->getTitulo() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="iconoOperacion" name="iconoOperacion" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getIcono() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -41,9 +41,7 @@
                             <select id="grupoOperacion" name="grupoOperacion" class="form-control">
                                 <option value="">-- Seleccione --</option>
                             <?php foreach($arrVariables['Operaciones'] as $Operacion) :?>
-                                <option value="<?= $Operacion->getId() ?>"
-                                <?= ($Entidad && $Entidad->getGrupo() && $Entidad->getGrupo()->getId() == $Operacion->getId()) ? 'selected' : '' ?>
-                                ><?= $Operacion->getTitulo() ?></option>
+                                <option value="<?= $Operacion->getId() ?>" ><?= $Operacion->getTitulo() ?></option>
                             <?php endforeach;?>
                             </select>
                         </div>
@@ -54,7 +52,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="ordenOperacion" name="ordenOperacion" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getOrden() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -63,15 +61,13 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="urlOperacion" name="urlOperacion" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getUrl() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
-                        <a href="<?=$this->url("abm/entidad",["entidad" => "operacion", "action" => "listar"])?>">
-                            <div class="btn">Cancelar</div>
-                        </a>
-                        <button type="submit">Confirmar</button>
+                        <a href="<?=$this->url("abm/operacion", ["action" => "index"])?>" class="btn btn-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary ml-3">Confirmar</button>
                     </div>
                 </form>
             </div>

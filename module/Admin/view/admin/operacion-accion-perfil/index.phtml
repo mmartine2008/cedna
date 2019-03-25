@@ -1,7 +1,7 @@
 <div class="form-row">
     
         <div class="col-md-2 offset-10">
-            <a href="<?=$this->url("abm/entidad",["entidad" => "operacionAccionPerfil", "action" => "alta"])?>" class="btn btn-primary">Nueva Relación</a>
+            <a href="<?=$this->url("abm/operacionAccionPerfil", ["action" => "alta"])?>" class="btn btn-primary">Nueva Relación</a>
         </div>
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -25,11 +25,11 @@
                                 <td><?= $Entidad->getAccion()->getNombre() ?></td>
                                 <td><?= $Entidad->getPerfil()->getNombre() ?></td>
                                 <td>
-                                    <a href="<?=$this->url("abm/entidad",
-                                        ["entidad" => "operacionAccionPerfil", "action" => "editar", "id" => $Entidad->getId()]
+                                    <a href="<?=$this->url("abm/operacionAccionPerfil",
+                                        ["action" => "editar", "id" => $Entidad->getId()]
                                         )?>" class="btn btn-success">Editar</a> | 
-                                    <a href="<?=$this->url("abm/entidad",
-                                        ["entidad" => "operacionAccionPerfil", "action" => "borrar", "id" => $Entidad->getId()]
+                                    <a href="<?=$this->url("abm/operacionAccionPerfil",
+                                        ["action" => "borrar", "id" => $Entidad->getId()]
                                         )?>" class="btn btn-danger">Borrar</a>
                                 </td>
                             </tr>
@@ -37,7 +37,7 @@
                         </tbody>
                     </table>
                     <div class="flex">
-                        <a href="<?=$this->url("abm",["action" => "listar"])?>" class="btn btn-primary">Volver</a>
+                        <a href="<?=$this->url("abm", ["action" => "index"])?>" class="btn btn-primary">Volver</a>
                     </div>
                 </div>
             </div>
