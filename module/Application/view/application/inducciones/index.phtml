@@ -1,0 +1,116 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Inducciones</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaInducciones" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyInducciones">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrInduccionesJSON = <?= $arrInduccionesJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaInducciones();
+    });
+
+    function dibujarTablaInducciones(){
+        $('#bodyInducciones').find('tr').remove();
+    
+        for (var i = 0; i < arrInduccionesJSON.length; i++)
+        {
+            var induccion = arrInduccionesJSON[i];
+
+            var body = document.getElementById("bodyInducciones");
+            var row = body.insertRow();
+            row.id = i;
+
+            var fecha = row.insertCell(0);
+            var descripcion = row.insertCell(1);
+
+            fecha.innerHTML = induccion.fecha;
+            descripcion.innerHTML = induccion.descripcion;
+        }
+    }
+
+    $(function() {
+        $('#tablaInducciones').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarInduccion() {
+        var result = null;
+        var induccion = arrInduccionesJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/inducciones/borrar/' + induccion.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var induccion = arrInduccionesJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Inducción',
+                width: 600,
+                text: "Está seguro que desea eliminar la inducción del día: "+ induccion.fecha +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarInduccion();
+                    window.location.replace(url + "/inducciones");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var induccion = arrInduccionesJSON[filaSeleccionada];
+
+            window.location.replace(url + "/inducciones/editar/" + induccion.id);
+        }
+    }
+
+  </script>

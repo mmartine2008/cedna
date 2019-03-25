@@ -46,6 +46,12 @@ class Operarios
      */
     protected $Email;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Usuarios")
+     * @ORM\JoinColumn(name="IdContratista", referencedColumnName="IdUsuario")
+     */
+    protected $Contratista;
+
     public function setNombre($Nombre)
     {
         $this->Nombre = $Nombre;
@@ -69,6 +75,11 @@ class Operarios
     public function setEmail($Email)
     {
         $this->Email = $Email;
+    }
+
+    public function setContratista($Contratista)
+    {
+        $this->Contratista = $Contratista;
     }
 
     public function getId()
@@ -101,6 +112,11 @@ class Operarios
         return $this->Email;
     }
 
+    public function getContratista()
+    {
+        return $this->Contratista;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -109,6 +125,7 @@ class Operarios
         $output .= '"apellido": "' . $this->getApellido() .'", ';
         $output .= '"cuit": "' . $this->getCuit() .'", ';
         $output .= '"telefono": "' . $this->getTelefono() .'", ';
+        $output .= '"contratista": ' . $this->getContratista()->getJSON() .', ';
         $output .= '"email": "' . $this->getEmail() .'"';
         
         return '{' . $output . '}';

@@ -49,6 +49,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'inducciones' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/inducciones[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\InduccionesController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
             'organigrama' => [
                 'type' => Segment::class,
                 'options' => [
@@ -172,6 +187,7 @@ return [
             Controller\OrdenesDeCompraController::class => Controller\Factory\OrdenesDeCompraControllerFactory::class,
             Controller\PlanificacionController::class => Controller\Factory\PlanificacionControllerFactory::class,
             Controller\MailController::class => Controller\Factory\MailControllerFactory::class,
+            Controller\InduccionesController::class => Controller\Factory\InduccionesControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -184,6 +200,7 @@ return [
             Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
             Service\OrdenesDeCompraManager::class => Service\Factory\OrdenesDeCompraManagerFactory::class,
             Service\MailManager::class => Service\Factory\MailManagerFactory::class,
+            Service\InduccionesManager::class => Service\Factory\InduccionesManagerFactory::class,
         ],
     ],
     'view_manager' => [

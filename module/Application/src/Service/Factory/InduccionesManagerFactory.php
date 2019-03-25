@@ -3,13 +3,12 @@ namespace Application\Service\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Application\Service\OperariosManager;
+use Application\Service\InduccionesManager;
 use DBAL\Service\CatalogoManager;
 use Application\Service\TareasManager;
 use Application\Service\MailManager;
 
-
-class OperariosManagerFactory implements FactoryInterface
+class InduccionesManagerFactory implements FactoryInterface
 {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -18,6 +17,6 @@ class OperariosManagerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class); 
         $mailManager = $container->get(MailManager::class); 
 
-        return new OperariosManager($entityManager, $catalogoManager, $mailManager);
+        return new InduccionesManager($entityManager, $catalogoManager, $mailManager);
     }
 }

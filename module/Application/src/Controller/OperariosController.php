@@ -25,7 +25,10 @@ class OperariosController extends CednaController
     {
         $this->cargarAccionesDisponibles('operarios');
         
-        $arrOperariosJSON = $this->catalogoManager->getArrEntidadJSON('Operarios');
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $arrOperariosJSON = $this->operariosManager->getArrOperariosJSON($UsuarioActivo);
 
         return new ViewModel([
             'arrOperariosJSON' => $arrOperariosJSON
@@ -35,12 +38,15 @@ class OperariosController extends CednaController
     public function altaAction(){
         $this->cargarAccionesDisponibles('operarios - alta');
 
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->operariosManager->altaEdicionOperarios($JsonData);
+            $this->operariosManager->altaEdicionOperarios($JsonData, $UsuarioActivo);
 
             $this->redirect()->toRoute("operarios",["action" => "index"]);
         }
@@ -59,11 +65,14 @@ class OperariosController extends CednaController
 
         $idOperarios = $parametros['id'];
 
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->operariosManager->altaEdicionOperarios($JsonData, $idOperarios);
+            $this->operariosManager->altaEdicionOperarios($JsonData, $UsuarioActivo, $idOperarios);
 
             $this->redirect()->toRoute("operarios",["action" => "index"]);
         }
