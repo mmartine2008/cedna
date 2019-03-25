@@ -1,47 +1,119 @@
 <div class="form-row">
-    
-        <div class="col-md-2 offset-10">
-            <a href="<?=$this->url("abm/operacionAccionPerfil", ["action" => "alta"])?>" class="btn btn-primary">Nueva Relación</a>
-        </div>
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Listado de Operaciones - Acciones - Perfiles</h3>
                 </div>
                 <div class="panel-body">
-                    <table class="footable table table-stripped toggle-arrow-tiny no-borders">
+                    <table id="tablaOpAccionPerfil" class="footable table table-stripped toggle-arrow-tiny no-borders">
                         <thead>
                             <tr>
                                 <th class="text-center">Operación</th>
                                 <th class="text-center">Acción</th>
                                 <th class="text-center">Perfil</th>
-                                <th class="text-right">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="">
-                        <?php foreach($arrEntidades as $Entidad) : ?>
-                            <tr>
-                                <td><?= $Entidad->getOperacion()->getTitulo() ?></td>
-                                <td><?= $Entidad->getAccion()->getNombre() ?></td>
-                                <td><?= $Entidad->getPerfil()->getNombre() ?></td>
-                                <td>
-                                    <a href="<?=$this->url("abm/operacionAccionPerfil",
-                                        ["action" => "editar", "id" => $Entidad->getId()]
-                                        )?>" class="btn btn-success">Editar</a> | 
-                                    <a href="<?=$this->url("abm/operacionAccionPerfil",
-                                        ["action" => "borrar", "id" => $Entidad->getId()]
-                                        )?>" class="btn btn-danger">Borrar</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <tbody id="bodyOpAccionPerfil">
                         </tbody>
                     </table>
-                    <div class="flex">
-                        <a href="<?=$this->url("abm", ["action" => "index"])?>" class="btn btn-primary">Volver</a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+<script>
+    var filaSeleccionada = -1;
+    var arrOpAccionPerfilJSON = <?= $arrOpAccionPerfilJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaOpAccionPerfil();
+    });
+
+    function dibujarTablaOpAccionPerfil(){
+        $('#bodyOpAccionPerfil').find('tr').remove();
+    
+        for (var i = 0; i < arrOpAccionPerfilJSON.length; i++)
+        {
+            var opAccionPerfil = arrOpAccionPerfilJSON[i];
+
+            var body = document.getElementById("bodyOpAccionPerfil");
+            var row = body.insertRow();
+            row.id = i;
+
+            var operacion = row.insertCell(0);
+            var accion = row.insertCell(1);
+            var perfil = row.insertCell(2);
+
+            operacion.innerHTML = opAccionPerfil.Operacion.titulo;
+            accion.innerHTML = opAccionPerfil.Accion.titulo;
+            perfil.innerHTML = opAccionPerfil.Perfil.nombre;
+        }
+    }
+
+    $(function() {
+        $('#tablaOpAccionPerfil').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarOpAccionPerfil() {
+        var result = null;
+        var opAccionPerfil = arrOpAccionPerfilJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + 'abm/operacionAccionPerfil/borrar/' + opAccionPerfil.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var opAccionPerfil = arrOpAccionPerfilJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Relación',
+                width: 600,
+                text: "Está seguro que desea eliminar la relacion entre acción, operación y perfil?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarOpAccionPerfil();
+                    window.location.replace(url + "/abm/operacionAccionPerfil");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var opAccionPerfil = arrOpAccionPerfilJSON[filaSeleccionada];
+
+            window.location.replace(url + "/abm/operacionAccionPerfil/editar/" + opAccionPerfil.id);
+        }
+    }
+
+  </script>

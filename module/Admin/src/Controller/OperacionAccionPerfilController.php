@@ -23,19 +23,19 @@ class OperacionAccionPerfilController extends CednaController
 
     public function indexAction()
     {
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('abm operacionAccionPerfil');
 
-        $arrEntidades = $this->operacionAccionPerfil->getListado();
+        $arrEntidades = $this->catalogoManager->getArrEntidadJSON('OperacionAccionPerfil');
         
         $view = new ViewModel();
 
-        $view->setVariable('arrEntidades', $arrEntidades);
+        $view->setVariable('arrOpAccionPerfilJSON', $arrEntidades);
 
         return $view;
     }
 
     public function altaAction(){
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('abm operacionAccionPerfil - alta');
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
@@ -44,7 +44,7 @@ class OperacionAccionPerfilController extends CednaController
 
             $this->operacionAccionPerfil->procesarAlta($JsonData);
 
-            $this->redirect()->toRoute("abm/operacion-accion-perfil", ["action" => "index"]);
+            $this->redirect()->toRoute("abm/operacionAccionPerfil", ["action" => "index"]);
         }
 
         $view = new ViewModel();
@@ -56,6 +56,7 @@ class OperacionAccionPerfilController extends CednaController
     }
 
     public function editarAction(){
+        $this->cargarAccionesDisponibles('abm operacionAccionPerfil - editar');
         $parametros = $this->params()->fromRoute();
 
         $idEntidad = $parametros['id'];
@@ -67,7 +68,7 @@ class OperacionAccionPerfilController extends CednaController
 
             $this->operacionAccionPerfil->procesarAlta($JsonData, $idEntidad);
 
-            $this->redirect()->toRoute("abm/operacion-accion-perfil", ["action" => "index"]);
+            $this->redirect()->toRoute("abm/operacionAccionPerfil", ["action" => "index"]);
         }
 
         $Entidad = $this->operacionAccionPerfil->getEntidadPorId($idEntidad);
@@ -87,6 +88,6 @@ class OperacionAccionPerfilController extends CednaController
 
         $mensaje = $this->operacionAccionPerfil->borrarEntidad($idEntidad);
 
-        return $this->redirect()->toRoute("abm/operacion-accion-perfil", ["action" => "index"]);
+        return $this->redirect()->toRoute("abm/operacionAccionPerfil", ["action" => "index"]);
     } 
 }

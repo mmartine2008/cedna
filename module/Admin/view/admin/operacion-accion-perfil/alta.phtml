@@ -5,7 +5,7 @@
                 <h3 class="panel-title">Nueva Relación Operación - Accion - Perfil</h3>
             </div>
             <div class="panel-body">
-                <form method="post" name="formAltaOperacionAccionPerfil" onsubmit="preSubmit()">
+                <form method="post" name="formAltaOperacionAccionPerfil" id="formAltaOperacionAccionPerfil">
                     <div class="row form-group">
                         <div class="col-md-3">
                             <label for="idOperacion"><span class="obligatorio">(*) </span>Operación:</label>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="urlDestino" name="urlDestino" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getUrlDestino() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -60,7 +60,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="jsFunction" name="jsFunction" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getJsFunction() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="idHTMLElement" name="idHTMLElement" class="form-control"
-                            value="<?= ($Entidad) ? $Entidad->getIdHTMLElement() : '' ?>">
+                            value="">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -87,8 +87,6 @@
                     </div>
                     <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
-                        <a href="<?=$this->url("abm/operacionAccionPerfil", ["action" => "index"])?>" class="btn btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary ml-3">Confirmar</button>
                     </div>
                 </form>
             </div>
@@ -123,4 +121,19 @@ function preSubmit(){
         $("#formAltaOperacionAccionPerfil")[0].reportValidity();
     }
 }
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    verificarMostrarBotonGuardar();
+});
 </script>

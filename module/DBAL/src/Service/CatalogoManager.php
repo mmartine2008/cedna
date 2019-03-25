@@ -4,6 +4,7 @@ namespace DBAL\Service;
 
 use DBAL\Entity\TipoPregunta;
 
+use DBAL\Entity\Accion;
 use DBAL\Entity\Operacion;
 use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
@@ -52,6 +53,35 @@ class CatalogoManager {
         return $TipoPregunta;
     }
 
+    public function getAccion($idAccion = null){
+        if ($idAccion){
+            $Accion = $this->entityManager->getRepository(Accion::class)->findOneBy(['id' => $idAccion]);
+        }else{
+            $Accion = $this->entityManager->getRepository(Accion::class)->findAll();
+        }
+
+        return $Accion;
+    }
+
+    public function getOperacion($idOperacion = null){
+        if ($idOperacion){
+            $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['id' => $idOperacion]);
+        }else{
+            $Operacion = $this->entityManager->getRepository(Operacion::class)->findAll();
+        }
+
+        return $Operacion;
+    }
+
+    public function getOperacionAccionPerfil($idOperacionAccionPerfil = null){
+        if ($idOperacionAccionPerfil){
+            $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)->findOneBy(['id' => $idOperacionAccionPerfil]);
+        }else{
+            $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)->findAll();
+        }
+
+        return $OperacionAccionPerfil;
+    }
     public function getPerfiles($idPerfil = null){
         if ($idPerfil){
             $Perfiles = $this->entityManager->getRepository(Perfiles::class)->findOneBy(['id' => $idPerfil]);

@@ -5,7 +5,7 @@
                 <h3 class="panel-title">Nueva Operación</h3>
             </div>
             <div class="panel-body">
-                <form method="post" name="formAltaOperacion" onsubmit="preSubmit()">
+                <form method="post" name="formAltaOperacion" id="formAltaOperacion">
                     <div class="row form-group">
                         <div class="col-md-3">
                             <label for="nombreOperacion"><span class="obligatorio">(*) </span>Nombre:</label>
@@ -66,8 +66,6 @@
                     </div>
                     <div class="row form-group">
                         <input type="hidden" name="JsonData" id="JsonData">
-                        <a href="<?=$this->url("abm/operacion", ["action" => "index"])?>" class="btn btn-secondary">Cancelar</a>
-                        <button type="submit" class="btn btn-primary ml-3">Confirmar</button>
                     </div>
                 </form>
             </div>
@@ -101,4 +99,19 @@ function preSubmit(){
         $("#formAltaOperacion")[0].reportValidity();
     }
 }
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    verificarMostrarBotonGuardar();
+});
 </script>

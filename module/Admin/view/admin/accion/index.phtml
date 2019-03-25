@@ -1,43 +1,119 @@
 <div class="form-row">
-    
-        <div class="col-md-2 offset-10">
-            <a href="<?=$this->url("abm/accion", ["action" => "alta"])?>" class="btn btn-primary">Nueva Acción</a>
-        </div>
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Listado de Acciones</h3>
                 </div>
                 <div class="panel-body">
-                    <table class="footable table table-stripped toggle-arrow-tiny no-borders">
+                    <table id="tablaAcciones" class="footable table table-stripped toggle-arrow-tiny no-borders">
                         <thead>
                             <tr>
                                 <th class="text-center">Nombre</th>
                                 <th class="text-center">Titulo</th>
                                 <th class="text-center">Icono</th>
-                                <th class="text-right">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="">
-                        <?php foreach($arrEntidades as $Accion) : ?>
-                            <tr>
-                                <td><?= $Accion->getNombre() ?></td>
-                                <td><?= $Accion->getTitulo() ?></td>
-                                <td><?= $Accion->getIcono() ?></td>
-                                <td>
-                                    <a href="<?=$this->url("abm/accion", ["action" => "editar", "id" => $Accion->getId()])?>" class="btn btn-success">Editar</a> | 
-                                    <a href="<?=$this->url("abm/accion", ["action" => "borrar", "id" => $Accion->getId()])?>" class="btn btn-danger">Borrar</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+                        <tbody id="bodyAcciones">
                         </tbody>
                     </table>
-                    <div class="flex">
-                        <a href="<?=$this->url("abm", ["action" => "index"])?>" class="btn btn-primary">Volver</a>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 </div>
+<script>
+    var filaSeleccionada = -1;
+    var arrAccionesJSON = <?= $arrAccionesJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaAcciones();
+    });
+
+    function dibujarTablaAcciones(){
+        $('#bodyAcciones').find('tr').remove();
+    
+        for (var i = 0; i < arrAccionesJSON.length; i++)
+        {
+            var accion = arrAccionesJSON[i];
+
+            var body = document.getElementById("bodyAcciones");
+            var row = body.insertRow();
+            row.id = i;
+
+            var nombre = row.insertCell(0);
+            var titulo = row.insertCell(1);
+            var icono = row.insertCell(2);
+
+            nombre.innerHTML = accion.nombre;
+            titulo.innerHTML = accion.titulo;
+            icono.innerHTML = accion.icono;
+        }
+    }
+
+    $(function() {
+        $('#tablaAcciones').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarAccion() {
+        var result = null;
+        var accion = arrAccionesJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + 'abm/accion/borrar/' + accion.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var accion = arrAccionesJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Acción',
+                width: 600,
+                text: "Está seguro que desea eliminar la acción: "+ accion.nombre +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarAccion();
+                    window.location.replace(url + "/abm/accion");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var accion = arrAccionesJSON[filaSeleccionada];
+
+            window.location.replace(url + "/abm/accion/editar/" + accion.id);
+        }
+    }
+
+  </script>

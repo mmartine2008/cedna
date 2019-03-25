@@ -23,19 +23,19 @@ class AccionController extends CednaController
 
     public function indexAction()
     {
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('abm acciones');
 
-        $arrEntidades = $this->accionManager->getListado();
+        $arrEntidades = $this->catalogoManager->getArrEntidadJSON('Accion');
         
         $view = new ViewModel();
 
-        $view->setVariable('arrEntidades', $arrEntidades);
+        $view->setVariable('arrAccionesJSON', $arrEntidades);
 
         return $view;
     }
 
     public function altaAction(){
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('abm acciones - alta');
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
@@ -56,6 +56,7 @@ class AccionController extends CednaController
     }
 
     public function editarAction(){
+        $this->cargarAccionesDisponibles('abm acciones - editar');
         $parametros = $this->params()->fromRoute();
 
         $idEntidad = $parametros['id'];
