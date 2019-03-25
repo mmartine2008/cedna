@@ -116,11 +116,9 @@ class FormularioController extends BaseFormularioController
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
-        $archivos = $this->FormularioManager->getArchivosRelevamiento($Relevamiento);
         
         return new ViewModel([
             "formulario" => $FormularioJSON,
-            "archivos" => $archivos,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $destinos,
             "idRelevamiento" => $idRelevamiento

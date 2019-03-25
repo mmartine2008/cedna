@@ -345,6 +345,13 @@ class FormularioManager {
         return $respuesta;
     }
 
+    private function getRespuestaPorRelevamiento($idRelevamiento) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findBy(['relevamiento' => $idRelevamiento]); 
+        
+        return $respuesta;
+    }
+
     private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino) {
         $respuesta = $this->entityManager->getRepository(Respuesta::class)
                     ->findOneBy(['pregunta' => $pregunta, 'seccion' => $seccion, 'relevamiento' => $relevamiento, 'destino' => $destino]); 
@@ -603,9 +610,15 @@ class FormularioManager {
         return $output;
     } 
 
-    public function getArchivosRelevamiento($Relevamiento) {
-        
-    }
+    // public function getArchivosRelevamiento($Relevamiento) {
+    //     $Respuestas =  $this->getRespuestaPorRelevamiento($Relevamiento);
+    //     $Archivos = [];
+    //     foreach($Respuestas as $Respuesta) {
+    //         if($Respuesta->getPregunta()->getTipoPregunta()->esPeguntaArchivo()) {
+    //             // if (is_file($ruta))
+    //         }
+    //     }
+    // }
 
 
     private function respuestasSonTipoPDF($Respuestas) {
