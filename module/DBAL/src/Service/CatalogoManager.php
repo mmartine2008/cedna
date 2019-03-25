@@ -25,6 +25,7 @@ use DBAL\Entity\TiposEvento;
 use DBAL\Entity\NotificacionesXPerfil;
 use DBAL\Entity\UsuariosxPerfiles;
 use DBAL\Entity\EstadosRelevamiento;
+use DBAL\Entity\Inducciones;
 
 class CatalogoManager {
     
@@ -273,6 +274,16 @@ class CatalogoManager {
         return $EstadosRelevamiento;
     }
 
+    public function getInducciones($idInducciones = null){
+        if ($idInducciones){
+            $Inducciones = $this->entityManager->getRepository(Inducciones::class)->findOneBy(['id' => $idInducciones]);
+        }else{
+            $Inducciones = $this->entityManager->getRepository(Inducciones::class)->findAll();
+        }
+
+        return $Inducciones;
+    }
+
     public function getTareaPorOrdenDeCompra($OrdenDeCompra){
         $Tareas = $this->entityManager->getRepository(Tareas::class)->findOneBy(['OrdenDeCompra' => $OrdenDeCompra]);
 
@@ -283,6 +294,12 @@ class CatalogoManager {
         $Tareas = $this->entityManager->getRepository(Tareas::class)->findBy(['PlanificaTarea' => $Usuario]);
 
         return $Tareas;
+    }
+
+    public function getOperariosPorContratista($UsuarioActivo){
+        $Operarios = $this->entityManager->getRepository(Operarios::class)->findBy(['Contratista' => $UsuarioActivo]);
+
+        return $Operarios;
     }
 
     public function getNotificacionesXPerfilPorTipoEventoPerfil($TipoEvento, $Perfil){

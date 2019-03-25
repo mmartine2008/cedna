@@ -25,7 +25,7 @@ class OperariosManager {
         $this->mailManager = $mailManager;
     }
 
-    public function altaEdicionOperarios($jsonData, $idOperarios = null){
+    public function altaEdicionOperarios($jsonData, $UsuarioActivo, $idOperarios = null){
         if ($idOperarios){
             $Operarios = $this->catalogoManager->getOperarios($idOperarios);
         }else{
@@ -37,6 +37,7 @@ class OperariosManager {
         $Operarios->setCuit($jsonData->cuit);
         $Operarios->setTelefono($jsonData->telefono);
         $Operarios->setEmail($jsonData->email);
+        $Operarios->setContratista($UsuarioActivo);
 
         $this->entityManager->persist($Operarios);
         $this->entityManager->flush();
@@ -66,5 +67,18 @@ class OperariosManager {
         }
 
         return $mensaje;
+    }
+
+    public function getArrOperariosJSON($UsuarioActivo){
+        $arrOperarios = $this->catalogoManager->getOperariosPorContratista($UsuarioActivo);
+
+        $output = [];
+        foreach($arrOperarios as $Operario){
+            $output[] = $Operario->getJSON();
+        }
+
+        $output = implode(',', $output);
+
+        return '[' . $output . ']';
     }
 }

@@ -37,6 +37,7 @@ return array (
       'Application\\Service\\TareasManager' => 'Application\\Service\\Factory\\TareasManagerFactory',
       'Application\\Service\\OrdenesDeCompraManager' => 'Application\\Service\\Factory\\OrdenesDeCompraManagerFactory',
       'Application\\Service\\MailManager' => 'Application\\Service\\Factory\\MailManagerFactory',
+      'Application\\Service\\InduccionesManager' => 'Application\\Service\\Factory\\InduccionesManagerFactory',
       'Zend\\Authentication\\AuthenticationService' => 'Autenticacion\\Service\\Factory\\AuthenticationServiceFactory',
       'Autenticacion\\Service\\AuthManager' => 'Autenticacion\\Service\\Factory\\AuthManagerFactory',
       'Autenticacion\\Service\\UserManager' => 'Autenticacion\\Service\\Factory\\UserManagerFactory',
@@ -157,6 +158,25 @@ return array (
           'defaults' => 
           array (
             'controller' => 'Application\\Controller\\OperariosController',
+            'action' => 'index',
+          ),
+        ),
+        'constraints' => 
+        array (
+          'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+          'id' => '[a-zA-Z0-9_-]*',
+        ),
+        'may_terminate' => true,
+      ),
+      'inducciones' => 
+      array (
+        'type' => 'Zend\\Router\\Http\\Segment',
+        'options' => 
+        array (
+          'route' => '/inducciones[/:action[/:id]]',
+          'defaults' => 
+          array (
+            'controller' => 'Application\\Controller\\InduccionesController',
             'action' => 'index',
           ),
         ),
@@ -1107,6 +1127,7 @@ return array (
       'Application\\Controller\\OrdenesDeCompraController' => 'Application\\Controller\\Factory\\OrdenesDeCompraControllerFactory',
       'Application\\Controller\\PlanificacionController' => 'Application\\Controller\\Factory\\PlanificacionControllerFactory',
       'Application\\Controller\\MailController' => 'Application\\Controller\\Factory\\MailControllerFactory',
+      'Application\\Controller\\InduccionesController' => 'Application\\Controller\\Factory\\InduccionesControllerFactory',
       'Autenticacion\\Controller\\AuthController' => 'Autenticacion\\Controller\\Factory\\AuthControllerFactory',
       'Configuracion\\Controller\\ConfiguracionController' => 'Configuracion\\Controller\\Factory\\ConfiguracionControllerFactory',
       'Configuracion\\Controller\\ConfigTipoPreguntaController' => 'Configuracion\\Controller\\Factory\\ConfigTipoPreguntaControllerFactory',

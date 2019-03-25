@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Inducción</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formInduccion" name="formInduccion">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-6">
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <label for="fechaInduccion"><span class="obligatorio">(*) </span><?= $this->translate('__Fecha__') ?>:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input type="date" id="fechaInduccion" name="fechaInduccion" class="form-control" required="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="descripcionInduccion"><span class="obligatorio">(*) </span>Descripción:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea id="descripcionInduccion" name="descripcionInduccion" class="form-control" required="true" rows="5" maxlength="235"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var induccionesJson = <?= $InduccionesJson ?>;
+
+function FormInduccionToJson(){
+    var formData = {
+        fecha: $('#fechaInduccion').val(), 
+        descripcion: $('#descripcionInduccion').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormInduccionToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formInduccion")[0].checkValidity()){
+        $("#formInduccion").submit();
+    }else{
+        $("#formInduccion")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    if (induccionesJson !== ''){
+        $('#fechaInduccion').val(induccionesJson.fecha);
+        $('#descripcionInduccion').val(induccionesJson.descripcion);
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+</script>
