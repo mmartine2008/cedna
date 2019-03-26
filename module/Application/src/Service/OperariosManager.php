@@ -3,6 +3,7 @@
 namespace Application\Service;
 
 use DBAL\Entity\Operarios;
+use DBAL\Entity\InduccionXOperario;
 
 class OperariosManager {
     
@@ -80,5 +81,41 @@ class OperariosManager {
         $output = implode(',', $output);
 
         return '[' . $output . ']';
+    }
+
+    public function cargarInduccionesAOperarios($JsonData, $Induccion){
+        $this->eliminarOperariosDeLaInduccion($Induccion);
+
+        foreach($JsonData->arrOperarios as $operarioJSON){
+            $Operario = $this->catalogoManager->getOperarios($operarioJSON->id);
+
+            $InduccionXOperario = new InduccionXOperario();
+            $InduccionXOperario->setInduccion($Induccion);
+            $InduccionXOperario->setOperario($Operario);
+
+            $this->entityManager->persist($InduccionXOperario);
+        }
+
+        $this->entityManager->flush();
+    }
+
+    private function eliminarOperariosDeLaInduccion($Induccion){
+        $arrInduccionXOperario = $this->catalogoManager->getInduccionXOperarioPorInduccion($Induccion);
+
+        foreach($arrInduccionXOperario as $InduccionXOperario){
+            $this->borrarInduccionXOperario($InduccionXOperario);
+        }
+    }
+
+    public function borrarInduccionXOperario($InduccionXOperario){
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($InduccionXOperario);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+        }
     }
 }

@@ -129,4 +129,19 @@ function preSubmit(){
         $("#formEditarOperacionAccionPerfil")[0].reportValidity();
     }
 }
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    verificarMostrarBotonGuardar();
+});
 </script>

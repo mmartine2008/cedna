@@ -25,6 +25,14 @@ class OperariosController extends CednaController
     {
         $this->cargarAccionesDisponibles('operarios');
         
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('operarios');
+        
+        return new ViewModel(['OperacionesJSON' => $OperacionesJSON]);
+    }
+
+    public function listarAction(){
+        $this->cargarAccionesDisponibles('operarios - listar');
+        
         $userName = $this->userSessionManager->getUserName();
         $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
 
@@ -96,6 +104,43 @@ class OperariosController extends CednaController
 
         //Todavia no hay para mostrar mensajes
         return $this->redirect()->toRoute("operarios",["action" => "index"]);
-    } 
+    }
+
+    public function induccionesAction(){
+        $this->cargarAccionesDisponibles('operarios - inducciones');
+
+        $arrInduccionesJSON = $this->catalogoManager->getArrEntidadJSON('Inducciones');
+
+        return new ViewModel([
+            'arrInduccionesJSON' => $arrInduccionesJSON
+        ]);
+    }
+
+    public function cargarInduccionAction(){
+        $this->cargarAccionesDisponibles('operarios - cargar induccion');
+        $parametros = $this->params()->fromRoute();
+
+        $idInduccion = $parametros['id'];
+        $Induccion = $this->catalogoManager->getInducciones($idInduccion);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->operariosManager->cargarInduccionesAOperarios($JsonData, $Induccion);
+
+            $this->redirect()->toRoute("operarios",["action" => "inducciones"]);
+        }
+
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $arrOperariosJSON = $this->operariosManager->getArrOperariosJSON($UsuarioActivo);
+
+        return new ViewModel([
+            'arrOperariosJSON' => $arrOperariosJSON,
+            'InduccionJSON' => $Induccion->getJSON()
+        ]);
+    }
 
 }

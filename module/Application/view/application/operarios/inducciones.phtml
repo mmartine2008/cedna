@@ -1,0 +1,76 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de Inducciones</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaInducciones" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyInducciones">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrInduccionesJSON = <?= $arrInduccionesJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaInducciones();
+    });
+
+    function dibujarTablaInducciones(){
+        $('#bodyInducciones').find('tr').remove();
+    
+        for (var i = 0; i < arrInduccionesJSON.length; i++)
+        {
+            var induccion = arrInduccionesJSON[i];
+
+            var body = document.getElementById("bodyInducciones");
+            var row = body.insertRow();
+            row.id = i;
+
+            var fecha = row.insertCell(0);
+            var descripcion = row.insertCell(1);
+
+            fecha.innerHTML = induccion.fecha;
+            descripcion.innerHTML = induccion.descripcion;
+        }
+    }
+
+    $(function() {
+        $('#tablaInducciones').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var induccion = arrInduccionesJSON[filaSeleccionada];
+
+            window.location.replace(url + "/operarios/cargar-induccion/" + induccion.id);
+        }
+    }
+
+  </script>

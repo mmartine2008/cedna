@@ -81,12 +81,12 @@
         var operacion = arrOperacionesJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + 'abm/operacion/borrar/' + operacion.id,
+            url: url + '/abm/operacion/borrar/' + operacion.id,
             type: 'post',
             dataType: 'json',
             async: false,
             success: function (data) {
-                
+               
             }
         });
         
@@ -109,7 +109,7 @@
                 confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
-                    borrarAccion();
+                    borrarOperacion();
                     window.location.replace(url + "/abm/operacion");
                 }
             });

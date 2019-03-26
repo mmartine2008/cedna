@@ -1,0 +1,125 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__listado_operarios__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaOperarios" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Apellido__') ?></th>
+                            <th class="text-center">CUIT</th>
+                            <th class="text-center"><?= $this->translate('__Telefono__') ?></th>
+                            <th class="text-center">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyOperarios">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrOperariosJSON = <?= $arrOperariosJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaOperarios();
+    });
+
+    function dibujarTablaOperarios(){
+        $('#bodyOperarios').find('tr').remove();
+    
+        for (var i = 0; i < arrOperariosJSON.length; i++)
+        {
+            var operario = arrOperariosJSON[i];
+
+            var body = document.getElementById("bodyOperarios");
+            var row = body.insertRow();
+            row.id = i;
+
+            var nombre = row.insertCell(0);
+            var apellido = row.insertCell(1);
+            var cuit = row.insertCell(2);
+            var telefono = row.insertCell(3);
+            var email = row.insertCell(4);
+
+            nombre.innerHTML = operario.nombre;
+            apellido.innerHTML = operario.apellido;
+            cuit.innerHTML = operario.cuit;
+            telefono.innerHTML = operario.telefono;
+            email.innerHTML = operario.email;
+        }
+    }
+
+    $(function() {
+        $('#tablaOperarios').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarOperario() {
+        var result = null;
+        var operario = arrOperariosJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/operarios/borrar/' + operario.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var operario = arrOperariosJSON[filaSeleccionada];
+            
+            swal({
+                title: '<?= $this->translate('__Eliminar_Usuario__') ?>',
+                width: 600,
+                text: "<?= $this->translate('__pregunta_confirmacion_eliminar_operario__') ?>: "+ operario.nombre+', '+operario.apellido +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Cancelar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarOperario();
+                    window.location.replace(url + "/operarios");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var operario = arrOperariosJSON[filaSeleccionada];
+
+            window.location.replace(url + "/operarios/editar/" + operario.id);
+        }
+    }
+
+  </script>
