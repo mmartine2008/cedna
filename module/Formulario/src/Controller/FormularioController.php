@@ -98,7 +98,7 @@ class FormularioController extends BaseFormularioController
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
-        $idRelevamiento = $Planificacion->getRelevamiento()->getId();
+        $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($this->getRequest()->isPost()) {
             $params = $this->params()->fromPost();
@@ -107,21 +107,20 @@ class FormularioController extends BaseFormularioController
             
             $listaArchivos = json_decode($params['archivos']);
             $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
-            $this->FormularioManager->guardarArchivos($listaArchivos, $archivo, $idRelevamiento);
+            $this->FormularioManager->guardarArchivos($listaArchivos, $archivo, $Relevamiento->getId());
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
-
-        $Relevamiento = $Planificacion->getRelevamiento();
+        
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
-        
         return new ViewModel([
             "formulario" => $FormularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $destinos,
-            "idRelevamiento" => $idRelevamiento
+            "idRelevamiento" => $Relevamiento->getId(),
+            "dir" => __DIR__
         ]);
     }
 

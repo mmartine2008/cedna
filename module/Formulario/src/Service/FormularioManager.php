@@ -416,7 +416,11 @@ class FormularioManager {
             }
         } else {
                 if($respuesta[0]->getDescripcion()) {
-                    $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
+                    if($respuesta[0]->getNombreArchivo()) {
+                        $preguntaJSON->respuesta  = $respuesta[0]->getNombreArchivo();
+                    } else {
+                        $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
+                    }
                 } else {
                     $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
                 }

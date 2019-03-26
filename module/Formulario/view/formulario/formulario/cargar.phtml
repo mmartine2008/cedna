@@ -450,7 +450,7 @@
         button.className = "btn btn-primary";
         button.textContent = icon;
         button.disabled = disabled;
-        button.style.marginTop = "35px";
+        button.style.marginTop = "30px";
         button.onclick = function() {insertarElementInSelect(origin, destination, idPregunta, idSeccion, cantDestinos, nroDestino)};
         // var icono = document.createElement("i");
         // icono.className = "fas fa-angle-left";
@@ -513,39 +513,74 @@
         }
     }
 
-    function createInput(infoType, pregunta, divElement, idSeccion, required){
-        
-        ele = document.createElement('input');
-        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion+"_relevamiento_"+idRelevamiento;
-       
-        ele.id = idEle;
-        if((pregunta.respuesta != " ")&&(infoType != "file")) {
+    function mostrarImagen(url) {
+
+    }
+
+    function createImage(url, idPregunta, idSeccion){
+        ele = document.createElement('img');
+        ele.src = "img/Coca-Cola_Femsa_Logo.png";
+        var id = "imagen_pregunta"+idPregunta+"_seccion_"+idSeccion;
+        ele.name = id;
+        ele.id = id;
+        return ele;
+    }
+
+    function cargarImagen(ele, pregunta, idSeccion, div, idEle) {
+        ele.name = "archivo[]";
+        ele.type = "file";
+        ele.accept="image/png, image/jpeg";
+        listaFileInput.push(idEle);
+        // console.log(pregunta.respuesta);
+        div.appendChild(ele);
+        if(pregunta.respuesta != " ") {
+            var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
+            div.appendChild(imagen);
+        }
+        var button = document.createElement("button");
+        button.type = "button";
+        button.id = "button_"+idEle;
+        button.textContent = "X";
+        button.className = "btn btn-danger";
+        div.appendChild(button);
+    }
+
+    function cargarPDF(ele, idEle, div) {
+        ele.name = "archivo[]";
+        ele.type = "file";
+        ele.accept="application/pdf";
+        listaFileInput.push(idEle);
+        div.appendChild(ele);
+    }
+
+    function cargarInput(ele, pregunta, div, infoType, idEle){
+        ele.type = infoType;
+        ele.name = idEle;
+        if(pregunta.respuesta != " ") {
             ele.value = pregunta.respuesta;
         }
-            ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
+        div.appendChild(ele);
+    }
+
+    function createInput(infoType, pregunta, divElement, idSeccion, required){
+        ele = document.createElement('input');
+        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion+"_relevamiento_"+idRelevamiento;
+        ele.id = idEle;
+        
+        ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         if(required == '1'){
             listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
         }
+        
+        var div = createDivClass("text-left", divElement);
 
         if(infoType == "file_image") {
-            ele.name = "archivo[]";
-            ele.type = "file";
-            ele.accept="image/png, image/jpeg";
-            listaFileInput.push(idEle);
-            console.log(pregunta.respuesta);
+            cargarImagen(ele, pregunta, idSeccion, div, idEle) ;
         } else if (infoType == "file_file"){
-            console.log(pregunta.respuesta);
-            ele.name = "archivo[]";
-            ele.type = "file";
-            ele.accept="application/pdf";
-            listaFileInput.push(idEle);
+            cargarPDF(ele, idEle, div);
         } else {
-            ele.type = infoType;
-            ele.name = idEle;
+            cargarInput(ele, pregunta, div, infoType, idEle);
         }
-
-        var div = createDivClass("text-left", divElement);
-        div.appendChild(ele);
     }  
 
     function createSelector(item, divElement, idSeccion, divSeccion, required){
@@ -582,16 +617,6 @@
         div.appendChild(ele);
         ele.onchange = function() {updateJsonSimple(idSeccion, item.idPregunta, id)};
     }
-
-    function createImage(item, divElement, idSeccion){
-        var div = createDivClass("text-left", divElement);
-        ele = document.createElement('img');
-        ele.src = "#";
-        var id = "pregunta_"+item.idPregunta+"_seccion_"+idSeccion;
-        ele.name = id;
-        ele.id = id;
-        div.appendChild(ele);
-    }
     
     function createAnswer(item, divElement, idSeccion, divSeccion, required){
         if ((item.tipoPregunta.descripcion == 'simple') || (item.tipoPregunta.descripcion == 'multiple')){
@@ -621,7 +646,7 @@
     function createOneQuestion(idSeccion, question, divElement) {
         var div = document.createElement("Div");
             div.className='form-row';
-            div.style.padding = "15px";
+            div.style.padding = "10px";
             divElement.appendChild(div);
             var required = question.requerido;
             var divText = createDivClass("col-sm-3 text-right", div);
@@ -820,7 +845,7 @@
         var divFormulario = document.createElement("Div");
         divFormulario.id = "Formulario_id_"+formulario.idFormulario;
         divFormulario.className="container";
-        divFormulario.style.paddingTop = "15px";
+        divFormulario.style.paddingTop = "10px";
         createTextElement("h4", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);
 
