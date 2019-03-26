@@ -52,6 +52,19 @@ class Operarios
      */
     protected $Contratista;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Inducciones", inversedBy="Operario", cascade={"persist"})
+     * @ORM\JoinTable(name="dbo.InduccionXOperario",
+     *      joinColumns={@ORM\JoinColumn(name="IdOperario", referencedColumnName="IdOperario")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdInduccion", referencedColumnName="IdInduccion")}
+     *      )
+     */
+    protected $Inducciones;
+
+    public function __construct() {
+        $this->Inducciones = new ArrayCollection();
+    }
+
     public function setNombre($Nombre)
     {
         $this->Nombre = $Nombre;
@@ -117,7 +130,25 @@ class Operarios
         return $this->Contratista;
     }
 
+    /**
+     * @return array
+     */
+    public function getInducciones()
+    {
+        if ($this->Inducciones){
+            return $this->Inducciones->toArray();
+        }else{
+            return null;
+        }
+    }
+
     public function getJSON(){
+        $inducciones = [];
+        foreach ($this->getInducciones() as $induccion) {
+            $inducciones[] = $induccion->getJSON();
+        }
+        $inducciones = implode(", ", $inducciones);
+
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
@@ -126,7 +157,8 @@ class Operarios
         $output .= '"cuit": "' . $this->getCuit() .'", ';
         $output .= '"telefono": "' . $this->getTelefono() .'", ';
         $output .= '"contratista": ' . $this->getContratista()->getJSON() .', ';
-        $output .= '"email": "' . $this->getEmail() .'"';
+        $output .= '"email": "' . $this->getEmail() .'",';
+        $output .= '"inducciones": ['.$inducciones.']';
         
         return '{' . $output . '}';
     }

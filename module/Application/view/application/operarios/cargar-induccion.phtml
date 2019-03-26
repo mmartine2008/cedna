@@ -1,0 +1,185 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Carga de Inducciones a Operarios</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formCargarInducciones" name="formCargarInducciones">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-6 offset-3">
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <label for="induccionFecha">Fecha de Inducción:</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" id="induccionFecha" name="induccionFecha" class="form-control" disabled="true">
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="induccionDescripcion">Descripción:</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <textarea id="induccionDescripcion" name="induccionDescripcion" class="form-control" disabled="true" row="5"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-lg-8 offset-2">
+                            <div class="flex mt-3">
+                                <div class="card" id="cardOperarios">
+                                    <div class="card-header">
+                                        Operarios
+                                    </div>
+                                    <div class="card-body">
+                                        <table id="tablaOperarios" class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Nombre y Apellido</th>
+                                                    <th class="text-center">CUIT</th>
+                                                    <th class="text-center">Realizó Inducción</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="bodyOperarios">
+                                            
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var operariosJson = <?= $arrOperariosJSON ?>;
+var induccionJson = <?= $InduccionJSON ?>;
+
+function FormOperarioToJson(){
+    var formData = {
+        arrOperarios : procesarOperariosRealizaronInduccion()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormOperarioToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formCargarInducciones")[0].checkValidity()){
+        $("#formCargarInducciones").submit();
+    }else{
+        $("#formCargarInducciones")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+    dibujarInduccion();
+    dibujarTablaOperarios();
+    actualizarOperarios();
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function transformarFechaParaInput(fecha){
+    var arrFecha = fecha.split('-');
+    //[0] => dia; [1] => mes; [2] => anio
+
+    return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+}
+
+function dibujarInduccion(){
+    $('#induccionFecha').val(transformarFechaParaInput(induccionJson.fecha));
+    $('#induccionDescripcion').val(induccionJson.descripcion);
+}
+
+function actualizarOperarios(){
+    $('[id*="operario_"]').prop('checked', false);
+
+    var iPosInduccion = $('#selectInduccion').val();
+
+    if (iPosInduccion != ''){
+        for (var i = 0; i < operariosJson.length; i++){
+            var operario = operariosJson[i];
+
+            for (var j = 0; j < operario.inducciones.length; j++){
+                var induccionTomada = operario.inducciones[j];
+
+                if (induccionJson.id == induccionTomada.id){
+                    $('#operario_'+operario.id).prop('checked', true);
+                }
+            }
+        }
+    }
+}
+
+function dibujarTablaOperarios(){
+    $('#bodyOperarios').find('tr').remove();
+
+    for (var i = 0; i < operariosJson.length; i++)
+    {
+        var operario = operariosJson[i];
+
+        var body = document.getElementById("bodyOperarios");
+        var row = body.insertRow();
+
+        var nombreApellido = row.insertCell(0);
+        var cuit = row.insertCell(1);
+        var realizoInduccion = row.insertCell(2);
+
+        nombreApellido.innerHTML = operario.nombre +', '+operario.apellido;
+        cuit.innerHTML = operario.cuit;
+
+        var checkbox = document.createElement('input');
+        checkbox.setAttribute('type', 'checkbox');
+        checkbox.setAttribute('id', 'operario_'+operario.id);
+        checkbox.setAttribute('name', 'operario_'+operario.id);
+
+
+        realizoInduccion.appendChild(checkbox);
+    }
+}
+
+function procesarOperariosRealizaronInduccion(){
+    var checkboxSeleccionadas = $("input[type='checkbox']:checked");
+    var arrOperarios = [];
+
+    for (var i = 0; i < checkboxSeleccionadas.length; i++){
+        var idCheckbox = checkboxSeleccionadas[i].id;
+        var idOperario = idCheckbox.split('_')[1];
+
+        for (var j = 0; j < operariosJson.length; j++){
+            var operario = operariosJson[j];
+
+            if (idOperario == operario.id){
+                arrOperarios.push(operario);
+            }
+        }
+    }
+
+    return arrOperarios;
+}
+
+</script>
