@@ -7,22 +7,23 @@
 
 namespace Admin\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use Application\Controller\CednaController;
 use Zend\View\Model\ViewModel;
 
-class ABMController extends AbstractActionController
+class ABMController extends CednaController
 {
     private $accionManager;
     private $operacionManager;
     private $operacionAccionPerfilManager;
 
-    public function __construct($accionManager, $operacionManager, $operacionAccionPerfilManager)
+    public function __construct($accionManager, $operacionManager, $operacionAccionPerfilManager, 
+                                $catalogoManager, $userSessionManager, $translator)
     {
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
+
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;
         $this->operacionAccionPerfilManager = $operacionAccionPerfilManager;
-
-        $this->layout()->arrAccionesDisponibles = null;
     }
 
     /**
@@ -32,7 +33,7 @@ class ABMController extends AbstractActionController
      */
     public function indexAction()
     {
-
+        $this->cargarAccionesDisponibles('abms');
         return new ViewModel();
     }
 

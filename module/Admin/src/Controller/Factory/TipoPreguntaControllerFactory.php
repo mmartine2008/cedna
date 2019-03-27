@@ -3,11 +3,9 @@ namespace Admin\Controller\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Admin\Controller\ABMController;
+use Admin\Controller\TipoPreguntaController;
 
-use Admin\Service\AccionManager;
-use Admin\Service\OperacionManager;
-use Admin\Service\OperacionAccionPerfilManager;
+use Admin\Service\TipoPreguntaManager;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 
@@ -15,18 +13,15 @@ use Autenticacion\Service\UserSessionManager;
  * This is the factory for AuthController. Its purpose is to instantiate the controller
  * and inject dependencies into its constructor.
  */
-class ABMControllerFactory implements FactoryInterface
+class TipoPreguntaControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $accionManager = $container->get(AccionManager::class);
-        $operacionManager = $container->get(OperacionManager::class);
-        $operacionAccionPerfilManager = $container->get(OperacionAccionPerfilManager::class);
+        $tipoPreguntaManager = $container->get(TipoPreguntaManager::class);
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
         
-        return new ABMController($accionManager, $operacionManager, $operacionAccionPerfilManager, 
-                                $catalogoManager, $userSessionManager, $translator);
+        return new TipoPreguntaController($catalogoManager, $tipoPreguntaManager, $userSessionManager, $translator);
     }
 }
