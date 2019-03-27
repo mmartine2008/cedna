@@ -464,7 +464,7 @@ class CatalogoManager {
 
     public function getRiesgosAmbientales() {
         $resultado = [];
-        $elementos = ['Existe posibilidad de incendio', 'Existe posibilidad de explosion', 'Existe posibilidad de emisiones de gases tóxicos', 'Existe posibilidad de emisión de radiación', 'Existe posibilidad de emisiones de líquidos tóxicos'];
+        $elementos = ['Existe posibilidad de incendio', 'Existe posibilidad de explosión', 'Existe posibilidad de emisiones de gases tóxicos', 'Existe posibilidad de emisión de radiación', 'Existe posibilidad de emisiones de líquidos tóxicos'];
         $id = 5;
         foreach($elementos as $elemento){
             $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
