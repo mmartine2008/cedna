@@ -45,6 +45,8 @@ class CednaController extends AbstractActionController
         $arrAccionesDisponiblesJSON = implode(", ", $arrAccionesDisponiblesJSON);
 
         $this->layout()->arrAccionesDisponibles = '[' . $arrAccionesDisponiblesJSON . ']';
+
+        $this->cargarNombrePerfilConectado($PerfilActivo);
     }
 
     protected function recuperarOperacionesIniciales($nombreOperacion){
@@ -61,5 +63,13 @@ class CednaController extends AbstractActionController
         $arrOperacionesDisponiblesJSON = implode(", ", $arrOperacionesDisponiblesJSON);
 
         return '[' . $arrOperacionesDisponiblesJSON . ']';
+    }
+
+    private function cargarNombrePerfilConectado($PerfilActivo){
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $this->layout()->nombreApellidoUsuario = $UsuarioActivo->getNombre() .', '. $UsuarioActivo->getApellido();
+        $this->layout()->perfilUsuario = $PerfilActivo->getNombre();
     }
 }
