@@ -26,6 +26,7 @@ use DBAL\Entity\NotificacionesXPerfil;
 use DBAL\Entity\UsuariosxPerfiles;
 use DBAL\Entity\EstadosRelevamiento;
 use DBAL\Entity\Inducciones;
+use DBAL\Entity\InduccionXOperario;
 
 class CatalogoManager {
     
@@ -314,6 +315,13 @@ class CatalogoManager {
                                                         ->findBy(['TipoEvento' => $TipoEvento]);
 
         return $NotificacionesXPerfil;
+    }
+
+    public function getInduccionXOperarioPorInduccion($Induccion){
+        $InduccionXOperario = $this->entityManager->getRepository(InduccionXOperario::class)
+                                                        ->findBy(['Induccion' => $Induccion]);
+
+        return $InduccionXOperario;
     }
 
     public function getTiposEventoPorDescripcion($Descripcion){

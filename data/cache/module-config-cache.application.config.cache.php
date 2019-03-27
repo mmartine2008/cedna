@@ -52,6 +52,7 @@ return array (
       'Admin\\Service\\AccionManager' => 'Admin\\Service\\Factory\\AccionManagerFactory',
       'Admin\\Service\\OperacionManager' => 'Admin\\Service\\Factory\\OperacionManagerFactory',
       'Admin\\Service\\OperacionAccionPerfilManager' => 'Admin\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
+      'Admin\\Service\\TipoPreguntaManager' => 'Admin\\Service\\Factory\\TipoPreguntaManagerFactory',
       'Formulario\\Service\\FormularioManager' => 'Formulario\\Service\\Factory\\FormularioManagerFactory',
       'Formulario\\Service\\CednaTcpdf' => 'Formulario\\Service\\Factory\\CednaTcpdfFactory',
       'TCPDF' => 'TCPDFModule\\Factory\\TCPDFFactory',
@@ -572,25 +573,6 @@ return array (
         'may_terminate' => true,
         'child_routes' => 
         array (
-          'tipo-pregunta' => 
-          array (
-            'type' => 'Zend\\Router\\Http\\Segment',
-            'options' => 
-            array (
-              'route' => '/tipo-pregunta[/:action[/:id]]',
-              'defaults' => 
-              array (
-                'controller' => 'Configuracion\\Controller\\ConfigTipoPreguntaController',
-                'action' => 'index',
-              ),
-            ),
-            'constraints' => 
-            array (
-              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'id' => '[a-zA-Z0-9_-]*',
-            ),
-            'may_terminate' => true,
-          ),
           'perfiles' => 
           array (
             'type' => 'Zend\\Router\\Http\\Segment',
@@ -711,6 +693,25 @@ return array (
               'defaults' => 
               array (
                 'controller' => 'Admin\\Controller\\OperacionAccionPerfilController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
+          'tipo-pregunta' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/tipo-pregunta[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Admin\\Controller\\TipoPreguntaController',
                 'action' => 'index',
               ),
             ),
@@ -1130,7 +1131,6 @@ return array (
       'Application\\Controller\\InduccionesController' => 'Application\\Controller\\Factory\\InduccionesControllerFactory',
       'Autenticacion\\Controller\\AuthController' => 'Autenticacion\\Controller\\Factory\\AuthControllerFactory',
       'Configuracion\\Controller\\ConfiguracionController' => 'Configuracion\\Controller\\Factory\\ConfiguracionControllerFactory',
-      'Configuracion\\Controller\\ConfigTipoPreguntaController' => 'Configuracion\\Controller\\Factory\\ConfigTipoPreguntaControllerFactory',
       'Configuracion\\Controller\\ConfigPerfilesController' => 'Configuracion\\Controller\\Factory\\ConfigPerfilesControllerFactory',
       'Configuracion\\Controller\\ConfigUsuariosController' => 'Configuracion\\Controller\\Factory\\ConfigUsuariosControllerFactory',
       'Configuracion\\Controller\\ConfigNotifXPerfilController' => 'Configuracion\\Controller\\Factory\\ConfigNotifXPerfilControllerFactory',
@@ -1138,6 +1138,7 @@ return array (
       'Admin\\Controller\\AccionController' => 'Admin\\Controller\\Factory\\AccionControllerFactory',
       'Admin\\Controller\\OperacionController' => 'Admin\\Controller\\Factory\\OperacionControllerFactory',
       'Admin\\Controller\\OperacionAccionPerfilController' => 'Admin\\Controller\\Factory\\OperacionAccionPerfilControllerFactory',
+      'Admin\\Controller\\TipoPreguntaController' => 'Admin\\Controller\\Factory\\TipoPreguntaControllerFactory',
       'Formulario\\Controller\\BaseFormularioController' => 'Formulario\\Controller\\Factory\\BaseFormularioControllerFactory',
       'Formulario\\Controller\\FormularioController' => 'Formulario\\Controller\\Factory\\FormularioControllerFactory',
     ),
