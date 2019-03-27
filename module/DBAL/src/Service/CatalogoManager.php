@@ -426,9 +426,9 @@ class CatalogoManager {
         return $resultado;
     }
 
-    public function getEmpresas() {
+    public function getHerramientas(){
         $resultado = [];
-        $elementos = ['Construcciones del Sur', 'Construcciones del Norte'];
+        $elementos = ['Casco', 'Anteojos de Seguridad', 'Antiparras', 'Calzado de seguridad', 'Ropa especial de trabajo', 'Chaleco reflectivo'];
         $id = 5;
         foreach($elementos as $elemento){
             $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
@@ -459,17 +459,6 @@ class CatalogoManager {
         return $resultado;
     }
 
-    public function getActividadesObra() {
-        $resultado = [];
-        $elementos =  ['Pintura', 'Mambo', 'Yeso'];
-        $id = 5;
-        foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
-        }
-        return $resultado;
-    }
-
     public function getRiesgosAmbientales() {
         $resultado = [];
         $elementos = ['Existe posibilidad de incendio', 'Existe posibilidad de explosión', 'Existe posibilidad de emisiones de gases tóxicos', 'Existe posibilidad de emisión de radiación', 'Existe posibilidad de emisiones de líquidos tóxicos'];
@@ -481,9 +470,31 @@ class CatalogoManager {
         return $resultado;
     }
 
-    public function getRiesgosAdicionales() {
+    public function getRiesgosAdicionalesFrio() {
         $resultado = [];
         $elementos = ['Requiere guardia de operación', 'Requiere control de emergencia', 'Requiere guardia de seguridad', 'Requiere equipo contra incendio'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getRiesgosAdicionalesCalor() {
+        $resultado = [];
+        $elementos = ['Require uso de pantallas UV', 'Requiere presencia de la birgada durante la tarea', 'Requiere control preriódico de la Atmosfera', 'Requiere etraer los gases o vapores producidos por la tarea'];
+        $id = 5;
+        foreach($elementos as $elemento){
+            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
+            $id++;
+        }
+        return $resultado;
+    }
+
+    public function getRiesgosAdicionalesAltura() {
+        $resultado = [];
+        $elementos = ['Requiere proteger los objetos que pueden caer', 'Requiere señalización de la zona de trabajo', 'Requiere cambio de escalera', 'Requiere cambio de andamio'];
         $id = 5;
         foreach($elementos as $elemento){
             $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];

@@ -111,7 +111,7 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
-        
+
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
@@ -120,7 +120,6 @@ class FormularioController extends BaseFormularioController
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $destinos,
             "idRelevamiento" => $Relevamiento->getId(),
-            "dir" => __DIR__
         ]);
     }
 

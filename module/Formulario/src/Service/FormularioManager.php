@@ -24,17 +24,19 @@ class FormularioManager {
     private $datosEmpresa;
     private $mailManager;
     private $translator;
+    private $datosArchivos;
     
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $catalogoManager, $datosEmpresa, $mailManager, $translator) 
+    public function __construct($entityManager, $catalogoManager, $datosEmpresa, $mailManager, $translator, $datosArchivos) 
     {
         $this->entityManager = $entityManager;
         $this->catalogoManager = $catalogoManager;
         $this->datosEmpresa = $datosEmpresa;
         $this->mailManager = $mailManager;
         $this->translator = $translator;
+        $this->datosArchivos = $datosArchivos;
     }
 
     public function getDatosEmpresa()
@@ -42,6 +44,18 @@ class FormularioManager {
         $output = [];
         
         foreach ($this->datosEmpresa as $index => $valor)
+        {
+            $output[$index] = $valor;
+        }        
+        
+        return $output;
+    }
+
+    public function getPathFiles()
+    {
+        $output = [];
+        
+        foreach ($this->datosArchivos as $index => $valor)
         {
             $output[$index] = $valor;
         }        
@@ -783,7 +797,8 @@ class FormularioManager {
                 $nombreReal = $archivo['name'][$i];
                 $file_ext = pathinfo($nombreReal, PATHINFO_EXTENSION);
                 $nombreArchivo = $nombreUsuario."-".$fecha_hoy.".".$file_ext;
-                $ruta_destino_archivo = "file/".$nombreArchivo;
+                $path = $this->getPathFiles();
+                $ruta_destino_archivo = $path['path']."/".$nombreArchivo;
                 $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
                 $this->modificarNombresArchivo($listaArchivos[$i], $nombreArchivo, $nombreReal);
             }

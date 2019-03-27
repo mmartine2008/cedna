@@ -1313,5 +1313,9 @@ return array (
     'phone' => '+5492262772277',
     'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
   ),
+  'datos_archivos' => 
+  array (
+    'path' => '/home/juano/Cedna/files',
+  ),
   'timer_notifications' => 3000,
 );
