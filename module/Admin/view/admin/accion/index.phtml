@@ -73,7 +73,7 @@
         var accion = arrAccionesJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + 'abm/accion/borrar/' + accion.id,
+            url: url + '/abm/accion/borrar/' + accion.id,
             type: 'post',
             dataType: 'json',
             async: false,

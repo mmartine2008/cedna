@@ -70,6 +70,21 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'tipo-pregunta' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/tipo-pregunta[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\TipoPreguntaController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -81,6 +96,7 @@ return [
             Controller\AccionController::class => Controller\Factory\AccionControllerFactory::class,
             Controller\OperacionController::class => Controller\Factory\OperacionControllerFactory::class,
             Controller\OperacionAccionPerfilController::class => Controller\Factory\OperacionAccionPerfilControllerFactory::class,
+            Controller\TipoPreguntaController::class => Controller\Factory\TipoPreguntaControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -88,6 +104,7 @@ return [
             Service\AccionManager::class => Service\Factory\AccionManagerFactory::class,
             Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,            
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
+            Service\TipoPreguntaManager::class => Service\Factory\TipoPreguntaManagerFactory::class,
         ],
     ],
     'view_manager' => [

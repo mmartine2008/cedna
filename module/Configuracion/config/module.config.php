@@ -25,21 +25,6 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'tipo-pregunta' => [
-                        'type' => Segment::class,
-                        'options' => [
-                            'route' => '/tipo-pregunta[/:action[/:id]]',
-                            'defaults' => [
-                                'controller' => Controller\ConfigTipoPreguntaController::class,
-                                'action'     => 'index',
-                            ],
-                        ],
-                        'constraints' => [
-                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            'id' => '[a-zA-Z0-9_-]*',
-                        ],
-                        'may_terminate' => true,
-                    ],
                     'perfiles' => [
                         'type' => Segment::class,
                         'options' => [
@@ -92,7 +77,6 @@ return [
     'controllers' => [
         'factories' => [
             Controller\ConfiguracionController::class => Controller\Factory\ConfiguracionControllerFactory::class,
-            Controller\ConfigTipoPreguntaController::class => Controller\Factory\ConfigTipoPreguntaControllerFactory::class,
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,

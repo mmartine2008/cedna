@@ -5,27 +5,27 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Configuracion\Controller;
+namespace Admin\Controller;
 
 use Zend\View\Model\ViewModel;
-use Configuracion\Controller\ConfiguracionController;
+use Application\Controller\CednaController;
 
-class ConfigTipoPreguntaController extends ConfiguracionController
+class TipoPreguntaController extends CednaController
 {
 
-    private $configuracionManager;
+    private $tipoPreguntaManager;
 
-    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator)
+    public function __construct($catalogoManager, $tipoPreguntaManager, $userSessionManager, $translator)
     {
         parent::__construct($catalogoManager, $userSessionManager, $translator);
 
-        $this->configuracionManager = $configuracionManager;
+        $this->tipoPreguntaManager = $tipoPreguntaManager;
     }
 
     public function indexAction()
     {
         
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta');
+        $this->cargarAccionesDisponibles('tipo pregunta');
 
         $arrTipoPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('TipoPregunta');
         
@@ -35,28 +35,28 @@ class ConfigTipoPreguntaController extends ConfiguracionController
     }
 
     public function altaAction(){
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Alta');
+        $this->cargarAccionesDisponibles('tipo pregunta - alta');
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionTipoPregunta($JsonData);
+            $this->tipoPreguntaManager->altaEdicionTipoPregunta($JsonData);
 
-            $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
+            $this->redirect()->toRoute("abm/tipo-pregunta",["action" => "index"]);
         }
 
         $view = new ViewModel();
         
         $view->setVariable('TipoPreguntaJson', '""');
-        $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
+        $view->setTemplate('admin/tipo-pregunta/alta.phtml');
         
         return $view;
     }
 
     public function editarAction(){
-        $this->cargarAccionesDisponibles('Configuracion Tipo Pregunta - Edicion');
+        $this->cargarAccionesDisponibles('tipo pregunta - edicion');
 
         $parametros = $this->params()->fromRoute();
 
@@ -67,9 +67,9 @@ class ConfigTipoPreguntaController extends ConfiguracionController
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionTipoPregunta($JsonData, $idTipoPregunta);
+            $this->tipoPreguntaManager->altaEdicionTipoPregunta($JsonData, $idTipoPregunta);
 
-            $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
+            $this->redirect()->toRoute("abm/tipo-pregunta",["action" => "index"]);
         }
 
         $view = new ViewModel();
@@ -77,7 +77,7 @@ class ConfigTipoPreguntaController extends ConfiguracionController
         $TipoPregunta = $this->catalogoManager->getTipoPregunta($idTipoPregunta);
 
         $view->setVariable('TipoPreguntaJson', $TipoPregunta->getJSON());
-        $view->setTemplate('configuracion/config-tipo-pregunta/form-tipo-pregunta.phtml');
+        $view->setTemplate('admin/tipo-pregunta/editar.phtml');
         
         return $view;
     }
@@ -87,10 +87,9 @@ class ConfigTipoPreguntaController extends ConfiguracionController
 
         $idTipoPregunta = $parametros['id'];
 
-        $mensaje = $this->configuracionManager->borrarTipoPregunta($idTipoPregunta);
+        $mensaje = $this->tipoPreguntaManager->borrarTipoPregunta($idTipoPregunta);
 
-        //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/tipo-pregunta",["action" => "index"]);
+        return $this->redirect()->toRoute("abm/tipo-pregunta",["action" => "index"]);
     } 
 
 }

@@ -70,7 +70,7 @@
         var tipoPregunta = arrTipoPreguntasJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/tipo-pregunta/borrar/' + tipoPregunta.id,
+            url: url + '/abm/tipo-pregunta/borrar/' + tipoPregunta.id,
             type: 'post',
             dataType: 'json',
             async: false,
@@ -99,13 +99,9 @@
             }).then((result) => {
                 if (result.value) {
                     borrarTipoPregunta();
-                    window.location.replace(url + "/configuracion/tipo-pregunta");
+                    window.location.replace(url + "/abm/tipo-pregunta");
                 }
             });
-        }else{
-            swal('Tipo de Pregunta no seleccionada',
-                'Por favor seleccione el tipo de pregunta que desea eliminar',
-                'error');
         }
     }
 
@@ -113,11 +109,7 @@
         if (filaSeleccionada >= 0){
             var tipoPregunta = arrTipoPreguntasJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/tipo-pregunta/editar/" + tipoPregunta.id);
-        }else{
-            swal('Tipo de Pregunta no seleccionada',
-                'Por favor seleccione el tipo de pregunta que desea editar',
-                'error');
+            window.location.replace(url + "/abm/tipo-pregunta/editar/" + tipoPregunta.id);
         }
     }
 

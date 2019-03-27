@@ -1,28 +1,27 @@
 <?php
-namespace Configuracion\Controller\Factory;
+namespace Admin\Controller\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Configuracion\Controller\ConfigTipoPreguntaController;
+use Admin\Controller\TipoPreguntaController;
 
+use Admin\Service\TipoPreguntaManager;
 use DBAL\Service\CatalogoManager;
-use Configuracion\Service\ConfiguracionManager;
 use Autenticacion\Service\UserSessionManager;
-
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
  * and inject dependencies into its constructor.
  */
-class ConfigTipoPreguntaControllerFactory implements FactoryInterface
+class TipoPreguntaControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        $tipoPreguntaManager = $container->get(TipoPreguntaManager::class);
         $catalogoManager = $container->get(CatalogoManager::class);
-        $configuracionManager = $container->get(ConfiguracionManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
-
-        return new ConfigTipoPreguntaController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
+        
+        return new TipoPreguntaController($catalogoManager, $tipoPreguntaManager, $userSessionManager, $translator);
     }
 }
