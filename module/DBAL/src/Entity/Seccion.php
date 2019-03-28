@@ -26,12 +26,6 @@ class Seccion
     protected $formulario;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TipoSeccion")
-     * @ORM\JoinColumn(name="IdTipoSeccion", nullable=true, referencedColumnName="IdTipoSeccion")
-     */
-    protected $tipoSeccion;
-
-    /**
      * @ORM\Column(name="Nombre",  nullable=true, type="string", length=100)
      */
     protected $nombre;
@@ -136,26 +130,6 @@ class Seccion
         return $this;
     }
 
-    /**
-     * Get the value of tipoSeccion
-     */ 
-    public function getTipoSeccion()
-    {
-        return $this->tipoSeccion;
-    }
-
-    /**
-     * Set the value of tipoSeccion
-     *
-     * @return  self
-     */ 
-    public function setTipoSeccion($tipoSeccion)
-    {
-        $this->tipoSeccion = $tipoSeccion;
-
-        return $this;
-    }
-
       /**
      * Get the value of nombre
      */ 
@@ -208,9 +182,6 @@ class Seccion
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        if ($this->getTipoSeccion()) {
-            $output .= '"tipoSeccion": ' . $this->getTipoSeccion()->getJSON() .', ';
-        }
         $output .= '"preguntas": ['.$preguntas.']';
 
         return '{' . $output . '}';

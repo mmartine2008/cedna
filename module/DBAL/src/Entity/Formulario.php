@@ -18,12 +18,6 @@ class Formulario
      */
     protected $id;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Permiso")
-     * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
-     */
-    protected $permiso;
-
     /**
      * @ORM\Column(name="Descripcion",  nullable=true, type="string", length=1000)
      */
@@ -116,14 +110,6 @@ class Formulario
         return $this;
     }
 
-    /**
-     * Get the value of permiso
-     */ 
-    public function getPermiso()
-    {
-        return $this->permiso;
-    }
-
       /**
      * Get the value of nombre
      */ 
@@ -140,18 +126,6 @@ class Formulario
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    /**
-     * Set the value of permiso
-     *
-     * @return  self
-     */ 
-    public function setPermiso($permiso)
-    {
-        $this->permiso = $permiso;
 
         return $this;
     }

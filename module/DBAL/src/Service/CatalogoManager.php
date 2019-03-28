@@ -27,6 +27,14 @@ use DBAL\Entity\UsuariosxPerfiles;
 use DBAL\Entity\EstadosRelevamiento;
 use DBAL\Entity\Inducciones;
 use DBAL\Entity\InduccionXOperario;
+use DBAL\Entity\LugaresDeObra;
+use DBAL\Entity\ElementosProteccionPersonal;
+use DBAL\Entity\HerramientasDeTrabajo;
+use DBAL\Entity\RiesgosAmbientales;
+use DBAL\Entity\RiesgosAdicionalesFrio;
+use DBAL\Entity\PruebasDeGases;
+use DBAL\Entity\RiesgosAdicionalesCalor;
+use DBAL\Entity\RiesgosAdicionalesAltura;
 
 class CatalogoManager {
     
@@ -137,13 +145,83 @@ class CatalogoManager {
         return $TipoNodo;
     }
 
+    public function getLugaresObras($idLugar = null){
+        if ($idLugar){
+            $Lugares = $this->entityManager->getRepository(LugaresDeObra::class)->findOneBy(['id' => $idLugar]);
+        }else{
+            $Lugares = $this->entityManager->getRepository(LugaresDeObra::class)->findAll();
+        }
+        return $Lugares;
+    }
+
+    public function getElementosProteccionPersonales($idElemento = null){
+        if ($idElemento){
+            $Elementos = $this->entityManager->getRepository(ElementosProteccionPersonal::class)->findOneBy(['id' => $idElemento]);
+        }else{
+            $Elementos = $this->entityManager->getRepository(ElementosProteccionPersonal::class)->findAll();
+        }
+        return $Elementos;
+    }
+
+    public function getHerramientasDeTrabajo($idHerramienta = null){
+        if ($idHerramienta){
+            $Herramientas = $this->entityManager->getRepository(HerramientasDeTrabajo::class)->findOneBy(['id' => $idHerramienta]);
+        }else{
+            $Herramientas = $this->entityManager->getRepository(HerramientasDeTrabajo::class)->findAll();
+        }
+        return $Herramientas;
+    }
+
+    public function getEntidadesRiesgosAmbientales($idRiesgosAmientales = null){
+        if ($idRiesgosAmientales){
+            $RiesgosAmbientales = $this->entityManager->getRepository(RiesgosAmbientales::class)->findOneBy(['id' => $idRiesgosAmientales]);
+        }else{
+            $RiesgosAmbientales = $this->entityManager->getRepository(RiesgosAmbientales::class)->findAll();
+        }
+        return $RiesgosAmbientales;
+    }
+
+    public function getRiesgosAdicionalesEnFrio($idRiesgosAdicionalesFrio = null){
+        if ($idRiesgosAdicionalesFrio){
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesFrio::class)->findOneBy(['id' => $idRiesgosAdicionalesFrio]);
+        }else{
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesFrio::class)->findAll();
+        }
+        return $Riesgos;
+    }
+
+    public function getGases($idPruebaGases = null){
+        if ($idPruebaGases){
+            $Gases = $this->entityManager->getRepository(PruebasDeGases::class)->findOneBy(['id' => $idPruebaGases]);
+        }else{
+            $Gases = $this->entityManager->getRepository(PruebasDeGases::class)->findAll();
+        }
+        return $Gases;
+    }
+
+    public function getRiesgosAdicionalesEnCalor($idRiesgosAdicionalesCalor = null){
+        if ($idRiesgosAdicionalesCalor){
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesCalor::class)->findOneBy(['id' => $idRiesgosAdicionalesCalor]);
+        }else{
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesCalor::class)->findAll();
+        }
+        return $Riesgos;
+    }
+    public function getRiesgosAdicionalesEnAltura($idRiesgosAdicionalesAltura = null){
+        if ($idRiesgosAdicionalesAltura){
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesAltura::class)->findOneBy(['id' => $idRiesgosAdicionalesAltura]);
+        }else{
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesAltura::class)->findAll();
+        }
+        return $Riesgos;
+    }
+
     public function getNodos($idNodos = null){
         if ($idNodos){
             $Nodos = $this->entityManager->getRepository(Nodos::class)->findOneBy(['id' => $idNodos]);
         }else{
             $Nodos = $this->entityManager->getRepository(Nodos::class)->findAll();
         }
-
         return $Nodos;
     }
 
@@ -417,99 +495,72 @@ class CatalogoManager {
 
     public function getElementosProteccionPersonal(){
         $resultado = [];
-        $elementos = ['Casco', 'Anteojos de Seguridad', 'Antiparras', 'Calzado de seguridad', 'Ropa especial de trabajo', 'Chaleco reflectivo'];
-        $id = 5;
+        $elementos = $this->getElementosProteccionPersonales();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getHerramientas(){
         $resultado = [];
-        $elementos = ['Casco', 'Anteojos de Seguridad', 'Antiparras', 'Calzado de seguridad', 'Ropa especial de trabajo', 'Chaleco reflectivo'];
-        $id = 5;
+        $elementos = $this->getHerramientasDeTrabajo();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getLugarObra() {
         $resultado = [];
-        $elementos = ['Deposito', 'Planta 1', 'Planta 2', 'Zona 1', 'Zona 2'];
-        $id = 5;
+        $elementos = $this->getLugaresObras();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
-        }
-        return $resultado;
-    }
-
-    public function getEtapasObra() {
-        $resultado = [];
-        $elementos = ['Pintura', 'Mambo', 'Yeso'];
-        $id = 5;
-        foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getRiesgosAmbientales() {
         $resultado = [];
-        $elementos = ['Existe posibilidad de incendio', 'Existe posibilidad de explosión', 'Existe posibilidad de emisiones de gases tóxicos', 'Existe posibilidad de emisión de radiación', 'Existe posibilidad de emisiones de líquidos tóxicos'];
-        $id = 5;
+        $elementos = $this->getEntidadesRiesgosAmbientales();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getRiesgosAdicionalesFrio() {
         $resultado = [];
-        $elementos = ['Requiere guardia de operación', 'Requiere control de emergencia', 'Requiere guardia de seguridad', 'Requiere equipo contra incendio'];
-        $id = 5;
+        $elementos = $this->getRiesgosAdicionalesEnFrio();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getRiesgosAdicionalesCalor() {
         $resultado = [];
-        $elementos = ['Require uso de pantallas UV', 'Requiere presencia de la birgada durante la tarea', 'Requiere control preriódico de la Atmosfera', 'Requiere etraer los gases o vapores producidos por la tarea'];
-        $id = 5;
+        $elementos = $this->getRiesgosAdicionalesEnCalor();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getRiesgosAdicionalesAltura() {
         $resultado = [];
-        $elementos = ['Requiere proteger los objetos que pueden caer', 'Requiere señalización de la zona de trabajo', 'Requiere cambio de escalera', 'Requiere cambio de andamio'];
-        $id = 5;
+        $elementos = $this->getRiesgosAdicionalesEnAltura();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }
 
     public function getPruebaDeGases() {
         $resultado = [];
-        $elementos = ['LEL, % <= 10', 'O2 % 19.5 a 23', 'CO, ppm <= 35', 'H2S, ppm <= 10'];
-        $id = 5;
+        $elementos = $this->getGases();
         foreach($elementos as $elemento){
-            $resultado[] = ['id' => "$id", 'descripcion' =>$elemento];
-            $id++;
+            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }
         return $resultado;
     }

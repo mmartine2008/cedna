@@ -28,12 +28,6 @@ class Respuesta
      */
     protected $nombreArchivo;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Permiso")
-     * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
-     */
-    protected $permiso;
-
     /**
      * @ORM\ManyToOne(targetEntity="Pregunta")
      * @ORM\JoinColumn(name="IdPregunta", nullable=true, referencedColumnName="IdPregunta")
@@ -106,26 +100,7 @@ class Respuesta
         return $this;
     }
 
-    /**
-     * Get the value of permiso
-     */ 
-    public function getPermiso()
-    {
-        return $this->permiso;
-    }
-
-    /**
-     * Set the value of permiso
-     *
-     * @return  self
-     */ 
-    public function setPermiso($permiso)
-    {
-        $this->permiso = $permiso;
-
-        return $this;
-    }
-
+    
     /**
      * Get the value of pregunta
      */ 
@@ -258,9 +233,6 @@ class Respuesta
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": ' . $this->getPregunta()->getJson() .', ';
 
-        if ($this->getPermiso()) {
-             $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
-        }
         $destino = "";
         if ($this->getOpcion()) {
             $output .= '"opcion": "' . $this->getOpcion().'", ';

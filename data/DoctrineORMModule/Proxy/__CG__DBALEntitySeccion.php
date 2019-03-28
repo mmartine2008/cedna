@@ -64,10 +64,10 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'formulario', 'tipoSeccion', 'nombre', 'descripcion', 'preguntas'];
+            return ['__isInitialized__', 'id', 'formulario', 'nombre', 'descripcion', 'preguntas'];
         }
 
-        return ['__isInitialized__', 'id', 'formulario', 'tipoSeccion', 'nombre', 'descripcion', 'preguntas'];
+        return ['__isInitialized__', 'id', 'formulario', 'nombre', 'descripcion', 'preguntas'];
     }
 
     /**
@@ -263,28 +263,6 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormulario', [$formulario]);
 
         return parent::setFormulario($formulario);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getTipoSeccion()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTipoSeccion', []);
-
-        return parent::getTipoSeccion();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setTipoSeccion($tipoSeccion)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTipoSeccion', [$tipoSeccion]);
-
-        return parent::setTipoSeccion($tipoSeccion);
     }
 
     /**

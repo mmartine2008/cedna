@@ -64,10 +64,10 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
+            return ['__isInitialized__', 'id', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
         }
 
-        return ['__isInitialized__', 'id', 'permiso', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
+        return ['__isInitialized__', 'id', 'descripcion', 'nombre', 'secciones', 'PerfilesFirmantes'];
     }
 
     /**
@@ -246,17 +246,6 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
     /**
      * {@inheritDoc}
      */
-    public function getPermiso()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPermiso', []);
-
-        return parent::getPermiso();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getNombre()
     {
 
@@ -274,17 +263,6 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setNombre', [$nombre]);
 
         return parent::setNombre($nombre);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setPermiso($permiso)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setPermiso', [$permiso]);
-
-        return parent::setPermiso($permiso);
     }
 
     /**

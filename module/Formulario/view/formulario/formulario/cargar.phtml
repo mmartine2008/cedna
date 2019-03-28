@@ -467,13 +467,17 @@
             .end();
     }
 
-    function crearWarningAlert(div, id) {
+    function createDivAlert(div, id){
         var divElement = document.createElement("Div");
         divElement.id = "div_"+id;
         divElement.classList = "alert alert-warning alert-dismissible"
         divElement.style.display = "none";
         div.appendChild(divElement);
 
+        return divElement;
+    }
+    function createWarningAlert(div, id) {
+        var divElement = createDivAlert(div, id);
         var strong = document.createElement("strong");
         var t = document.createTextNode("Debe vaciar la lista de elementos");
         strong.appendChild(t);
@@ -487,11 +491,13 @@
 
         createTextElement("P", div_class_sm_3, "Disponibles");
         
-        createMultipleSelector('destino_0_id_', div_class_sm_3, 10, idPregunta, idSeccion);
+        var size = 10;
+        createMultipleSelector('destino_0_id_', div_class_sm_3, size, idPregunta, idSeccion);
 
         if (cantDestinos >1) {
             listMultipleSelectDestino0.push('destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
-            crearWarningAlert(div_class_sm_3, 'destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
+            createWarningAlert(div_class_sm_3, 'destino_0_id_'+idPregunta+"_seccion_"+idSeccion);
+            size = 5;
         } else if(required){
             listMultipleSelectDestino1.push('destino_1_id_'+idPregunta+"_seccion_"+idSeccion);
         }
@@ -512,7 +518,7 @@
             createButton("button", 'button_'+i+'_L_id_'+idPregunta+"_seccion_"+idSeccion, "Quitar seleccionados", div_class_sm_1, "<", deshabilitarBotonL, 'destino_'+i+'_id_', "destino_0_id_", idPregunta,idSeccion, cantDestinos, i);
 
             createTextElement("P", div_class_sm_3_2, destinos[i]);
-            createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, 5, idPregunta, idSeccion);
+            createMultipleSelector('destino_'+i+'_id_', div_class_sm_3_2, size, idPregunta, idSeccion);
         }
     }
 
@@ -526,8 +532,19 @@
         return ele;
     }
 
+    function createDivClassWithPadding(info, div) {
+        var divElement = document.createElement("Div");
+        divElement.className= info;
+        divElement.style.padding = "10px";
+        div.appendChild(divElement);
+
+        return divElement;
+    }
+
     function mostrarImagenCargada(pregunta, idSeccion, idEle, div){
-        var divImage = createDivClass("text-left margin-top-10", div, "div_imagen_"+idEle);
+        var divElement = createDivClassWithPadding('form-row', div);
+
+        var divImage = createDivClass("col-sm-3 margin-top-10", div, "div_imagen_"+idEle);
         var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
         divImage.appendChild(imagen);
         var button = document.createElement("button");
@@ -538,31 +555,44 @@
         divImage.appendChild(button);
     }
 
+    function removerDivImagenes(divButton, divImage, divElement, div, idEle) {
+        divButton.removeChild(divButton.lastChild);
+        divImage.removeChild(divImage.lastChild);
+        divElement.removeChild(divElement.lastChild);
+        divElement.removeChild(divElement.lastChild);
+        div.removeChild(div.lastChild);
+        document.getElementById(idEle).value ='';
+    }
+
+    function createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle){
+        var divButton = createDivClass("col-sm-1", divElement);
+        var button = document.createElement("button");
+        button.type = "button";
+        button.id = "button_"+idPregunta+"_seccion_"+idSeccion;
+        button.textContent = "X";
+        button.className = "btn btn-danger";
+        button.onclick = function() {removerDivImagenes(divButton, divImage, divElement, div, idEle)};
+        divButton.appendChild(button);
+    }
 
     function preview(e, idPregunta, idSeccion, idEle, div) {
         var divImage = document.getElementById("div_imagen_"+idEle);
+        
         if(divImage == null){
-            var divImage = createDivClass("text-left margin-top-10", div, "div_imagen_"+idEle);
+            var divElement = createDivClassWithPadding('form-row', div);
+
+            var divImage = createDivClass("col-sm-7 margin-top-10", divElement, "div_imagen_"+idEle);
+            createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle);
         } else {
-            divImage.removeChild(divImage.lastChild);
             divImage.removeChild(divImage.lastChild);
         }
         if(e.files && e.files[0])   {
-            
             var reader=new FileReader();
             reader.onload=function(e) {
             
             var imagen = createImage("", idPregunta, idSeccion);
             $(imagen).attr('src', e.target.result);
-            divImage.appendChild(imagen);
-            var button = document.createElement("button");
-            button.type = "button";
-            button.id = "button_"+idPregunta+"_seccion_"+idSeccion;
-            button.textContent = "X";
-            button.className = "btn btn-danger";
-            button.onclick = function() {div.removeChild(div.lastChild);
-                                        document.getElementById(idEle).value ='';};
-            divImage.appendChild(button);
+            divImage.appendChild(imagen);  
         } 
         reader.readAsDataURL(e.files[0]);
         }
@@ -635,7 +665,6 @@
         } else {
                 var cantDestinos = item.cantDestinos;
                 createMultipleSelectorSkeleton(item.idPregunta, divElement, idSeccion, cantDestinos, required);  
-                // manageButtons(item.idPregunta, idSeccion, cantDestinos);
         } 
     }
 
@@ -682,17 +711,15 @@
     }
 
     function createOneQuestion(idSeccion, question, divElement) {
-        var div = document.createElement("Div");
-            div.className='form-row';
-            div.style.padding = "10px";
-            divElement.appendChild(div);
-            var required = question.requerido;
-            var divText = createDivClass("col-sm-3 text-right", div);
-            var text = question.descripcion;
-            if(text) text = text+": ";
-            createTextElement("P", divText, text, required);
+        var div = createDivClassWithPadding('form-row', divElement);
 
-            createAnswer(question, div, idSeccion, divElement, required);
+        var required = question.requerido;
+        var divText = createDivClass("col-sm-3 text-right", div);
+        var text = question.descripcion;
+        if(text) text = text+": ";
+        createTextElement("P", divText, text, required);
+
+        createAnswer(question, div, idSeccion, divElement, required);
     }
 
     function createQuestions(item, divElement){
