@@ -197,7 +197,7 @@ $( document ).ready(function() {
     dibujarSelectTipoPlanificacion();
     dibujarTablaPlanificacion();
 
-    if (TareaJson !== ''){
+    if (TareaJson.tipoPlanificacion.hasOwnProperty('id')){
         $('#tipoPlanificacion').val(TareaJson.tipoPlanificacion.id);
     }
     

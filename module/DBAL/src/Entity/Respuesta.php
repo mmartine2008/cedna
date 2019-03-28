@@ -100,7 +100,6 @@ class Respuesta
         return $this;
     }
 
-    
     /**
      * Get the value of pregunta
      */ 
@@ -241,13 +240,6 @@ class Respuesta
                 $destino = $this->getDestino();
             } 
         }
-        
-
-        // if($destino == $this->getPregunta()->getListaDestinos()[0]) {
-        //     // var_dump("ASD");
-        //      $destino = $this->getPregunta()->getListaDestinos()[2];
-        //     //  var_dump($destino);
-        // }
 
         $output .= '"destino": "' .$destino.'", ';
         $output .= '"respuesta": "' . $this->getDescripcion() .'"';

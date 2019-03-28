@@ -130,7 +130,8 @@ class Seccion
         return $this;
     }
 
-      /**
+
+    /**
      * Get the value of nombre
      */ 
     public function getNombre()
