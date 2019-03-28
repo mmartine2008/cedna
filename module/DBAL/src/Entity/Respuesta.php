@@ -28,12 +28,6 @@ class Respuesta
      */
     protected $nombreArchivo;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Permiso")
-     * @ORM\JoinColumn(name="IdPermiso", nullable=true, referencedColumnName="IdPermiso")
-     */
-    protected $permiso;
-
     /**
      * @ORM\ManyToOne(targetEntity="Pregunta")
      * @ORM\JoinColumn(name="IdPregunta", nullable=true, referencedColumnName="IdPregunta")
@@ -102,26 +96,6 @@ class Respuesta
     public function setDescripcion($descripcion)
     {
         $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of permiso
-     */ 
-    public function getPermiso()
-    {
-        return $this->permiso;
-    }
-
-    /**
-     * Set the value of permiso
-     *
-     * @return  self
-     */ 
-    public function setPermiso($permiso)
-    {
-        $this->permiso = $permiso;
 
         return $this;
     }
@@ -258,9 +232,6 @@ class Respuesta
         $output .= '"idRespuesta": "' . $this->getId() .'", ';
         $output .= '"pregunta": ' . $this->getPregunta()->getJson() .', ';
 
-        if ($this->getPermiso()) {
-             $output .= '"permiso": ' . $this->getPermiso()->getJSON().'", ' ;
-        }
         $destino = "";
         if ($this->getOpcion()) {
             $output .= '"opcion": "' . $this->getOpcion().'", ';
@@ -269,13 +240,6 @@ class Respuesta
                 $destino = $this->getDestino();
             } 
         }
-        
-
-        // if($destino == $this->getPregunta()->getListaDestinos()[0]) {
-        //     // var_dump("ASD");
-        //      $destino = $this->getPregunta()->getListaDestinos()[2];
-        //     //  var_dump($destino);
-        // }
 
         $output .= '"destino": "' .$destino.'", ';
         $output .= '"respuesta": "' . $this->getDescripcion() .'"';

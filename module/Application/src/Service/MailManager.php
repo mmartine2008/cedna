@@ -9,6 +9,7 @@ use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver\TemplateMapResolver;
 use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
+use DBAL\Entity\TiposEvento;
 
 class MailManager {
     
@@ -204,7 +205,7 @@ class MailManager {
 
         $mensaje = $this->translator->translate('__mail_nueva_orden_de_compra__') . ': ' . $OrdenDeCompra->getId();
 
-        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translate('__Nueva_Orden_de_Compra__'));
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translator->translate('__Nueva_Orden_de_Compra__'));
     }
 
     /**
@@ -219,7 +220,7 @@ class MailManager {
 
         $mensaje = $this->translator->translate('__Edición_de_Orden_de_Compra__') . ': ' . $OrdenDeCompra->getId();
 
-        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translate('__Edición_de_Orden_de_Compra__'));
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $this->translator->translate('__Edición_de_Orden_de_Compra__'));
     }
 
     /**
