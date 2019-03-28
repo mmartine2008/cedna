@@ -541,19 +541,7 @@
         return divElement;
     }
 
-    function mostrarImagenCargada(pregunta, idSeccion, idEle, div){
-        var divElement = createDivClassWithPadding('form-row', div);
-
-        var divImage = createDivClass("col-sm-3 margin-top-10", div, "div_imagen_"+idEle);
-        var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
-        divImage.appendChild(imagen);
-        var button = document.createElement("button");
-        button.type = "button";
-        button.id = "button_"+idEle;
-        button.textContent = "X";
-        button.className = "btn btn-danger";
-        divImage.appendChild(button);
-    }
+    
 
     function removerDivImagenes(divButton, divImage, divElement, div, idEle) {
         divButton.removeChild(divButton.lastChild);
@@ -564,28 +552,21 @@
         document.getElementById(idEle).value ='';
     }
 
-    function createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle){
+    function createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle, ele){
         var divButton = createDivClass("col-sm-1", divElement);
         var button = document.createElement("button");
         button.type = "button";
         button.id = "button_"+idPregunta+"_seccion_"+idSeccion;
         button.textContent = "X";
         button.className = "btn btn-danger";
-        button.onclick = function() {removerDivImagenes(divButton, divImage, divElement, div, idEle)};
+        button.onclick = function() {removerDivImagenes(divButton, divImage, divElement, div, idEle);
+                                    ele.disabled=false;
+                                    // div.style.display = "block";
+                                    };
         divButton.appendChild(button);
     }
 
-    function preview(e, idPregunta, idSeccion, idEle, div) {
-        var divImage = document.getElementById("div_imagen_"+idEle);
-        
-        if(divImage == null){
-            var divElement = createDivClassWithPadding('form-row', div);
-
-            var divImage = createDivClass("col-sm-7 margin-top-10", divElement, "div_imagen_"+idEle);
-            createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle);
-        } else {
-            divImage.removeChild(divImage.lastChild);
-        }
+    function preview(e, idPregunta, idSeccion, idEle, divImage) {
         if(e.files && e.files[0])   {
             var reader=new FileReader();
             reader.onload=function(e) {
@@ -598,6 +579,35 @@
         }
     }
 
+    function cargarImagenInsertada(e, idEle, div, idPregunta, idSeccion, ele){
+        var divImage = document.getElementById("div_imagen_"+idEle);
+        
+        if(divImage == null){
+            var divElement = createDivClassWithPadding('form-row', div);
+            var divImage = createDivClass("col-sm-7 margin-top-10", divElement, "div_imagen_"+idEle);
+            createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle, ele);
+
+        } else {
+            divImage.removeChild(divImage.lastChild);
+        }
+        preview(e, idPregunta, idSeccion, idEle, divImage)
+    }
+
+    function mostrarImagenCargada(pregunta, idSeccion, idEle, div, ele){
+        ele.disabled=true;
+        // div.style.display = "none";
+        var divImage = document.getElementById("div_imagen_"+idEle);
+        
+        if(divImage == null){
+            var divElement = createDivClassWithPadding('form-row', div);
+            var divImage = createDivClass("col-sm-7", divElement, "div_imagen_"+idEle);
+            createButtonForImage(divElement, pregunta.idPregunta, idSeccion, divImage, div, idEle, ele);
+         }
+        var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
+        $(imagen).attr('src', "#");
+        divImage.appendChild(imagen);
+    }
+
     function cargarImagen(ele, pregunta, idSeccion, div, idEle) {
         ele.name = "archivo[]";
         ele.type = "file";
@@ -606,11 +616,10 @@
         div.appendChild(ele);
         div.style.display = "block";
         if(pregunta.respuesta != "") {
-            mostrarImagenCargada(pregunta, idSeccion, idEle, div);
+            mostrarImagenCargada(pregunta, idSeccion, idEle, div, ele);
         } 
-        // ele.onclick = function() {divImage.style.display = "block"; };
         ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)
-                                     preview(this, pregunta.idPregunta, idSeccion, idEle, div)};
+                                     cargarImagenInsertada(this, idEle, div, pregunta.idPregunta, idSeccion)};
     }
 
     function cargarPDF(ele, idEle, div) {

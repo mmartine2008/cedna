@@ -111,6 +111,7 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
+        // $ruta_img = "/home/juano/Cedna/files/sanabria-2019-03-28-16:16:56.jpg";
 
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();
