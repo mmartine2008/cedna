@@ -41,6 +41,19 @@ return [
                     ],
                 ],
             ],
+            'mostrar_imagen' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/mostrar_imagen/:id',
+                    'defaults' => [
+                        'action' => 'mostrarImagen',
+                        'controller' => Controller\FormularioController::class,
+                    ],
+                    'constraints' => [
+                        'id' => '[1-9]\d*',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [

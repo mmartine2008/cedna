@@ -539,29 +539,25 @@
         div.appendChild(divElement);
 
         return divElement;
-    }
+    } 
 
-    
-
-    function removerDivImagenes(divButton, divImage, divElement, div, idEle) {
+    function removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput) {
         divButton.removeChild(divButton.lastChild);
         divImage.removeChild(divImage.lastChild);
-        divElement.removeChild(divElement.lastChild);
-        divElement.removeChild(divElement.lastChild);
-        div.removeChild(div.lastChild);
+        divImageButton.removeChild(divImageButton.lastChild);
+        divImageButton.removeChild(divImageButton.lastChild);
+        divInput.removeChild(divInput.lastChild);
         document.getElementById(idEle).value ='';
     }
 
-    function createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle, ele){
-        var divButton = createDivClass("col-sm-1", divElement);
+    function createButtonForImage(idPregunta, idEle, idSeccion, divImageButton, divImage, divInput){
+        var divButton = createDivClass("col-sm-1", divImageButton);
         var button = document.createElement("button");
         button.type = "button";
         button.id = "button_"+idPregunta+"_seccion_"+idSeccion;
         button.textContent = "X";
         button.className = "btn btn-danger";
-        button.onclick = function() {removerDivImagenes(divButton, divImage, divElement, div, idEle);
-                                    ele.disabled=false;
-                                    // div.style.display = "block";
+        button.onclick = function() {removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput);
                                     };
         divButton.appendChild(button);
     }
@@ -579,13 +575,13 @@
         }
     }
 
-    function cargarImagenInsertada(e, idEle, div, idPregunta, idSeccion, ele){
+    function cargarImagenInsertada(e, idEle, divImagenInput, idPregunta, idSeccion, divInput){
         var divImage = document.getElementById("div_imagen_"+idEle);
         
         if(divImage == null){
-            var divElement = createDivClassWithPadding('form-row', div);
-            var divImage = createDivClass("col-sm-7 margin-top-10", divElement, "div_imagen_"+idEle);
-            createButtonForImage(divElement, idPregunta, idSeccion, divImage, div, idEle, ele);
+            var divImageButton = createDivClassWithPadding('form-row', divImagenInput);
+            var divImage = createDivClass("col-sm-7 margin-top-10", divImageButton, "div_imagen_"+idEle);
+            createButtonForImage(idPregunta, idEle, idSeccion, divImageButton, divImage, divInput);
 
         } else {
             divImage.removeChild(divImage.lastChild);
@@ -593,33 +589,34 @@
         preview(e, idPregunta, idSeccion, idEle, divImage)
     }
 
-    function mostrarImagenCargada(pregunta, idSeccion, idEle, div, ele){
-        ele.disabled=true;
-        // div.style.display = "none";
+    function mostrarImagenCargada(pregunta, idSeccion, idEle, divInput){
+        // divInput.style.display = "none";
         var divImage = document.getElementById("div_imagen_"+idEle);
         
         if(divImage == null){
-            var divElement = createDivClassWithPadding('form-row', div);
-            var divImage = createDivClass("col-sm-7", divElement, "div_imagen_"+idEle);
-            createButtonForImage(divElement, pregunta.idPregunta, idSeccion, divImage, div, idEle, ele);
+            var divImageButton = createDivClassWithPadding('form-row', divInput);
+            var divImage = createDivClass("col-sm-7", divImageButton, "div_imagen_"+idEle);
+            createButtonForImage(pregunta.idPregunta, idEle, idSeccion, divImageButton, divImage, divInput);
          }
         var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
-        $(imagen).attr('src', "#");
+        // var path = $.post('mostrar_imagen/'+pregunta.respuesta.id);
+        var path = $.post('../../mostrar_imagen/'+1);
+        $(imagen).attr('src', path);
         divImage.appendChild(imagen);
     }
 
-    function cargarImagen(ele, pregunta, idSeccion, div, idEle) {
+    function cargarImagen(ele, pregunta, idSeccion, divInput, idEle) {
         ele.name = "archivo[]";
         ele.type = "file";
         ele.accept="image/png, image/jpeg";
         listaFileInput.push(idEle);
-        div.appendChild(ele);
-        div.style.display = "block";
+        divInput.appendChild(ele);
+        divInput.style.display = "block";
         if(pregunta.respuesta != "") {
-            mostrarImagenCargada(pregunta, idSeccion, idEle, div, ele);
+            mostrarImagenCargada(pregunta, idSeccion, idEle, divInput);
         } 
         ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)
-                                     cargarImagenInsertada(this, idEle, div, pregunta.idPregunta, idSeccion)};
+                                     cargarImagenInsertada(this, idEle, divInput, pregunta.idPregunta, idSeccion, divInput)};
     }
 
     function cargarPDF(ele, idEle, div) {

@@ -91,6 +91,21 @@ class FormularioController extends BaseFormularioController
         return $view;
     }
 
+    function mostrarImagenAction(){
+        $datos_archivo = $this->FormularioManager->getPathFiles();
+        if ($this->getRequest()->isPost()){
+            $id = $this->params()->formPost('id');
+            // $nombreArchivo = $this->FormularioManager->getRespuesta($id)->getNombreArchivo();
+            $nombreArchivo = "sanabria-2019-03-28-16:16:56.jpg";
+        } 
+
+        $name = $datos_archivo['path'].$nombreArchivo;
+        $img = file_get_contents($name);
+
+        header('Content-type:image/png');    
+        echo ($img);
+    }
+
     public function cargarAction(){
         $this->cargarAccionesDisponibles('formularios - cargar');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - cargar');
@@ -111,7 +126,6 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
-        // $ruta_img = "/home/juano/Cedna/files/sanabria-2019-03-28-16:16:56.jpg";
 
         $Formulario = $Relevamiento->getFormulario();
         $destinos = $this->getDestinos();

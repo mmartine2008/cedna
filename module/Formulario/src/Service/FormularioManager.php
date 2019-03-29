@@ -39,8 +39,7 @@ class FormularioManager {
         $this->datosArchivos = $datosArchivos;
     }
 
-    public function getDatosEmpresa()
-    {
+    public function getDatosEmpresa() {
         $output = [];
         
         foreach ($this->datosEmpresa as $index => $valor)
@@ -51,8 +50,7 @@ class FormularioManager {
         return $output;
     }
 
-    public function getPathFiles()
-    {
+    public function getPathFiles() {
         $output = [];
         
         foreach ($this->datosArchivos as $index => $valor)
