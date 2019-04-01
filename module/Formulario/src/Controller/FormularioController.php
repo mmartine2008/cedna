@@ -93,16 +93,15 @@ class FormularioController extends BaseFormularioController
 
     function mostrarImagenAction(){
         $datos_archivo = $this->FormularioManager->getPathFiles();
-        if ($this->getRequest()->isPost()){
-            $id = $this->params()->formPost('id');
-            // $nombreArchivo = $this->FormularioManager->getRespuesta($id)->getNombreArchivo();
-            $nombreArchivo = "sanabria-2019-03-28-16:16:56.jpg";
-        } 
 
-        $name = $datos_archivo['path'].$nombreArchivo;
+        $id = $this->params()->fromRoute('id');
+        $nombreArchivo = $this->FormularioManager->getRespuesta($id)->getNombreArchivo();
+            
+        $name = $datos_archivo['path']."/".$nombreArchivo;
         $img = file_get_contents($name);
 
-        header('Content-type:image/png');    
+        header('Content-type:image/png');
+
         echo ($img);
     }
 
@@ -118,22 +117,19 @@ class FormularioController extends BaseFormularioController
         if ($this->getRequest()->isPost()) {
             $params = $this->params()->fromPost();
             $data = json_decode($params['JsonData']);
-            $this->FormularioManager->altaRespuestasFormulario($data, $idPlanificacion);
-            
             $listaArchivos = json_decode($params['archivos']);
             $archivo = (isset($_FILES["archivo"])) ? $_FILES["archivo"] : null;
-            $this->FormularioManager->guardarArchivos($listaArchivos, $archivo, $Relevamiento->getId());
+
+            $this->FormularioManager->altaRespuestasYArchivosFormulario($Planificacion, $data, $listaArchivos, $archivo);
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
-
         $Formulario = $Relevamiento->getFormulario();
-        $destinos = $this->getDestinos();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
         return new ViewModel([
             "formulario" => $FormularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
-            "destinos" => $destinos,
+            "destinos" => $this->getDestinos(),
             "idRelevamiento" => $Relevamiento->getId(),
         ]);
     }

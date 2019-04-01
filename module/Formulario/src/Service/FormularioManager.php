@@ -103,6 +103,12 @@ class FormularioManager {
         return $Secciones;
     }
 
+    public function getRespuesta($id = null) {
+        $Entidad = $this->entityManager->getRepository(Respuesta::class)
+                                            ->findOneBy(['id' => $id]); 
+        return $Entidad;
+    }
+
     /**
      * Funcion que asignar un formulario a una planificacion.
      *
@@ -417,6 +423,20 @@ class FormularioManager {
         return $respuestasJSON;
     }
 
+    private function getRespuestaUsuario($respuesta) {
+        foreach ($respuesta as $valor) {
+            if($valor->getDescripcion()) {
+                if($valor->getNombreArchivo()) {
+                    return ['id' => $valor->getId(), 'opciones' => $valor->getNombreArchivo()];
+                } else {
+                    return  $valor->getDescripcion();
+                }
+            } else {
+                return  $valor->getOpcion();
+            }
+        }
+    }
+
     private function getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion){
         if($tipoPregunta->descripcion == 'multiple'){
             $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta);
@@ -427,15 +447,7 @@ class FormularioManager {
                 }
             }
         } else {
-                if($respuesta[0]->getDescripcion()) {
-                    if($respuesta[0]->getNombreArchivo()) {
-                        $preguntaJSON->respuesta  = $respuesta[0]->getNombreArchivo();
-                    } else {
-                        $preguntaJSON->respuesta = $respuesta[0]->getDescripcion();
-                    }
-                } else {
-                    $preguntaJSON->respuesta = $respuesta[0]->getOpcion();
-                }
+            $preguntaJSON->respuesta = $this->getRespuestaUsuario($respuesta);
         }
         return $preguntaJSON;
     }
@@ -485,11 +497,12 @@ class FormularioManager {
         foreach($preguntas as $pregunta) {
             $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
         }
-
+        //si requiere el JSON una vez editado el Relevamiento
         if($Relevamiento->getEstadoRelevamiento()->esEditado()){
             $output = $this->getJSONActualizadoPorRespuestasRelevamiento($formJSON, $Relevamiento->getId());
             return json_encode($output);
         }
+
         return json_encode($formJSON);
     }
 
@@ -787,7 +800,7 @@ class FormularioManager {
 
     }
 
-    public function guardarArchivos($listaArchivos, $archivo, $idRelevamiento) {
+    private function guardarArchivos($listaArchivos, $archivo, $idRelevamiento) {
         for($i = 0; $i < count($listaArchivos); $i++) {
             if ($archivo) {
                 $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
@@ -871,7 +884,7 @@ class FormularioManager {
         }
     }
 
-    public function altaRespuestasFormulario($datos, $idPlanificacion) {
+    private function altaRespuestasFormulario($datos, $idPlanificacion) {
         $secciones = $datos->secciones;
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
         $Relevamiento = $Planificacion->getRelevamiento();
@@ -884,6 +897,12 @@ class FormularioManager {
 
         $this->entityManager->persist($Relevamiento);
         $this->entityManager->flush();
+    }
+
+    public function altaRespuestasYArchivosFormulario($Planificacion, $data, $listaArchivos, $archivo) {
+        $this->altaRespuestasFormulario($data, $Planificacion->getId());
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $this->guardarArchivos($listaArchivos, $archivo, $Relevamiento->getId());
     }
 
     

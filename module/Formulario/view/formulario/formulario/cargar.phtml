@@ -590,19 +590,24 @@
     }
 
     function mostrarImagenCargada(pregunta, idSeccion, idEle, divInput){
-        // divInput.style.display = "none";
-        var divImage = document.getElementById("div_imagen_"+idEle);
-        
+        var divImage = document.getElementById("div_imagen_"+idEle);        
         if(divImage == null){
             var divImageButton = createDivClassWithPadding('form-row', divInput);
             var divImage = createDivClass("col-sm-7", divImageButton, "div_imagen_"+idEle);
             createButtonForImage(pregunta.idPregunta, idEle, idSeccion, divImageButton, divImage, divInput);
          }
         var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
-        // var path = $.post('mostrar_imagen/'+pregunta.respuesta.id);
-        var path = $.post('../../mostrar_imagen/'+1);
-        $(imagen).attr('src', path);
-        divImage.appendChild(imagen);
+        // var path = $.get('/mostrar_imagen/'+pregunta.respuesta.id);
+        $.get('/mostrar_imagen/'+pregunta.respuesta.id, function(path){
+            $(imagen).attr('src', path);
+            divImage.appendChild(imagen);
+        }).done(function(){
+            console.log('Done!');
+        }).fail(function(){
+            console.log('Failed!');
+        });    
+        // $(imagen).attr('src', path);
+        // divImage.appendChild(imagen);
     }
 
     function cargarImagen(ele, pregunta, idSeccion, divInput, idEle) {

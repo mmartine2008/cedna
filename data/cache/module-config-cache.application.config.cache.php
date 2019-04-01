@@ -759,6 +759,23 @@ return array (
           ),
         ),
       ),
+      'mostrar_imagen' => 
+      array (
+        'type' => 'Zend\\Router\\Http\\Segment',
+        'options' => 
+        array (
+          'route' => '/mostrar_imagen/:id',
+          'defaults' => 
+          array (
+            'action' => 'mostrarImagen',
+            'controller' => 'Formulario\\Controller\\FormularioController',
+          ),
+          'constraints' => 
+          array (
+            'id' => '[1-9]\\d*',
+          ),
+        ),
+      ),
     ),
   ),
   'filters' => 
