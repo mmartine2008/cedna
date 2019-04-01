@@ -1,5 +1,6 @@
 <?= $this->doctype() ?>
 
+
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -24,6 +25,9 @@
             ->prependFile($this->basePath('js/jquery-2.2.4.min.js'))
             ->appendFile($this->basePath('js/sweetalert2.all.js'))
         ?>
+        <script>
+            var url = '<?= $this->serverUrl(); ?>';
+        </script>
     </head>
     <body>
         <div class="flex encabezado"> 
@@ -81,7 +85,6 @@
     </body>
 </html>
 <script>
-    var url = '<?= $this->serverUrl(); ?>';
     var arrAccionesDisponibles = <?= $arrAccionesDisponibles; ?>;
 
     function lugarEstaDisponible(lugar, lugaresOcupados){

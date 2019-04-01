@@ -427,7 +427,7 @@ class FormularioManager {
         foreach ($respuesta as $valor) {
             if($valor->getDescripcion()) {
                 if($valor->getNombreArchivo()) {
-                    return ['id' => $valor->getId(), 'opciones' => $valor->getNombreArchivo()];
+                    return ['id' => $valor->getId(), 'valor' => $valor->getDescripcion()];
                 } else {
                     return  $valor->getDescripcion();
                 }
@@ -743,11 +743,14 @@ class FormularioManager {
     public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
         if(($Respuesta)&& (!$destino)) { 
-            $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
-        } else {
-            if($pregunta->getTipoPregunta()->esPeguntaArchivo()) {
-                $pregunta->setRequerido(0);
+            if($pregunta->getTipoPregunta()->esImagen()) {
+                if($Respuesta->getDescripcion() != $respuesta) {
+                    $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
+                }
+            } else {
+                $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
             }
+        } else {
             $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
         }
     }
@@ -806,12 +809,14 @@ class FormularioManager {
                 $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
                 $fecha_hoy = date("Y-m-d-H:i:s");
                 $nombreReal = $archivo['name'][$i];
-                $file_ext = pathinfo($nombreReal, PATHINFO_EXTENSION);
-                $nombreArchivo = $nombreUsuario."-".$fecha_hoy.".".$file_ext;
-                $path = $this->getPathFiles();
-                $ruta_destino_archivo = $path['path']."/".$nombreArchivo;
-                $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
-                $this->modificarNombresArchivo($listaArchivos[$i], $nombreArchivo, $nombreReal);
+                if($nombreReal) {
+                    $file_ext = pathinfo($nombreReal, PATHINFO_EXTENSION);
+                    $nombreArchivo = $nombreUsuario."-".$fecha_hoy.".".$file_ext;
+                    $path = $this->getPathFiles();
+                    $ruta_destino_archivo = $path['path']."/".$nombreArchivo;
+                    $archivo_ok = move_uploaded_file($archivo['tmp_name'][$i], $ruta_destino_archivo);
+                    $this->modificarNombresArchivo($listaArchivos[$i], $nombreArchivo, $nombreReal);
+                }
             }
         }
     }
@@ -841,7 +846,7 @@ class FormularioManager {
         }
     }
 
-    public function altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta){
+    private function altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta){
         $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEntidad, $respuesta);
         if ($listaOpcionDestino){
             $this->eliminarRespuestasSelectores($preguntaEntidad, $seccionEnt, $Relevamiento);
@@ -855,12 +860,23 @@ class FormularioManager {
         }
     }
 
+    private function eliminarRespuestasSinResponder($Pregunta, $Seccion, $Relevamiento) {
+        $Respuestas = $this->getRespuestaPreguntaPorRelevamientoSeccion($Relevamiento, $Seccion, $Pregunta);
+        foreach($Respuestas as $Respuesta) {
+            $this->elminarEntidad($Respuesta);
+        } 
+    }
+
     public function altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento){
         $respuesta = $pregunta->respuesta;
         if ($this->tieneRespuesta($respuesta)){
             $idPregunta = $pregunta->idPregunta;
             $preguntaEntidad = $this->getPregunta($idPregunta);
             $this->altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta);
+        } else {
+            $idPregunta = $pregunta->idPregunta;
+            $preguntaEntidad = $this->getPregunta($idPregunta);
+            $this->eliminarRespuestasSinResponder($preguntaEntidad, $seccionEnt, $Relevamiento);
         }
     }
 
@@ -871,6 +887,7 @@ class FormularioManager {
                 $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
             }
         }
+        die();
     }
 
     public function altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento){

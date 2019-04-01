@@ -532,6 +532,10 @@
         return ele;
     }
 
+    function removerRespuestaEnJSON(Pregunta) {
+        Pregunta.respuesta = "";          
+    }
+
     function createDivClassWithPadding(info, div) {
         var divElement = document.createElement("Div");
         divElement.className= info;
@@ -550,14 +554,15 @@
         document.getElementById(idEle).value ='';
     }
 
-    function createButtonForImage(idPregunta, idEle, idSeccion, divImageButton, divImage, divInput){
+    function createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput){
         var divButton = createDivClass("col-sm-1", divImageButton);
         var button = document.createElement("button");
         button.type = "button";
-        button.id = "button_"+idPregunta+"_seccion_"+idSeccion;
+        button.id = "button_"+Pregunta.idPregunta+"_seccion_"+idSeccion;
         button.textContent = "X";
         button.className = "btn btn-danger";
         button.onclick = function() {removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput);
+                                    removerRespuestaEnJSON(Pregunta);
                                     };
         divButton.appendChild(button);
     }
@@ -575,18 +580,18 @@
         }
     }
 
-    function cargarImagenInsertada(e, idEle, divImagenInput, idPregunta, idSeccion, divInput){
+    function cargarImagenInsertada(e, idEle, divImagenInput, Pregunta, idSeccion, divInput){
         var divImage = document.getElementById("div_imagen_"+idEle);
         
         if(divImage == null){
             var divImageButton = createDivClassWithPadding('form-row', divImagenInput);
             var divImage = createDivClass("col-sm-7 margin-top-10", divImageButton, "div_imagen_"+idEle);
-            createButtonForImage(idPregunta, idEle, idSeccion, divImageButton, divImage, divInput);
+            createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput);
 
         } else {
             divImage.removeChild(divImage.lastChild);
         }
-        preview(e, idPregunta, idSeccion, idEle, divImage)
+        preview(e, Pregunta.idPregunta, idSeccion, idEle, divImage)
     }
 
     function mostrarImagenCargada(pregunta, idSeccion, idEle, divInput){
@@ -594,20 +599,13 @@
         if(divImage == null){
             var divImageButton = createDivClassWithPadding('form-row', divInput);
             var divImage = createDivClass("col-sm-7", divImageButton, "div_imagen_"+idEle);
-            createButtonForImage(pregunta.idPregunta, idEle, idSeccion, divImageButton, divImage, divInput);
+            createButtonForImage(pregunta, idEle, idSeccion, divImageButton, divImage, divInput);
          }
         var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
-        // var path = $.get('/mostrar_imagen/'+pregunta.respuesta.id);
-        $.get('/mostrar_imagen/'+pregunta.respuesta.id, function(path){
-            $(imagen).attr('src', path);
-            divImage.appendChild(imagen);
-        }).done(function(){
-            console.log('Done!');
-        }).fail(function(){
-            console.log('Failed!');
-        });    
-        // $(imagen).attr('src', path);
-        // divImage.appendChild(imagen);
+        
+        $(imagen).attr('src', url+'/mostrar_imagen/'+ pregunta.respuesta.id);
+        updateJson(idSeccion, pregunta.idPregunta, pregunta.respuesta.valor);
+        divImage.appendChild(imagen);    
     }
 
     function cargarImagen(ele, pregunta, idSeccion, divInput, idEle) {
@@ -620,8 +618,10 @@
         if(pregunta.respuesta != "") {
             mostrarImagenCargada(pregunta, idSeccion, idEle, divInput);
         } 
-        ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)
-                                     cargarImagenInsertada(this, idEle, divInput, pregunta.idPregunta, idSeccion, divInput)};
+        ele.onchange = function() { 
+                                    updateJsonSimple(idSeccion, pregunta.idPregunta, idEle);
+                                    // updateJsonSimpleArchivoImagen(idSeccion, idPregunta, idRespuesta);
+                                     cargarImagenInsertada(this, idEle, divInput, pregunta, idSeccion, divInput)};
     }
 
     function cargarPDF(ele, idEle, div) {
