@@ -12,6 +12,7 @@
                             <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
                             <th class="text-center"><?= $this->translate('__Apellido__') ?></th>
                             <th class="text-center">Email</th>
+                            <th class="text-center">Perfil</th>
                         </tr>
                     </thead>
                     <tbody id="bodyConfUsuarios">
@@ -46,11 +47,15 @@
             var nombre = row.insertCell(1);
             var apellido = row.insertCell(2);
             var email = row.insertCell(3);
+            var perfil = row.insertCell(4);
+
 
             userName.innerHTML = usuario.userName;
             nombre.innerHTML = usuario.nombre;
             apellido.innerHTML = usuario.apellido;
             email.innerHTML = usuario.email;
+            //los usuarios tendran solo un perfil
+            perfil.innerHTML = usuario.perfiles[0].nombre;
         }
     }
 
