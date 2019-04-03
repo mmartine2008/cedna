@@ -561,7 +561,7 @@
         button.className = "btn btn-danger";
         button.onclick = function() {   removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput);
                                         Pregunta.respuesta = "";  
-                                        if((required == '1') && (enEdicion == '1') && (!listaRespuestasInput.includes(idEle))){
+                                        if((required == '1') && (enEdicion == '2') && (!listaRespuestasInput.includes(idEle))){
                                             listaRespuestasInput.push(idEle);
                                         }
                                     };
@@ -630,7 +630,7 @@
         listaFileInput.push(idEle);
         divInput.appendChild(ele);
         divInput.style.display = "block";
-        if((required == '1') && (enEdicion == '0')){
+        if((required == '1') && (enEdicion < '2')){
             listaRespuestasInput.push(idEle);
         }
         if(pregunta.respuesta != "") {
@@ -645,7 +645,7 @@
         ele.type = "file";
         ele.accept="application/pdf";
         listaFileInput.push(idEle);
-        if((required == '1') && (enEdicion == '0')){
+        if((required == '1') && (enEdicion < '2')){
             listaRespuestasInput.push(idEle);
         }
         div.appendChild(ele);

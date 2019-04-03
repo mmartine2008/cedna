@@ -126,12 +126,14 @@ class FormularioController extends BaseFormularioController
         }
         $Formulario = $Relevamiento->getFormulario();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
+
+        $enEdicion = $Relevamiento->getEstadoRelevamiento()->getId();
         return new ViewModel([
             "formulario" => $FormularioJSON,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $this->getDestinos(),
             "idRelevamiento" => $Relevamiento->getId(),
-            "enEdicion" => $Relevamiento->getEstadoRelevamiento()->esEditado(),
+            "enEdicion" => $enEdicion,
         ]);
     }
 
@@ -190,8 +192,9 @@ class FormularioController extends BaseFormularioController
         $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'L');
         $pdf->Ln(5);
 
+        $color = true;
         foreach ($data['secciones'] as $seccion) {
-            $this->imprimirSecciones($pdf, $seccion);
+            $color = $this->imprimirSecciones($pdf, $seccion, $color);
         }
 
         $pdf->Ln(5);

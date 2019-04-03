@@ -45,7 +45,7 @@ class BaseFormularioController extends CednaController
         return $output;
     }
 
-    protected function imprimirSelectoresMultiples($respuesta, $pdf) {
+    protected function imprimirSelectoresMultiples($respuesta, $pdf, $color) {
         $respuestas = $respuesta['respuesta'];
         foreach($respuestas as $resp) {
             $pdf->SetFont('helvetica', 'I', 10);
@@ -54,16 +54,25 @@ class BaseFormularioController extends CednaController
             $pdf->Cell(40, 5, $listaDestinos[1]);
             $pdf->Ln(6);
             foreach ($list as $valor) {
+                if($color) {
+                    $pdf->SetTextColor(0, 0, 0, 70);
+                } else {
+                    $pdf->SetTextColor(0, 0, 0, 100);
+                }
                 $pdf->SetFont('helvetica', '', 10);
                 $pdf->Cell(25, 5, "");
                 $pdf->Cell(100, 5, "- ".$valor);
                 $pdf->Ln(5);
+                $color = !$color;
             }
         }
     }
 
     private function mostrarImagen($nombreArchivo, $pdf, $descripcion, $respuesta) {
-        $urlImagen = "file/".$nombreArchivo;
+        $datos_archivo = $this->FormularioManager->getPathFiles();
+        $name = $datos_archivo['path']."/".$nombreArchivo;
+
+        $urlImagen = $name;
         $file_ext = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
         $pdf->Cell(50, 5,  $descripcion);
         $pdf->Image($urlImagen, "", "", "30", '', $file_ext, '', '', false, 300, '', false, false, 0, false, false, false);        
@@ -71,9 +80,7 @@ class BaseFormularioController extends CednaController
         $pdf->Ln(50);
     }
 
-    
-
-    protected function imprimirPregunta($respuesta, $pdf, $descripcion){
+    protected function imprimirPregunta($respuesta, $pdf, $descripcion, $color){
         if($respuesta['archivo'] == "") {
             $pdf->Cell(50, 5,  $descripcion);
             $pdf->SetFont('helvetica', '', 10);
@@ -89,17 +96,18 @@ class BaseFormularioController extends CednaController
         } else {
             $this->mostrarImagen($respuesta['archivo'], $pdf, $descripcion, $respuesta);
         }
+        return !$color;
     }
 
-    protected function imprimirPreguntas($respuestas, $pdf, $seccion){
+    protected function imprimirPreguntas($respuestas, $pdf, $seccion, $color){
         $pdf->SetFont('helvetica', 'B', 11);
         $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
         $pdf->Ln(8);
-        $color = true; 
+    
         foreach ( $respuestas as $respuestaxRespuesta) { 
             foreach ( $respuestaxRespuesta as $respuesta) { 
                 if($color) {
-                    $pdf->SetTextColor(0, 0, 0, 50);
+                    $pdf->SetTextColor(0, 0, 0, 70);
                 } else {
                     $pdf->SetTextColor(0, 0, 0, 100);
                 }
@@ -107,14 +115,13 @@ class BaseFormularioController extends CednaController
                 $descripcion = $respuesta['descripcionPregunta'];
                 if($descripcion == '') { $descripcion = ' ';}
                 if($respuesta['tipoPregunta'] == 'multiple') {
-                    $this->imprimirSelectoresMultiples($respuesta, $pdf);
+                    $color = $this->imprimirSelectoresMultiples($respuesta, $pdf, $color);
                 } else {
-                    $this->imprimirPregunta($respuesta, $pdf, $descripcion);
-
+                    $color = $this->imprimirPregunta($respuesta, $pdf, $descripcion, $color);
                 }
-                $color = !$color;
             }
         }
+        return $color;
     }
 
     protected function imprimirFirmasSeleccionadas($pdf, $list) {
@@ -187,7 +194,7 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    protected function imprimirSecciones($pdf, $seccion){
+    protected function imprimirSecciones($pdf, $seccion, $color){
         $pdf->SetTextColor(0, 0, 0, 100);
         $respuestas = $seccion['respuestas'];
         $pdf->Ln(5);
@@ -195,8 +202,9 @@ class BaseFormularioController extends CednaController
         if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
             $this->imprimirFirmas($respuestas, $pdf, $seccion);
         } else {
-            $this->imprimirPreguntas($respuestas, $pdf, $seccion);
+            $color = $this->imprimirPreguntas($respuestas, $pdf, $seccion, $color);
         }
+        return $color;
     }
     
 }
