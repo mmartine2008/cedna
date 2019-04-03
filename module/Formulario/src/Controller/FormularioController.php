@@ -131,6 +131,7 @@ class FormularioController extends BaseFormularioController
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $this->getDestinos(),
             "idRelevamiento" => $Relevamiento->getId(),
+            "enEdicion" => $Relevamiento->getEstadoRelevamiento()->esEditado(),
         ]);
     }
 

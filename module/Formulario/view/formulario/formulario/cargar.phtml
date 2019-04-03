@@ -14,6 +14,7 @@
     var destinos = <?= json_encode($destinos) ?>;
     var listaFileInput = [];
     var idRelevamiento = <?= $idRelevamiento ?>;
+    var enEdicion = <?= $enEdicion ?>;
 
     function updateAnswerOfPreguntaGenerada(pregGeneradas, idPregunta, answer) {
         for (var k = 0; k < pregGeneradas.length; k++){ 
@@ -533,10 +534,6 @@
         return ele;
     }
 
-    function removerRespuestaEnJSON(Pregunta) {
-        Pregunta.respuesta = "";          
-    }
-
     function createDivClassWithPadding(info, div) {
         var divElement = document.createElement("Div");
         divElement.className= info;
@@ -555,93 +552,114 @@
         document.getElementById(idEle).value ='';
     }
 
-    function createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput){
+    function createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput, required){
         var divButton = createDivClass("col-sm-1", divImageButton);
         var button = document.createElement("button");
         button.type = "button";
         button.id = "button_"+Pregunta.idPregunta+"_seccion_"+idSeccion;
         button.textContent = "X";
         button.className = "btn btn-danger";
-        button.onclick = function() {removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput);
-                                    removerRespuestaEnJSON(Pregunta);
+        button.onclick = function() {   removerDivImagenes(idEle, divButton, divImage, divImageButton, divInput);
+                                        Pregunta.respuesta = "";  
+                                        if((required == '1') && (enEdicion == '1') && (!listaRespuestasInput.includes(idEle))){
+                                            listaRespuestasInput.push(idEle);
+                                        }
                                     };
         divButton.appendChild(button);
     }
 
-    function preview(e, idPregunta, idSeccion, idEle, divImage) {
+    function createPDF(urlPDF, idPregunta, idSeccion, divImage){
+        ele = document.createElement('iframe');
+        var id = "pdf_pregunta"+idPregunta+"_seccion_"+idSeccion;
+        ele.name = id;
+        ele.id = id;
+        ele.setAttribute("src", urlPDF); 
+        ele.setAttribute("type","application/pdf"); 
+        ele.setAttribute("width","160"); 
+        ele.setAttribute("height","168");
+        divImage.appendChild(ele);
+        
+        divImage.appendChild(imagen);
+        return ele;
+    }
+
+    function preview(e, idPregunta, idSeccion, idEle, divImage, tipo) {
         if(e.files && e.files[0])   {
             var reader=new FileReader();
             reader.onload=function(e) {
-            
             var imagen = createImage("", idPregunta, idSeccion);
             $(imagen).attr('src', e.target.result);
-            divImage.appendChild(imagen);  
+            divImage.appendChild(imagen);
         } 
         reader.readAsDataURL(e.files[0]);
         }
     }
 
-    function cargarImagenInsertada(e, idEle, divImagenInput, Pregunta, idSeccion, divInput){
+    function cargarImagenInsertada(e, idEle, divImagenInput, Pregunta, idSeccion, divInput, required){
         var divImage = document.getElementById("div_imagen_"+idEle);
         
         if(divImage == null){
             var divImageButton = createDivClassWithPadding('form-row', divImagenInput);
             var divImage = createDivClass("col-sm-7 margin-top-10", divImageButton, "div_imagen_"+idEle);
-            createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput);
-
+            createButtonForImage(Pregunta, idEle, idSeccion, divImageButton, divImage, divInput, required);
         } else {
             divImage.removeChild(divImage.lastChild);
         }
-        preview(e, Pregunta.idPregunta, idSeccion, idEle, divImage)
+        preview(e, Pregunta.idPregunta, idSeccion, idEle, divImage);
     }
 
-    function mostrarImagenCargada(pregunta, idSeccion, idEle, divInput){
+    function mostrarImagenCargada(pregunta, idSeccion, idEle, divInput, required){
         var divImage = document.getElementById("div_imagen_"+idEle);        
         if(divImage == null){
             var divImageButton = createDivClassWithPadding('form-row', divInput);
             var divImage = createDivClass("col-sm-7", divImageButton, "div_imagen_"+idEle);
             listaDivImagen.push("div_imagen_"+idEle);
-            createButtonForImage(pregunta, idEle, idSeccion, divImageButton, divImage, divInput);
+            createButtonForImage(pregunta, idEle, idSeccion, divImageButton, divImage, divInput, required);
          }
         var imagen = createImage(pregunta.respuesta, pregunta.idPregunta, idSeccion);
-        
         $(imagen).attr('src', url+'/mostrar_imagen/'+ pregunta.respuesta.id);
+         
         updateJson(idSeccion, pregunta.idPregunta, pregunta.respuesta.valor);
         divImage.appendChild(imagen);    
     }
 
-    function cargarImagen(ele, pregunta, idSeccion, divInput, idEle) {
+    function cargarImagen(ele, pregunta, idSeccion, divInput, idEle, required) {
         ele.name = "archivo[]";
         ele.type = "file";
         ele.accept="image/png, image/jpeg";
         listaFileInput.push(idEle);
         divInput.appendChild(ele);
         divInput.style.display = "block";
+        if((required == '1') && (enEdicion == '0')){
+            listaRespuestasInput.push(idEle);
+        }
         if(pregunta.respuesta != "") {
-            mostrarImagenCargada(pregunta, idSeccion, idEle, divInput);
+            mostrarImagenCargada(pregunta, idSeccion, idEle, divInput, required);
         } 
-        ele.onchange = function() { 
-                                    updateJsonSimple(idSeccion, pregunta.idPregunta, idEle);
-                                     cargarImagenInsertada(this, idEle, divInput, pregunta, idSeccion, divInput)};
+        ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle);
+                                    cargarImagenInsertada(this, idEle, divInput, pregunta, idSeccion, divInput, required)};
     }
 
-    function cargarPDF(ele, idEle, div) {
+    function cargarPDF(ele, pregunta, idSeccion, idEle, div, required) {
         ele.name = "archivo[]";
         ele.type = "file";
         ele.accept="application/pdf";
         listaFileInput.push(idEle);
+        if((required == '1') && (enEdicion == '0')){
+            listaRespuestasInput.push(idEle);
+        }
         div.appendChild(ele);
         ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
     }
 
-    function cargarInput(ele, pregunta, div, infoType, idEle){
+    function cargarInput(ele, pregunta, idSeccion, div, infoType, idEle, required){
         ele.type = infoType;
         ele.name = idEle;
         if(pregunta.respuesta != " ") {
             ele.value = pregunta.respuesta;
         }
         if(required == '1'){
-            listaRespuestasInput.push("pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion);
+            listaRespuestasInput.push(idEle);
         }
         ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         div.appendChild(ele);
@@ -655,11 +673,11 @@
         var div = createDivClass("text-left", divElement);
 
         if(infoType == "file_image") {
-            cargarImagen(ele, pregunta, idSeccion, div, idEle) ;
+            cargarImagen(ele, pregunta, idSeccion, div, idEle, required) ;
         } else if (infoType == "file_file"){
-            cargarPDF(ele, idEle, div);
+            cargarPDF(ele, pregunta, idSeccion, idEle, div, required);
         } else {
-            cargarInput(ele, pregunta, div, infoType, idEle);
+            cargarInput(ele, pregunta, idSeccion, div, infoType, idEle, required);
         }
     }  
 
@@ -770,7 +788,6 @@
         
         liNav.className = "nav-item";
         navPills.appendChild(liNav);
-
 
         var aNav = document.createElement("a");
         aNav.href = "#Seccion_id_"+item.id;
@@ -886,7 +903,6 @@
     }
 
     function mostrarCartelErrorSubmit(secciones) {
-
         swal({
             type: 'error',
             title: 'Faltan responder preguntas',
