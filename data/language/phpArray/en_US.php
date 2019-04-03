@@ -149,4 +149,11 @@ return [
     '__cuerpo_mail_nuevo_operario__' => 'A new Operator in the system has been registered. Operator',
     '__cuerpo_mail_edicion_operario__' => 'The Operator data has been edited',
     '__titulo_mail_edicion_operario__' => 'Operator Edition',
+    '__Listado_de_Inducciones__' => 'List of Inductions',
+    '__Editar_Induccion__' => 'Edit Induction',
+    '__Nueva_Induccion__' => 'New Induction',
+    '__Carga_de_Inducciones_a_Operarios__' => 'Load of Inductions to Operators',
+    '__Fecha_de_Induccion__' => 'Induction date',
+    '__Operarios__' => 'Operators',
+    '__Realizo_Induccion__' => 'He did Induction'
 ];

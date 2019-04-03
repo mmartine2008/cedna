@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title">Carga de Inducciones a Operarios</h3>
+                <h3 class="panel-title"><?= $this->translate('__Carga_de_Inducciones_a_Operarios__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formCargarInducciones" name="formCargarInducciones">
@@ -10,7 +10,7 @@
                         <div class="col-lg-6 offset-3">
                             <div class="form-row">
                                 <div class="col-md-4">
-                                    <label for="induccionFecha">Fecha de Inducción:</label>
+                                    <label for="induccionFecha"><?= $this->translate('__Fecha_de_Induccion__') ?>:</label>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="date" id="induccionFecha" name="induccionFecha" class="form-control" disabled="true">
@@ -18,7 +18,7 @@
                             </div>
                             <div class="form-row mt-3">
                                 <div class="col-md-3">
-                                    <label for="induccionDescripcion">Descripción:</label>
+                                    <label for="induccionDescripcion"><?= $this->translate('__Descripcion__') ?>:</label>
                                 </div>
                                 <div class="col-md-7">
                                     <textarea id="induccionDescripcion" name="induccionDescripcion" class="form-control" disabled="true" row="5"></textarea>
@@ -31,15 +31,15 @@
                             <div class="flex mt-3">
                                 <div class="card" id="cardOperarios">
                                     <div class="card-header">
-                                        Operarios
+                                        <?= $this->translate('__Operarios__') ?>
                                     </div>
                                     <div class="card-body">
                                         <table id="tablaOperarios" class="table table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center">Nombre y Apellido</th>
+                                                    <th class="text-center"><?= $this->translate('__Nombre_y_Apellido__') ?></th>
                                                     <th class="text-center">CUIT</th>
-                                                    <th class="text-center">Realizó Inducción</th>
+                                                    <th class="text-center"><?= $this->translate('__Realizo_Induccion__') ?></th>
                                                 </tr>
                                             </thead>
                                             <tbody id="bodyOperarios">

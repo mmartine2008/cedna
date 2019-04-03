@@ -148,4 +148,11 @@ return [
     '__cuerpo_mail_nuevo_operario__' => 'Se ha registrado el alta de un nuevo Operario en el sistema. Operario',
     '__cuerpo_mail_edicion_operario__' => 'Se han editado los datos del Operario',
     '__titulo_mail_edicion_operario__' => 'Edición de Operario',
+    '__Listado_de_Inducciones__' => 'Listado de Inducciones',
+    '__Editar_Induccion__' => 'Editar Inducción',
+    '__Nueva_Induccion__' => 'Nueva Inducción',
+    '__Carga_de_Inducciones_a_Operarios__' => 'Carga de Inducciones a Operarios',
+    '__Fecha_de_Induccion__' => 'Fecha de Inducción',
+    '__Operarios__' => 'Operarios',
+    '__Realizo_Induccion__' => 'Realizó Inducción',
 ];
