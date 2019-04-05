@@ -46,6 +46,8 @@
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 var preguntas = childs[i].preguntas;
+                //seccionPregunta = childs[i].seccionespreguntas;
+                //
                 updateAnswerOfJson(preguntas, idPregunta, answer, encontre); 
             }
         }
@@ -627,6 +629,7 @@
         ele.name = "archivo[]";
         ele.type = "file";
         ele.accept="image/png, image/jpeg";
+        // ele.placeholder="Search for a file to add"
         listaFileInput.push(idEle);
         divInput.appendChild(ele);
         divInput.style.display = "block";
@@ -655,12 +658,14 @@
     function cargarInput(ele, pregunta, idSeccion, div, infoType, idEle, required){
         ele.type = infoType;
         ele.name = idEle;
+        
         if(pregunta.respuesta != " ") {
             ele.value = pregunta.respuesta;
         }
         if(required == '1'){
             listaRespuestasInput.push(idEle);
         }
+        ele.className = "form-control";
         ele.onchange = function() { updateJsonSimple(idSeccion, pregunta.idPregunta, idEle)};
         div.appendChild(ele);
     }
@@ -754,6 +759,13 @@
 
     function createQuestions(item, divElement){
         var questions = item.preguntas;
+        //var seccionesPreguntas = item.seccPregunta
+        // for (var i = 0; i < seccionesPreguntas.length; i++){
+            // var seccionPregunta = seccionesPreguntas[i];
+            // var question = seccionPregunta.pregunta;
+            // var required = seccionPregunta.requerido;
+            // createOneQuestion(item.id, question, divElement, required);
+        // }
         for (var i = 0; i < questions.length; i++){
             var question = questions[i];
             createOneQuestion(item.id, question, divElement);

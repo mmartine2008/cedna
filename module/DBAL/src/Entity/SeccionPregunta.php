@@ -117,12 +117,11 @@ class SeccionPregunta
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
-        if ($this->getSeccion()) {
-            $output .= '"seccion": ' . $this->getSeccion()->getJSON() .', ';
-        }
         if ($this->getPregunta()) {
             $output .= '"pregunta": ' . $this->getPregunta()->getJSON() .'';
         }
+        $output .= '"requerido": ' . $this->getRequerido() .'';
+        
         return '{' . $output . '}';
     }
 }
