@@ -160,4 +160,6 @@ return [
     '__Parametro__' => 'Parameter',
     '__Listado_de_Parametros__' => 'List of Parameters',
     '__Nuevo_Parametro__' => 'New Parameter',
+    '__Eliminar_Parametro__' => 'Delete parameter',
+    '__mensaje_eliminar_parametro__' => 'Está seguro que desea eliminar el parámetro',
 ];

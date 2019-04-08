@@ -36,11 +36,6 @@ class Pregunta
     protected $tieneOpciones;
 
     /**
-     * @ORM\Column(name="Required",  nullable=false, type="integer", length=1)
-     */
-    protected $requerido;
-
-    /**
      * @ORM\Column(name="Funcion",  nullable=true, type="string", length=1000)
      */
     protected $funcion;
@@ -229,25 +224,6 @@ class Pregunta
         return $this;
     }
 
-    /**
-     * Get the value of requerido
-     */ 
-    public function getRequerido()
-    {
-        return $this->requerido;
-    }
-
-    /**
-     * Set the value of requerido
-     *
-     * @return  self
-     */ 
-    public function setRequerido($requerido)
-    {
-        $this->requerido = $requerido;
-
-        return $this;
-    }
 
     public function tieneFuncion() {
         if($this->funcion) {
@@ -290,12 +266,6 @@ class Pregunta
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"tipoPregunta": ' . $this->getTipoPregunta()->getJSON() .', ';
         $output .= '"preguntasGeneradas": '.$preguntasGeneradasJSON.', ';
-        
-        if ($this->getRequerido()){
-            $output .= '"requerido": '.$this->getRequerido().', ';
-        }else{
-            $output .= '"requerido": 0, ';
-        }
 
         $funcion = $this->getFuncion();
         if($funcion) {
