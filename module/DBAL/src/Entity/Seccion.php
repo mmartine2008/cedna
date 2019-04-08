@@ -35,16 +35,6 @@ class Seccion
      */
     protected $descripcion;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
-     * @ORM\JoinTable(name="app.SeccionPregunta",
-     *      joinColumns={@ORM\JoinColumn(name="IdSeccion", referencedColumnName="IdSeccion")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")}
-     *      )
-     */
-    protected $preguntas;
-
     // /**
     //  *
     //  * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
@@ -53,10 +43,17 @@ class Seccion
     //  *      inverseJoinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")}
     //  *      )
     //  */
-    // protected $seccionPregunta;
+    // protected $preguntas;
+
+   /**
+     * @ORM\OneToMany(targetEntity="SeccionPregunta", mappedBy="seccion")
+     */
+    protected $seccionPreguntas;
 
     public function __construct() {
-        $this->preguntas = new ArrayCollection();
+        // $this->preguntas = new ArrayCollection();
+        $this->seccionPreguntas = new ArrayCollection();
+
     }
 
     /**
@@ -79,46 +76,87 @@ class Seccion
         return $this;
     }
 
-    /**
-     * @param Pregunta|null $preguntas
-     */
-    public function addPreguntas(Pregunta $preguntas = null)
-    {
-        if (!$this->preguntas->contains($preguntas)) {
-            $this->preguntas->add($preguntas);
-        }
-    }
+    // /**
+    //  * @param Pregunta|null $preguntas
+    //  */
+    // public function addPreguntas(Pregunta $preguntas = null)
+    // {
+    //     if (!$this->preguntas->contains($preguntas)) {
+    //         $this->preguntas->add($preguntas);
+    //     }
+    // }
+
+    // /**
+    //  * @return array
+    //  */
+    // public function getPreguntas()
+    // {
+    //     if ($this->preguntas){
+    //         return $this->preguntas->toArray();
+    //     }else{
+    //         return null;
+    //     }
+    // }
+    
+    // /**
+    //  * @param Pregunta $preguntas
+    //  */
+    // public function removePreguntas($preguntas)
+    // {
+    //     if (!$this->preguntas->contains($preguntas)) {
+    //         return;
+    //     }
+    //     $this->preguntas->removeElement($preguntas);
+    // }
+
+    // /**
+    //  * @desc Remove all tags for this article
+    //  */
+    // public function removeAllPreguntas()
+    // {
+    //     $this->preguntas->clear();
+    // }
+
+    // /**
+    //  * @param SeccionPregunta|null $seccionPreguntas
+    //  */
+    // public function addSeccionPregunta(Pregunta $seccionPreguntas = null)
+    // {
+    //     if (!$this->seccionPreguntas->contains($seccionPreguntas)) {
+    //         $this->seccionPreguntas->add($seccionPreguntas);
+    //     }
+    // }
 
     /**
      * @return array
      */
-    public function getPreguntas()
+    public function getSeccionPreguntas()
     {
-        if ($this->preguntas){
-            return $this->preguntas->toArray();
+        if ($this->seccionPreguntas){
+            return $this->seccionPreguntas->toArray();
         }else{
             return null;
         }
     }
     
-    /**
-     * @param Pregunta $preguntas
-     */
-    public function removePreguntas($preguntas)
-    {
-        if (!$this->preguntas->contains($preguntas)) {
-            return;
-        }
-        $this->preguntas->removeElement($preguntas);
-    }
+    // /**
+    //  * @param SeccionPregunta $seccionPreguntas
+    //  */
+    // public function removeSeccionPreguntas($seccionPreguntas)
+    // {
+    //     if (!$this->seccionPreguntas->contains($seccionPreguntas)) {
+    //         return;
+    //     }
+    //     $this->seccionPreguntas->removeElement($seccionPreguntas);
+    // }
 
-    /**
-     * @desc Remove all tags for this article
-     */
-    public function removeAllPreguntas()
-    {
-        $this->preguntas->clear();
-    }
+    // /**
+    //  * @desc Remove all tags for this article
+    //  */
+    // public function removeAllSeccionPreguntas()
+    // {
+    //     $this->seccionPreguntas->clear();
+    // }
 
     /**
      * Get the value of formulario
@@ -184,16 +222,16 @@ class Seccion
     public function getJSON(){
         $output = "";
 
-        $preguntas = [];
-        foreach ($this->getPreguntas() as $pregunta) {
-            $preguntas[] = $pregunta->getJSON();
+        $seccionPreguntas = [];
+        foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
+            $seccionPreguntas[] = $seccionPregunta->getJSON();
         }
-        $preguntas = implode(", ", $preguntas);
+        $seccionPreguntas = implode(", ", $seccionPreguntas);
 
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"preguntas": ['.$preguntas.']';
+        $output .= '"preguntas": ['.$seccionPreguntas.']';
 
         return '{' . $output . '}';
     }
