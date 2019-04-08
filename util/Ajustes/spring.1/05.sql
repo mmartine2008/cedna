@@ -1,3 +1,14 @@
+DROP TABLE dbo.ElementosProteccionPersonal;
+DROP TABLE dbo.HerramientasDeTrabajo;
+DROP TABLE dbo.LugaresDeObra;
+DROP TABLE DBO.ActividadesDeObras;
+DROP TABLE Dbo.RiesgosAmbientales;
+DROP TABLE dbo.RiesgosAdicionalesFrio;
+DROP TABLE dbo.RiesgosAdicionalesCalor;
+DROP TABLE dbo.RiesgosAdicionalesAltura;
+DROP TABLE dbo.PruebasDeGases;
+
+
 CREATE TABLE dbo.ElementosProteccionPersonal (
     Id int IDENTITY(1,1) NOT NULL,
     Descripcion varchar(1000) not null,
@@ -123,3 +134,5 @@ INSERT INTO dbo.PruebasDeGases(Descripcion) VALUES ('LEL, % <= 10');
 INSERT INTO dbo.PruebasDeGases(Descripcion) VALUES ('O2 % 19.5 a 23');  
 INSERT INTO dbo.PruebasDeGases(Descripcion) VALUES ('CO, ppm <= 35');  
 INSERT INTO dbo.PruebasDeGases(Descripcion) VALUES ('H2S, ppm <= 10');
+
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('05.sql', GETDATE ( ), 1, 5);
