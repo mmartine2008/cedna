@@ -9,6 +9,7 @@ use DBAL\Entity\Perfiles;
 use DBAL\Entity\OperacionAccionPerfil;
 use DBAL\Entity\Usuarios;
 use DBAL\Entity\NotificacionesXPerfil;
+use DBAL\Entity\Parametros;
 
 class ConfiguracionManager {
     
@@ -36,7 +37,7 @@ class ConfiguracionManager {
             $Perfiles = new Perfiles();
         }
 
-        $Perfiles->setNombre($jsonData->nombre);
+        $Perfiles->setParametro($jsonData->nombre);
         $Perfiles->setDescripcion($jsonData->descripcion);
 
         $this->entityManager->persist($Perfiles);
@@ -114,8 +115,42 @@ class ConfiguracionManager {
             
             if (!in_array($key, $YaCargados)){
                 $this->borrarNotificacionesXPerfiles($NotificacionXPerfilesOriginal);
-            }
-            
+            } 
         }
+    }
+
+    public function altaEdicionParametros($jsonData, $idParametros = null){
+        if ($idParametros){
+            $Parametros = $this->catalogoManager->getParametros($idParametros);
+        }else{
+            $Parametros = new Parametros();
+        }
+
+        $Parametros->setParametro($jsonData->nombre);
+        $Parametros->setValor($jsonData->valor);
+        $Parametros->setDescripcion($jsonData->descripcion);
+
+        $this->entityManager->persist($Parametros);
+        $this->entityManager->flush();
+    }
+
+    public function borrarParametros($idParametros){
+        $Parametros = $this->catalogoManager->getParametros($idParametros);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Parametros);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado el parametro correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'El parametro no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }

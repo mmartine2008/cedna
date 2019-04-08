@@ -155,5 +155,9 @@ return [
     '__Carga_de_Inducciones_a_Operarios__' => 'Load of Inductions to Operators',
     '__Fecha_de_Induccion__' => 'Induction date',
     '__Operarios__' => 'Operators',
-    '__Realizo_Induccion__' => 'He did Induction'
+    '__Realizo_Induccion__' => 'He did Induction',
+    '__Valor__' => 'Value',
+    '__Parametro__' => 'Parameter',
+    '__Listado_de_Parametros__' => 'List of Parameters',
+    '__Nuevo_Parametro__' => 'New Parameter',
 ];

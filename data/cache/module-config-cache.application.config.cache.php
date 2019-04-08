@@ -592,6 +592,25 @@ return array (
             ),
             'may_terminate' => true,
           ),
+          'parametros' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/parametros[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Configuracion\\Controller\\ConfigParametrosController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
           'usuarios' => 
           array (
             'type' => 'Zend\\Router\\Http\\Segment',
@@ -1151,6 +1170,7 @@ return array (
       'Configuracion\\Controller\\ConfigPerfilesController' => 'Configuracion\\Controller\\Factory\\ConfigPerfilesControllerFactory',
       'Configuracion\\Controller\\ConfigUsuariosController' => 'Configuracion\\Controller\\Factory\\ConfigUsuariosControllerFactory',
       'Configuracion\\Controller\\ConfigNotifXPerfilController' => 'Configuracion\\Controller\\Factory\\ConfigNotifXPerfilControllerFactory',
+      'Configuracion\\Controller\\ConfigParametrosController' => 'Configuracion\\Controller\\Factory\\ConfigParametrosControllerFactory',
       'Admin\\Controller\\ABMController' => 'Admin\\Controller\\Factory\\ABMControllerFactory',
       'Admin\\Controller\\AccionController' => 'Admin\\Controller\\Factory\\AccionControllerFactory',
       'Admin\\Controller\\OperacionController' => 'Admin\\Controller\\Factory\\OperacionControllerFactory',

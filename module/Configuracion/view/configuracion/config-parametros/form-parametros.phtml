@@ -1,0 +1,89 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Parametro__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formParametro" id="formParametro">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <label for="parametroNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Parametro__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="parametroNombre" name="parametroNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-3">
+                            <label for="parametroValor"><span class="obligatorio">(*) </span><?= $this->translate('__Valor__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="parametroValor" name="parametroValor" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-3">
+                            <label for="parametroDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="parametroDescripcion" name="parametroDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData"> 
+                        <input type="button" value="Aceptar" onclick="preSubmit()">                       
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var parametroesJson = <?= $ParametrosJson ?>;
+
+function FormParametrosToJson(){
+    var formData = {
+        descripcion: $('#parametroDescripcion').val(),
+        valor: $('#parametroValor').val(),
+        nombre: $('#parametroNombre').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormParametrosToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formParametro")[0].checkValidity()){
+        $("#formParametro").submit();
+    }else{
+        $("#formParametro")[0].reportValidity();
+    }
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    if (parametroesJson !== ''){
+        $('#parametroDescripcion').val(parametroesJson.descripcion);
+        $('#parametroValor').val(parametroesJson.valor);
+        $('#parametroNombre').val(parametroesJson.nombre);
+    }
+
+    verificarMostrarBotonGuardar();
+});
+</script>

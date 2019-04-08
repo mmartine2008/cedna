@@ -40,6 +40,21 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'parametros' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/parametros[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigParametrosController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'usuarios' => [
                         'type' => Segment::class,
                         'options' => [
@@ -80,6 +95,7 @@ return [
             Controller\ConfigPerfilesController::class => Controller\Factory\ConfigPerfilesControllerFactory::class,
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
+            Controller\ConfigParametrosController::class => Controller\Factory\ConfigParametrosControllerFactory::class,
         ],
     ],
     'service_manager' => [

@@ -155,4 +155,8 @@ return [
     '__Fecha_de_Induccion__' => 'Fecha de Inducción',
     '__Operarios__' => 'Operarios',
     '__Realizo_Induccion__' => 'Realizó Inducción',
+    '__Valor__' => 'Valor',
+    '__Parametro__' => 'Parámetro',
+    '__Listado_de_Parametros__' => 'Listado de Parámetros',
+    '__Nuevo_Parametro__' => 'Nuevo Parámetro',
 ];
