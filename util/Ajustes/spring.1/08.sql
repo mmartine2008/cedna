@@ -6,3 +6,5 @@ CREATE TABLE dbo.Parametros (
 
     CONSTRAINT PK_Parametros PRIMARY KEY (Id),
 ); 
+
+INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('08.sql', GETDATE ( ), 1, 8);
