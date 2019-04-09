@@ -84,6 +84,34 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'formularios' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/formularios[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigFormulariosController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'secciones' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => '/secciones[/:action[/:id]]',
+                                ],
+                                'constraints' => [
+                                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                    'id' => '[a-zA-Z0-9_-]*',
+                                ],
+                                'may_terminate' => true,
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -96,6 +124,7 @@ return [
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
             Controller\ConfigParametrosController::class => Controller\Factory\ConfigParametrosControllerFactory::class,
+            Controller\ConfigFormulariosController::class => Controller\Factory\ConfigFormulariosControllerFactory::class,
         ],
     ],
     'service_manager' => [

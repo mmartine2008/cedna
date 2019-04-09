@@ -25,211 +25,210 @@ class ConfigFormularioController extends ConfiguracionController
     {
         $this->cargarAccionesDisponibles('formulario');
         
-        $arrParametrosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
 
         return new ViewModel([
-            'arrParametrosJSON' => $arrParametrosJSON
+            'arrFormulariosJSON' => $arrFormulariosJSON
         ]);
     }
 
     public function altaFormularioAction(){
-        $this->cargarAccionesDisponibles('parametros - alta');
+        $this->cargarAccionesDisponibles('formularios - alta');
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
-            var_dump($JsonData);
-            $this->configuracionManager->altaEdicionParametros($JsonData);
+            $this->configuracionManager->altaEdicionFormularios($JsonData);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
         }
 
         $view = new ViewModel();
         
-        $view->setVariable('ParametrosJson', '""');
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('FormulariosJson', '""');
+        $view->setTemplate('configuracion/config-formularios/form-formularios.phtml');
         
         return $view;
     }
 
     public function editarFormularioAction(){
-        $this->cargarAccionesDisponibles('parametros - edicion');
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('formularios - edicion');
+        $formularios = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idFormularios = $formularios['id'];
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionParametros($JsonData, $idParametros);
+            $this->configuracionManager->altaEdicionFormularios($JsonData, $idFormularios);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
         }
 
         $view = new ViewModel();
         
-        $Parametros = $this->catalogoManager->getParametros($idParametros);
+        $Formularios = $this->catalogoManager->getFormularios($idFormularios);
 
-        $view->setVariable('ParametrosJson', $Parametros->getJSON());
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('FormulariosJson', $Formularios->getJSON());
+        $view->setTemplate('configuracion/config-formularios/form-formularios.phtml');
         
         return $view;
     }
     
     public function borrarFormularioAction(){
-        $parametros = $this->params()->fromRoute();
+        $formularios = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idFormularios = $formularios['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->borrarFormularios($idFormularios);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
     } 
 
     public function clonarFormularioAction(){
-        $parametros = $this->params()->fromRoute();
+        $formularios = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idFormularios = $formularios['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->clonarFormularios($idFormularios);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
     } 
 
     public function altaSeccionAction(){
-        $this->cargarAccionesDisponibles('parametros - alta');
+        $this->cargarAccionesDisponibles('secciones - alta');
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
             var_dump($JsonData);
-            $this->configuracionManager->altaEdicionParametros($JsonData);
+            $this->configuracionManager->altaEdicionSecciones($JsonData);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
         }
 
         $view = new ViewModel();
         
-        $view->setVariable('ParametrosJson', '""');
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('SeccionesJson', '""');
+        $view->setTemplate('configuracion/config-formularios/form-secciones.phtml');
         
         return $view;
     }
 
     public function editarSeccionAction(){
-        $this->cargarAccionesDisponibles('parametros - edicion');
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('secciones - edicion');
+        $secciones = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idSecciones = $secciones['id'];
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionParametros($JsonData, $idParametros);
+            $this->configuracionManager->altaEdicionSecciones($JsonData, $idSecciones);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
         }
 
         $view = new ViewModel();
         
-        $Parametros = $this->catalogoManager->getParametros($idParametros);
+        $Secciones = $this->catalogoManager->getSecciones($idSecciones);
 
-        $view->setVariable('ParametrosJson', $Parametros->getJSON());
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('SeccionesJson', $Secciones->getJSON());
+        $view->setTemplate('configuracion/config-formularios/form-secciones.phtml');
         
         return $view;
     }
     
     public function borrarSeccionAction(){
-        $parametros = $this->params()->fromRoute();
+        $secciones = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idSecciones = $secciones['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->borrarSecciones($idSecciones);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
     } 
 
     public function clonarSeccionAction(){
-        $parametros = $this->params()->fromRoute();
+        $secciones = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idSecciones = $secciones['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->clonaridSecciones($idSecciones);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
     } 
 
     public function altaPreguntaAction(){
-        $this->cargarAccionesDisponibles('parametros - alta');
+        $this->cargarAccionesDisponibles('preguntas - alta');
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
             var_dump($JsonData);
-            $this->configuracionManager->altaEdicionParametros($JsonData);
+            $this->configuracionManager->altaEdicionPreguntas($JsonData);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
         }
 
         $view = new ViewModel();
         
-        $view->setVariable('ParametrosJson', '""');
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('FormulariosJson', '""');
+        $view->setTemplate('configuracion/config-formularios/form-preguntas.phtml');
         
         return $view;
     }
 
     public function editarPreguntaAction(){
-        $this->cargarAccionesDisponibles('parametros - edicion');
-        $parametros = $this->params()->fromRoute();
+        $this->cargarAccionesDisponibles('preguntas - edicion');
+        $preguntas = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idPreguntas = $preguntas['id'];
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionParametros($JsonData, $idParametros);
+            $this->configuracionManager->altaEdicionPreguntas($JsonData, $idPreguntas);
 
-            $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+            $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
         }
 
         $view = new ViewModel();
         
-        $Parametros = $this->catalogoManager->getParametros($idParametros);
+        $Preguntas = $this->catalogoManager->getPreguntas($idPreguntas);
 
-        $view->setVariable('ParametrosJson', $Parametros->getJSON());
-        $view->setTemplate('configuracion/config-parametros/form-parametros.phtml');
+        $view->setVariable('PreguntasJson', $Preguntas->getJSON());
+        $view->setTemplate('configuracion/config-formularios/form-preguntas.phtml');
         
         return $view;
     }
     
     public function borrarPreguntaAction(){
-        $parametros = $this->params()->fromRoute();
+        $formularios = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idPreguntas = $formularios['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->borrarPreguntas($idPreguntas);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
     } 
 
     public function enlazarPreguntaAction(){
-        $parametros = $this->params()->fromRoute();
+        $preguntas = $this->params()->fromRoute();
 
-        $idParametros = $parametros['id'];
+        $idPreguntas = $preguntas['id'];
 
-        $mensaje = $this->configuracionManager->borrarParametros($idParametros);
+        $mensaje = $this->configuracionManager->enlazarPreguntas($idPreguntas);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/parametros",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
     } 
 }
