@@ -1,0 +1,189 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Seccion__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formSeccion" id="formSeccion">
+                    <div class="form-row">
+                        <div class="col-md-2">
+                            <label for="SeccionNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="SeccionNombre" name="SeccionNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-2">
+                            <label for="SeccionDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="SeccionDescripcion" name="SeccionDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">                 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default mt-5">
+            <div class="panel-heading">
+                <h5 class="panel-title"><?= $this->translate('__Listado_de_Preguntas__') ?></h5>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaPreguntas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Numero__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Pregunta__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Tipo_de_Pregunta__') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyConfPreguntas">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var seccionJson = <?= $SeccionJson ?>;
+var filaSeleccionada = -1;
+var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
+
+function FormSeccionesToJson(){
+    var formData = {
+        nombre: $('#SeccionNombre').val(),
+        descripcion: $('#SeccionDescripcion').val(),
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormSeccionesToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formFormulario")[0].checkValidity()){
+        $("#formFormulario").submit();
+    }else{
+        $("#formFormulario")[0].reportValidity();
+    }
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    if (seccionJson !== ''){
+        $('#SeccionNombre').val(seccionJson.nombre);
+        $('#SeccionDescripcion').val(seccionJson.descripcion);
+    }
+    dibujarTablaFormularios();
+    verificarMostrarBotonGuardar();
+});
+
+function dibujarTablaFormularios(){
+        $('#bodyConfPreguntas').find('tr').remove();
+
+        for (var i = 0; i < arrPreguntasJSON.length; i++)
+        {
+            var pregunta = arrPreguntasJSON[i];
+
+            var body = document.getElementById("bodyConfPreguntas");
+            var row = body.insertRow();
+            row.id = i;
+
+            var id = row.insertCell(0);
+            var nombre = row.insertCell(1);
+            var tipo = row.insertCell(2);
+
+            id.innerHTML = pregunta.idPregunta;
+            nombre.innerHTML = pregunta.descripcion;
+            tipo.innerHTML = pregunta.tipoPregunta.descripcion;
+        }
+    }
+
+    $(function() {
+        $('#tablaPreguntas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    /*function borrarPerfil() {
+        var result = null;
+        var formulario = arrPreguntasJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/configuracion/formularios/secciones/borrar/' + formulario.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }*/
+
+    /*function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var formulario = arrPreguntasJSON[filaSeleccionada];
+            
+            swal({
+                title: '<?= $this->translate('__Eliminar_Seccion__') ?>',
+                width: 600,
+                text: "<?= $this->translate('__mensaje_eliminar_seccion__') ?>: "+ seccion.nombre +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarPerfil();
+                    window.location.replace(url + "/configuracion/formularios");
+                }
+            });
+        }
+    }*/
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var formulario = arrPreguntasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
+        }
+    }
+
+</script>

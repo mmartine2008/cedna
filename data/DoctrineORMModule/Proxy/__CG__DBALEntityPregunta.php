@@ -64,10 +64,10 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'requerido', 'funcion', 'opciones', 'preguntaGeneradora'];
+            return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'funcion', 'opciones', 'preguntaGeneradora'];
         }
 
-        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'requerido', 'funcion', 'opciones', 'preguntaGeneradora'];
+        return ['__isInitialized__', 'id', 'descripcion', 'tipoPregunta', 'tieneOpciones', 'funcion', 'opciones', 'preguntaGeneradora'];
     }
 
     /**
@@ -356,28 +356,6 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
-    public function getRequerido()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRequerido', []);
-
-        return parent::getRequerido();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setRequerido($requerido)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setRequerido', [$requerido]);
-
-        return parent::setRequerido($requerido);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function tieneFuncion()
     {
 
@@ -406,6 +384,17 @@ class Pregunta extends \DBAL\Entity\Pregunta implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
 
         return parent::getJSON();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getScript()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScript', []);
+
+        return parent::getScript();
     }
 
 }

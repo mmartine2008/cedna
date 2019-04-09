@@ -1,0 +1,179 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nuevo_Formulario__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formFormulario" id="formFormulario">
+                    <div class="form-row">
+                        <div class="col-md-1">
+                            <label for="formularioNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="formularioNombre" name="formularioNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">                 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default mt-5">
+            <div class="panel-heading">
+                <h5 class="panel-title"><?= $this->translate('__Listado_de_Secciones_del_Formulario__') ?></h5>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaSecciones" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Numero__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Descripcion__') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyConfSecciones">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var formulariosJson = <?= $FormulariosJson ?>;
+var filaSeleccionada = -1;
+
+function FormFormulariosToJson(){
+    var formData = {
+        nombre: $('#formularioNombre').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormFormulariosToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formFormulario")[0].checkValidity()){
+        $("#formFormulario").submit();
+    }else{
+        $("#formFormulario")[0].reportValidity();
+    }
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+$( document ).ready(function() {
+    if (formulariosJson !== ''){
+        $('#formularioNombre').val(formulariosJson.nombre);
+        arrSeccionesJSON = formulariosJson.secciones;
+        dibujarTablaFormularios();
+    }
+    verificarMostrarBotonGuardar();
+});
+
+function dibujarTablaFormularios(){
+        $('#bodyConfSecciones').find('tr').remove();
+
+        for (var i = 0; i < arrSeccionesJSON.length; i++)
+        {
+            var seccion = arrSeccionesJSON[i];
+
+            var body = document.getElementById("bodyConfSecciones");
+            var row = body.insertRow();
+            row.id = i;
+
+            var id = row.insertCell(0);
+            var nombre = row.insertCell(1);
+            var descripcion = row.insertCell(2);
+
+            id.innerHTML = seccion.id;
+            nombre.innerHTML = seccion.nombre;
+            descripcion.innerHTML = seccion.descripcion;
+        }
+    }
+
+    $(function() {
+        $('#tablaSecciones').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarPerfil() {
+        var result = null;
+        var formulario = arrSeccionesJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/configuracion/formularios/secciones/borrar/' + formulario.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var formulario = arrSeccionesJSON[filaSeleccionada];
+            
+            swal({
+                title: '<?= $this->translate('__Eliminar_Seccion__') ?>',
+                width: 600,
+                text: "<?= $this->translate('__mensaje_eliminar_seccion__') ?>: "+ seccion.nombre +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarPerfil();
+                    window.location.replace(url + "/configuracion/formularios");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var formulario = arrSeccionesJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
+        }
+    }
+
+</script>

@@ -8,7 +8,7 @@
                 <table id="tablaFormularios" class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center"><?= $this->translate('__Nro__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Numero__') ?></th>
                             <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
                         </tr>
                     </thead>
@@ -43,7 +43,7 @@
             var id = row.insertCell(0);
             var nombre = row.insertCell(1);
 
-            id.innerHTML = formulario.id;
+            id.innerHTML = formulario.idFormulario;
             nombre.innerHTML = formulario.nombre;
         }
     }
@@ -65,7 +65,7 @@
         });
     });
 
-    function borrarPerfil() {
+    function borrarFormulario() {
         var result = null;
         var formulario = arrFormulariosJSON[filaSeleccionada];
 

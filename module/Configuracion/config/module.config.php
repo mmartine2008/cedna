@@ -89,7 +89,7 @@ return [
                         'options' => [
                             'route' => '/formularios[/:action[/:id]]',
                             'defaults' => [
-                                'controller' => Controller\ConfigFormulariosController::class,
+                                'controller' => Controller\ConfigFormularioController::class,
                                 'action'     => 'index',
                             ],
                         ],
@@ -124,7 +124,7 @@ return [
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
             Controller\ConfigParametrosController::class => Controller\Factory\ConfigParametrosControllerFactory::class,
-            Controller\ConfigFormulariosController::class => Controller\Factory\ConfigFormulariosControllerFactory::class,
+            Controller\ConfigFormularioController::class => Controller\Factory\ConfigFormularioControllerFactory::class,
         ],
     ],
     'service_manager' => [

@@ -36,6 +36,8 @@ use DBAL\Entity\PruebasDeGases;
 use DBAL\Entity\RiesgosAdicionalesCalor;
 use DBAL\Entity\RiesgosAdicionalesAltura;
 use DBAL\Entity\Parametros;
+use DBAL\Entity\Pregunta;
+
 
 class CatalogoManager {
     
@@ -112,6 +114,26 @@ class CatalogoManager {
         }
 
         return $Parametros;
+    }
+
+    public function getFormularios($idFormularios = null){
+        if ($idFormularios){
+            $Formularios = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormularios]);
+        }else{
+            $Formularios = $this->entityManager->getRepository(Formulario::class)->findAll();
+        }
+
+        return $Formularios;
+    }
+
+    public function getPreguntas($idPregunta = null){
+        if ($idPregunta){
+            $Preguntas = $this->entityManager->getRepository(Pregunta::class)->findOneBy(['id' => $idPregunta]);
+        }else{
+            $Preguntas = $this->entityManager->getRepository(Pregunta::class)->findAll();
+        }
+
+        return $Preguntas;
     }
 
     public function getAccionesPorPerfil($OperacionNombre, $Perfil){

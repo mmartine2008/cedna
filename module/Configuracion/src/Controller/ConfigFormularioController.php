@@ -46,7 +46,7 @@ class ConfigFormularioController extends ConfiguracionController
         $view = new ViewModel();
         
         $view->setVariable('FormulariosJson', '""');
-        $view->setTemplate('configuracion/config-formularios/form-formularios.phtml');
+        $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
         
         return $view;
     }
@@ -71,7 +71,7 @@ class ConfigFormularioController extends ConfiguracionController
         $Formularios = $this->catalogoManager->getFormularios($idFormularios);
 
         $view->setVariable('FormulariosJson', $Formularios->getJSON());
-        $view->setTemplate('configuracion/config-formularios/form-formularios.phtml');
+        $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
         
         return $view;
     }
@@ -111,9 +111,12 @@ class ConfigFormularioController extends ConfiguracionController
         }
 
         $view = new ViewModel();
+
+        $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
         
-        $view->setVariable('SeccionesJson', '""');
-        $view->setTemplate('configuracion/config-formularios/form-secciones.phtml');
+        $view->setVariable('SeccionJson', '""');
+        $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
+        $view->setTemplate('configuracion/config-formulario/form-secciones.phtml');
         
         return $view;
     }
@@ -136,9 +139,12 @@ class ConfigFormularioController extends ConfiguracionController
         $view = new ViewModel();
         
         $Secciones = $this->catalogoManager->getSecciones($idSecciones);
+        $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
 
-        $view->setVariable('SeccionesJson', $Secciones->getJSON());
-        $view->setTemplate('configuracion/config-formularios/form-secciones.phtml');
+        $view->setVariable('SeccionJson', $Secciones->getJSON());
+        $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
+        
+        $view->setTemplate('configuracion/config-formulario/form-secciones.phtml');
         
         return $view;
     }
@@ -180,7 +186,7 @@ class ConfigFormularioController extends ConfiguracionController
         $view = new ViewModel();
         
         $view->setVariable('FormulariosJson', '""');
-        $view->setTemplate('configuracion/config-formularios/form-preguntas.phtml');
+        $view->setTemplate('configuracion/config-formulario/form-preguntas.phtml');
         
         return $view;
     }
@@ -205,7 +211,7 @@ class ConfigFormularioController extends ConfiguracionController
         $Preguntas = $this->catalogoManager->getPreguntas($idPreguntas);
 
         $view->setVariable('PreguntasJson', $Preguntas->getJSON());
-        $view->setTemplate('configuracion/config-formularios/form-preguntas.phtml');
+        $view->setTemplate('configuracion/config-formulario/form-preguntas.phtml');
         
         return $view;
     }
