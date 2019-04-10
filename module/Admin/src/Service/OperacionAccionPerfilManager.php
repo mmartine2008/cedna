@@ -84,12 +84,16 @@ class OperacionAccionPerfilManager {
      * Funcion que retorna un arreglo con todas las variables
      * necesarias en el template de alta de la entidad.
      *
+     * Listo al reves las operaciones, para que a la hora de buscar una
+     * operacion recien agregada no tenga q ir hasta el final.
+     * 
      * @return array
      */
     public function getArrVariablesAltaEntidad(){
+        $OperacionesAlReves = array_reverse($this->operacionManager->getListado());
         return [
             'Acciones' => $this->accionManager->getListado(),
-            'Operaciones' => $this->operacionManager->getListado(),
+            'Operaciones' => $OperacionesAlReves,
             'Perfiles' => $this->perfilesManager->getListado()
         ];
     }
