@@ -37,7 +37,7 @@ use DBAL\Entity\RiesgosAdicionalesCalor;
 use DBAL\Entity\RiesgosAdicionalesAltura;
 use DBAL\Entity\Parametros;
 use DBAL\Entity\Pregunta;
-
+use DBAL\Entity\Seccion;
 
 class CatalogoManager {
     
@@ -124,6 +124,16 @@ class CatalogoManager {
         }
 
         return $Formularios;
+    }
+
+    public function getSecciones($idSeccion = null){
+        if ($idSeccion){
+            $Secciones = $this->entityManager->getRepository(Seccion::class)->findOneBy(['id' => $idSeccion]);
+        }else{
+            $Secciones = $this->entityManager->getRepository(Seccion::class)->findAll();
+        }
+
+        return $Secciones;
     }
 
     public function getPreguntas($idPregunta = null){

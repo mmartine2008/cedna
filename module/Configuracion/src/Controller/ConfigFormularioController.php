@@ -100,20 +100,25 @@ class ConfigFormularioController extends ConfiguracionController
 
     public function altaSeccionAction(){
         $this->cargarAccionesDisponibles('secciones - alta');
+
+        $parametros = $this->params()->fromRoute();
+        $idFormulario = $parametros['id'];
+
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
             var_dump($JsonData);
-            $this->configuracionManager->altaEdicionSecciones($JsonData);
+            $this->configuracionManager->altaSecciones($JsonData, $idFormulario);
 
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
+            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario", "id" => $idFormulario]);
         }
 
         $view = new ViewModel();
 
         $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
         
+        $view->setVariable('idFormulario', $idFormulario);
         $view->setVariable('SeccionJson', '""');
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
         $view->setTemplate('configuracion/config-formulario/form-secciones.phtml');
@@ -131,7 +136,7 @@ class ConfigFormularioController extends ConfiguracionController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionSecciones($JsonData, $idSecciones);
+            $this->configuracionManager->edicionSecciones($JsonData, $idSecciones);
 
             $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
         }
@@ -141,6 +146,7 @@ class ConfigFormularioController extends ConfiguracionController
         $Secciones = $this->catalogoManager->getSecciones($idSecciones);
         $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
 
+        $view->setVariable('idFormulario', $Secciones->getFormulario()->getId());
         $view->setVariable('SeccionJson', $Secciones->getJSON());
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
         

@@ -49,6 +49,7 @@ return array (
       'DBAL\\Service\\CatalogoManager' => 'DBAL\\Service\\Factory\\CatalogoManagerFactory',
       'Configuracion\\Service\\ConfiguracionManager' => 'Configuracion\\Service\\Factory\\ConfiguracionManagerFactory',
       'Configuracion\\Service\\ConfigUsuariosManager' => 'Configuracion\\Service\\Factory\\ConfigUsuariosManagerFactory',
+      'Configuracion\\Service\\ConfigFormularioManager' => 'Configuracion\\Service\\Factory\\ConfigFormularioManagerFactory',
       'Admin\\Service\\AccionManager' => 'Admin\\Service\\Factory\\AccionManagerFactory',
       'Admin\\Service\\OperacionManager' => 'Admin\\Service\\Factory\\OperacionManagerFactory',
       'Admin\\Service\\OperacionAccionPerfilManager' => 'Admin\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
@@ -666,23 +667,25 @@ return array (
               'id' => '[a-zA-Z0-9_-]*',
             ),
             'may_terminate' => true,
-            'child_routes' => 
+          ),
+          'secciones' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
             array (
-              'secciones' => 
+              'route' => '/secciones[/:action[/:id]]',
+              'defaults' => 
               array (
-                'type' => 'Zend\\Router\\Http\\Segment',
-                'options' => 
-                array (
-                  'route' => '/secciones[/:action[/:id]]',
-                ),
-                'constraints' => 
-                array (
-                  'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                  'id' => '[a-zA-Z0-9_-]*',
-                ),
-                'may_terminate' => true,
+                'controller' => 'Configuracion\\Controller\\ConfigFormularioController',
+                'action' => 'index',
               ),
             ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
           ),
         ),
       ),

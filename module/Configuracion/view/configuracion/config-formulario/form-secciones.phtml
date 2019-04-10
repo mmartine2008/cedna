@@ -30,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row" id="divPreguntas">
     <div class="col-md-12">
         <div class="panel panel-default mt-5">
             <div class="panel-heading">
@@ -57,6 +57,7 @@
 var seccionJson = <?= $SeccionJson ?>;
 var filaSeleccionada = -1;
 var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
+var idFormulario = <?= $idFormulario ?>;
 
 function FormSeccionesToJson(){
     var formData = {
@@ -73,10 +74,10 @@ function preSubmit(){
     var JsonData = FormSeccionesToJson();
     $('#JsonData').val(JsonData);
 
-    if ($("#formFormulario")[0].checkValidity()){
-        $("#formFormulario").submit();
+    if ($("#formSeccion")[0].checkValidity()){
+        $("#formSeccion").submit();
     }else{
-        $("#formFormulario")[0].reportValidity();
+        $("#formSeccion")[0].reportValidity();
     }
 }
 
@@ -91,16 +92,31 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
+function verificarMostrarBotonVolver(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preVolver()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
 $( document ).ready(function() {
     if (seccionJson !== ''){
         $('#SeccionNombre').val(seccionJson.nombre);
         $('#SeccionDescripcion').val(seccionJson.descripcion);
+        document.getElementById('divPreguntas').style.display = 'block';
+    } else {
+        document.getElementById('divPreguntas').style.display = 'none';
     }
-    dibujarTablaFormularios();
+    dibujarTablaPreguntas();
     verificarMostrarBotonGuardar();
+    verificarMostrarBotonVolver();
 });
 
-function dibujarTablaFormularios(){
+function dibujarTablaPreguntas(){
         $('#bodyConfPreguntas').find('tr').remove();
 
         for (var i = 0; i < arrPreguntasJSON.length; i++)
@@ -138,52 +154,16 @@ function dibujarTablaFormularios(){
         });
     });
 
-    /*function borrarPerfil() {
-        var result = null;
-        var formulario = arrPreguntasJSON[filaSeleccionada];
-
-        $.ajax({
-            url: url + '/configuracion/formularios/secciones/borrar/' + formulario.id,
-            type: 'post',
-            dataType: 'json',
-            async: false,
-            success: function (data) {
-                
-            }
-        });
-        
-        return result;
-    }*/
-
-    /*function preBorrar(){
-        if (filaSeleccionada >= 0){
-            var formulario = arrPreguntasJSON[filaSeleccionada];
-            
-            swal({
-                title: '<?= $this->translate('__Eliminar_Seccion__') ?>',
-                width: 600,
-                text: "<?= $this->translate('__mensaje_eliminar_seccion__') ?>: "+ seccion.nombre +"?",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
-                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
-            }).then((result) => {
-                if (result.value) {
-                    borrarPerfil();
-                    window.location.replace(url + "/configuracion/formularios");
-                }
-            });
-        }
-    }*/
-
     function preEditar(){
         if (filaSeleccionada >= 0){
             var formulario = arrPreguntasJSON[filaSeleccionada];
 
             window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
         }
+    }
+
+    function preVolver(){
+        window.location.replace(url + "/configuracion/formularios/editar-formulario/" + idFormulario);
     }
 
 </script>

@@ -3,11 +3,11 @@ namespace Configuracion\Service\Factory;
 
 use Interop\Container\ContainerInterface; 
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Configuracion\Service\ConfigFormulariosManager;
+use Configuracion\Service\ConfigFormularioManager;
 use DBAL\Service\CatalogoManager;
 
 
-class ConfigFormulariosManagerFactory implements FactoryInterface
+class ConfigFormularioManagerFactory implements FactoryInterface
 {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -16,6 +16,6 @@ class ConfigFormulariosManagerFactory implements FactoryInterface
 
         $catalogoManager = $container->get(CatalogoManager::class);
                         
-        return new ConfigFormulariosManager($entityManager, $catalogoManager);
+        return new ConfigFormularioManager($entityManager, $catalogoManager);
     }
 }

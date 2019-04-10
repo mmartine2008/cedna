@@ -6,7 +6,7 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 use Configuracion\Controller\ConfigFormularioController;
 
 use DBAL\Service\CatalogoManager;
-use Configuracion\Service\ConfiguracionManager;
+use Configuracion\Service\ConfigFormularioManager;
 use Autenticacion\Service\UserSessionManager;
 
 
@@ -19,7 +19,7 @@ class ConfigFormularioControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $catalogoManager = $container->get(CatalogoManager::class);
-        $configuracionManager = $container->get(ConfiguracionManager::class);
+        $configuracionManager = $container->get(ConfigFormularioManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
         

@@ -10,6 +10,7 @@
                         <tr>
                             <th class="text-center"><?= $this->translate('__Numero__') ?></th>
                             <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Descripcion__') ?></th>
                         </tr>
                     </thead>
                     <tbody id="bodyConfFormularios">
@@ -42,9 +43,11 @@
 
             var id = row.insertCell(0);
             var nombre = row.insertCell(1);
+            var descripcion = row.insertCell(2);
 
             id.innerHTML = formulario.idFormulario;
             nombre.innerHTML = formulario.nombre;
+            descripcion.innerHTML = formulario.descripcion;
         }
     }
 
@@ -70,7 +73,7 @@
         var formulario = arrFormulariosJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/formularios/borrar/' + formulario.id,
+            url: url + '/configuracion/formularios/borrar/' + formulario.idFormulario,
             type: 'post',
             dataType: 'json',
             async: false,
@@ -89,7 +92,7 @@
             swal({
                 title: '<?= $this->translate('__Eliminar_Formulario__') ?>',
                 width: 600,
-                text: "<?= $this->translate('__mensaje_eliminar_formulario__') ?>: "+ formulario.id +"?",
+                text: "<?= $this->translate('__mensaje_eliminar_formulario__') ?>: "+ formulario.idFormulario +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -98,7 +101,7 @@
                 confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
-                    borrarPerfil();
+                    borrarFormulario();
                     window.location.replace(url + "/configuracion/formularios");
                 }
             });
@@ -109,7 +112,7 @@
         if (filaSeleccionada >= 0){
             var formulario = arrFormulariosJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
+            window.location.replace(url + "/configuracion/formularios/editar-formulario/" + formulario.idFormulario);
         }
     }
 

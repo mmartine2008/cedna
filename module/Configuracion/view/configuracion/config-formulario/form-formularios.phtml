@@ -7,11 +7,19 @@
             <div class="panel-body mt-5">
                 <form method="post" name="formFormulario" id="formFormulario">
                     <div class="form-row">
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <label for="formularioNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
                         </div>
                         <div class="col-md-4">
                             <input type="text" id="formularioNombre" name="formularioNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-2">
+                            <label for="formularioDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="formularioDescripcion" name="formularioDescripcion" class="form-control" required="true">
                         </div>
                     </div>
                     <div class="flex">
@@ -22,7 +30,7 @@
         </div>
     </div>
 </div>
-<div class="form-row">
+<div class="form-row" id="divSeccionesFormulario">
     <div class="col-md-12">
         <div class="panel panel-default mt-5">
             <div class="panel-heading">
@@ -51,7 +59,8 @@ var filaSeleccionada = -1;
 
 function FormFormulariosToJson(){
     var formData = {
-        nombre: $('#formularioNombre').val()
+        nombre: $('#formularioNombre').val(),
+        descripcion : $('#formularioDescripcion').val(),
     };
     
     var JsonData = JSON.stringify(formData);
@@ -81,13 +90,29 @@ function verificarMostrarBotonGuardar(){
     }
 }
 
+function verificarMostrarBotonNueva(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preAltaSeccion()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
 $( document ).ready(function() {
     if (formulariosJson !== ''){
         $('#formularioNombre').val(formulariosJson.nombre);
+        $('#formularioDescripcion').val(formulariosJson.descripcion);
         arrSeccionesJSON = formulariosJson.secciones;
+        document.getElementById('divSeccionesFormulario').style.display = 'block';
         dibujarTablaFormularios();
+    } else {
+        document.getElementById('divSeccionesFormulario').style.display = 'none';
     }
     verificarMostrarBotonGuardar();
+    verificarMostrarBotonNueva();
 });
 
 function dibujarTablaFormularios(){
@@ -130,10 +155,10 @@ function dibujarTablaFormularios(){
 
     function borrarPerfil() {
         var result = null;
-        var formulario = arrSeccionesJSON[filaSeleccionada];
+        var seccion = arrSeccionesJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/formularios/secciones/borrar/' + formulario.id,
+            url: url + '/configuracion/formularios/borrar-seccion/' + formulario.seccion,
             type: 'post',
             dataType: 'json',
             async: false,
@@ -145,9 +170,9 @@ function dibujarTablaFormularios(){
         return result;
     }
 
-    function preBorrar(){
+    function preBorrarSeccion(){
         if (filaSeleccionada >= 0){
-            var formulario = arrSeccionesJSON[filaSeleccionada];
+            var seccion = arrSeccionesJSON[filaSeleccionada];
             
             swal({
                 title: '<?= $this->translate('__Eliminar_Seccion__') ?>',
@@ -168,12 +193,16 @@ function dibujarTablaFormularios(){
         }
     }
 
-    function preEditar(){
+    function preEditarSeccion(){
         if (filaSeleccionada >= 0){
-            var formulario = arrSeccionesJSON[filaSeleccionada];
+            var seccion = arrSeccionesJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
+            window.location.replace(url + "/configuracion/formularios/editar-seccion/" + seccion.id);
         }
+    }
+
+    function preAltaSeccion(){
+        window.location.replace(url + "/configuracion/formularios/alta-seccion/" + formulariosJson.idFormulario);
     }
 
 </script>
