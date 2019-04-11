@@ -167,7 +167,10 @@ return [
     '__Listado_de_Secciones_del_Formulario__' => 'List of sections of the form',
     '__Nuevo_Formulario__' => 'New Form',
     '__Nueva_Seccion__' => 'New Section',
-    '__Listado_de_Preguntas__' => 'List of Questions',
+    '__Listado_de_todas_las_Preguntas__' => 'List of all Questions',
     '__Pregunta__' => 'Question',
     '__Tipo_de_Pregunta__' => 'Type of Question',
+    '__Pertenece_a_seccion__' => 'Belongs to the Section',
+    '__Nueva_Pregunta__' => 'New Question',
+
 ];

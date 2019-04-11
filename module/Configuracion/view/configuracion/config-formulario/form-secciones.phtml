@@ -23,7 +23,8 @@
                         </div>
                     </div>
                     <div class="flex">
-                        <input type="hidden" name="JsonData" id="JsonData">                 
+                        <input type="hidden" name="JsonData" id="JsonData">  
+                        <input type="hidden" name="seleccionados" id="seleccionados">               
                     </div>
                 </form>
             </div>
@@ -34,7 +35,7 @@
     <div class="col-md-12">
         <div class="panel panel-default mt-5">
             <div class="panel-heading">
-                <h5 class="panel-title"><?= $this->translate('__Listado_de_Preguntas__') ?></h5>
+                <h5 class="panel-title"><?= $this->translate('__Listado_de_todas_las_Preguntas__') ?></h5>
             </div>
             <div class="panel-body mt-5">
                 <table id="tablaPreguntas" class="table table-hover">
@@ -43,6 +44,8 @@
                             <th class="text-center"><?= $this->translate('__Numero__') ?></th>
                             <th class="text-center"><?= $this->translate('__Pregunta__') ?></th>
                             <th class="text-center"><?= $this->translate('__Tipo_de_Pregunta__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Pertenece_a_seccion__') ?></th>
+                            <!-- <th class="text-center"><?= $this->translate('__Requerida__') ?></th> -->
                         </tr>
                     </thead>
                     <tbody id="bodyConfPreguntas">
@@ -58,8 +61,11 @@ var seccionJson = <?= $SeccionJson ?>;
 var filaSeleccionada = -1;
 var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
 var idFormulario = <?= $idFormulario ?>;
+var eventos = [];
+var estados = <?php echo json_encode($estados); ?>;
 
-function FormSeccionesToJson(){
+
+function FormSeccionesToJson(){    
     var formData = {
         nombre: $('#SeccionNombre').val(),
         descripcion: $('#SeccionDescripcion').val(),
@@ -103,6 +109,16 @@ function verificarMostrarBotonVolver(){
     }
 }
 
+// function cargarHabilitadosTabla() {
+//     console.log(estados);
+//     for (var i = 0; i < estados.length; i++){ 
+//         console.log(estados[i]);
+//         if(estados[i] == '1'){
+//             $('#checkBox_'+estados[i]).prop("checked", true);
+//         }
+//     }
+// }
+
 $( document ).ready(function() {
     if (seccionJson !== ''){
         $('#SeccionNombre').val(seccionJson.nombre);
@@ -114,9 +130,34 @@ $( document ).ready(function() {
     dibujarTablaPreguntas();
     verificarMostrarBotonGuardar();
     verificarMostrarBotonVolver();
-});
+    cargarInput();
+    // cargarHabilitadosTabla();
+    });
 
-function dibujarTablaPreguntas(){
+    function cargarInput() {
+        var myJSON = JSON.stringify(estados);
+        $("#seleccionados").val(myJSON);
+    }
+
+    function habilitar(id) {
+        estados[id] = 1;
+        cargarInput();
+    }
+
+    function deshabilitar(id) {
+        estados[id] = 0;
+        cargarInput();
+    }
+
+    function marcarEnTabla(id){
+        if(estados[id] == 1) {
+            $('#checkBox_'+id).prop("checked", true);
+        } else {
+            $('#checkBox_'+id).prop("checked", false);
+        }
+    }
+
+    function dibujarTablaPreguntas(){
         $('#bodyConfPreguntas').find('tr').remove();
 
         for (var i = 0; i < arrPreguntasJSON.length; i++)
@@ -125,15 +166,31 @@ function dibujarTablaPreguntas(){
 
             var body = document.getElementById("bodyConfPreguntas");
             var row = body.insertRow();
-            row.id = i;
+            row.id = pregunta.idPregunta;
 
             var id = row.insertCell(0);
             var nombre = row.insertCell(1);
             var tipo = row.insertCell(2);
+            var pertenece = row.insertCell(3);
+            var requerida = row.insertCell(4);
 
             id.innerHTML = pregunta.idPregunta;
             nombre.innerHTML = pregunta.descripcion;
-            tipo.innerHTML = pregunta.tipoPregunta.descripcion;
+            tipo.innerHTML = pregunta.tipoPregunta.informacion;
+            pertenece.innerHTML = "<input type='checkbox'  id='checkBox_"+pregunta.idPregunta+"' value=''>";  
+            // requerida.innerHTML = "<input type='checkbox'  id='requerida_"+pregunta.idPregunta+"' value=''>";  
+            marcarEnTabla(pregunta.idPregunta);
+        }
+    }
+
+    function habilitarEnTabla(idElemento) {
+        id = "checkBox_" + idElemento;
+        if(! $('#'+id).is(":checked")){
+            $('#'+id).prop("checked", true);
+            habilitar(idElemento);
+        } else {
+            $('#'+id).prop("checked", false);
+            deshabilitar(idElemento);
         }
     }
 
@@ -141,26 +198,25 @@ function dibujarTablaPreguntas(){
         $('#tablaPreguntas').on('click', 'tbody tr', function(event) {
             if (!$(this).hasClass('highlight')){
                 $('.highlight').removeClass('highlight');
-
                 $(this).addClass('highlight').siblings();
                 filaSeleccionada = $(this)[0].id;
-
-                cambiarVisibilidadBotones(true);
+                habilitarEnTabla($(this)[0].id) ;
+                // cambiarVisibilidadBotones(true);
             }else{
                 $(this).removeClass('highlight');
                 filaSeleccionada = -1;
-                cambiarVisibilidadBotones(false);
+                // cambiarVisibilidadBotones(false);
             }
         });
     });
 
-    function preEditar(){
-        if (filaSeleccionada >= 0){
-            var formulario = arrPreguntasJSON[filaSeleccionada];
+    // function preEditar(){
+    //     if (filaSeleccionada >= 0){
+    //         var formulario = arrPreguntasJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
-        }
-    }
+    //         window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
+    //     }
+    // }
 
     function preVolver(){
         window.location.replace(url + "/configuracion/formularios/editar-formulario/" + idFormulario);

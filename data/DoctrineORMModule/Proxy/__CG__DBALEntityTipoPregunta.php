@@ -64,10 +64,10 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos'];
+            return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos', 'informacion'];
         }
 
-        return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos'];
+        return ['__isInitialized__', 'id', 'descripcion', 'cantDestinos', 'informacion'];
     }
 
     /**
@@ -219,6 +219,28 @@ class TipoPregunta extends \DBAL\Entity\TipoPregunta implements \Doctrine\ORM\Pr
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCantDestinos', []);
 
         return parent::getCantDestinos();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getInformacion()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getInformacion', []);
+
+        return parent::getInformacion();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setInformacion($informacion)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setInformacion', [$informacion]);
+
+        return parent::setInformacion($informacion);
     }
 
     /**

@@ -28,6 +28,11 @@ class TipoPregunta
     protected $cantDestinos;
 
     /**
+     * @ORM\Column(name="Informacion",  nullable=false, type="string", length=1000)
+     */
+    protected $informacion;
+
+    /**
      * Get the value of id
      */ 
     public function getId()
@@ -64,6 +69,27 @@ class TipoPregunta
             return $this->cantDestinos;
         }
         return 0;
+    }
+
+
+    /**
+     * Get the value of informacion
+     */ 
+    public function getInformacion()
+    {
+        return $this->informacion;
+    }
+
+    /**
+     * Set the value of informacion
+     *
+     * @return  self
+     */ 
+    public function setInformacion($informacion)
+    {
+        $this->informacion = $informacion;
+
+        return $this;
     }
 
     /**
@@ -114,8 +140,9 @@ class TipoPregunta
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
+        $output .= '"informacion": "' . $this->getInformacion() .'", ';
         $output .= '"destinos": "' . $this->getCantDestinos() .'"';
+
         return '{' . $output . '}';
     }
-
 }

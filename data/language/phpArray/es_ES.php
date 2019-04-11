@@ -166,7 +166,9 @@ return [
     '__Listado_de_Secciones_del_Formulario__' => 'Listado de Secciones del Formularios',
     '__Nuevo_Formulario__' => 'Nuevo Formulario',
     '__Nueva_Seccion__' => 'Nueva Seccion',
-    '__Listado_de_Preguntas__' => 'Listado de Preguntas',
+    '__Listado_de_todas_las_Preguntas__' => 'Listado de todas las Preguntas',
     '__Pregunta__' => 'Pregunta',
     '__Tipo_de_Pregunta__' => 'Tipo de pregunta',
+    '__Pertenece_a_seccion__' => 'Pertenece a la Sección',
+    '__Nueva_Pregunta__' => 'Nueva Pregunta',
 ];

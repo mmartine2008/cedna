@@ -38,6 +38,7 @@ use DBAL\Entity\RiesgosAdicionalesAltura;
 use DBAL\Entity\Parametros;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
+use DBAL\Entity\SeccionPregunta;
 
 class CatalogoManager {
     
@@ -151,6 +152,12 @@ class CatalogoManager {
         $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)
                                                         ->findBy(['Operacion' => $Operacion, 'Perfil' => $Perfil]);
         return $OperacionAccionPerfil;
+    }
+
+    public function getSeccionPregunta($Seccion, $Pregunta){
+        $seccionPregunta = $this->entityManager->getRepository(SeccionPregunta::class)
+                                        ->findOneBy(['pregunta' => $Pregunta, 'seccion' => $Seccion]);
+        return $seccionPregunta;
     }
 
     public function getUsuarios($idUsuarios = null){
