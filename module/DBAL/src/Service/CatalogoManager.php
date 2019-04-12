@@ -147,6 +147,19 @@ class CatalogoManager {
         return $Preguntas;
     }
 
+    public function getSeccionesPreguntasPorSeccion($Seccion){
+        
+        $SeccionPregunta = $this->entityManager->getRepository(SeccionPregunta::class)->findBy(['seccion' => $Seccion]);
+
+        return $SeccionPregunta;
+    }
+
+    public function getSeccionesPorFormulario($Formulario){
+        $Secciones = $this->entityManager->getRepository(Seccion::class)->findBy(['formulario' => $Formulario]);
+
+        return $Secciones;
+    }
+
     public function getAccionesPorPerfil($OperacionNombre, $Perfil){
         $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $OperacionNombre]);
         $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)

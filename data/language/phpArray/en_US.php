@@ -161,7 +161,7 @@ return [
     '__Listado_de_Parametros__' => 'List of Parameters',
     '__Nuevo_Parametro__' => 'New Parameter',
     '__Eliminar_Parametro__' => 'Delete parameter',
-    '__mensaje_eliminar_parametro__' => 'Are you sure you want to delete the parameter ?',
+    '__mensaje_eliminar_parametro__' => 'Are you sure you want to delete the parameter',
     '__Listado_de_Formularios__' => 'List of Forms',
     '__Numero__' => 'Number',
     '__Listado_de_Secciones_del_Formulario__' => 'List of sections of the form',
@@ -172,5 +172,14 @@ return [
     '__Tipo_de_Pregunta__' => 'Type of Question',
     '__Pertenece_a_seccion__' => 'Belongs to the Section',
     '__Nueva_Pregunta__' => 'New Question',
+    '__Tipo_Pregunta__' => 'Type of Question',
+    '__Opciones__' => 'Options',
+    '__Funcion__' => 'Function',
+    '__Inserte_nombre_de_la_función__' => 'Insert the name of the function',
+    '__Inserte_opciones__' => 'Insert the options separated by a hyphen (-)',
+    '__Eliminar_Seccion__' => 'Delete Section',
+    '__mensaje_eliminar_seccion__' => 'Are you sure you want to delete the section',
+    '__Eliminar_Formulario__' => 'Delete Form',
+    '__mensaje_eliminar_formulario__' => 'Are you sure you want to delete the form',
 
 ];

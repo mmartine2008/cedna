@@ -35,16 +35,6 @@ class Seccion
      */
     protected $descripcion;
 
-    // /**
-    //  *
-    //  * @ORM\ManyToMany(targetEntity="Pregunta", inversedBy="Seccion", cascade={"persist"})
-    //  * @ORM\JoinTable(name="app.SeccionPregunta",
-    //  *      joinColumns={@ORM\JoinColumn(name="IdSeccion", referencedColumnName="IdSeccion")},
-    //  *      inverseJoinColumns={@ORM\JoinColumn(name="IdPregunta", referencedColumnName="IdPregunta")}
-    //  *      )
-    //  */
-    // protected $preguntas;
-
    /**
      * @ORM\OneToMany(targetEntity="SeccionPregunta", mappedBy="seccion")
      */
@@ -76,57 +66,7 @@ class Seccion
         return $this;
     }
 
-    // /**
-    //  * @param Pregunta|null $preguntas
-    //  */
-    // public function addPreguntas(Pregunta $preguntas = null)
-    // {
-    //     if (!$this->preguntas->contains($preguntas)) {
-    //         $this->preguntas->add($preguntas);
-    //     }
-    // }
-
-    // /**
-    //  * @return array
-    //  */
-    // public function getPreguntas()
-    // {
-    //     if ($this->preguntas){
-    //         return $this->preguntas->toArray();
-    //     }else{
-    //         return null;
-    //     }
-    // }
     
-    // /**
-    //  * @param Pregunta $preguntas
-    //  */
-    // public function removePreguntas($preguntas)
-    // {
-    //     if (!$this->preguntas->contains($preguntas)) {
-    //         return;
-    //     }
-    //     $this->preguntas->removeElement($preguntas);
-    // }
-
-    // /**
-    //  * @desc Remove all tags for this article
-    //  */
-    // public function removeAllPreguntas()
-    // {
-    //     $this->preguntas->clear();
-    // }
-
-    // /**
-    //  * @param SeccionPregunta|null $seccionPreguntas
-    //  */
-    // public function addSeccionPregunta(Pregunta $seccionPreguntas = null)
-    // {
-    //     if (!$this->seccionPreguntas->contains($seccionPreguntas)) {
-    //         $this->seccionPreguntas->add($seccionPreguntas);
-    //     }
-    // }
-
     /**
      * @return array
      */
@@ -139,24 +79,7 @@ class Seccion
         }
     }
     
-    // /**
-    //  * @param SeccionPregunta $seccionPreguntas
-    //  */
-    // public function removeSeccionPreguntas($seccionPreguntas)
-    // {
-    //     if (!$this->seccionPreguntas->contains($seccionPreguntas)) {
-    //         return;
-    //     }
-    //     $this->seccionPreguntas->removeElement($seccionPreguntas);
-    // }
-
-    // /**
-    //  * @desc Remove all tags for this article
-    //  */
-    // public function removeAllSeccionPreguntas()
-    // {
-    //     $this->seccionPreguntas->clear();
-    // }
+    
 
     /**
      * Get the value of formulario

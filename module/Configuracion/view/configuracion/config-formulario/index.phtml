@@ -73,7 +73,7 @@
         var formulario = arrFormulariosJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/formularios/borrar/' + formulario.idFormulario,
+            url: url + '/configuracion/formularios/borrar-formulario/' + formulario.idFormulario,
             type: 'post',
             dataType: 'json',
             async: false,

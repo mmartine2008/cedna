@@ -102,6 +102,17 @@ function verificarMostrarBotonVolver(){
     for (var i = 0; i < arrAccionesDisponibles.length; i++){
         var boton = arrAccionesDisponibles[i];
 
+        if (boton.jsFunction === 'preAltaPregunta()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function verificarMostrarBotonAlta(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
         if (boton.jsFunction === 'preVolver()'){
             $('#'+boton.idHTMLElement).prop('disabled', false);
             $('#'+boton.idHTMLElement).show();
@@ -130,7 +141,9 @@ $( document ).ready(function() {
     dibujarTablaPreguntas();
     verificarMostrarBotonGuardar();
     verificarMostrarBotonVolver();
+    verificarMostrarBotonAlta();
     cargarInput();
+    cambiarVisibilidadBotones(true);
     // cargarHabilitadosTabla();
     });
 
@@ -210,13 +223,9 @@ $( document ).ready(function() {
         });
     });
 
-    // function preEditar(){
-    //     if (filaSeleccionada >= 0){
-    //         var formulario = arrPreguntasJSON[filaSeleccionada];
-
-    //         window.location.replace(url + "/configuracion/formularios/editar/" + formulario.id);
-    //     }
-    // }
+    function preAltaPregunta(){
+        window.location.replace(url + "/configuracion/formularios/alta-pregunta/" + seccionJson.id);
+    }
 
     function preVolver(){
         window.location.replace(url + "/configuracion/formularios/editar-formulario/" + idFormulario);

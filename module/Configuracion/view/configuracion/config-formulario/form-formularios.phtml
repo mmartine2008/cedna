@@ -153,19 +153,21 @@ function dibujarTablaFormularios(){
         });
     });
 
-    function borrarPerfil() {
+    function borrarSeccion() {
         var result = null;
         var seccion = arrSeccionesJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/formularios/borrar-seccion/' + formulario.seccion,
+            url: url + '/configuracion/formularios/borrar-seccion/' + seccion.id,
             type: 'post',
             dataType: 'json',
             async: false,
             success: function (data) {
-                
+                console.log(data);
             }
         });
+
+        // window.location.replace(url + "/configuracion/formularios/borrar-seccion/" + seccion.id);
         
         return result;
     }
@@ -186,8 +188,8 @@ function dibujarTablaFormularios(){
                 confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
-                    borrarPerfil();
-                    window.location.replace(url + "/configuracion/formularios");
+                    borrarSeccion();
+                    window.location.replace(url + "/configuracion/formularios/editar-formulario/"+ formulariosJson.idFormulario);
                 }
             });
         }
