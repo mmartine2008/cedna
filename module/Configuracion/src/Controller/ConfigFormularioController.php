@@ -118,6 +118,7 @@ class ConfigFormularioController extends ConfiguracionController
 
         $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
         
+        $view->setVariable('estados', "");
         $view->setVariable('idFormulario', $idFormulario);
         $view->setVariable('SeccionJson', '""');
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
