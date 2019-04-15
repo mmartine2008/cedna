@@ -42,8 +42,24 @@ class ConfigFormularioManager{
                 $this->entityManager->rollBack();
             }
         }
-        
     }
+
+    private function enlazarPregunta($Pregunta, $Seccion, $requerido) {
+        $SeccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);
+        
+        if(!$SeccionPregunta) {
+            $SeccionPregunta = new SeccionPregunta();
+            $SeccionPregunta->setSeccion($Seccion);
+            $SeccionPregunta->setPregunta($Pregunta);
+            $SeccionPregunta->setRequerido($requerido);
+
+            $this->entityManager->persist($SeccionPregunta);
+            $this->entityManager->flush();
+        } else {
+            $SeccionPregunta->setRequerido($requerido);
+        }
+    }
+
 
     public function borrarSecciones($idSeccion){
         $Seccion = $this->catalogoManager->getSecciones($idSeccion);
@@ -106,16 +122,41 @@ class ConfigFormularioManager{
 
         return $mensaje;
     }
+    // foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
+
+    private function enlazarPreguntas($SeccionesPreguntas, $SeccionClon) {
+        foreach($SeccionesPreguntas as $SeccionPregunta) {
+            $Pregunta = $SeccionPregunta->getPregunta();
+            $requerido = $SeccionPregunta->getRequerido();
+            $this->enlazarPregunta($Pregunta, $SeccionClon, $requerido);
+        }
+    }
+    public function clonarSecciones($Secciones, $Formulario){
+        foreach ($Secciones as $Seccion) {
+            $SeccionClon = new Seccion();
+            $SeccionClon->setFormulario($Formulario);
+            $SeccionClon->setNombre($Seccion->getNombre());
+            $SeccionClon->setDescripcion($Seccion->getDescripcion());
+
+            $this->entityManager->persist($SeccionClon);
+            $this->entityManager->flush();
+
+            $this->enlazarPreguntas($Seccion->getSeccionPreguntas(), $SeccionClon);
+        }
+    }
 
     public function clonarFormulario($idFormulario) {
         $Formulario = $this->catalogoManager->getFormulario($idFormulario);
         
-        $script = $Formulario->getScript();
+        $FormClon = new Formulario();
 
-       
+        $FormClon->setNombre($Formulario->getNombre());
+        $FormClon->setDescripcion($Formulario->getDescripcion());
 
-        $this->entityManager->persist($Formulario);
+        $this->entityManager->persist($FormClon);
         $this->entityManager->flush();
+
+        $this->clonarSecciones($Formulario->getSecciones(), $FormClon);
     }
     
     public function altaSecciones($jsonData, $idFormulario){
@@ -129,22 +170,7 @@ class ConfigFormularioManager{
         $this->entityManager->flush();
     }
 
-    private function enlazarPregunta($Pregunta, $Seccion, $requerido) {
-        $SeccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);
-        
-        if(!$SeccionPregunta) {
-            $SeccionPregunta = new SeccionPregunta();
-            $SeccionPregunta->setSeccion($Seccion);
-            $SeccionPregunta->setPregunta($Pregunta);
-            $SeccionPregunta->setRequerido($requerido);
-
-            $this->entityManager->persist($SeccionPregunta);
-            $this->entityManager->flush();
-        } else {
-            $SeccionPregunta->setRequerido($requerido);
-        }
-    }
-
+    
     private function desenlazarPregunta($Pregunta, $Seccion) {
         $seccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);        
         
