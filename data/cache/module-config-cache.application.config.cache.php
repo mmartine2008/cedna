@@ -53,6 +53,7 @@ return array (
       'Admin\\Service\\OperacionManager' => 'Admin\\Service\\Factory\\OperacionManagerFactory',
       'Admin\\Service\\OperacionAccionPerfilManager' => 'Admin\\Service\\Factory\\OperacionAccionPerfilManagerFactory',
       'Admin\\Service\\TipoPreguntaManager' => 'Admin\\Service\\Factory\\TipoPreguntaManagerFactory',
+      'Admin\\Service\\GeneradorABMManager' => 'Admin\\Service\\Factory\\GeneradorABMManagerFactory',
       'Formulario\\Service\\FormularioManager' => 'Formulario\\Service\\Factory\\FormularioManagerFactory',
       'Formulario\\Service\\CednaTcpdf' => 'Formulario\\Service\\Factory\\CednaTcpdfFactory',
       'TCPDF' => 'TCPDFModule\\Factory\\TCPDFFactory',
@@ -741,6 +742,25 @@ return array (
             ),
             'may_terminate' => true,
           ),
+          'generador-abm' => 
+          array (
+            'type' => 'Zend\\Router\\Http\\Segment',
+            'options' => 
+            array (
+              'route' => '/generador-abm[/:action[/:id]]',
+              'defaults' => 
+              array (
+                'controller' => 'Admin\\Controller\\GeneradorABMController',
+                'action' => 'index',
+              ),
+            ),
+            'constraints' => 
+            array (
+              'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+              'id' => '[a-zA-Z0-9_-]*',
+            ),
+            'may_terminate' => true,
+          ),
         ),
       ),
       'formulario' => 
@@ -1176,6 +1196,7 @@ return array (
       'Admin\\Controller\\OperacionController' => 'Admin\\Controller\\Factory\\OperacionControllerFactory',
       'Admin\\Controller\\OperacionAccionPerfilController' => 'Admin\\Controller\\Factory\\OperacionAccionPerfilControllerFactory',
       'Admin\\Controller\\TipoPreguntaController' => 'Admin\\Controller\\Factory\\TipoPreguntaControllerFactory',
+      'Admin\\Controller\\GeneradorABMController' => 'Admin\\Controller\\Factory\\GeneradorABMControllerFactory',
       'Formulario\\Controller\\BaseFormularioController' => 'Formulario\\Controller\\Factory\\BaseFormularioControllerFactory',
       'Formulario\\Controller\\FormularioController' => 'Formulario\\Controller\\Factory\\FormularioControllerFactory',
     ),

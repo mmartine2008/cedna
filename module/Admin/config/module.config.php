@@ -85,6 +85,21 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'generador-abm' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/generador-abm[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\GeneradorABMController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -97,6 +112,7 @@ return [
             Controller\OperacionController::class => Controller\Factory\OperacionControllerFactory::class,
             Controller\OperacionAccionPerfilController::class => Controller\Factory\OperacionAccionPerfilControllerFactory::class,
             Controller\TipoPreguntaController::class => Controller\Factory\TipoPreguntaControllerFactory::class,
+            Controller\GeneradorABMController::class => Controller\Factory\GeneradorABMControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -105,6 +121,7 @@ return [
             Service\OperacionManager::class => Service\Factory\OperacionManagerFactory::class,            
             Service\OperacionAccionPerfilManager::class => Service\Factory\OperacionAccionPerfilManagerFactory::class,
             Service\TipoPreguntaManager::class => Service\Factory\TipoPreguntaManagerFactory::class,
+            Service\GeneradorABMManager::class => Service\Factory\GeneradorABMManagerFactory::class,
         ],
     ],
     'view_manager' => [

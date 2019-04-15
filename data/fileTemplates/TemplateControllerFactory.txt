@@ -1,0 +1,33 @@
+<?php
+
+/*
+ * FACTORY GENERADO DE FORMA AUTOMATICA
+ *
+ * Variables de reemplazo:
+ *  - $NombreModulo => Nombre del modulo en donde se guardará el factory. Comienza con Mayuscula.
+ *  - $NombreEntidad => Nombre de la entidad del cual se está creando el ABM.  Comienza con Mayuscula.
+ *  - $nombre_entidad => Nombre de la entidad del cual se está creando el ABM.  Todo en minuscula.
+ */
+
+namespace $NombreModulo\Controller\Factory;
+
+use Interop\Container\ContainerInterface; 
+use Zend\ServiceManager\Factory\FactoryInterface;
+use $NombreModulo\Controller\$NombreEntidadController;
+
+use $NombreModulo\Service\$NombreEntidadManager;
+use DBAL\Service\CatalogoManager;
+use Autenticacion\Service\UserSessionManager;
+
+class $NombreEntidadControllerFactory implements FactoryInterface
+{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $$nombre_entidadManager = $container->get($NombreEntidadManager::class);
+        $catalogoManager = $container->get(CatalogoManager::class);
+        $userSessionManager = $container->get(UserSessionManager::class);
+        $translator = $container->get('translator');
+        
+        return new $NombreEntidadController($$nombre_entidadManager, $catalogoManager, $userSessionManager, $translator);
+    }
+}

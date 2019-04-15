@@ -1,0 +1,27 @@
+<?php
+
+/*
+ * FACTORY GENERADO DE FORMA AUTOMATICA
+ *
+ * Variables de reemplazo:
+ *  - $NombreModulo => Nombre del modulo en donde se guardará el factory. Comienza con Mayuscula.
+ *  - $NombreEntidad => Nombre de la entidad del cual se está creando el ABM.  Comienza con Mayuscula.
+ */
+
+namespace $NombreModulo\Service\Factory;
+
+use Interop\Container\ContainerInterface; 
+use Zend\ServiceManager\Factory\FactoryInterface;
+use $NombreModulo\Service\$NombreEntidadManager;
+
+
+class $NombreEntidadManagerFactory implements FactoryInterface
+{
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {        
+        $entityManager = $container->get('doctrine.entitymanager.orm_default'); 
+                        
+        return new $NombreEntidadManager($entityManager);
+    }
+}
