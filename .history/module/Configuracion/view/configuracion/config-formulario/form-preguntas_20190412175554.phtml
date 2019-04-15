@@ -1,0 +1,175 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Pregunta__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formPregunta" id="formPregunta">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <label for="preguntaDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="preguntaDescripcion" name="preguntaDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-3">
+                            <label for="select_tipo_pregunta"><span class="obligatorio">(*) </span><?= $this->translate('__Tipo_Pregunta__') ?>:</label>
+                        </div>
+                        <div class="col-md-4" id="div_TipoPregunta">
+                            
+                        </div>
+                    </div>
+                    <div class="form-row mt-3 col-md-12" style='display:none' id="div_preguntaOpciones">
+                        <div class="col-md-3">
+                            <label class="m-l">
+                                <input type="radio" name="pregunta_radio" 
+                                onclick="ocultarDiv('div_opciones', 'div_funcion', 'input_preguntaOpcion', 'input_preguntaFuncion')"
+                                id="pregunta_radio" value="opcion"
+                                 checked>&nbsp;&nbsp;<?= $this->translate('__Opciones__') ?><br>
+                            </label>
+                        </div>
+                        <div class="col-md-6" id="div_opciones" style='display:block'>
+                            <input type="text" id="input_preguntaOpcion" 
+                            title='<?= $this->translate('__Inserte_opciones__')?>'
+                            placeholder='<?= $this->translate('__Inserte_opciones__')?>'
+                            name="input_preguntaOpcion" class="form-control">                               
+                        </div>
+                    </div>
+                    <div class="form-row col-md-12 mt-3" style='display:none' id="div_preguntaFuncion">
+                        <div class="col-md-3">
+                            <label class="m-l">
+                                <input type="radio" name="pregunta_radio" 
+                                onclick="ocultarDiv('div_funcion', 'div_opciones', 'input_preguntaFuncion', 'input_preguntaOpcion')"
+                                id="pregunta_radio" value="funcion">
+                                &nbsp;&nbsp;<?= $this->translate('__Funcion__') ?><br>
+                            </label>
+                        </div>
+                        <div class="col-md-6" id="div_funcion" style='display:none'>
+                            <input type="text" id="input_preguntaFuncion" name="input_preguntaFuncion" 
+                            title='<?= $this->translate('__Inserte_nombre_de_la_función__')?>'
+                            placeholder='<?= $this->translate('__Inserte_nombre_de_la_función__')?>'
+                            class="form-control">                            
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">                 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var preguntasJson = <?= $PreguntasJson ?>;
+    var tiposPregunta = <?= $tiposPregunta ?>;
+
+    function FormPreguntasToJson(){
+        var formData = {
+            descripcion: $('#preguntaDescripcion').val(),
+            tipo: $('#select_tipo_pregunta').val(),
+            funcion: $('#input_preguntaFuncion').val(),
+            opcion: $('#input_preguntaOpcion').val(),
+        };
+        
+        var JsonData = JSON.stringify(formData);
+        
+        return JsonData;
+    }
+
+    function preSubmit(){
+        var JsonData = FormPreguntasToJson();
+        $('#JsonData').val(JsonData);
+
+        if ($("#formPregunta")[0].checkValidity()){
+            $("#formPregunta").submit();
+        }else{
+            $("#formPregunta")[0].reportValidity();
+        }
+    }
+
+    function verificarMostrarBotonGuardar(){
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var boton = arrAccionesDisponibles[i];
+
+            if (boton.jsFunction === 'preSubmit()'){
+                $('#'+boton.idHTMLElement).prop('disabled', false);
+                $('#'+boton.idHTMLElement).show();
+            }
+        }
+    }
+
+    function verificarMostrarBotonVolver(){
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var boton = arrAccionesDisponibles[i];
+
+            if (boton.jsFunction === 'preVolver()'){
+                $('#'+boton.idHTMLElement).prop('disabled', false);
+                $('#'+boton.idHTMLElement).show();
+            }
+        }
+    }
+
+    function createListFromJSONLista(selector) {
+        var option = document.createElement("option");
+        option.value =  -1;
+        option.text = 'Seleccione';
+        selector.appendChild(option);
+    
+        for (var i=0; i < tiposPregunta.length; i++) {
+            var option = document.createElement("option");
+            item = tiposPregunta[i];
+            option.value = item.id;
+            option.text = item.informacion;
+            option.title = item.informacion;
+            selector.appendChild(option);
+        }
+        return selector;
+    }
+
+    function mostrarPreguntaOpcionFuncion() {
+        var valor = $('#select_tipo_pregunta').val();
+        if((valor == '1') || (valor == '2') || (valor == '3')) {
+            document.getElementById('div_preguntaOpciones').style.display = 'block';
+            document.getElementById('div_preguntaFuncion').style.display = 'block';
+        } else {
+            document.getElementById('div_preguntaOpciones').style.display = 'none';
+            document.getElementById('div_preguntaFuncion').style.display = 'none';
+        }
+    }
+
+    function ocultarDiv(divActual, divOcultar, inputActual, inputVaciar) {
+        document.getElementById(divActual).style.display = 'block';
+        document.getElementById(divOcultar).style.display = 'none';
+        document.getElementById(inputActual).required = true;
+        document.getElementById(inputVaciar).required = false;
+        $('#'+inputVaciar).val('');
+    }
+    
+    function createSimpleSelector() {
+        var selector = document.createElement("select");
+        selector.id = "select_tipo_pregunta";
+        selector.classList= "form-control";
+        var selectorModificado = createListFromJSONLista(selector);
+        selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();
+                                               };
+
+        document.getElementById('div_TipoPregunta').appendChild(selectorModificado);
+    }
+
+    $( document ).ready(function() {
+        if (preguntasJson !== ''){
+            $('#preguntaDescripcion').val(preguntasJson.descripcion);
+        }
+        createSimpleSelector();
+        verificarMostrarBotonGuardar();
+        verificarMostrarBotonVolver();
+    });
+
+    function preVolver(){
+        window.location.replace(url + "/configuracion/formularios/editar-seccion/" + idSeccion);
+    }
+</script>

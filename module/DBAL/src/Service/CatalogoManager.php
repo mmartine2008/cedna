@@ -36,6 +36,9 @@ use DBAL\Entity\PruebasDeGases;
 use DBAL\Entity\RiesgosAdicionalesCalor;
 use DBAL\Entity\RiesgosAdicionalesAltura;
 use DBAL\Entity\Parametros;
+use DBAL\Entity\Pregunta;
+use DBAL\Entity\Seccion;
+use DBAL\Entity\SeccionPregunta;
 
 class CatalogoManager {
     
@@ -114,11 +117,60 @@ class CatalogoManager {
         return $Parametros;
     }
 
+    public function getFormularios($idFormularios = null){
+        if ($idFormularios){
+            $Formularios = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormularios]);
+        }else{
+            $Formularios = $this->entityManager->getRepository(Formulario::class)->findAll();
+        }
+
+        return $Formularios;
+    }
+
+    public function getSecciones($idSeccion = null){
+        if ($idSeccion){
+            $Secciones = $this->entityManager->getRepository(Seccion::class)->findOneBy(['id' => $idSeccion]);
+        }else{
+            $Secciones = $this->entityManager->getRepository(Seccion::class)->findAll();
+        }
+
+        return $Secciones;
+    }
+
+    public function getPreguntas($idPregunta = null){
+        if ($idPregunta){
+            $Preguntas = $this->entityManager->getRepository(Pregunta::class)->findOneBy(['id' => $idPregunta]);
+        }else{
+            $Preguntas = $this->entityManager->getRepository(Pregunta::class)->findAll();
+        }
+
+        return $Preguntas;
+    }
+
+    public function getSeccionesPreguntasPorSeccion($Seccion){
+        
+        $SeccionPregunta = $this->entityManager->getRepository(SeccionPregunta::class)->findBy(['seccion' => $Seccion]);
+
+        return $SeccionPregunta;
+    }
+
+    public function getSeccionesPorFormulario($Formulario){
+        $Secciones = $this->entityManager->getRepository(Seccion::class)->findBy(['formulario' => $Formulario]);
+
+        return $Secciones;
+    }
+
     public function getAccionesPorPerfil($OperacionNombre, $Perfil){
         $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $OperacionNombre]);
         $OperacionAccionPerfil = $this->entityManager->getRepository(OperacionAccionPerfil::class)
                                                         ->findBy(['Operacion' => $Operacion, 'Perfil' => $Perfil]);
         return $OperacionAccionPerfil;
+    }
+
+    public function getSeccionPregunta($Seccion, $Pregunta){
+        $seccionPregunta = $this->entityManager->getRepository(SeccionPregunta::class)
+                                        ->findOneBy(['pregunta' => $Pregunta, 'seccion' => $Seccion]);
+        return $seccionPregunta;
     }
 
     public function getUsuarios($idUsuarios = null){

@@ -1,3 +1,4 @@
+
 SET IDENTITY_INSERT cedna.app.Operacion ON;
 
 INSERT INTO cedna.app.Operacion (Id, nombre, titulo, icono, grupoId, orden, url)

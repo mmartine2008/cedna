@@ -38,6 +38,11 @@ class PreguntaGeneradora
     protected $preguntaGenerada;
 
     /**
+     * @ORM\Column(name="Required",  nullable=true, type="integer", length=1)
+     */
+    protected $requerido;
+
+    /**
      * Get the value of id
      */ 
     public function getId()
@@ -117,14 +122,38 @@ class PreguntaGeneradora
         return $this;
     }
 
+    /**
+     * Get the value of requerido
+     */ 
+    public function getRequerido()
+    {
+        return $this->requerido;
+    }
+
+    /**
+     * Set the value of requerido
+     *
+     * @return  self
+     */ 
+    public function setRequerido($requerido)
+    {
+        $this->requerido = $requerido;
+
+        return $this;
+    }
+
     public function getJSON(){
         $output = "";
 
         $output .= '"idPreguntaGenerada": "' . $this->getId() .'", ';
         $output .= '"opcion": ' . $this->getOpcion()->getJSON() .', ';
         $output .= '"estado": "none", ';
-        $output .= '"preguntaGenerada": ' . $this->getPreguntaGenerada()->getJSON() .'';
-        
+        if ($this->getRequerido()){
+            $output .= '"requerido": '.$this->getRequerido().', ';
+        }else{
+            $output .= '"requerido": 0, ';
+        }
+        $output .= '"preguntaGenerada": ' . $this->getPreguntaGenerada()->getJSON() .''; 
         
         return '{' . $output . '}';
     }

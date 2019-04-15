@@ -1,0 +1,234 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Seccion__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formSeccion" id="formSeccion">
+                    <div class="form-row">
+                        <div class="col-md-2">
+                            <label for="SeccionNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="SeccionNombre" name="SeccionNombre" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-2">
+                            <label for="SeccionDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="SeccionDescripcion" name="SeccionDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">  
+                        <input type="hidden" name="seleccionados" id="seleccionados">               
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-row" id="divPreguntas">
+    <div class="col-md-12">
+        <div class="panel panel-default mt-5">
+            <div class="panel-heading">
+                <h5 class="panel-title"><?= $this->translate('__Listado_de_todas_las_Preguntas__') ?></h5>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaPreguntas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Numero__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Pregunta__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Tipo_de_Pregunta__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Pertenece_a_seccion__') ?></th>
+                            <!-- <th class="text-center"><?= $this->translate('__Requerida__') ?></th> -->
+                        </tr>
+                    </thead>
+                    <tbody id="bodyConfPreguntas">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var seccionJson = <?= $SeccionJson ?>;
+var filaSeleccionada = -1;
+var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
+var idFormulario = <?= $idFormulario ?>;
+var eventos = [];
+var estados = <?php echo json_encode($estados); ?>;
+
+
+function FormSeccionesToJson(){    
+    var formData = {
+        nombre: $('#SeccionNombre').val(),
+        descripcion: $('#SeccionDescripcion').val(),
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormSeccionesToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formSeccion")[0].checkValidity()){
+        $("#formSeccion").submit();
+    }else{
+        $("#formSeccion")[0].reportValidity();
+    }
+}
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function verificarMostrarBotonVolver(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preAltaPregunta()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+function verificarMostrarBotonAlta(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preVolver()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+// function cargarHabilitadosTabla() {
+//     console.log(estados);
+//     for (var i = 0; i < estados.length; i++){ 
+//         console.log(estados[i]);
+//         if(estados[i] == '1'){
+//             $('#checkBox_'+estados[i]).prop("checked", true);
+//         }
+//     }
+// }
+
+$( document ).ready(function() {
+    if (seccionJson !== ''){
+        $('#SeccionNombre').val(seccionJson.nombre);
+        $('#SeccionDescripcion').val(seccionJson.descripcion);
+        document.getElementById('divPreguntas').style.display = 'block';
+    } else {
+        document.getElementById('divPreguntas').style.display = 'none';
+    }
+    dibujarTablaPreguntas();
+    verificarMostrarBotonGuardar();
+    verificarMostrarBotonVolver();
+    verificarMostrarBotonAlta();
+    cargarInput();
+    cambiarVisibilidadBotones(true);
+    // cargarHabilitadosTabla();
+    });
+
+    function cargarInput() {
+        var myJSON = JSON.stringify(estados);
+        $("#seleccionados").val(myJSON);
+    }
+
+    function habilitar(id) {
+        estados[id] = 1;
+        cargarInput();
+    }
+
+    function deshabilitar(id) {
+        estados[id] = 0;
+        cargarInput();
+    }
+
+    function marcarEnTabla(id){
+        if(estados[id] == 1) {
+            $('#checkBox_'+id).prop("checked", true);
+        } else {
+            $('#checkBox_'+id).prop("checked", false);
+        }
+    }
+
+    function dibujarTablaPreguntas(){
+        $('#bodyConfPreguntas').find('tr').remove();
+
+        for (var i = 0; i < arrPreguntasJSON.length; i++)
+        {
+            var pregunta = arrPreguntasJSON[i];
+
+            var body = document.getElementById("bodyConfPreguntas");
+            var row = body.insertRow();
+            row.id = pregunta.idPregunta;
+
+            var id = row.insertCell(0);
+            var nombre = row.insertCell(1);
+            var tipo = row.insertCell(2);
+            var pertenece = row.insertCell(3);
+            var requerida = row.insertCell(4);
+
+            id.innerHTML = pregunta.idPregunta;
+            nombre.innerHTML = pregunta.descripcion;
+            tipo.innerHTML = pregunta.tipoPregunta.informacion;
+            pertenece.innerHTML = "<input type='checkbox'  id='checkBox_"+pregunta.idPregunta+"' value=''>";  
+            // requerida.innerHTML = "<input type='checkbox'  id='requerida_"+pregunta.idPregunta+"' value=''>";  
+            marcarEnTabla(pregunta.idPregunta);
+        }
+    }
+
+    function habilitarEnTabla(idElemento) {
+        id = "checkBox_" + idElemento;
+        if(! $('#'+id).is(":checked")){
+            $('#'+id).prop("checked", true);
+            habilitar(idElemento);
+        } else {
+            $('#'+id).prop("checked", false);
+            deshabilitar(idElemento);
+        }
+    }
+
+    $(function() {
+        $('#tablaPreguntas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+                habilitarEnTabla($(this)[0].id) ;
+                // cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                // cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function preAltaPregunta(){
+        window.location.replace(url + "/configuracion/formularios/alta-pregunta/" + seccionJson.id);
+    }
+
+    function preVolver(){
+        window.location.replace(url + "/configuracion/formularios/editar-formulario/" + idFormulario);
+    }
+
+</script>

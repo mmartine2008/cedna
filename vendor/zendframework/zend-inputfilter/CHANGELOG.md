@@ -2,12 +2,71 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.10.0 - 2019-01-30
+
+### Added
+
+- [#176](https://github.com/zendframework/zend-inputfilter/pull/176) adds the interface `UnfilteredDataInterface`, with the following methods:
+
+  ```php
+  public function getUnfilteredData() : array|object;
+  public function setUnfilteredData(array|object $data) : $this;
+  ```
+
+  By default, the `BaseInputFilter` now implements this interface.
+
+  The primary purpose of the interface is to allow the ability to access ALL
+  original raw data, and not just the data the input filter knows about. This is
+  particularly useful with collections.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Nothing.
+
+## 2.9.1 - 2019-01-07
+
+### Added
+
+- [#174](https://github.com/zendframework/zend-inputfilter/pull/174) adds support for PHP 7.3.
+
+### Changed
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- [#175](https://github.com/zendframework/zend-inputfilter/pull/175) fixes a regression introduced in 2.9.0 when overriding the default
+  validator of a `FileInput`. 2.9.0 changed the default to use the
+  fully-qualified class name of `Zend\Validator\File\Upload` as the service,
+  instead of the previous 'fileuploadfile`; this release returns to the original
+  behavior.
+
 ## 2.9.0 - 2018-12-17
 
 ### Added
 
 - [#172](https://github.com/zendframework/zend-inputfilter/pull/172) adds support for PSR-7 `UploadedFileInterface` to `Zend\InputFilter\FileInput`.
-  It adds a new interface, `Zend\InputFilter\FileInput\FileInputDecoratorInterface`, 
+  It adds a new interface, `Zend\InputFilter\FileInput\FileInputDecoratorInterface`,
   which defines methods required for validating and filtering file uploads. It
   also provides two implementations of it, one for standard SAPI file uploads,
   and the other for PSR-7 uploads. The `FileInput` class does detection on the

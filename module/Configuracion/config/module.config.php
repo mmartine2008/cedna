@@ -84,6 +84,36 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
+                    'formularios' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/formularios[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigFormularioController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'secciones' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => '/secciones[/:action[/:id]]',
+                            'defaults' => [
+                                'controller' => Controller\ConfigFormularioController::class,
+                                'action'     => 'index',
+                            ],
+                        ],
+                        'constraints' => [
+                            'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            'id' => '[a-zA-Z0-9_-]*',
+                        ],
+                        'may_terminate' => true,
+                    ],
                 ],
             ],
         ],
@@ -96,12 +126,14 @@ return [
             Controller\ConfigUsuariosController::class => Controller\Factory\ConfigUsuariosControllerFactory::class,
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
             Controller\ConfigParametrosController::class => Controller\Factory\ConfigParametrosControllerFactory::class,
+            Controller\ConfigFormularioController::class => Controller\Factory\ConfigFormularioControllerFactory::class,
         ],
     ],
     'service_manager' => [
         'factories' => [
             Service\ConfiguracionManager::class => Service\Factory\ConfiguracionManagerFactory::class,
             Service\ConfigUsuariosManager::class => Service\Factory\ConfigUsuariosManagerFactory::class,
+            Service\ConfigFormularioManager::class => Service\Factory\ConfigFormularioManagerFactory::class,
             \Zend\I18n\Translator\TranslatorInterface::class => \Zend\I18n\Translator\TranslatorServiceFactory::class,
         ],
     ],

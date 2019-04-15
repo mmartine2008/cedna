@@ -338,8 +338,9 @@ class FormularioManager {
     public function getJSONModificadoSelectSimple($pregunta, $form) {
         $secc = $form->secciones;
         foreach($secc as $seccion) {
-            $preguntas = $seccion->preguntas;
-            foreach($preguntas as $preguntaJSON) {
+            $seccionPreguntas = $seccion->preguntas;
+            foreach($seccionPreguntas as $seccionPregunta) {
+                $preguntaJSON = $seccionPregunta->pregunta;
                 if($preguntaJSON->idPregunta == $pregunta->getId()) {
                     $opciones = $this->getOpcionesFuncion($pregunta);
                     $preguntaJSON->opciones = $opciones;
@@ -352,8 +353,9 @@ class FormularioManager {
     public function getJSONModificadoSelectMultiple($pregunta, $form) {
         $secciones = $form->secciones;
         foreach($secciones as $seccion) {
-            $preguntas = $seccion->preguntas;
-            foreach($preguntas as $preguntaJSON) {
+            $seccionPreguntas = $seccion->preguntas;
+            foreach($seccionPreguntas as $seccionPregunta) {
+                $preguntaJSON = $seccionPregunta->pregunta;
                 if($preguntaJSON->idPregunta == $pregunta->getId()) {
                     $opciones = $this->getOpcionesFuncion($pregunta);
                     $respuestas = $preguntaJSON->respuesta;
@@ -466,11 +468,13 @@ class FormularioManager {
         return $preguntaJSON;
     }
 
+    
     private function getJSONActualizadoPorRespuestasRelevamiento($form, $idRelevamiento) {
         $secciones = $form->secciones;
         foreach($secciones as $seccion) {
-            $preguntas = $seccion->preguntas;
-            foreach($preguntas as $preguntaJSON) {
+            $seccionPreguntas = $seccion->preguntas;
+            foreach($seccionPreguntas as $seccionPregunta) {
+                $preguntaJSON = $seccionPregunta->pregunta;
                 $tipoPregunta = $preguntaJSON->tipoPregunta;
                 $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaJSON->idPregunta);
                 if($respuesta) {
@@ -907,7 +911,9 @@ class FormularioManager {
     public function altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento){
         $idSeccion = $seccion->id;
         $seccionEnt = $this->getSeccion($idSeccion);
-        foreach ($seccion->preguntas as $pregunta) {
+        $seccionPreguntas = $seccion->preguntas;
+        foreach ($seccionPreguntas as $seccionPregunta) {
+            $pregunta = $seccionPregunta->pregunta;
             $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
             if($pregunta->preguntasGeneradas) {
                 $this->altaRespuestaPreguntasGeneradas($pregunta->preguntasGeneradas, $seccionEnt, $Relevamiento);
