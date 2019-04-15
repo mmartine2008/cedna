@@ -1,0 +1,69 @@
+<?php
+
+/*
+ * MANAGER GENERADO DE FORMA AUTOMATICA
+ *
+ * Variables de reemplazo:
+ *  - $NombreModulo => Nombre del modulo en donde se guardará el Manager. Comienza con Mayuscula.
+ *  - $NombreEntidad => Nombre de la entidad del cual se está creando el ABM.  Comienza con Mayuscula.
+ *  - $setterDeAtributos => Son todos los set de los atributos de la entidad.
+ */
+
+namespace $NombreModulo\Service;
+
+use DBAL\Entity\$NombreEntidad;
+
+class $NombreEntidadManager {
+    
+    /**
+     * Doctrine entity manager.
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $entityManager; 
+    
+    private $catalogoManager;
+    private $mailManager;
+
+    /**
+     * Constructor del Servicio
+     */
+    public function __construct($entityManager, $catalogoManager, $mailManager) 
+    {
+        $this->entityManager = $entityManager;
+        $this->catalogoManager = $catalogoManager;
+        $this->mailManager = $mailManager;
+    }
+
+    public function altaEdicion$NombreEntidad($jsonData, $id$NombreEntidad = null){
+        if ($id$NombreEntidad){
+            $$NombreEntidad = $this->catalogoManager->get$NombreEntidad($id$NombreEntidad);
+        }else{
+            $$NombreEntidad = new $NombreEntidad();
+        }
+
+        $setterDeAtributos
+
+        $this->entityManager->persist($$NombreEntidad);
+        $this->entityManager->flush();
+    }
+    
+    public function borrar$NombreEntidad($id$NombreEntidad){
+        $$NombreEntidad = $this->catalogoManager->get$NombreEntidad($id$NombreEntidad);
+
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($$NombreEntidad);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado el induccion correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'El induccion no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
+    }
+}

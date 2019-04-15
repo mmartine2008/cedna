@@ -47,7 +47,7 @@ return [
     '__Orden_de_Compra__' => 'Órden de Compra',
     '__Planificacion__' => 'Planificación',
     '__Estado__' => 'Estado',
-    '__Planificacion_de_Tarea_por_Dia__' => 'Planificación de Tarea por Día',
+    '__Planificacion_de_Tarea__' => 'Planificación de Tarea',
     '__Descripcion__' => 'Descripción',
     '__Tipo_de_Planificacion__' => 'Tipo de Planificación',
     '__Tarea__' => 'Tarea',

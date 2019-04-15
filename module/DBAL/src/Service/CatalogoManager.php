@@ -439,6 +439,12 @@ class CatalogoManager {
         return $Tareas;
     }
 
+    public function getTareasParaEjecutar($Usuario){
+        $Tareas = $this->entityManager->getRepository(Tareas::class)->findBy(['Ejecutor' => $Usuario]);
+
+        return $Tareas;
+    }
+
     public function getOperariosPorContratista($UsuarioActivo){
         $Operarios = $this->entityManager->getRepository(Operarios::class)->findBy(['Contratista' => $UsuarioActivo]);
 
@@ -505,6 +511,24 @@ class CatalogoManager {
     }
 
     /**
+     * Funcion que transforma un arreglo de entidades, en un JSON.
+     *
+     * @param [array] $arrEntidad
+     * @return String
+     */
+    public function arrEntidadesAJSON($arrEntidad){
+        $output = [];
+        
+        foreach($arrEntidad as $Entidad){
+            $output[] = $Entidad->getJSON();
+        }
+
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+    }
+
+    /**
      * Funcion que devuelve el arreglo de todas las entidades
      * en formato JSON para ser enviado a la vista.
      * 
@@ -517,15 +541,7 @@ class CatalogoManager {
         $nombreFuncion = 'get'.$nombreEntidad;
         $arrEntidad = $this->$nombreFuncion();
 
-        $output = [];
-        
-        foreach($arrEntidad as $Entidad){
-            $output[] = $Entidad->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
+        return $this->arrEntidadesAJSON($arrEntidad);
     }
 
     /**

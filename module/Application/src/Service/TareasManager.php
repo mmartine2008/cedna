@@ -170,14 +170,6 @@ class TareasManager {
         $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
         $arrTareas = $this->catalogoManager->getTareasParaPlanificar($Usuario);
 
-        $output = [];
-        
-        foreach($arrTareas as $Tarea){
-            $output[] = $Tarea->getJSON();
-        }
-
-        $output = implode(", ", $output);
-
-        return '[' . $output . ']';
+        return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
     }
 }

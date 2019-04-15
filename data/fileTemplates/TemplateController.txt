@@ -1,0 +1,99 @@
+<?php
+/**
+ * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
+ * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @license   http://framework.zend.com/license/new-bsd New BSD License
+ *
+ * CONTROLADOR GENERADO DE FORMA AUTOMATICA
+ *
+ * Variables de reemplazo:
+ *  - $NombreModulo => Nombre del modulo en donde se guardará el Controlador. Comienza con Mayuscula.
+ *  - $NombreEntidad => Nombre de la entidad del cual se está creando el ABM.  Comienza con Mayuscula.
+ *  - $nombre_entidad => Nombre de la entidad del cual se está creando el ABM.  Todo en minuscula.
+ */
+
+namespace $NombreModulo\Controller;
+
+use Application\Controller\CednaController;
+use Zend\View\Model\ViewModel;
+
+class $NombreEntidadController extends CednaController
+{
+    private $$nombre_entidadManager;
+
+    public function __construct($catalogoManager, $userSessionManager, $$nombre_entidadManager, $translator)
+    {
+        parent::__construct($catalogoManager, $userSessionManager, $translator);
+
+        $this->$nombre_entidadManager = $$nombre_entidadManager;
+    }
+
+    public function indexAction()
+    {
+        $this->cargarAccionesDisponibles('abm $nombre_entidad');
+        
+        $arr$NombreEntidadJSON = $this->catalogoManager->getArrEntidadJSON('$NombreEntidad');
+
+        return new ViewModel([
+            'arr$NombreEntidadJSON' => $arr$NombreEntidadJSON
+        ]);
+    }
+
+    public function altaAction(){
+        $this->cargarAccionesDisponibles('abm $nombre_entidad - alta');
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->$nombre_entidadManager->altaEdicion$NombreEntidad($JsonData);
+
+            $this->redirect()->toRoute("$nombre_entidad", ["action" => "index"]);
+        }
+
+        $view = new ViewModel();
+        
+        $view->setVariable('$NombreEntidadJson', '""');
+        $view->setTemplate('application/$nombre_entidad/alta-$nombre_entidad.phtml');
+        
+        return $view;
+    }
+
+    public function editarAction(){
+        $this->cargarAccionesDisponibles('abm $nombre_entidad - edicion');
+        $parametros = $this->params()->fromRoute();
+
+        $id$NombreEntidad = $parametros['id'];
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->$nombre_entidadManager->altaEdicion$NombreEntidad($JsonData, $id$NombreEntidad);
+
+            $this->redirect()->toRoute("$nombre_entidad",["action" => "index"]);
+        }
+
+        $view = new ViewModel();
+        
+        $$NombreEntidad = $this->catalogoManager->get$NombreEntidad($id$NombreEntidad);
+
+        $view->setVariable('$NombreEntidadJson', $$NombreEntidad->getJSON());
+        $view->setTemplate('application/$nombre_entidad/editar-$nombre_entidad.phtml');
+        
+        return $view;
+    }
+    
+    public function borrarAction(){
+        $parametros = $this->params()->fromRoute();
+
+        $id$NombreEntidad = $parametros['id'];
+
+        $mensaje = $this->$nombre_entidadManager->borrarOperarios($id$NombreEntidad);
+
+        //Todavia no hay para mostrar mensajes
+        return $this->redirect()->toRoute("$nombre_entidad",["action" => "index"]);
+    } 
+
+}
