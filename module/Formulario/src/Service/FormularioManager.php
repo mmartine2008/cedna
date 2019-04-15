@@ -110,6 +110,20 @@ class FormularioManager {
     }
 
     /**
+     * Esta funcion recupera el listado de tareas para ejecutar del usuario conectado.
+     * Lo retorna transformado en JSON.
+     *
+     * @param [type] $nombreUsuario
+     * @return void
+     */
+    public function getArrTareasParaEjecutar($nombreUsuario){
+        $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
+        $arrTareas = $this->catalogoManager->getTareasParaEjecutar($Usuario);
+
+        return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
+    }
+
+    /**
      * Funcion que asignar un formulario a una planificacion.
      *
      * @param [JSON] $JsonData

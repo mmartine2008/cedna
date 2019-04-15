@@ -29,8 +29,8 @@ class FormularioController extends BaseFormularioController
         $this->cargarAccionesDisponibles('formularios - para cargar');
         $OperacionesJSON = $this->recuperarOperacionesIniciales('formularios - para cargar');
 
-        //Actualmente mostrará todas las planificaciones de todas las tareas creadas sin filtro alguno
-        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
+        $nombreUsuario = $this->userSessionManager->getUserName();
+        $arrTareasJSON = $this->FormularioManager->getArrTareasParaEjecutar($nombreUsuario);
 
         return new ViewModel([
             "OperacionesJSON" => $OperacionesJSON,
