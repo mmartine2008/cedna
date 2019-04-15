@@ -300,15 +300,15 @@ class Pregunta
         return '{' . $output . '}';
     }
 
-    public function getScript(){
-        $descripcion = "";
-        $idTipoPregunta = "";
-        $opciones = "";
-        $funcion = "";
-        // INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ($descripcion, $idTipoPregunta, $opciones);
-        // INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ($descripcion, $idTipoPregunta, $opciones);
+    // public function getScript(){
+    //     $descripcion = "";
+    //     $idTipoPregunta = "";
+    //     $opciones = "";
+    //     $funcion = "";
+    //     // INSERT Pregunta(Descripcion, idTipoPregunta, Opciones, Funcion) VALUES ($descripcion, $idTipoPregunta, $opciones);
+    //     // INSERT Pregunta(Descripcion, idTipoPregunta, Opciones) VALUES ($descripcion, $idTipoPregunta, $opciones);
 
 
-    }
+    // }
 
 }

@@ -106,6 +106,17 @@ class ConfigFormularioManager{
 
         return $mensaje;
     }
+
+    public function clonarFormulario($idFormulario) {
+        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
+        
+        $script = $Formulario->getScript();
+
+       
+
+        $this->entityManager->persist($Formulario);
+        $this->entityManager->flush();
+    }
     
     public function altaSecciones($jsonData, $idFormulario){
         $Seccion = new Seccion();
@@ -229,7 +240,7 @@ class ConfigFormularioManager{
 
     public function altaEdicionPreguntas($jsonData, $idPregunta = null){
         if ($idPregunta){
-            $Pregunta = $this->catalogoManager->getPregunta($idPregunta);
+            $Pregunta = $this->catalogoManager->getPreguntas($idPregunta);
         }else{
             $Pregunta = new Pregunta();
         }
@@ -254,5 +265,24 @@ class ConfigFormularioManager{
         if($jsonData->opcion != '') {
             $this->crearOpciones($jsonData->opcion, $Pregunta);            
         }
+    }
+
+    public function borrarPreguntas($idPregunta){
+        $Pregunta = $this->catalogoManager->getPreguntas($idPregunta);
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Pregunta);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la pregunta correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La pregunta no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }

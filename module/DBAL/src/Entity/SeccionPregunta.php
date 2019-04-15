@@ -124,4 +124,15 @@ class SeccionPregunta
         
         return '{' . $output . '}';
     }
+
+    public function getScript(){
+        $seccion = $this->getSeccion()->getId();
+        $pregunta = $this->getPregunta()->getId();
+        $required = $this->getRequerido();
+        
+        $script = "";
+        $script .= 'INSERT INTO cedna.app.SeccionPregunta (IdSeccion,IdPregunta,Required) VALUES ('.$seccion.','.$pregunta.','.$required.');';
+        
+        return $script;
+    }
 }

@@ -162,4 +162,22 @@ class Formulario
         return '{' . $output . '}';
     }
 
+    public function getScript(){
+        $nombre = $this->getNombre();
+        $descripcion = $this->getDescripcion();
+        
+        $script = "";
+        $script .= 'INSERT INTO cedna.dbo.Formulario (Descripcion,Nombre) VALUES ('.$nombre.','.$descripcion.';';
+        
+        $secciones = [];
+        foreach ($this->getSecciones() as $seccion) {
+            $secciones[] = $seccion->getScript();
+        }
+        $secciones = implode("; ", $secciones);
+
+        $script .= $secciones.';';
+
+        return $script;
+    }
+
 }

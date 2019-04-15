@@ -159,4 +159,23 @@ class Seccion
         return '{' . $output . '}';
     }
 
+    public function getScript(){
+        $formulario = $this->getFormulario()->getId();
+        $nombre = $this->getNombre();
+        $descripcion = $this->getDescripcion();
+        
+        $script = "";
+        $script .= 'INSERT INTO cedna.app.Seccion (IdFormulario,Nombre,Descripcion) VALUES ('.$formulario.','.$nombre.','.$descripcion.');';
+
+        $seccionPreguntas = [];
+        foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
+            $seccionPreguntas[] = $seccionPregunta->getScript();
+        }
+        $seccionPreguntas = implode("; ", $seccionPreguntas);
+
+        $script .= $seccionPreguntas.';';
+
+        return $script;
+    }
+
 }

@@ -287,4 +287,15 @@ class Formulario extends \DBAL\Entity\Formulario implements \Doctrine\ORM\Proxy\
         return parent::getJSON();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getScript()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScript', []);
+
+        return parent::getScript();
+    }
+
 }

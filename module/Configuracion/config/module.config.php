@@ -99,12 +99,12 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'secciones' => [
+                    'preguntas' => [
                         'type' => Segment::class,
                         'options' => [
-                            'route' => '/secciones[/:action[/:id]]',
+                            'route' => '/preguntas[/:action[/:id]]',
                             'defaults' => [
-                                'controller' => Controller\ConfigFormularioController::class,
+                                'controller' => Controller\ConfigPreguntaController::class,
                                 'action'     => 'index',
                             ],
                         ],
@@ -127,6 +127,7 @@ return [
             Controller\ConfigNotifXPerfilController::class => Controller\Factory\ConfigNotifXPerfilControllerFactory::class,
             Controller\ConfigParametrosController::class => Controller\Factory\ConfigParametrosControllerFactory::class,
             Controller\ConfigFormularioController::class => Controller\Factory\ConfigFormularioControllerFactory::class,
+            Controller\ConfigPreguntaController::class => Controller\Factory\ConfigPreguntaControllerFactory::class,  
         ],
     ],
     'service_manager' => [
