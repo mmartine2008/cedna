@@ -49,6 +49,7 @@ VALUES (1067,'secciones - alta','Alta de Sección','permisos zoom',1066,0);
 
 INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden)
 VALUES (1067,'secciones - edicion','Editar Sección','permisos zoom',1066,0); 
+
 SET IDENTITY_INSERT cedna.app.Operacion OFF;
 
 SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil ON;
