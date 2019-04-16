@@ -17,9 +17,14 @@ class UserManagerFactory
         if (!(isset($config['smtp_options'])))
         {
             // throw new \Exception("Opciones de envio de correo (SMTP) no definidas", 1);
-        }        
+        } 
+        
+        if (!(isset($config['datos_empresa'])))
+        {
+            // throw new \Exception("Opciones de envio de correo (SMTP) no definidas", 1);
+        } 
             
         $perfilesManager = $container->get(PerfilesManager::class);
-        return new UserManager($entityManager, $config['smtp_options'], $perfilesManager);
+        return new UserManager($entityManager, $config['smtp_options'], $perfilesManager, $config['datos_empresa']);
     }
 }

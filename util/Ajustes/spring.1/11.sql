@@ -39,16 +39,16 @@ INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden,url)
 VALUES (1064,'formulario','Configuración de formularios','permisos zoom',5,0,'configuracion/formularios'); 
 
 INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden,url)
-VALUES (1065,'formularios - alta','Alta de Formulario','permisos zoom',1064,0,'configuracion/formularios/alta-formulario'); 
+VALUES (1065,'formularios - alta','Alta de Formulario',NULL,1064,0,'configuracion/formularios/alta-formulario'); 
 
 INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden)
-VALUES (1066,'formularios - edicion','Edición de Formulario','permisos zoom',1064,0); 
+VALUES (1066,'formularios - edicion','Edición de Formulario',NULL,1064,0); 
 
 INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden)
-VALUES (1067,'secciones - alta','Alta de Sección','permisos zoom',1066,0); 
+VALUES (1067,'secciones - alta','Alta de Sección',NULL,1066,0); 
 
 INSERT INTO cedna.app.Operacion (Id,nombre,titulo,icono,grupoId,orden)
-VALUES (1067,'secciones - edicion','Editar Sección','permisos zoom',1066,0); 
+VALUES (1068,'secciones - edicion','Editar Sección',NULL,1066,0); 
 
 SET IDENTITY_INSERT cedna.app.Operacion OFF;
 

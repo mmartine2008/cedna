@@ -38,14 +38,18 @@ class UserManager
     
     private $perfilesManager;
 
+    private $datos_empresa;
+
+
     /**
      * Constructor del Servicio
      */
-    public function __construct($entityManager, $options, $perfilesManager) 
+    public function __construct($entityManager, $options, $perfilesManager, $datosEmpresa) 
     {
         $this->entityManager = $entityManager;
         $this->smtp_options = $options;
         $this->perfilesManager = $perfilesManager;
+        $this->datos_empresa = $datosEmpresa;
     }
     
     /**
@@ -226,6 +230,11 @@ class UserManager
     public function getSMTPOptions()
     {
         return $this->smtp_options;
+    }
+
+    public function getDatosEmpresa()
+    {
+        return $this->datos_empresa;
     }
     
     public function sendMailPrueba($datos)
