@@ -9,7 +9,7 @@ class CednaTcpdf extends \TCPDF
 
     public function Header() {
         // Logo
-        $this->Image($this->getLogo(), 20, 15, 30, '', 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image('./public/'.$this->getLogo(), 20, 15, 27, '', 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
        
 
         $this->SetFont('helvetica', '', 15);

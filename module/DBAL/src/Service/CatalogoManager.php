@@ -495,6 +495,12 @@ class CatalogoManager {
         return $Tareas;
     }
 
+    public function getPlanificacionPorRelevamiento($Relevamiento) {
+        $Planificacion = $this->entityManager->getRepository(Planificaciones::class)->findOneBy(['Relevamiento' => $Relevamiento]);
+
+        return $Planificacion;
+    }
+
     /**
      * Funcion generica que busca una Entidad en particular, si se pasa el ID
      * como parametro, o de lo contrario recupera todas las entidades disponibles.
@@ -549,7 +555,6 @@ class CatalogoManager {
 
         return $this->arrEntidadesAJSON($arrEntidad);
     }
-
 
     public function getArrTareasPorSolicitanteJSON($Usuario){
         $arrTareas = $this->getTareasPorSolicitante($Usuario);

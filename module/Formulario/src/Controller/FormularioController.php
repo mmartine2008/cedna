@@ -151,6 +151,7 @@ class FormularioController extends BaseFormularioController
         $this->redirect()->toRoute("formulario", ["action" => "paraCargar"]);
     }
 
+    
     public function imprimirAction() {
         $datos_empresa = $this->FormularioManager->getDatosEmpresa();
         $fecha_hoy = date("d/m/Y  H:i:s");
@@ -163,6 +164,7 @@ class FormularioController extends BaseFormularioController
         $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
         $data = $this->FormularioManager->getRespuestas($Relevamiento);
         $nombreUsuario = $this->catalogoManager->getUsuarioPorRelevamiento($idRelevamiento);
+        $Planificacion = $this->catalogoManager->getPlanificacionPorRelevamiento($Relevamiento);
         
         $view = new ViewModel();
 
@@ -187,16 +189,12 @@ class FormularioController extends BaseFormularioController
         $pdf->AddPage('P', 'A4');
         $pdf->writeHTML($html, true, false, true, false, '');
         
-        $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
-        $pdf->SetFont('helvetica', 'BI', 14);
-        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'L');
-        $pdf->Ln(5);
-
-        $color = true;
-        foreach ($data['secciones'] as $seccion) {
-            $color = $this->imprimirSecciones($pdf, $seccion, $color);
-        }
-
+        $Tarea = $Planificacion->getTarea();
+        $this->imprimirInformacionTarea($pdf, json_decode($Tarea->getJSON()));
+        // var_dump(json_decode($Tarea->getJSON()));
+        $this->imprimirInformacionPlanificacion($pdf, json_decode($Planificacion->getJSON()));
+        $this->imprimirFormulario($pdf, $data);
+    
         $pdf->Ln(5);
         $pdf->SetFont('helvetica', 'I', 8);
         $pdf->Cell(0, 5, "Emitido por ".$nombreUsuario." - Cedna Software - ".$fecha_hoy, 0, 1, 'R');
