@@ -70,8 +70,8 @@ class OperariosManager {
         return $mensaje;
     }
 
-    public function getArrOperariosJSON($UsuarioActivo){
-        $arrOperarios = $this->catalogoManager->getOperariosPorContratista($UsuarioActivo);
+    public function getArrOperariosJSON(){
+        $arrOperarios = $this->catalogoManager->getOperarios();
 
         $output = [];
         foreach($arrOperarios as $Operario){

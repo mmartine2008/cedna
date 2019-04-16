@@ -489,6 +489,12 @@ class CatalogoManager {
         return $Planificacion->getTarea()->getSolicitante()->getNombreUsuario();
     }
 
+    public function getTareasPorSolicitante($Usuario) {
+        $Tareas = $this->entityManager->getRepository(Tareas::class)->findBy(['Solicitante' => $Usuario]);
+
+        return $Tareas;
+    }
+
     /**
      * Funcion generica que busca una Entidad en particular, si se pasa el ID
      * como parametro, o de lo contrario recupera todas las entidades disponibles.
@@ -542,6 +548,20 @@ class CatalogoManager {
         $arrEntidad = $this->$nombreFuncion();
 
         return $this->arrEntidadesAJSON($arrEntidad);
+    }
+
+
+    public function getArrTareasPorSolicitanteJSON($Usuario){
+        $arrTareas = $this->getTareasPorSolicitante($Usuario);
+
+        $output = [];
+        foreach($arrTareas as $Tarea){
+            $output[] = $Tarea->getJSON();
+        }
+
+        $output = implode(',', $output);
+
+        return '[' . $output . ']';
     }
 
     /**

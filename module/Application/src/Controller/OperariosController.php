@@ -133,9 +133,8 @@ class OperariosController extends CednaController
         }
 
         $userName = $this->userSessionManager->getUserName();
-        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
 
-        $arrOperariosJSON = $this->operariosManager->getArrOperariosJSON($UsuarioActivo);
+        $arrOperariosJSON = $this->operariosManager->getArrOperariosJSON();
 
         return new ViewModel([
             'arrOperariosJSON' => $arrOperariosJSON,
