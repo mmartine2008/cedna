@@ -73,7 +73,7 @@ return [
         // 'name' => 'Coca-Cola',
         // 'phone' => '+5492262772277',
         // 'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
-        'name' => 'Arcor San Pedro',
+        'name' => 'ARCOR SAN PEDRO',
         'phone' => '+5492262772277',
         'logo' => 'img/logo_arcor.png',
     ],

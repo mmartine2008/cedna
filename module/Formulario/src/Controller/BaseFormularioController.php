@@ -43,29 +43,29 @@ class BaseFormularioController extends CednaController
         foreach($respuestas as $respuesta) {
             $output[] = $respuesta['respuesta'];
         }
+
         return $output;
     }
 
-    protected function imprimirSelectoresMultiples($respuesta, $pdf, $color) {
+    protected function getStringRespuestas($respuestas) {
+        $output = [];
+        foreach($respuestas as $respuesta) {
+            $output[] = $respuesta['respuesta'];
+        }
+
+        $string = implode(" - ", $output);
+        return $string;
+    }
+
+    protected function imprimirSelectoresMultiples($respuesta, $pdf) {
+        $this->insertarSaltoPagina($pdf, 40);                
         $respuestas = $respuesta['respuesta'];
         foreach($respuestas as $resp) {
-            $pdf->SetFont('helvetica', 'I', 10);
-            $list = $this->getListaRespuestas($resp['respuestas']);
+            $string = $this->getStringRespuestas($resp['respuestas']);
             $listaDestinos = $this->getDestinos();
-            $pdf->Cell(40, 5, $listaDestinos[1]);
-            $pdf->Ln(6);
-            foreach ($list as $valor) {
-                if($color) {
-                    $pdf->SetTextColor(0, 0, 0, 70);
-                } else {
-                    $pdf->SetTextColor(0, 0, 0, 100);
-                }
-                $pdf->SetFont('helvetica', '', 10);
-                $pdf->Cell(25, 5, "");
-                $pdf->Cell(100, 5, "- ".$valor);
-                $pdf->Ln(5);
-                $color = !$color;
-            }
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->MultiCell(0, 10, $string."\n", 1, 'L', 0, 0, '' ,'', true);
+            $pdf->Ln(7);
         }
     }
 
@@ -76,12 +76,12 @@ class BaseFormularioController extends CednaController
         $urlImagen = $name;
         $file_ext = pathinfo($nombreArchivo, PATHINFO_EXTENSION);
         $pdf->Cell(50, 5,  $descripcion);
-        $pdf->Image($urlImagen, "", "", "30", '', $file_ext, '', '', false, 300, '', false, false, 0, false, false, false);        
+        $pdf->Image($urlImagen, "", "", 40, 40, $file_ext, '', '', false, 300, '', false, false, 0, false, false, false);        
         $pdf->SetFont('helvetica', '', 10);
-        $pdf->Ln(50);
+        $pdf->Ln(45);
     }
 
-    protected function imprimirPregunta($respuesta, $pdf, $descripcion, $color){
+    protected function imprimirPregunta($respuesta, $pdf, $descripcion){
         if($respuesta['archivo'] == "") {
             $pdf->Cell(50, 5,  $descripcion);
             $pdf->SetFont('helvetica', '', 10);
@@ -97,28 +97,26 @@ class BaseFormularioController extends CednaController
         } else {
             $this->mostrarImagen($respuesta['archivo'], $pdf, $descripcion, $respuesta);
         }
-        return !$color;
     }
 
     protected function imprimirPreguntas($respuestas, $pdf, $seccion, $color){
-        $pdf->SetFont('helvetica', 'B', 11);
+        $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
         $pdf->Ln(8);
     
         foreach ( $respuestas as $respuestaxRespuesta) { 
             foreach ( $respuestaxRespuesta as $respuesta) { 
-                if($color) {
-                    $pdf->SetTextColor(0, 0, 0, 70);
-                } else {
-                    $pdf->SetTextColor(0, 0, 0, 100);
-                }
-                $pdf->SetFont('helvetica', 'I', 10);
+                $pdf->SetFont('helvetica', 'B', 10);
                 $descripcion = $respuesta['descripcionPregunta'];
-                if($descripcion == '') { $descripcion = ' ';}
-                if($respuesta['tipoPregunta'] == 'multiple') {
-                    $color = $this->imprimirSelectoresMultiples($respuesta, $pdf, $color);
+                if($descripcion == '') { 
+                    $descripcion = ' ';
                 } else {
-                    $color = $this->imprimirPregunta($respuesta, $pdf, $descripcion, $color);
+                    $descripcion = $descripcion.":  ";
+                }
+                if($respuesta['tipoPregunta'] == 'multiple') {
+                    $this->imprimirSelectoresMultiples($respuesta, $pdf);
+                } else {
+                    $this->imprimirPregunta($respuesta, $pdf, $descripcion);
                 }
             }
         }
@@ -134,8 +132,8 @@ class BaseFormularioController extends CednaController
                 if($i+3 >= count($list)) {
                     if($modulo == 2) {
                         $pdf->Cell(30, 5,  "");
-                        $pdf->Cell(60, 5,  "__________________");
-                        $pdf->Cell(60, 5,  "__________________");
+                        $pdf->Cell(60, 5,  "____________________");
+                        $pdf->Cell(60, 5,  "____________________");
                         $pdf->Ln(5);
 
                         $pdf->Cell(40, 5,  "");
@@ -143,7 +141,7 @@ class BaseFormularioController extends CednaController
                         $pdf->Cell(60, 5,  $list[$i+1]);
                     } else {
                         $pdf->Cell(70, 5,  "");
-                        $pdf->Cell(60, 5,  "__________________");
+                        $pdf->Cell(60, 5,  "____________________");
                         $pdf->Ln(5);
 
                         $pdf->Cell(80, 5,  "");
@@ -151,9 +149,9 @@ class BaseFormularioController extends CednaController
                     }
                 } else {
                     $pdf->Cell(13, 5,  "");
-                    $pdf->Cell(60, 5,  "__________________");
-                    $pdf->Cell(60, 5,  "__________________");
-                    $pdf->Cell(60, 5,  "__________________");
+                    $pdf->Cell(60, 5,  "____________________");
+                    $pdf->Cell(60, 5,  "____________________");
+                    $pdf->Cell(60, 5,  "____________________");
                     $pdf->Ln(5);
 
                     $pdf->Cell(20, 5,  "");
@@ -174,15 +172,18 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    protected function imprimirFirmas($respuestas, $pdf, $seccion) {
-        $pdf->Ln(10);
+    private function insertarSaltoPagina($pdf, $size){
         $posicionY = $pdf->GetY();
         $tamanio_pagina = $pdf->getPageHeight() ;
-
-        if ($tamanio_pagina - $posicionY <= 80) { 
+        if ($tamanio_pagina - $posicionY <= $size) { 
             $pdf->AddPage(); 
         }
-        $pdf->SetFont('helvetica', 'B', 11);
+    }
+
+    protected function imprimirFirmas($respuestas, $pdf, $seccion) {
+        $pdf->Ln(10);
+        $this->insertarSaltoPagina($pdf, 80);
+        $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
         $pdf->Ln(8);
 
@@ -199,7 +200,7 @@ class BaseFormularioController extends CednaController
         $pdf->SetTextColor(0, 0, 0, 100);
         $respuestas = $seccion['respuestas'];
         $pdf->Ln(5);
-        
+
         if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
             $this->imprimirFirmas($respuestas, $pdf, $seccion);
         } else {
@@ -210,9 +211,8 @@ class BaseFormularioController extends CednaController
 
     protected function imprimirFormulario($pdf, $data) {
         $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
-        $pdf->SetFont('helvetica', 'BI', 14);
-        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'L');
-        $pdf->Ln(5);
+        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'C');
 
         $color = true;
         foreach ($data['secciones'] as $seccion) {
@@ -222,82 +222,92 @@ class BaseFormularioController extends CednaController
 
     private function imprimirDetallesPlanificacion($pdf, $Planificacion) {
         $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Planificación: ");
-        $pdf->Cell(45, 5, $Planificacion->titulo);
-        $pdf->Ln(6);
 
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Observaciones: ");
-        $pdf->Cell(45, 5, $Planificacion->observaciones);
-        $pdf->Ln(6);
+        $y = $pdf->getY();
+        $left_column = "<b>Planificación:  </b> ".$Planificacion->titulo;
+        $pdf->writeHTMLCell(0, '', '', $y, $left_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(2);
+        
+        $y = $pdf->getY();
+        $left_column = "<b>Observaciones:  </b> ".$Planificacion->observaciones;
+        $pdf->writeHTMLCell(0, '', '', $y, $left_column, 0, 1, 0, true, 'L', true);
+        $y_fin = $pdf->getY();
+        $pdf->Ln(2);
 
-
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Fecha de Inicio: ");
+        $y = $pdf->getY();
         $time = strtotime($Planificacion->fechaInicio);
-        $resp = date('d/m/Y',$time);
-        $pdf->Cell(45, 5, $resp);
-        $pdf->Ln(6);
+        $date = date('d/m/Y',$time);
+        $left_column = "<b>Fecha de Inicio: </b>  ".$date;
 
-        $pdf->Cell(50, 5,  "Fecha de Finalización: ");
         $time = strtotime($Planificacion->fechaFin);
-        $resp = date('d/m/Y',$time);
-        $pdf->Cell(45, 5, $resp);
-        $pdf->Ln(6);
+        $date = date('d/m/Y',$time);
+        $right_column = "<b>Fecha de Finalización: </b>  ".$date;
 
-        $pdf->Cell(50, 5,  "Hora de Inicio: ");
+        $pdf->writeHTMLCell(80, '', '', $y, $left_column, 0, 0, 0, true, 'L', true);
+        $pdf->writeHTMLCell(80, '', '', '', $right_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(2);
+
+        $y = $pdf->getY();
         $time = strtotime($Planificacion->horaInicio);
-        $resp = date('H:m',$time);
-        $pdf->Cell(45, 5, $resp);
-        $pdf->Ln(10);
+        $date = date('H:m',$time);
+        $left_column = "<b>Hora de Inicio: </b>  ".$date;
+
+        $time = strtotime($Planificacion->horaFin);
+        $date = date('H:m',$time);
+        $right_column = "<b>Hora de Finalización: </b>  ".$date;
+        
+        $pdf->writeHTMLCell(80, '', '', $y, $left_column, 0, 0, 0, true, 'L', true);
+        $pdf->writeHTMLCell(80, '', '', '', $right_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(5);
+
+        $html ='<hr>';
+        $pdf->writeHTML($html, true, false, true, false, '');
     }
 
     protected function imprimirInformacionPlanificacion($pdf, $Planificacion) {
-        $pdf->SetFont('helvetica', 'BI', 14);
-        $pdf->Cell(0, 5, "Detalles de la Planificación", 0, 1, 'L');
+        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->Cell(0, 5, "Detalles de la Planificación", 0, 1, 'C');
         $pdf->Ln(5);
         $this->imprimirDetallesPlanificacion($pdf, $Planificacion);
-
     }
 
     private function imprimirDetallesObra($pdf, $Tarea) {
         //ver si poner nodo y si esta bien planificaTarea
         $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Usuario que planifica la Obra: ");
-        $pdf->Cell(45, 5, $Tarea->planificaTarea->nombre);
-        $pdf->Ln(6);
+        
+        $y = $pdf->getY();
+        $left_column = "<b>Usuario que planifica la Obra: </b>  ".$Tarea->planificaTarea->nombre;
+        $right_column = "<b>Solicitante: </b>  ".$Tarea->solicitante->nombre;
+        $pdf->writeHTMLCell(80, '', '', $y, $left_column, 0, 0, 0, true, 'L', true);
+        $pdf->writeHTMLCell(80, '', '', '', $right_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(2);
 
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Solicitante: ");
-        $pdf->Cell(45, 5, $Tarea->solicitante->nombre);
-        $pdf->Ln(6);
+        $y = $pdf->getY();
+        $left_column = "<b>Ejecutor:  </b> ".$Tarea->ejecutor->nombre;
+        $right_column = "<b>Responsable: </b>  ".$Tarea->responsable->nombre;
+        $pdf->writeHTMLCell(80, '', '', $y, $left_column, 0, 0, 0, true, 'L', true);
+        $pdf->writeHTMLCell(80, '', '', '', $right_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(5);
 
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Ejecutor: ");
-        $pdf->Cell(45, 5, $Tarea->ejecutor->nombre);
-        $pdf->Ln(6);
+        $y = $pdf->getY();
+        $left_column = "<b>Descripcion:  </b> ".$Tarea->descripcion;
+        $pdf->writeHTMLCell(0, '', '', $y, $left_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(2);
 
+        $y = $pdf->getY();
+        $left_column = "<b>Tipo de Planificacion: </b>  ".$Tarea->tipoPlanificacion->descripcion;
+        $pdf->writeHTMLCell(0, '', '', $y, $left_column, 0, 1, 0, true, 'L', true);
+        $pdf->Ln(5);
 
-        $pdf->SetFont('helvetica', '', 10);
-        $pdf->Cell(50, 5,  "Responsable: ");
-        $pdf->Cell(45, 5, $Tarea->responsable->nombre);
-        $pdf->Ln(6);
-
-        $pdf->Cell(50, 5,  "Descripcion: ");
-        $pdf->Cell(45, 5, $Tarea->descripcion);
-        $pdf->Ln(6);
-
-        $pdf->Cell(50, 5,  "Tipo de Planificacion: ");
-        $pdf->Cell(45, 5, $Tarea->tipoPlanificacion->descripcion);
-        $pdf->Ln(10);
+        $html ='<hr>';
+        $pdf->writeHTML($html, true, false, true, false, '');
     }
 
     protected function imprimirInformacionTarea($pdf, $Tarea) {
-        $pdf->SetFont('helvetica', 'BI', 14);
-        $pdf->Cell(0, 5, "Detalles de la Obra", 0, 1, 'L');
+        $pdf->SetFont('helvetica', 'B', 14);
+        $pdf->Cell(0, 5, "Detalles de la Obra", 0, 1, 'C');
         $pdf->Ln(5);
         $this->imprimirDetallesObra($pdf, $Tarea);
-
     }
     
 }

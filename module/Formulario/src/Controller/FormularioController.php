@@ -178,13 +178,15 @@ class FormularioController extends BaseFormularioController
 
         $pdf->SetFont('helvetica', '', 8, '', false);
 
-        $pdf->SetMargins(PDF_MARGIN_LEFT, 40, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 43, PDF_MARGIN_RIGHT);
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
+        $descripcion = "PERMISO INTEGRAL PARA TRABAJOS SEGUROS";
         $pdf->setTitulo($titulo);
         $pdf->setFechaEmision($fecha_emision);
         $pdf->setLogo($logo);
+        $pdf->setDescripcion($descripcion);
         
         $pdf->AddPage('P', 'A4');
         $pdf->writeHTML($html, true, false, true, false, '');
