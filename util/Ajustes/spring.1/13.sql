@@ -49,4 +49,8 @@ VALUES (1255,1064,8,1,'preClonar()',NULL,4,'botonClonar');
 
 SET IDENTITY_INSERT cedna.app.OperacionAccionPerfil OFF;
 
+UPDATE app.OperacionAccionPerfil
+SET urlDestino = 'formulario/para-cargar'
+WHERE IdOperacion = 32 AND IdAccion = 1;
+
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('13.sql', GETDATE ( ), 1, 13);
