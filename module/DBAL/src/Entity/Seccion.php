@@ -12,6 +12,8 @@ use DBAL\Entity\Pregunta;
  */
 class Seccion
 {
+    const ID_SECCION_FIRMAS = [17, 18, 19];
+
     /**
      * @ORM\Id
      * @ORM\Column(name="IdSeccion", type="integer")
@@ -142,6 +144,10 @@ class Seccion
         return $this;
     }
 
+    public function esSeccionFirmas(){
+        return (\in_array($this->id, SELF::ID_SECCION_FIRMAS));
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -154,7 +160,8 @@ class Seccion
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"preguntas": ['.$seccionPreguntas.']';
+        $output .= '"preguntas": ['.$seccionPreguntas.'], ';
+        $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'"';
 
         return '{' . $output . '}';
     }

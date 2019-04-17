@@ -268,11 +268,11 @@ function dibujarSelectSolicitante(){
     }
 }
 
-function tienePerfilComitente(arrPerfiles){
+function tienePerfilComitenteContratista(arrPerfiles){
     for (var i = 0; i < arrPerfiles.length; i++){
         var perfil = arrPerfiles[i];
 
-        if (perfil.nombre == 'Comitente'){
+        if (perfil.esComitente == '1' || perfil.esContratista == '1'){
             return true;
         }
     }
@@ -382,7 +382,7 @@ function dibujarSelectEjecutor(){
     for (var i = 0; i < arrUsuariosJSON.length; i++){
         var usuario = arrUsuariosJSON[i];
 
-        if (tienePerfilComitente(usuario.perfiles)){
+        if (tienePerfilComitenteContratista(usuario.perfiles)){
             var option = $("<option></option>")
                             .attr("value", i)
                             .text(usuario.nombre + ', ' + usuario.apellido);

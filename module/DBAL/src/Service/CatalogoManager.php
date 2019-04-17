@@ -39,6 +39,7 @@ use DBAL\Entity\Parametros;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
+use DBAL\Entity\NodosFirmantesRelevamiento;
 
 class CatalogoManager {
     
@@ -652,5 +653,19 @@ class CatalogoManager {
             $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getNombre()];
         }
         return $resultado;
+    }
+
+    public function getNodosFirmantesPorRelevamiento($Relevamiento){
+        $NodosFirmantesRelevamiento = $this->entityManager->getRepository(NodosFirmantesRelevamiento::class)
+                                                            ->findBy(['Relevamiento' => $Relevamiento]);
+    
+        return $NodosFirmantesRelevamiento;
+    }
+
+    public function getNodoFirmantePorRelevamientoYNodo($Relevamiento, $Nodo){
+        $NodosFirmantesRelevamiento = $this->entityManager->getRepository(NodosFirmantesRelevamiento::class)
+                                                            ->findOneBy(['Relevamiento' => $Relevamiento, 'Nodo' => $Nodo]);
+    
+        return $NodosFirmantesRelevamiento;
     }
 }

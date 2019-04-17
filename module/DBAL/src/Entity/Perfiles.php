@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Perfiles
 {
+    const ID_CONTRATISTA = 3;
+    CONST ID_COMITENTE = 5;
+
     /**
      * @ORM\Id
      * @ORM\Column(name="IdPerfil", type="integer")
@@ -52,11 +55,21 @@ class Perfiles
         return $this->Nombre;
     }
 
+    public function esComitente(){
+        return ($this->id == SELF::ID_COMITENTE);
+    }
+
+    public function esContratista(){
+        return ($this->id == SELF::ID_CONTRATISTA);
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
-        $output .= '"nombre": "' . $this->getNombre() .'"';
+        $output .= '"nombre": "' . $this->getNombre() .'", ';
+        $output .= '"esComitente": "' . $this->esComitente() .'", ';
+        $output .= '"esContratista": "' . $this->esContratista() .'"';
         return '{' . $output . '}';
     }
 }

@@ -11,6 +11,7 @@ use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\EstadosRelevamiento;
+use DBAL\Entity\NodosFirmantesRelevamiento;
 
 
 class FormularioManager {
@@ -758,6 +759,31 @@ class FormularioManager {
         $this->entityManager->flush();
     }
 
+    private function vaciarNodosFirmantes($Relevamiento){
+        $arrNodosFirmantes = $this->catalogoManager->getNodosFirmantesPorRelevamiento($Relevamiento);
+
+        foreach($arrNodosFirmantes as $NodoFirmanteRelevamiento){
+            $this->elminarEntidad($NodoFirmanteRelevamiento);
+        }
+    }
+
+    private function AltaNodoFirmante($Relevamiento, $id_nodo){
+        $Nodo = $this->catalogoManager->getNodos($id_nodo);
+        $NodoFirmante = $this->catalogoManager->getNodoFirmantePorRelevamientoYNodo($Relevamiento, $Nodo);
+        if (!$NodoFirmante){
+            $NodoFirmante = new NodosFirmantesRelevamiento();
+
+            $NodoFirmante->setRelevamiento($Relevamiento);
+            $NodoFirmante->setNodo($Nodo);
+
+            $arrJefes = $Nodo->getJefes();
+            $NodoFirmante->setUsuarioFirmante($arrJefes[0]);
+
+            $this->entityManager->persist($NodoFirmante);
+            $this->entityManager->flush();
+        }
+    }
+
     public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
         $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
         if(($Respuesta)&& (!$destino)) { 
@@ -770,6 +796,10 @@ class FormularioManager {
             }
         } else {
             $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
+        }
+
+        if (($seccion->esSeccionFirmas()) && (strpos($destino, 'destino_1_') !== false)){
+            $this->AltaNodoFirmante($relevamiento, $opcion);
         }
     }
 
@@ -925,6 +955,8 @@ class FormularioManager {
         $secciones = $datos->secciones;
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
         $Relevamiento = $Planificacion->getRelevamiento();
+
+        $this->vaciarNodosFirmantes($Relevamiento);
         foreach ($secciones as $seccion) {
             $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }
