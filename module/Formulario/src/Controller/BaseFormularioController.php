@@ -8,6 +8,7 @@
 namespace Formulario\Controller;
 
 use Application\Controller\CednaController;
+use function GuzzleHttp\json_decode;
 
 class BaseFormularioController extends CednaController
 {
@@ -205,6 +206,98 @@ class BaseFormularioController extends CednaController
             $color = $this->imprimirPreguntas($respuestas, $pdf, $seccion, $color);
         }
         return $color;
+    }
+
+    protected function imprimirFormulario($pdf, $data) {
+        $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+        $pdf->SetFont('helvetica', 'BI', 14);
+        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'L');
+        $pdf->Ln(5);
+
+        $color = true;
+        foreach ($data['secciones'] as $seccion) {
+            $color = $this->imprimirSecciones($pdf, $seccion, $color);
+        }
+    }
+
+    private function imprimirDetallesPlanificacion($pdf, $Planificacion) {
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Planificación: ");
+        $pdf->Cell(45, 5, $Planificacion->titulo);
+        $pdf->Ln(6);
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Observaciones: ");
+        $pdf->Cell(45, 5, $Planificacion->observaciones);
+        $pdf->Ln(6);
+
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Fecha de Inicio: ");
+        $time = strtotime($Planificacion->fechaInicio);
+        $resp = date('d/m/Y',$time);
+        $pdf->Cell(45, 5, $resp);
+        $pdf->Ln(6);
+
+        $pdf->Cell(50, 5,  "Fecha de Finalización: ");
+        $time = strtotime($Planificacion->fechaFin);
+        $resp = date('d/m/Y',$time);
+        $pdf->Cell(45, 5, $resp);
+        $pdf->Ln(6);
+
+        $pdf->Cell(50, 5,  "Hora de Inicio: ");
+        $time = strtotime($Planificacion->horaInicio);
+        $resp = date('H:m',$time);
+        $pdf->Cell(45, 5, $resp);
+        $pdf->Ln(10);
+    }
+
+    protected function imprimirInformacionPlanificacion($pdf, $Planificacion) {
+        $pdf->SetFont('helvetica', 'BI', 14);
+        $pdf->Cell(0, 5, "Detalles de la Planificación", 0, 1, 'L');
+        $pdf->Ln(5);
+        $this->imprimirDetallesPlanificacion($pdf, $Planificacion);
+
+    }
+
+    private function imprimirDetallesObra($pdf, $Tarea) {
+        //ver si poner nodo y si esta bien planificaTarea
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Usuario que planifica la Obra: ");
+        $pdf->Cell(45, 5, $Tarea->planificaTarea->nombre);
+        $pdf->Ln(6);
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Solicitante: ");
+        $pdf->Cell(45, 5, $Tarea->solicitante->nombre);
+        $pdf->Ln(6);
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Ejecutor: ");
+        $pdf->Cell(45, 5, $Tarea->ejecutor->nombre);
+        $pdf->Ln(6);
+
+
+        $pdf->SetFont('helvetica', '', 10);
+        $pdf->Cell(50, 5,  "Responsable: ");
+        $pdf->Cell(45, 5, $Tarea->responsable->nombre);
+        $pdf->Ln(6);
+
+        $pdf->Cell(50, 5,  "Descripcion: ");
+        $pdf->Cell(45, 5, $Tarea->descripcion);
+        $pdf->Ln(6);
+
+        $pdf->Cell(50, 5,  "Tipo de Planificacion: ");
+        $pdf->Cell(45, 5, $Tarea->tipoPlanificacion->descripcion);
+        $pdf->Ln(10);
+    }
+
+    protected function imprimirInformacionTarea($pdf, $Tarea) {
+        $pdf->SetFont('helvetica', 'BI', 14);
+        $pdf->Cell(0, 5, "Detalles de la Obra", 0, 1, 'L');
+        $pdf->Ln(5);
+        $this->imprimirDetallesObra($pdf, $Tarea);
+
     }
     
 }

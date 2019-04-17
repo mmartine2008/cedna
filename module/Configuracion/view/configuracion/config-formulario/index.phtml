@@ -116,4 +116,13 @@
         }
     }
 
+
+    function preClonar(){
+        if (filaSeleccionada >= 0){
+            var formulario = arrFormulariosJSON[filaSeleccionada];
+
+            window.location.replace(url + "/configuracion/formularios/clonar-formulario/" + formulario.idFormulario);
+        }
+    }
+
   </script>

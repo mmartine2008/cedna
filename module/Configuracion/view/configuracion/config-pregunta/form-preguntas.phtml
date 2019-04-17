@@ -156,7 +156,7 @@
         var selectorModificado = createListFromJSONLista(selector);
         selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();
                                                };
-
+        selector.value = preguntasJson.tipoPregunta.id;
         document.getElementById('div_TipoPregunta').appendChild(selectorModificado);
     }
 
@@ -169,7 +169,5 @@
         verificarMostrarBotonVolver();
     });
 
-    function preVolver(){
-        window.location.replace(url + "/configuracion/formularios/editar-seccion/" + idSeccion);
-    }
+   
 </script>

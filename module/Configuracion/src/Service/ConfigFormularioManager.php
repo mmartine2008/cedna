@@ -42,8 +42,24 @@ class ConfigFormularioManager{
                 $this->entityManager->rollBack();
             }
         }
-        
     }
+
+    private function enlazarPregunta($Pregunta, $Seccion, $requerido) {
+        $SeccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);
+        
+        if(!$SeccionPregunta) {
+            $SeccionPregunta = new SeccionPregunta();
+            $SeccionPregunta->setSeccion($Seccion);
+            $SeccionPregunta->setPregunta($Pregunta);
+            $SeccionPregunta->setRequerido($requerido);
+
+            $this->entityManager->persist($SeccionPregunta);
+            $this->entityManager->flush();
+        } else {
+            $SeccionPregunta->setRequerido($requerido);
+        }
+    }
+
 
     public function borrarSecciones($idSeccion){
         $Seccion = $this->catalogoManager->getSecciones($idSeccion);
@@ -106,6 +122,42 @@ class ConfigFormularioManager{
 
         return $mensaje;
     }
+    // foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
+
+    private function enlazarPreguntas($SeccionesPreguntas, $SeccionClon) {
+        foreach($SeccionesPreguntas as $SeccionPregunta) {
+            $Pregunta = $SeccionPregunta->getPregunta();
+            $requerido = $SeccionPregunta->getRequerido();
+            $this->enlazarPregunta($Pregunta, $SeccionClon, $requerido);
+        }
+    }
+    public function clonarSecciones($Secciones, $Formulario){
+        foreach ($Secciones as $Seccion) {
+            $SeccionClon = new Seccion();
+            $SeccionClon->setFormulario($Formulario);
+            $SeccionClon->setNombre($Seccion->getNombre());
+            $SeccionClon->setDescripcion($Seccion->getDescripcion());
+
+            $this->entityManager->persist($SeccionClon);
+            $this->entityManager->flush();
+
+            $this->enlazarPreguntas($Seccion->getSeccionPreguntas(), $SeccionClon);
+        }
+    }
+
+    public function clonarFormulario($idFormulario) {
+        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
+        
+        $FormClon = new Formulario();
+
+        $FormClon->setNombre($Formulario->getNombre());
+        $FormClon->setDescripcion($Formulario->getDescripcion());
+
+        $this->entityManager->persist($FormClon);
+        $this->entityManager->flush();
+
+        $this->clonarSecciones($Formulario->getSecciones(), $FormClon);
+    }
     
     public function altaSecciones($jsonData, $idFormulario){
         $Seccion = new Seccion();
@@ -118,22 +170,7 @@ class ConfigFormularioManager{
         $this->entityManager->flush();
     }
 
-    private function enlazarPregunta($Pregunta, $Seccion, $requerido) {
-        $SeccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);
-        
-        if(!$SeccionPregunta) {
-            $SeccionPregunta = new SeccionPregunta();
-            $SeccionPregunta->setSeccion($Seccion);
-            $SeccionPregunta->setPregunta($Pregunta);
-            $SeccionPregunta->setRequerido($requerido);
-
-            $this->entityManager->persist($SeccionPregunta);
-            $this->entityManager->flush();
-        } else {
-            $SeccionPregunta->setRequerido($requerido);
-        }
-    }
-
+    
     private function desenlazarPregunta($Pregunta, $Seccion) {
         $seccionPregunta = $this->catalogoManager->getSeccionPregunta($Seccion, $Pregunta);        
         
@@ -229,7 +266,7 @@ class ConfigFormularioManager{
 
     public function altaEdicionPreguntas($jsonData, $idPregunta = null){
         if ($idPregunta){
-            $Pregunta = $this->catalogoManager->getPregunta($idPregunta);
+            $Pregunta = $this->catalogoManager->getPreguntas($idPregunta);
         }else{
             $Pregunta = new Pregunta();
         }
@@ -254,5 +291,24 @@ class ConfigFormularioManager{
         if($jsonData->opcion != '') {
             $this->crearOpciones($jsonData->opcion, $Pregunta);            
         }
+    }
+
+    public function borrarPreguntas($idPregunta){
+        $Pregunta = $this->catalogoManager->getPreguntas($idPregunta);
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($Pregunta);
+            $this->entityManager->flush();
+
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la pregunta correctamente';
+
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
+
+            $mensaje = 'La pregunta no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
+
+        return $mensaje;
     }
 }

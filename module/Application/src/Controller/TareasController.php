@@ -25,7 +25,10 @@ class TareasController extends CednaController
     {
         $this->cargarAccionesDisponibles('tareas');
         
-        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
+        $userName = $this->userSessionManager->getUserName();
+        $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
+
+        $arrTareasJSON = $this->catalogoManager->getArrTareasPorSolicitanteJSON($UsuarioActivo);
 
         return new ViewModel([
             'arrTareasJSON' => $arrTareasJSON

@@ -70,9 +70,12 @@ return [
     ],
 
     'datos_empresa' => [
-        'name' => 'Nombre Empresa',
+        // 'name' => 'Coca-Cola',
+        // 'phone' => '+5492262772277',
+        // 'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
+        'name' => 'Arcor San Pedro',
         'phone' => '+5492262772277',
-        'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
+        'logo' => 'img/logo_arcor.png',
     ],
 
     'datos_archivos' => [

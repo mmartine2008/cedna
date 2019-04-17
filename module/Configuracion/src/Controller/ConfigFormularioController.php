@@ -88,14 +88,14 @@ class ConfigFormularioController extends ConfiguracionController
     } 
 
     public function clonarFormularioAction(){
-        // $formularios = $this->params()->fromRoute();
+        $formularios = $this->params()->fromRoute();
 
-        // $idFormularios = $formularios['id'];
+        $idFormulario = $formularios['id'];
 
-        // $mensaje = $this->configuracionManager->clonarFormularios($idFormularios);
+        $this->configuracionManager->clonarFormulario($idFormulario);
 
-        // //Todavia no hay para mostrar mensajes
-        // return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+        return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+
     } 
 
     public function altaSeccionAction(){
@@ -179,70 +179,6 @@ class ConfigFormularioController extends ConfiguracionController
 
         // //Todavia no hay para mostrar mensajes
         // return $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
-    } 
-
-    public function altaPreguntaAction(){
-        $this->cargarAccionesDisponibles('preguntas - alta');
-        $seccion= $this->params()->fromRoute();
-        $idSeccion = $seccion['id'];
-
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            
-            $JsonData = json_decode($data['JsonData']);
-            $this->configuracionManager->altaEdicionPreguntas($JsonData);
-
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarSeccion", "id" => $idSeccion]);
-        }
-
-        $view = new ViewModel();
-        
-        $tiposPregunta = $this->catalogoManager->getArrEntidadJSON('TipoPregunta');
-
-        $view->setVariable('tiposPregunta', $tiposPregunta);
-        $view->setVariable('PreguntasJson', '""');
-        $view->setTemplate('configuracion/config-formulario/form-preguntas.phtml');
-        
-        return $view;
-    }
-
-    public function editarPreguntaAction(){
-        // $this->cargarAccionesDisponibles('preguntas - edicion');
-        // $preguntas = $this->params()->fromRoute();
-
-        // $idPreguntas = $preguntas['id'];
-
-        // if ($this->getRequest()->isPost()) {
-        //     $data = $this->params()->fromPost();
-        //     $JsonData = json_decode($data['JsonData']);
-
-        //     $this->configuracionManager->altaEdicionPreguntas($JsonData, $idPreguntas);
-
-        //     $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
-        // }
-
-        // $view = new ViewModel();
-        
-        // $Preguntas = $this->catalogoManager->getPreguntas($idPreguntas);
-        // $tiposPregunta = $this->catalogoManager->getTipoPregunta()->getJson();
-
-        // $view->setVariable('tiposPregunta', $tiposPregunta);
-
-        // $view->setVariable('PreguntasJson', $Preguntas->getJSON());
-        // $view->setTemplate('configuracion/config-formulario/form-preguntas.phtml');
-        
-        // return $view;
-    }
-    
-    public function borrarPreguntaAction(){
-        // $formularios = $this->params()->fromRoute();
-
-        // $idPreguntas = $formularios['id'];
-
-        // $mensaje = $this->configuracionManager->borrarPreguntas($idPreguntas);
-
-        // //Todavia no hay para mostrar mensajes
-        // return $this->redirect()->toRoute("configuracion/formularios/secciones",["action" => "editarSecciones"]);
     } 
 
 }

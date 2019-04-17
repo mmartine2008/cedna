@@ -104,7 +104,11 @@ class AuthController extends AbstractActionController
 
         // Tiene que cargar los mensajes que tenga pendientes, porque puede venir de un rechazo
         // $this->cargarMensajes(); 
-        $view = new ViewModel();
+        $datos_empresa = $this->userManager->getDatosEmpresa();
+        $view = new ViewModel([
+            'logo_empresa' => $datos_empresa['logo'],
+        ]);
+
         
         return $view;
     }
