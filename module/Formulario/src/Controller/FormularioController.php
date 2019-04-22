@@ -193,7 +193,6 @@ class FormularioController extends BaseFormularioController
         
         $Tarea = $Planificacion->getTarea();
         $this->imprimirInformacionTarea($pdf, json_decode($Tarea->getJSON()));
-        // var_dump(json_decode($Tarea->getJSON()));
         $this->imprimirInformacionPlanificacion($pdf, json_decode($Planificacion->getJSON()));
         $this->imprimirFormulario($pdf, $data);
     

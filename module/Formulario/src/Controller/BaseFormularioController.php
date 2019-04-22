@@ -123,6 +123,20 @@ class BaseFormularioController extends CednaController
         return $color;
     }
 
+    private function imprimirTresFirmas($pdf, $list, $i) {
+        $pdf->Cell(13, 5,  "");
+
+        for($j = 0; $j< 3 ; $j++) {
+            $pdf->Cell(60, 5,  "____________________");
+        }
+        $pdf->Ln(5);
+
+        $pdf->Cell(20, 5,  "");
+        for($j = 0; $j< 3 ; $j++) {
+            $pdf->Cell(60, 5,  $list[$i+$j]);
+        }
+    }
+
     protected function imprimirFirmasSeleccionadas($pdf, $list) {
             $i = 0;
             $cantFirmas = count($list);
@@ -139,25 +153,18 @@ class BaseFormularioController extends CednaController
                         $pdf->Cell(40, 5,  "");
                         $pdf->Cell(60, 5,  $list[$i]);
                         $pdf->Cell(60, 5,  $list[$i+1]);
-                    } else {
+                    } else if($modulo == 1) {
                         $pdf->Cell(70, 5,  "");
                         $pdf->Cell(60, 5,  "____________________");
                         $pdf->Ln(5);
 
                         $pdf->Cell(80, 5,  "");
                         $pdf->Cell(60, 5,  $list[$i]);
+                    } else {
+                        $this->imprimirTresFirmas($pdf, $list, $i);
                     }
                 } else {
-                    $pdf->Cell(13, 5,  "");
-                    $pdf->Cell(60, 5,  "____________________");
-                    $pdf->Cell(60, 5,  "____________________");
-                    $pdf->Cell(60, 5,  "____________________");
-                    $pdf->Ln(5);
-
-                    $pdf->Cell(20, 5,  "");
-                    $pdf->Cell(60, 5,  $list[$i]);
-                    $pdf->Cell(60, 5,  $list[$i+1]);
-                    $pdf->Cell(60, 5,  $list[$i+2]);
+                    $this->imprimirTresFirmas($pdf, $list, $i);
                 }
                 $pdf->Ln(25);
                 $i = $i+3;

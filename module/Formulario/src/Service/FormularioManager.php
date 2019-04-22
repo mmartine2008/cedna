@@ -633,7 +633,6 @@ class FormularioManager {
         foreach($Respuestas as $Respuesta) {
             $pregunta = $Respuesta->getPregunta()->getDescripcion(); 
             $tipoPregunta = $Respuesta->getPregunta()->getTipoPregunta();
-            $destinos = $tipoPregunta->esPeguntaMultiple();
             $esArchivo = $tipoPregunta->esImagen();
 
             if(!$tipoPregunta->esPeguntaMultiple()) {
@@ -657,17 +656,6 @@ class FormularioManager {
         }
         return $output;
     } 
-
-    // public function getArchivosRelevamiento($Relevamiento) {
-    //     $Respuestas =  $this->getRespuestaPorRelevamiento($Relevamiento);
-    //     $Archivos = [];
-    //     foreach($Respuestas as $Respuesta) {
-    //         if($Respuesta->getPregunta()->getTipoPregunta()->esPeguntaArchivo()) {
-    //             // if (is_file($ruta))
-    //         }
-    //     }
-    // }
-
 
     private function respuestasSonTipoPDF($Respuestas) {
         foreach($Respuestas as $Respuesta) {
