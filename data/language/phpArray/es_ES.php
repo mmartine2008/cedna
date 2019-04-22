@@ -180,4 +180,6 @@ return [
     '__mensaje_eliminar_seccion__' => 'Está seguro que desea eliminar la sección',
     '__Eliminar_Formulario__' => 'Eliminar Formulario',
     '__mensaje_eliminar_formulario__' => 'Está seguro que desea eliminar el formulario',
+    '__Requerida__' => 'Requerida',
+
 ];
