@@ -6,21 +6,29 @@ class CednaTcpdf extends \TCPDF
     private $titulo ;
     private $fechaEmision ;
     private $image_file;
+    private $descripcion ;
+
 
     public function Header() {
         // Logo
         $this->Image('./public/'.$this->getLogo(), 20, 15, 27, '', 'png', '', 'T', false, 300, '', false, false, 0, false, false, false);
-       
 
-        $this->SetFont('helvetica', '', 15);
+        $this->SetFont('helvetica', 'B', 15);
         $this->setCellMargins(1, 1, 1, 1);
 
         $this->Ln(5);
         $this->Cell(0,15, $this->getTitulo(), 0, false, 'C', 0, "", 0, false, 'M', 'M');
         $this->Ln(5);
+        $this->SetFont('helvetica', 'B', 15);
+        $this->setCellMargins(1, 1, 1, 1);
+
+        $this->Ln(5);
+        $this->SetFont('helvetica', 'B', 12);
+        $this->Cell(0,15, $this->getDescripcion(), 0, false, 'C', 0, "", 0, false, 'M', 'M');
+        $this->Ln(7);
         $this->SetFont('helvetica', '', 10);
         $this->Cell(0, 15, "Fecha de Emisión: ". $this->getFechaEmision(), 0, false, 'R', 0, '', 0, false, 'M', 'M');
-        $this->Ln(10);
+        $this->Ln(5);
         $html ='<hr>';
         $this->writeHTML($html, true, false, true, false, '');
     }
@@ -94,4 +102,24 @@ class CednaTcpdf extends \TCPDF
         return $this;
     }
 
+
+    /**
+     * Get the value of descripcion
+     */ 
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set the value of descripcion
+     *
+     * @return  self
+     */ 
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
 }

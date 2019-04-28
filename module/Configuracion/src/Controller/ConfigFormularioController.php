@@ -137,8 +137,9 @@ class ConfigFormularioController extends ConfiguracionController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
             $preguntasEnlazadas = json_decode($data['seleccionados']);
+            $preguntasRequeridas = json_decode($data['required']);
 
-            $idFormulario = $this->configuracionManager->edicionSecciones($JsonData, $idSeccion, $preguntasEnlazadas, $preguntasEnlazadas);
+            $idFormulario = $this->configuracionManager->edicionSecciones($JsonData, $idSeccion, $preguntasEnlazadas, $preguntasRequeridas);
 
             $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario", "id" => $idFormulario]);
         }
@@ -148,8 +149,12 @@ class ConfigFormularioController extends ConfiguracionController
         $Secciones = $this->catalogoManager->getSecciones($idSeccion);
         $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
         $estados = $this->configuracionManager->getEstadoPreguntasSeccion($idSeccion);
+        $arrayRequired = $this->configuracionManager->getEstadoRequiredPreguntasSeccion($idSeccion);
+
+
 
         $view->setVariable('estados', $estados);
+        $view->setVariable('arrayRequired', $arrayRequired);
         $view->setVariable('idFormulario', $Secciones->getFormulario()->getId());
         $view->setVariable('SeccionJson', $Secciones->getJSON());
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);

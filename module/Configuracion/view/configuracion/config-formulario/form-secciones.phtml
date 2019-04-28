@@ -24,7 +24,8 @@
                     </div>
                     <div class="flex">
                         <input type="hidden" name="JsonData" id="JsonData">  
-                        <input type="hidden" name="seleccionados" id="seleccionados">               
+                        <input type="hidden" name="seleccionados" id="seleccionados">  
+                        <input type="hidden" name="required" id="required">               
                     </div>
                 </form>
             </div>
@@ -45,7 +46,7 @@
                             <th class="text-center"><?= $this->translate('__Pregunta__') ?></th>
                             <th class="text-center"><?= $this->translate('__Tipo_de_Pregunta__') ?></th>
                             <th class="text-center"><?= $this->translate('__Pertenece_a_seccion__') ?></th>
-                            <!-- <th class="text-center"><?= $this->translate('__Requerida__') ?></th> -->
+                            <th class="text-center"><?= $this->translate('__Requerida__') ?></th>
                         </tr>
                     </thead>
                     <tbody id="bodyConfPreguntas">
@@ -63,6 +64,8 @@ var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
 var idFormulario = <?= $idFormulario ?>;
 var eventos = [];
 var estados = <?php echo json_encode($estados); ?>;
+var arrayRequired = <?php echo json_encode($arrayRequired); ?>;
+
 
 
 function FormSeccionesToJson(){    
@@ -120,16 +123,6 @@ function verificarMostrarBotonAlta(){
     }
 }
 
-// function cargarHabilitadosTabla() {
-//     console.log(estados);
-//     for (var i = 0; i < estados.length; i++){ 
-//         console.log(estados[i]);
-//         if(estados[i] == '1'){
-//             $('#checkBox_'+estados[i]).prop("checked", true);
-//         }
-//     }
-// }
-
 $( document ).ready(function() {
     if (seccionJson !== ''){
         $('#SeccionNombre').val(seccionJson.nombre);
@@ -142,31 +135,61 @@ $( document ).ready(function() {
     verificarMostrarBotonGuardar();
     verificarMostrarBotonVolver();
     verificarMostrarBotonAlta();
-    cargarInput();
+    cargarInputEstados();
+    cargarInputRequired();
     cambiarVisibilidadBotones(true);
-    // cargarHabilitadosTabla();
     });
 
-    function cargarInput() {
+    function cargarInputEstados() {
         var myJSON = JSON.stringify(estados);
         $("#seleccionados").val(myJSON);
     }
 
-    function habilitar(id) {
+    function cargarInputRequired() {
+        var myJSON = JSON.stringify(arrayRequired);
+        $("#required").val(myJSON);
+    }
+
+    function habilitarEstado(id) {
         estados[id] = 1;
-        cargarInput();
+        cargarInputEstados();
     }
 
-    function deshabilitar(id) {
+    function deshabilitarEstado(id) {
         estados[id] = 0;
-        cargarInput();
+        cargarInputEstados();
     }
 
-    function marcarEnTabla(id){
+    function habilitarRequired(id) {
+        arrayRequired[id] = 1;
+        cargarInputRequired();
+    }
+
+    function deshabilitarRequired(id) {
+        arrayRequired[id] = 0;
+        cargarInputRequired();
+    }
+
+    function marcarEnTablaEstados(id){
         if(estados[id] == 1) {
-            $('#checkBox_'+id).prop("checked", true);
+            $('#checkBox_estados_'+id).prop("checked", true);
+            $('#checkBox_required_'+id).prop("disabled", false);
         } else {
-            $('#checkBox_'+id).prop("checked", false);
+            $('#checkBox_estados_'+id).prop("checked", false);
+            $('#checkBox_required_'+id).prop("disabled", true);
+        }
+    }
+
+    function marcarEnTablaRequired(id){
+        if(arrayRequired[id] == 1) {
+            $('#checkBox_required_'+id).prop("checked", true);
+        } else {
+            $('#checkBox_required_'+id).prop("checked", false);
+        }
+        if($('#checkBox_estados_'+id).is(":checked")){ 
+            $('#checkBox_required_'+id).prop("disabled", false);
+        } else {
+            $('#checkBox_required_'+id).prop("disabled", true);
         }
     }
 
@@ -190,20 +213,31 @@ $( document ).ready(function() {
             id.innerHTML = pregunta.idPregunta;
             nombre.innerHTML = pregunta.descripcion;
             tipo.innerHTML = pregunta.tipoPregunta.informacion;
-            pertenece.innerHTML = "<input type='checkbox'  id='checkBox_"+pregunta.idPregunta+"' value=''>";  
-            // requerida.innerHTML = "<input type='checkbox'  id='requerida_"+pregunta.idPregunta+"' value=''>";  
-            marcarEnTabla(pregunta.idPregunta);
+            pertenece.innerHTML = "<input type='checkbox'  id='checkBox_estados_"+pregunta.idPregunta+"' value='' onclick='habilitarEnTabla("+pregunta.idPregunta+") ;'>";  
+            requerida.innerHTML = "<input type='checkbox'  id='checkBox_required_"+pregunta.idPregunta+"' value='' onclick='habilitarEnTablaRequired("+pregunta.idPregunta+") ;'>";  
+            marcarEnTablaRequired(pregunta.idPregunta);
+            marcarEnTablaEstados(pregunta.idPregunta);
         }
     }
 
     function habilitarEnTabla(idElemento) {
-        id = "checkBox_" + idElemento;
-        if(! $('#'+id).is(":checked")){
-            $('#'+id).prop("checked", true);
-            habilitar(idElemento);
+        var id = 'checkBox_estados_'+idElemento;
+        if($('#'+id).is(":checked")){
+            habilitarEstado(idElemento);
+            $('#checkBox_required_'+idElemento).prop("disabled", false);
         } else {
-            $('#'+id).prop("checked", false);
-            deshabilitar(idElemento);
+            deshabilitarEstado(idElemento);
+            $('#checkBox_required_'+idElemento).prop("checked", false);
+            $('#checkBox_required_'+idElemento).prop("disabled", true);
+        }
+    }
+
+    function habilitarEnTablaRequired(idElemento) {
+        var id = 'checkBox_required_'+idElemento;
+        if($('#'+id).is(":checked")){
+            habilitarRequired(idElemento);
+        } else {
+            deshabilitarRequired(idElemento);
         }
     }
 
@@ -213,12 +247,9 @@ $( document ).ready(function() {
                 $('.highlight').removeClass('highlight');
                 $(this).addClass('highlight').siblings();
                 filaSeleccionada = $(this)[0].id;
-                habilitarEnTabla($(this)[0].id) ;
-                // cambiarVisibilidadBotones(true);
             }else{
                 $(this).removeClass('highlight');
                 filaSeleccionada = -1;
-                // cambiarVisibilidadBotones(false);
             }
         });
     });

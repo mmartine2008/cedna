@@ -114,6 +114,14 @@ class SeccionPregunta
         return $this;
     }
 
+    public function esRequerida()
+    {
+        if($this->requerido == 1) {
+            return true;
+        }
+        return false;
+    }
+
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
