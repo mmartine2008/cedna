@@ -178,7 +178,16 @@ tbody tr.highlight td {
 }
 
 .ordenesCompras {
-    content: url('../img/boton/adicionales.png');
+    content: url('../img/boton/orden-de-compra.png');
+    background-size: contain;
+    text-align: center;
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.planificacion {
+    content: url('../img/boton/planificaciones.png');
     background-size: contain;
     text-align: center;
     max-width: 100%;
