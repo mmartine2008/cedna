@@ -19,15 +19,14 @@ class Relevamientos
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Formulario")
-     * @ORM\JoinColumn(name="IdFormulario", referencedColumnName="IdFormulario")
+     *
+     * @ORM\ManyToMany(targetEntity="Seccion", inversedBy="Relevamiento", cascade={"persist"})
+     * @ORM\JoinTable(name="RelevamientosxSecciones",
+     *      joinColumns={@ORM\JoinColumn(name="IdRelevamiento", referencedColumnName="IdRelevamiento")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="IdSeccion", referencedColumnName="IdSeccion")}
+     *      )
      */
-    protected $Formulario;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Respuesta", mappedBy="relevamiento")
-     */
-    protected $Respuestas;
+    protected $secciones;
 
     /**
      * @ORM\ManyToOne(targetEntity="EstadosRelevamiento")
@@ -41,13 +40,49 @@ class Relevamientos
     protected $NodosFirmantesRelevamiento;
 
     public function __construct() {
-        $this->Respuestas = new ArrayCollection();
         $this->NodosFirmantesRelevamiento = new ArrayCollection();
+        $this->secciones = new ArrayCollection();
     }
 
-    public function setFormulario($Formulario)
+    /**
+     * @param Seccion|null $secciones
+     */
+    public function addSecciones($secciones = null)
     {
-        $this->Formulario = $Formulario;
+        if (!$this->secciones->contains($secciones)) {
+            $this->secciones->add($secciones);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getSecciones()
+    {
+        if ($this->secciones){
+            return $this->secciones->toArray();
+        }else{
+            return null;
+        }
+    }
+    
+    /**
+     * @param Seccion $secciones
+     */
+    public function removeSecciones($secciones)
+    {
+        if (!$this->secciones->contains($secciones)) {
+            return;
+        }
+        $this->secciones->removeElement($secciones);
+    }
+
+    /**
+     * @desc Remove all tags for this article
+     */
+    public function removeAllSecciones()
+    {
+        $this->secciones->clear();
     }
 
     public function setEstadoRelevamiento($EstadoRelevamiento)
@@ -60,23 +95,9 @@ class Relevamientos
         return $this->id;
     }
 
-    public function getFormulario()
-    {
-        return $this->Formulario;
-    }
-
     public function getEstadoRelevamiento()
     {
         return $this->EstadoRelevamiento;
-    }
-
-    public function getRespuestas()
-    {
-        if ($this->Respuestas){
-            return $this->Respuestas->toArray();
-        }else{
-            return null;
-        }
     }
 
     public function getNodosFirmantesRelevamiento()
@@ -89,11 +110,11 @@ class Relevamientos
     }
 
     public function getJSON(){
-        $respuestas = [];
-        foreach ($this->getRespuestas() as $respuesta) {
-            $respuestas[] = $respuesta->getJSON();
+        $secciones = [];
+        foreach ($this->getSecciones() as $seccion) {
+            $secciones[] = $seccion->getJSON();
         }
-        $respuestas = implode(", ", $respuestas);
+        $secciones = implode(", ", $secciones);
 
         $nodosFirmantes = [];
         foreach ($this->getNodosFirmantesRelevamiento() as $nodoFirmante) {
@@ -104,10 +125,9 @@ class Relevamientos
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"perfiles": ['.$respuestas.'],';
+        $output .= '"secciones": ['.$secciones.'],';
         $output .= '"nodosFirmantes": ['.$nodosFirmantes.'],';
-        $output .= '"estadoRelevamiento": ' . $this->getEstadoRelevamiento()->getJSON() .', ';
-        $output .= '"formulario": ' . $this->getFormulario()->getJSON();
+        $output .= '"estadoRelevamiento": ' . $this->getEstadoRelevamiento()->getJSON() ;
         
         return '{' . $output . '}';
     }

@@ -73,19 +73,19 @@ class FormularioController extends BaseFormularioController
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->FormularioManager->asignarFormularioAPlanificacion($JsonData, $Planificacion);
+            $this->FormularioManager->asignarSeccionesAPlanificacion($JsonData, $Planificacion);
 
             $this->redirect()->toRoute("formulario", ["action" => "asignacion"]);
         }
 
-        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+        $arrSeccionesJSON = $this->FormularioManager->getSeccionesPorRelevamiento($Planificacion->getRelevamiento());
         $Tareas = $Planificacion->getTarea();
 
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
         $view->setVariable('TareaJSON', $Tareas->getJSON());
-        $view->setVariable('arrFormulariosJSON', $arrFormulariosJSON);
+        $view->setVariable('arrSeccionesJSON', $arrSeccionesJSON);
         $view->setTemplate('formulario/formulario/asignar-formulario.phtml');
         
         return $view;
@@ -126,7 +126,8 @@ class FormularioController extends BaseFormularioController
         }
         $Formulario = $Relevamiento->getFormulario();
         $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
-
+        //ACA
+        //$RelevamientoJSON = $this->FormularioManager->getJSONActualizado($Relevamiento);
         $enEdicion = $Relevamiento->getEstadoRelevamiento()->getId();
         return new ViewModel([
             "formulario" => $FormularioJSON,

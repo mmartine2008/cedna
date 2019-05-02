@@ -44,7 +44,6 @@ final class Versions
   'symfony/polyfill-ctype' => 'v1.11.0@82ebae02209c21113908c229e9883c419720738a',
   'symfony/polyfill-mbstring' => 'v1.11.0@fe5e94c604826c35a32fa832f35bd036b6799609',
   'symfony/yaml' => 'v3.4.24@212a27b731e5bfb735679d1ffaac82bd6a1dc996',
-  'tecnick.com/tcpdf' => '6.2.26@367241059ca166e3a76490f4448c284e0a161f15',
   'tecnickcom/tcpdf' => '6.2.26@367241059ca166e3a76490f4448c284e0a161f15',
   'true/punycode' => 'v2.1.1@a4d0c11a36dd7f4e7cd7096076cab6d3378a071e',
   'vladmeh/zf3-tcpdf' => 'dev-master@1a5dd34234a804261d4b1f691e309d362c407093',
@@ -85,7 +84,7 @@ final class Versions
   'zendframework/zend-view' => '2.11.2@4f5cb653ed4c64bb8d9bf05b294300feb00c67f2',
   'zfcampus/zf-console' => '1.4.0@e4dd16760fe219d8b2745865a883b0e0a492a3ed',
   'zfcampus/zf-development-mode' => '3.2.0@419004a320bab017d28f2bc5e7857dde7e19aecf',
-  'zendframework/skeleton-application' => 'dev-master@ace9fd038f66ebcc319539669411b2ddf75c832b',
+  'zendframework/skeleton-application' => 'dev-master@2dfa50672ebaa0c13af7df7c1296b71aa8b44a01',
 );
 
     private function __construct()

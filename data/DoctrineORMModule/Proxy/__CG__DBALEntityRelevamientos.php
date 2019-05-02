@@ -64,10 +64,10 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'Formulario', 'Respuestas', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
+            return ['__isInitialized__', 'id', 'secciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
         }
 
-        return ['__isInitialized__', 'id', 'Formulario', 'Respuestas', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
+        return ['__isInitialized__', 'id', 'secciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
     }
 
     /**
@@ -176,12 +176,45 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function setFormulario($Formulario)
+    public function addSecciones($secciones = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormulario', [$Formulario]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSecciones', [$secciones]);
 
-        return parent::setFormulario($Formulario);
+        return parent::addSecciones($secciones);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSecciones()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSecciones', []);
+
+        return parent::getSecciones();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeSecciones($secciones)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeSecciones', [$secciones]);
+
+        return parent::removeSecciones($secciones);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeAllSecciones()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAllSecciones', []);
+
+        return parent::removeAllSecciones();
     }
 
     /**
@@ -213,34 +246,12 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function getFormulario()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormulario', []);
-
-        return parent::getFormulario();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getEstadoRelevamiento()
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEstadoRelevamiento', []);
 
         return parent::getEstadoRelevamiento();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getRespuestas()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRespuestas', []);
-
-        return parent::getRespuestas();
     }
 
     /**

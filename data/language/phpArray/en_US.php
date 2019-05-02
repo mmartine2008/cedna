@@ -182,5 +182,6 @@ return [
     '__Eliminar_Formulario__' => 'Delete Form',
     '__mensaje_eliminar_formulario__' => 'Are you sure you want to delete the form',
     '__Requerida__' => 'Required',
+    '__Secciones__' => 'Sections',
 
 ];

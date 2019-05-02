@@ -12,7 +12,8 @@ use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\EstadosRelevamiento;
 use DBAL\Entity\NodosFirmantesRelevamiento;
-
+use DBAL\Entity\RelevamientosxSecciones;
+use function GuzzleHttp\json_encode;
 
 class FormularioManager {
     
@@ -124,6 +125,20 @@ class FormularioManager {
         return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
     }
 
+    private function crearRelevamientosxSecciones($Relevamiento, $Secciones) {
+        foreach ($Secciones as $Seccion){
+            $RelevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $Seccion);
+            if(!$RelevamientoxSeccion) {
+                $RelevamientoxSeccion = new RelevamientosxSecciones();
+                
+                $RelevamientoxSeccion->setRelevamiento($Relevamiento);
+                $RelevamientoxSeccion->setSeccion($Seccion);
+                $this->entityManager->persist($Relevamiento);
+                $this->entityManager->flush();
+            }
+        }
+    }
+
     /**
      * Funcion que asignar un formulario a una planificacion.
      *
@@ -131,19 +146,20 @@ class FormularioManager {
      * @param [Planificaciones] $Planificacion
      * @return void
      */
-    public function asignarFormularioAPlanificacion($JsonData, $Planificacion){
-        $Formulario = $this->catalogoManager->getFormulario($JsonData->formulario->id);
-
+    public function asignarSeccionesAPlanificacion($JsonData, $Planificacion){
+        $SeccionesSeleccionadas = $this->getArraySecciones($JsonData->seccionesSeleccionadas);
+        $SeccionesNoSeleccionadas = $this->getArraySecciones($JsonData->seccionesNoSeleccionadas);
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            $Relevamiento->setFormulario($Formulario);
+            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
+            $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
             $this->entityManager->persist($Relevamiento);
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
             
             $Relevamiento = new Relevamientos();
-            $Relevamiento->setFormulario($Formulario);
+            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
             $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
             
             $this->entityManager->persist($Relevamiento);
@@ -962,5 +978,49 @@ class FormularioManager {
         $this->guardarArchivos($listaArchivos, $archivo, $Relevamiento->getId());
     }
 
-    
+    private function seccionNoRelacionada($Seccion, $RelevamientosxSecciones){
+        foreach($RelevamientosxSecciones as $RelevxSeccion) {
+            if($RelevxSeccion->getSeccion()->getId() == $Seccion->getId()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones) {
+        $Secciones = $this->catalogoManager->getSecciones();
+        $output = [];
+        foreach($Secciones as $Seccion) {
+            if($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) {
+                $output[] = $Seccion;
+            }
+        }
+        return $output;
+    }
+
+    private function getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones) {
+        $output = [];
+        foreach($RelevamientosxSecciones as $RelevxSeccion) {
+            $Seccion = $RelevxSeccion->getSeccion();
+            $output[] =  $Seccion;
+        }
+        return $output;
+    }
+
+    public function getSeccionesPorRelevamiento($Relevamiento) {
+        $output = [];
+        $RelevamientosxSecciones = $this->catalogoManager->getSeccionesxRelevamiento($Relevamiento);
+        
+
+        $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones);
+        $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones);
+        
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesRelacionada);
+        
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
+        
+    }
 }

@@ -21,12 +21,6 @@ class Seccion
      */
     protected $id;
 
-     /**
-     * @ORM\ManyToOne(targetEntity="Formulario")
-     * @ORM\JoinColumn(name="IdFormulario", nullable=true, referencedColumnName="IdFormulario")
-     */
-    protected $formulario;
-
     /**
      * @ORM\Column(name="Nombre",  nullable=true, type="string", length=100)
      */
@@ -79,28 +73,6 @@ class Seccion
         }else{
             return null;
         }
-    }
-    
-    
-
-    /**
-     * Get the value of formulario
-     */ 
-    public function getFormulario()
-    {
-        return $this->formulario;
-    }
-
-    /**
-     * Set the value of formulario
-     *
-     * @return  self
-     */ 
-    public function setFormulario($formulario)
-    {
-        $this->formulario = $formulario;
-
-        return $this;
     }
 
 
@@ -164,25 +136,6 @@ class Seccion
         $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'"';
 
         return '{' . $output . '}';
-    }
-
-    public function getScript(){
-        $formulario = $this->getFormulario()->getId();
-        $nombre = $this->getNombre();
-        $descripcion = $this->getDescripcion();
-        
-        $script = "";
-        $script .= 'INSERT INTO cedna.app.Seccion (IdFormulario,Nombre,Descripcion) VALUES ('.$formulario.','.$nombre.','.$descripcion.');';
-
-        $seccionPreguntas = [];
-        foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
-            $seccionPreguntas[] = $seccionPregunta->getScript();
-        }
-        $seccionPreguntas = implode("; ", $seccionPreguntas);
-
-        $script .= $seccionPreguntas.';';
-
-        return $script;
     }
 
 }

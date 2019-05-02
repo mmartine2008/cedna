@@ -35,16 +35,10 @@ class Respuesta
     protected $pregunta;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Seccion")
-     * @ORM\JoinColumn(name="IdSeccion", nullable=true, referencedColumnName="IdSeccion")
-     */
-    protected $seccion;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Relevamientos")
-     * @ORM\JoinColumn(name="IdRelevamiento", nullable=true, referencedColumnName="IdRelevamiento")
-     */
-    protected $relevamiento;
+    * @ORM\ManyToOne(targetEntity="RelevamientosxSecciones")
+    * @ORM\JoinColumn(name="IdRelevamientoxSeccion", nullable=true, referencedColumnName="IdRelevamientoxSeccion")
+    */
+    protected $relevamientoxSeccion;
 
     /**
      * @ORM\Column(name="IdOpcion",  nullable=true, type="integer")
@@ -120,33 +114,12 @@ class Respuesta
         return $this;
     }
 
-
-    /**
-     * Get the value of seccion
-     */ 
-    public function getSeccion()
-    {
-        return $this->seccion;
-    }
-
-    /**
-     * Set the value of seccion
-     *
-     * @return  self
-     */ 
-    public function setSeccion($seccion)
-    {
-        $this->seccion = $seccion;
-
-        return $this;
-    }
-
     /**
      * Get the value of relevamiento
      */ 
-    public function getRelevamiento()
+    public function getRelevamientoxSeccion()
     {
-        return $this->relevamiento;
+        return $this->relevamientoxSeccion;
     }
 
     /**
@@ -154,9 +127,9 @@ class Respuesta
      *
      * @return  self
      */ 
-    public function setRelevamiento($relevamiento)
+    public function setRelevamientoxSeccion($relevamientoxSeccion)
     {
-        $this->relevamiento = $relevamiento;
+        $this->relevamientoxSeccion = $relevamientoxSeccion;
 
         return $this;
     }

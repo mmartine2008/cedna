@@ -16,7 +16,6 @@ use DBAL\Entity\TipoJefe;
 use DBAL\Entity\esJefeDe;
 use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Tareas;
-use DBAL\Entity\Formulario;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\OrdenesDeCompra;
 use DBAL\Entity\Planificaciones;
@@ -40,6 +39,8 @@ use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\NodosFirmantesRelevamiento;
+use DBAL\Entity\RelevamientosxSecciones;
+
 
 class CatalogoManager {
     
@@ -118,16 +119,6 @@ class CatalogoManager {
         return $Parametros;
     }
 
-    public function getFormularios($idFormularios = null){
-        if ($idFormularios){
-            $Formularios = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormularios]);
-        }else{
-            $Formularios = $this->entityManager->getRepository(Formulario::class)->findAll();
-        }
-
-        return $Formularios;
-    }
-
     public function getSecciones($idSeccion = null){
         if ($idSeccion){
             $Secciones = $this->entityManager->getRepository(Seccion::class)->findOneBy(['id' => $idSeccion]);
@@ -155,10 +146,16 @@ class CatalogoManager {
         return $SeccionPregunta;
     }
 
-    public function getSeccionesPorFormulario($Formulario){
-        $Secciones = $this->entityManager->getRepository(Seccion::class)->findBy(['formulario' => $Formulario]);
+    // public function getSeccionesPorFormulario($Formulario){
+    //     $Secciones = $this->entityManager->getRepository(Seccion::class)->findBy(['formulario' => $Formulario]);
 
-        return $Secciones;
+    //     return $Secciones;
+    // }
+
+    public function getSeccionesxRelevamiento($Relevamiento) {
+        $SeccionesxRelevamiento = $this->entityManager->getRepository(RelevamientosxSecciones::class)->findBy(['relevamiento' => $Relevamiento]);
+
+        return $SeccionesxRelevamiento;
     }
 
     public function getAccionesPorPerfil($OperacionNombre, $Perfil){
@@ -318,16 +315,6 @@ class CatalogoManager {
         }
 
         return $Tareas;
-    }
-
-    public function getFormulario($idFormulario = null){
-        if ($idFormulario){
-            $Formulario = $this->entityManager->getRepository(Formulario::class)->findOneBy(['id' => $idFormulario]);
-        }else{
-            $Formulario = $this->entityManager->getRepository(Formulario::class)->findAll();
-        }
-
-        return $Formulario;
     }
 
     public function getEsJefeDePorNodoUsuario($Nodo, $Usuario){
@@ -693,4 +680,13 @@ class CatalogoManager {
     
         return $NodosFirmantesRelevamiento;
     }
+
+
+    public function getRelevamientosxSecciones($Relevamiento, $Seccion){
+        $NodosFirmantesRelevamiento = $this->entityManager->getRepository(RelevamientosxSecciones::class)
+                                                            ->findOneBy(['relevamiento' => $Relevamiento, 'seccion' => $Seccion]);
+    
+        return $NodosFirmantesRelevamiento;
+    }
+    
 }

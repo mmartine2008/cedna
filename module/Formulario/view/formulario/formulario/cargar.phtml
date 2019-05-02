@@ -6,7 +6,7 @@
     <input type="hidden" name="archivos" id="archivos">
 </form>
 <script>
-    var formulario = <?= $formulario ?>;
+    var formulario = <?= $formulario ?>; //relevamiento
     var listMultipleSelectDestino0 = [];
     var listMultipleSelectDestino1 = [];
     var listaRespuestasInput = [];
@@ -42,7 +42,7 @@
     }
 
     function updateJson(idSeccion, idPregunta, answer) {
-        var childs = formulario.secciones;
+        var childs = formulario.secciones; //relevamiento.secciones
         var encontre = false;
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
@@ -72,7 +72,7 @@
     }
 
     function updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, info) {
-        childs = formulario.secciones;
+        childs = formulario.secciones; //relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 seccionPregunta = childs[i].preguntas;
@@ -101,7 +101,7 @@
         }
     }
     function getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question) {
-        childs = formulario.secciones;
+        childs = formulario.secciones; //relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 preguntas = childs[i].preguntas;
@@ -128,7 +128,7 @@
 
     function getOptionsOfMultiSelectOfJson(idSelector, idSeccion, idPregunta){
         var output = [];
-        var childs = formulario.secciones;
+        var childs = formulario.secciones; //relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 var seccionPregunta = childs[i].preguntas;
@@ -195,7 +195,7 @@
     }
 
     function updateSelectAnswerOfJson(idSelector, opciones, idSeccion, idPregunta, borrarAnteriores) {
-        var childs = formulario.secciones;
+        var childs = formulario.secciones; //relevamiento.secciones
         var encontre = false;
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
@@ -205,7 +205,7 @@
     }
 ////////////////////////////////
     function updateIdDestinoJsonSelectores(idSeccion, idPregunta) {
-        var childs = formulario.secciones;
+        var childs = formulario.secciones; //relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
             if(childs[i].id == idSeccion){
                 var seccionPregunta = childs[i].preguntas;
@@ -673,7 +673,7 @@
 
     function createInput(infoType, pregunta, divElement, idSeccion, required){
         ele = document.createElement('input');
-        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion+"_relevamiento_"+idRelevamiento;
+        var idEle = "pregunta_"+pregunta.idPregunta+"_seccion_"+idSeccion+"_relevamiento_"+idRelevamiento; //relevamiento.id
         ele.id = idEle;
     
         var div = createDivClass("text-left", divElement);
@@ -846,7 +846,7 @@
     }
 
     function getNombreSeccion(idSeccion) {
-        secciones = formulario.secciones;
+        secciones = formulario.secciones; //relevamiento.secciones
         for (var i = 0; i < secciones.length; i++) {
             var seccion = secciones[i];
             if(seccion.id == idSeccion) {
@@ -948,13 +948,12 @@
         var contenedor = document.getElementById("divFormulario");
 
         var divFormulario = document.createElement("Div");
-        divFormulario.id = "Formulario_id_"+formulario.idFormulario;
+        divFormulario.id = "Formulario_id_"+formulario.idFormulario; //relevamiento.id
         divFormulario.className="container";
         divFormulario.style.paddingTop = "10px";
-        createTextElement("h4", divFormulario, formulario.descripcion);
         contenedor.appendChild(divFormulario);
 
-        construirSecciones(formulario.secciones, divFormulario);
+        construirSecciones(formulario.secciones, divFormulario); //relevamiento.secciones
     }
 
     function verificarMostrarBotonGuardar(){
