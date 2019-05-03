@@ -159,14 +159,25 @@ var PlanificacionJSON = <?= $PlanificacionJSON ?>;
 var TareaJSON = <?= $TareaJSON ?>;
 var arrSeccionesJSON = <?= $arrSeccionesJSON ?>;
 
-function FormPlanificacionToJson(){
-    var seccionesSeleccionadas = {secciones : $('#formularioPlanificacion_2').val()};
-    var seccioneNoSeleccionadas = {secciones : $('#formularioPlanificacion_1').val()};
+function obtenerElementosSelector(idSelector){
+    var select1 = document.getElementById(idSelector);
+    var options = [];
+    for (var i = 0; i < select1.length; i++) {
+            var formData = {
+                id :  select1.options[i].value
+                }
+            ;
+            options.push(formData);
+    }
 
+    return options ;
+}
+
+function FormPlanificacionToJson(){
 
     var formData = {
-        seccionesSeleccionadas : seccionesSeleccionadas,
-        seccioneNoSeleccionadas : seccioneNoSeleccionadas
+        seccionesSeleccionadas :  obtenerElementosSelector("formularioPlanificacion_2"),
+        seccioneNoSeleccionadas : obtenerElementosSelector("formularioPlanificacion_1")
     };
     
     var JsonData = JSON.stringify(formData);
@@ -188,7 +199,7 @@ function preSubmit(){
     if($("#formularioPlanificacion_2 option").length == 0){
         mostrarCartelErrorSubmit();
     } else {
-        // $("#formPlanificacion").submit();
+        $("#formPlanificacion").submit();
     }
 }
 

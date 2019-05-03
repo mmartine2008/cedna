@@ -64,10 +64,10 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'formulario', 'nombre', 'descripcion', 'seccionPreguntas'];
+            return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'seccionPreguntas'];
         }
 
-        return ['__isInitialized__', 'id', 'formulario', 'nombre', 'descripcion', 'seccionPreguntas'];
+        return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'seccionPreguntas'];
     }
 
     /**
@@ -213,28 +213,6 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getFormulario()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFormulario', []);
-
-        return parent::getFormulario();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setFormulario($formulario)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFormulario', [$formulario]);
-
-        return parent::setFormulario($formulario);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getNombre()
     {
 
@@ -296,17 +274,6 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
 
         return parent::getJSON();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getScript()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getScript', []);
-
-        return parent::getScript();
     }
 
 }

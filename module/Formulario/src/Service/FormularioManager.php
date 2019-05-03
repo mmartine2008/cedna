@@ -99,10 +99,13 @@ class FormularioManager {
         return $preguntas;
     }
 
-    public function getSeccionesxFormulario($formulario){
-        $Secciones = $this->entityManager->getRepository(Seccion::class)
-                                            ->findBy(['formulario' => $formulario]); 
-        return $Secciones;
+    public function getSeccionesxRelevamientoxSecciones($relevamiento){
+        $RelevamientosxSecciones = $this->catalogoManager->getSeccionesxRelevamiento($relevamiento);
+        $output = [];
+        foreach($RelevamientosxSecciones as $relevamientoxSeccion) {
+            $output[] = $relevamientoxSeccion->getSeccion();
+        }
+        return $output;
     }
 
     public function getRespuesta($id = null) {
@@ -121,7 +124,6 @@ class FormularioManager {
     public function getArrTareasParaEjecutar($nombreUsuario){
         $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
         $arrTareas = $this->catalogoManager->getTareasParaEjecutar($Usuario);
-
         return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
     }
 
@@ -133,10 +135,29 @@ class FormularioManager {
                 
                 $RelevamientoxSeccion->setRelevamiento($Relevamiento);
                 $RelevamientoxSeccion->setSeccion($Seccion);
-                $this->entityManager->persist($Relevamiento);
+                $this->entityManager->persist($RelevamientoxSeccion);
                 $this->entityManager->flush();
             }
         }
+    }
+
+    private function desenlazarRelevamientosxSecciones($Relevamiento, $Secciones) {
+        foreach ($Secciones as $Seccion){
+            $RelevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $Seccion);
+            if($RelevamientoxSeccion) {               
+                $this->eliminarEntidad($RelevamientoxSeccion);
+            }
+        }
+    }
+
+    public function getArraySecciones($JsonSecciones) {
+        $output = Array();
+        if($JsonSecciones) {
+            foreach($JsonSecciones as $JsonSeccion) {
+                $output[] = $this->catalogoManager->getSecciones($JsonSeccion->id);
+            }
+        }
+        return $output;
     }
 
     /**
@@ -148,18 +169,17 @@ class FormularioManager {
      */
     public function asignarSeccionesAPlanificacion($JsonData, $Planificacion){
         $SeccionesSeleccionadas = $this->getArraySecciones($JsonData->seccionesSeleccionadas);
-        $SeccionesNoSeleccionadas = $this->getArraySecciones($JsonData->seccionesNoSeleccionadas);
+        $SeccionesNoSeleccionadas = $this->getArraySecciones($JsonData->seccioneNoSeleccionadas);
+
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
             $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
-            $this->entityManager->persist($Relevamiento);
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
             
             $Relevamiento = new Relevamientos();
-            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
             $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
             
             $this->entityManager->persist($Relevamiento);
@@ -167,6 +187,8 @@ class FormularioManager {
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
+
+            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
         }
 
         $this->entityManager->flush();
@@ -334,8 +356,8 @@ class FormularioManager {
         return false;
     }
 
-    public function getPreguntasxFormulario($formulario) {
-        $secciones = $this->getSeccionesxFormulario($formulario);
+    public function getPreguntasxRelevamiento($relevamiento) {
+        $secciones = $this->getSeccionesxRelevamientoxSecciones($relevamiento);
         $arregloPreg = [];
         foreach($secciones as $seccion){
             $preguntasxSeccion = $this->getPreguntasxSeccion($seccion);
@@ -352,8 +374,8 @@ class FormularioManager {
         return $opciones;
     }
 
-    public function getJSONModificadoSelectSimple($pregunta, $form) {
-        $secc = $form->secciones;
+    public function getJSONModificadoSelectSimple($pregunta, $relev) {
+        $secc = $relev->secciones;
         foreach($secc as $seccion) {
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
@@ -364,11 +386,11 @@ class FormularioManager {
                 }
             }
         }
-        return $form;
+        return $relev;
     }
 
-    public function getJSONModificadoSelectMultiple($pregunta, $form) {
-        $secciones = $form->secciones;
+    public function getJSONModificadoSelectMultiple($pregunta, $relev) {
+        $secciones = $relev->secciones;
         foreach($secciones as $seccion) {
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
@@ -386,12 +408,12 @@ class FormularioManager {
                 }
             }
         }
-        return $form;
+        return $relev;
     }
 
-    private function getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $idSeccion, $idPregunta) {
+    private function getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $idPregunta) {
         $respuesta = $this->entityManager->getRepository(Respuesta::class)
-                    ->findBy(['pregunta' => $idPregunta, 'seccion' => $idSeccion, 'relevamiento' => $idRelevamiento]); 
+                    ->findBy(['pregunta' => $idPregunta, 'relevamientoxSeccion' => $relevamientoxSeccion]); 
         
         return $respuesta;
     }
@@ -403,9 +425,9 @@ class FormularioManager {
         return $respuesta;
     }
 
-    private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino) {
+    private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamientoxSeccion, $pregunta, $destino) {
         $respuesta = $this->entityManager->getRepository(Respuesta::class)
-                    ->findOneBy(['pregunta' => $pregunta, 'seccion' => $seccion, 'relevamiento' => $relevamiento, 'destino' => $destino]); 
+                    ->findOneBy(['pregunta' => $pregunta, 'relevamientoxSeccion' => $relevamientoxSeccion, 'destino' => $destino]); 
         
         return $respuesta;
     }
@@ -486,14 +508,15 @@ class FormularioManager {
     }
 
     
-    private function getJSONActualizadoPorRespuestasRelevamiento($form, $idRelevamiento) {
-        $secciones = $form->secciones;
+    private function getJSONActualizadoPorRespuestasRelevamiento($relev) {
+        $secciones = $relev->secciones;
         foreach($secciones as $seccion) {
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
                 $tipoPregunta = $preguntaJSON->tipoPregunta;
-                $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaJSON->idPregunta);
+                $relevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($relev->id, $seccion->id);
+                $respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $preguntaJSON->idPregunta);
                 if($respuesta) {
                     $preguntaJSON = $this->getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion);
                     $preguntasGeneradoras = $preguntaJSON->preguntasGeneradas;
@@ -501,7 +524,7 @@ class FormularioManager {
                         foreach($preguntasGeneradoras as $preguntaGeneradora) {
                             $opcionGeneradora = $preguntaGeneradora->opcion;
                             if($preguntaJSON->respuesta == $opcionGeneradora->id) {
-                                $respuestaPregGeneradora= $this->getRespuestaPreguntaPorRelevamientoSeccion($idRelevamiento, $seccion->id, $preguntaGeneradora->preguntaGenerada->idPregunta);
+                                $respuestaPregGeneradora= $this->getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $preguntaGeneradora->preguntaGenerada->idPregunta);
                                 $preguntaGeneradora->preguntaGenerada = $this->getPreguntaJSONConRespuesta($preguntaGeneradora->preguntaGenerada->tipoPregunta, $respuestaPregGeneradora, $preguntaGeneradora->preguntaGenerada, $seccion);
                             }
                         }
@@ -509,7 +532,7 @@ class FormularioManager {
                 }
             }
         } 
-        return $form;
+        return $relev;
     }
 
     private function getJSONActualizadoPorFuncion($pregunta, $formJSON) {
@@ -525,9 +548,9 @@ class FormularioManager {
         return $output;
     }
 
-    public function getJSONActualizado($formulario, $Relevamiento){
-        $preguntas = $this->getPreguntasxFormulario($formulario);
-        $JSON = $formulario->getJSON();
+    public function getJSONActualizado($Relevamiento){
+        $preguntas = $this->getPreguntasxRelevamiento($Relevamiento);
+        $JSON = $Relevamiento->getJSON();
         $formJSON = json_decode($JSON);
         foreach($preguntas as $pregunta) {
             $formJSON = $this->getJSONActualizadoPorFuncion($pregunta, $formJSON);
@@ -737,11 +760,10 @@ class FormularioManager {
         return true;
     }
 
-    public function altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
+    public function altaRespuesta($pregunta, $relevamientoxSeccion, $respuesta, $destino, $opcion) {
         $Entidad = new Respuesta();
         $Entidad->setPregunta($pregunta);
-        $Entidad->setSeccion($seccion);
-        $Entidad->setRelevamiento($relevamiento);
+        $Entidad->setRelevamientoxSeccion($relevamientoxSeccion);
         $Entidad->setDestino($destino);
         if($opcion){
             $Entidad->setOpcion($opcion);
@@ -788,8 +810,8 @@ class FormularioManager {
         }
     }
 
-    public function altaEdicionRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion) {
-        $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamiento, $seccion, $pregunta, $destino);
+    public function altaEdicionRespuesta($pregunta, $relevamientoxSeccion, $respuesta, $destino, $opcion) {
+        $Respuesta = $this->getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamientoxSeccion, $pregunta, $destino);
         if(($Respuesta)&& (!$destino)) { 
             if($pregunta->getTipoPregunta()->esImagen()) {
                 if($Respuesta->getDescripcion() != $respuesta) {
@@ -799,19 +821,19 @@ class FormularioManager {
                 $this->actualizarRespuesta($Respuesta, $respuesta, $destino, $opcion);
             }
         } else {
-            $this->altaRespuesta($pregunta, $seccion, $relevamiento, $respuesta, $destino, $opcion);
+            $this->altaRespuesta($pregunta, $relevamientoxSeccion, $respuesta, $destino, $opcion);
         }
 
-        if (($seccion->esSeccionFirmas()) && (strpos($destino, 'destino_1_') !== false)){
-            $this->AltaNodoFirmante($relevamiento, $opcion);
+        if (($relevamientoxSeccion->getSeccion()->esSeccionFirmas()) && (strpos($destino, 'destino_1_') !== false)){
+            $this->AltaNodoFirmante($relevamientoxSeccion->getRelevamiento(), $opcion);
         }
     }
 
-    public function altaRespuestasDestino($pregunta, $seccion, $Relevamiento, $respuesta, $listaDestinos){
+    public function altaRespuestasDestino($pregunta, $relevamientoxSeccion, $respuesta, $listaDestinos){
         foreach($listaDestinos as $item) {
             $destino = $item[0];
             $opcion = $item[1]->id;
-            $this->altaEdicionRespuesta($pregunta, $seccion, $Relevamiento, $respuesta, $destino, $opcion);
+            $this->altaEdicionRespuesta($pregunta, $relevamientoxSeccion, $respuesta, $destino, $opcion);
         }
     }
 
@@ -873,7 +895,7 @@ class FormularioManager {
         }
     }
 
-    private function elminarEntidad($Entidad) {
+    private function eliminarEntidad($Entidad) {
         $this->entityManager->beginTransaction();
         try {
             $entityManager = $this->entityManager;
@@ -891,74 +913,72 @@ class FormularioManager {
         }
     }
 
-    private function eliminarRespuestasSelectores($preguntaEntidad, $seccionEnt, $Relevamiento) {
-        $entidades = $this->getRespuestaPreguntaPorRelevamientoSeccion($Relevamiento, $seccionEnt, $preguntaEntidad);
+    private function eliminarRespuestasSelectores($preguntaEntidad, $relevamientoxSeccion) {
+        $entidades = $this->getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $preguntaEntidad);
         foreach($entidades as $entidad) {
-            $this->elminarEntidad($entidad);
+            $this->eliminarEntidad($entidad);
         }
     }
 
-    private function altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta){
+    private function altaRespuestaSegunTipoRespuesta($preguntaEntidad, $relevamientoxSeccion, $respuesta){
         $listaOpcionDestino = $this->getListaOpcionDestinoPregunta($preguntaEntidad, $respuesta);
         if ($listaOpcionDestino){
-            $this->eliminarRespuestasSelectores($preguntaEntidad, $seccionEnt, $Relevamiento);
-            $this->altaRespuestasDestino($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta, $listaOpcionDestino);
+            $this->eliminarRespuestasSelectores($preguntaEntidad, $relevamientoxSeccion);
+            $this->altaRespuestasDestino($preguntaEntidad, $relevamientoxSeccion, $respuesta, $listaOpcionDestino);
         } else {
             $opcion = null;
             if ($preguntaEntidad->tieneOpciones()) {
                 $opcion = $respuesta;
             }   
-            $this->altaEdicionRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta, null, $opcion);
+            $this->altaEdicionRespuesta($preguntaEntidad, $relevamientoxSeccion, $respuesta, null, $opcion);
         }
     }
 
-    private function eliminarRespuestasSinResponder($Pregunta, $Seccion, $Relevamiento) {
-        $Respuestas = $this->getRespuestaPreguntaPorRelevamientoSeccion($Relevamiento, $Seccion, $Pregunta);
+    private function eliminarRespuestasSinResponder($Pregunta, $relevamientoxSeccion) {
+        $Respuestas = $this->getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $Pregunta);
         foreach($Respuestas as $Respuesta) {
             $this->elminarEntidad($Respuesta);
         } 
     }
 
-    public function altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento){
+    public function altaRespuestaDePregunta($pregunta, $relevamientoxSeccion){
         $respuesta = $pregunta->respuesta;
         if ($this->tieneRespuesta($respuesta)){
             $idPregunta = $pregunta->idPregunta;
             $preguntaEntidad = $this->getPregunta($idPregunta);
-            $this->altaRespuestaSegunTipoRespuesta($preguntaEntidad, $seccionEnt, $Relevamiento, $respuesta);
+            $this->altaRespuestaSegunTipoRespuesta($preguntaEntidad, $relevamientoxSeccion, $respuesta);
         } else {
             $idPregunta = $pregunta->idPregunta;
             $preguntaEntidad = $this->getPregunta($idPregunta);
-            $this->eliminarRespuestasSinResponder($preguntaEntidad, $seccionEnt, $Relevamiento);
+            $this->eliminarRespuestasSinResponder($preguntaEntidad, $relevamientoxSeccion);
         }
     }
 
-    public function altaRespuestaPreguntasGeneradas($preguntasGeneradas, $seccionEnt, $Relevamiento){
+    public function altaRespuestaPreguntasGeneradas($preguntasGeneradas, $relevamientoxSeccion){
         foreach($preguntasGeneradas as $preguntaGenerada) {
             if($preguntaGenerada->estado == "block"){
                 $pregunta = $preguntaGenerada->preguntaGenerada;
-                $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
+                $this->altaRespuestaDePregunta($pregunta, $relevamientoxSeccion);
             }
         }
-        die();
     }
 
     public function altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento){
         $idSeccion = $seccion->id;
         $seccionEnt = $this->getSeccion($idSeccion);
+        $relevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $seccionEnt);
         $seccionPreguntas = $seccion->preguntas;
         foreach ($seccionPreguntas as $seccionPregunta) {
             $pregunta = $seccionPregunta->pregunta;
-            $this->altaRespuestaDePregunta($pregunta, $seccionEnt, $Relevamiento);
+            $this->altaRespuestaDePregunta($pregunta, $relevamientoxSeccion);
             if($pregunta->preguntasGeneradas) {
-                $this->altaRespuestaPreguntasGeneradas($pregunta->preguntasGeneradas, $seccionEnt, $Relevamiento);
+                $this->altaRespuestaPreguntasGeneradas($pregunta->preguntasGeneradas, $relevamientoxSeccion);
             }
         }
     }
 
-    private function altaRespuestasFormulario($datos, $idPlanificacion) {
+    private function altaRespuestasFormulario($datos, $Relevamiento) {
         $secciones = $datos->secciones;
-        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
-        $Relevamiento = $Planificacion->getRelevamiento();
 
         $this->vaciarNodosFirmantes($Relevamiento);
         foreach ($secciones as $seccion) {
@@ -973,8 +993,8 @@ class FormularioManager {
     }
 
     public function altaRespuestasYArchivosFormulario($Planificacion, $data, $listaArchivos, $archivo) {
-        $this->altaRespuestasFormulario($data, $Planificacion->getId());
         $Relevamiento = $Planificacion->getRelevamiento();
+        $this->altaRespuestasFormulario($data, $Relevamiento);
         $this->guardarArchivos($listaArchivos, $archivo, $Relevamiento->getId());
     }
 

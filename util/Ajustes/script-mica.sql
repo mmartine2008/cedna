@@ -33,6 +33,15 @@ DROP CONSTRAINT FK_Respuesta_Seccion;
 ALTER TABLE dbo.Respuesta
 DROP COLUMN IdSeccion;
 
+ALTER TABLE dbo.Respuesta
+ADD IdRelevamientoxSeccion INT NULL;
+
+ALTER TABLE dbo.Respuesta
+ADD CONSTRAINT FK_Respuesta_RelevamientoxSeccion
+FOREIGN KEY (IdRelevamientoxSeccion) REFERENCES RelevamientosxSecciones(IdRelevamientoxSeccion);
+
+
+
 DROP TABLE dbo.FirmanFormulario;
 
 DROP TABLE dbo.Formulario;

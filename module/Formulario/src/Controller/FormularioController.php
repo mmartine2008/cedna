@@ -31,7 +31,6 @@ class FormularioController extends BaseFormularioController
 
         $nombreUsuario = $this->userSessionManager->getUserName();
         $arrTareasJSON = $this->FormularioManager->getArrTareasParaEjecutar($nombreUsuario);
-
         return new ViewModel([
             "OperacionesJSON" => $OperacionesJSON,
             'arrTareasJSON' => $arrTareasJSON
@@ -124,13 +123,10 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario",["action" => "index"]);
         }
-        $Formulario = $Relevamiento->getFormulario();
-        $FormularioJSON = $this->FormularioManager->getJSONActualizado($Formulario, $Relevamiento);
-        //ACA
-        //$RelevamientoJSON = $this->FormularioManager->getJSONActualizado($Relevamiento);
+        $RelevamientoJSON = $this->FormularioManager->getJSONActualizado($Relevamiento);
         $enEdicion = $Relevamiento->getEstadoRelevamiento()->getId();
         return new ViewModel([
-            "formulario" => $FormularioJSON,
+            "relevamiento" => $RelevamientoJSON,
             "OperacionesJSON" => $OperacionesJSON,
             "destinos" => $this->getDestinos(),
             "idRelevamiento" => $Relevamiento->getId(),
