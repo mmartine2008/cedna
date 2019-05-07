@@ -182,5 +182,14 @@ return [
     '__mensaje_eliminar_formulario__' => 'Está seguro que desea eliminar el formulario',
     '__Requerida__' => 'Requerida',
     '__Secciones__' => 'Secciones',
+    '__falta_responder_pregunta_secciones__' => 'Falta responder la pregunta Secciones',
+    '__envio_formulario_no_modificable__' => 'Una vez enviado el formulario, no podrá modificarse',
+    '__Usted_esta_seguro__' => 'Usted esta seguro?',
+    '__Si__' => 'Si',
+    '__faltan_responder_preguntas__' => 'Faltan responder preguntas',
+    '__responda_preguntas_secciones__' => 'Responda las preguntas de las secciones',
+    '__responda_preguntas_secciones__' => 'Responda las preguntas de las secciones',
+    '__Emitido_por__' => 'Emitido por',
+    '__Permiso_integral_trabajos_seguros__' => 'PERMISO INTEGRAL PARA TRABAJOS SEGUROS',
 
 ];

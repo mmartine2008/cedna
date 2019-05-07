@@ -14,9 +14,9 @@ class OperacionController extends CednaController
 {
     private $operacionManager;
 
-    public function __construct($operacionManager, $catalogoManager, $userSessionManager, $translator)
+    public function __construct($operacionManager, $catalogoManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
         
         $this->operacionManager = $operacionManager;
     }

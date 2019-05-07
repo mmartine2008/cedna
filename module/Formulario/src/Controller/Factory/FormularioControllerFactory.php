@@ -10,6 +10,7 @@ use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Zend\View\Renderer\RendererInterface;
 use Formulario\Service\CednaTcpdf;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -27,7 +28,8 @@ class FormularioControllerFactory implements FactoryInterface
         $tcpdf = $container->get(CednaTcpdf::class);
 
         $renderer = $container->get(RendererInterface::class);    
+        $permisosManager = $container->get(PermisosManager::class);
 
-        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer);
+        return new FormularioController($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer, $permisosManager);
     }
 }

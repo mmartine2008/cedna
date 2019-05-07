@@ -8,6 +8,7 @@ use Application\Controller\MailController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\MailManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class MailControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $mailManager = $container->get(MailManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new MailController($catalogoManager, $userSessionManager, $mailManager, $translator);
+        return new MailController($catalogoManager, $userSessionManager, $mailManager, $translator, $permisosManager);
     }
 }

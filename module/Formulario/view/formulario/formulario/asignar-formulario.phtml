@@ -188,7 +188,7 @@ function FormPlanificacionToJson(){
 function mostrarCartelErrorSubmit() { //ver que texto poner
         swal({
             type: 'error',
-            title: 'Falta responder la pregunta Secciones',
+            title: '<?= $this->translate('__falta_responder_pregunta_secciones__') ?>',
         })
     }
 
@@ -199,7 +199,20 @@ function preSubmit(){
     if($("#formularioPlanificacion_2 option").length == 0){
         mostrarCartelErrorSubmit();
     } else {
-        $("#formPlanificacion").submit();
+        swal({
+        title: '<?= $this->translate('__Usted_esta_seguro__') ?>',
+        text:'<?= $this->translate('__envio_formulario_no_modificable__') ?>',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+        confirmButtonText: '<?= $this->translate('__Si__') ?>',
+        }).then((result) => {
+        if (result.value) {
+            $("#formPlanificacion").submit();
+        }
+        })
     }
 }
 

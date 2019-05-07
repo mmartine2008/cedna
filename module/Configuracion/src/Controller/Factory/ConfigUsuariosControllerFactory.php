@@ -8,6 +8,7 @@ use Configuracion\Controller\ConfigUsuariosController;
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfigUsuariosManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -22,7 +23,8 @@ class ConfigUsuariosControllerFactory implements FactoryInterface
         $configUsuariosManager = $container->get(ConfigUsuariosManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager, $userSessionManager, $translator);
+        return new ConfigUsuariosController($catalogoManager, $configUsuariosManager, $userSessionManager, $translator, $permisosManager);
     }
 }

@@ -8,6 +8,7 @@ use Application\Controller\OrdenesDeCompraController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\OrdenesDeCompraManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class OrdenesDeCompraControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $ordenesDeCompraManager = $container->get(OrdenesDeCompraManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new OrdenesDeCompraController($catalogoManager, $userSessionManager, $ordenesDeCompraManager, $translator);
+        return new OrdenesDeCompraController($catalogoManager, $userSessionManager, $ordenesDeCompraManager, $translator, $permisosManager);
     }
 }

@@ -8,6 +8,7 @@ use Application\Controller\OrganigramaController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\OrganigramaManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class OrganigramaControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $organigramaManager = $container->get(OrganigramaManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-    return new OrganigramaController($catalogoManager, $userSessionManager, $organigramaManager, $translator);
+    return new OrganigramaController($catalogoManager, $userSessionManager, $organigramaManager, $translator, $permisosManager);
     }
 }

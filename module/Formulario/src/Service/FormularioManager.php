@@ -590,7 +590,7 @@ class FormularioManager {
                             ->findAll(); 
         $output = [];
         foreach($Respuestas as $Respuesta) {
-            if ($Respuesta->getRelevamiento()->getId() == $Relevamiento->getId()) {
+            if ($Respuesta->getRelevamientoxSeccion()->getRelevamiento()->getId() == $Relevamiento->getId()) {
                 $output[] = $Respuesta;
             }
         }
@@ -709,7 +709,7 @@ class FormularioManager {
 
     private function respuestasPertenecenASeccion($Respuestas, $idSeccion) {
         foreach($Respuestas as $Respuesta) {
-            if($Respuesta->getSeccion()->getId() == $idSeccion){
+            if($Respuesta->getRelevamientoxSeccion()->getSeccion()->getId() == $idSeccion){
                 return true;
             }
             return false;
@@ -731,7 +731,7 @@ class FormularioManager {
 
     private function getSeccionesPorFormulario($Relevamiento){
         $RespuestasRelevamiento = $this->getRespuestasSegunRelevamiento($Relevamiento);
-        $secciones = $Relevamiento->getFormulario()->getSecciones();
+        $secciones = $Relevamiento->getSecciones();
         foreach($secciones as $seccion) {
             $respuestas = $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId());
             if($respuestas) {
@@ -746,7 +746,6 @@ class FormularioManager {
         $output = [];
        
         $output = ['idRelevamiento' =>$Relevamiento->getId(), 
-                    'descripcionFormulario' => $Relevamiento->getFormulario()->getNombre(),
                     'secciones' => $this->getSeccionesPorFormulario($Relevamiento)
                     ];
      

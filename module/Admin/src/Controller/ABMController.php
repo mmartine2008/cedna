@@ -17,9 +17,9 @@ class ABMController extends CednaController
     private $operacionAccionPerfilManager;
 
     public function __construct($accionManager, $operacionManager, $operacionAccionPerfilManager, 
-                                $catalogoManager, $userSessionManager, $translator)
+                                $catalogoManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->accionManager = $accionManager;
         $this->operacionManager = $operacionManager;

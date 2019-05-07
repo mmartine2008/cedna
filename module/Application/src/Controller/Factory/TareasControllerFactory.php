@@ -8,6 +8,7 @@ use Application\Controller\TareasController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\TareasManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class TareasControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $tareasManager = $container->get(TareasManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new TareasController($catalogoManager, $userSessionManager, $tareasManager, $translator);
+        return new TareasController($catalogoManager, $userSessionManager, $tareasManager, $translator, $permisosManager);
     }
 }

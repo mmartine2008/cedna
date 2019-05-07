@@ -8,6 +8,7 @@ use Application\Controller\OperariosController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\OperariosManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class OperariosControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $operariosManager = $container->get(OperariosManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new OperariosController($catalogoManager, $userSessionManager, $operariosManager, $translator);
+        return new OperariosController($catalogoManager, $userSessionManager, $operariosManager, $translator, $permisosManager);
     }
 }

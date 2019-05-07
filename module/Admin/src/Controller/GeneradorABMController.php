@@ -14,9 +14,9 @@ class GeneradorABMController extends CednaController
 {
     private $generadorABMManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $translator, $generadorABMManager)
+    public function __construct($catalogoManager, $userSessionManager, $translator, $generadorABMManager, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
         
         $this->generadorABMManager = $generadorABMManager;
     }

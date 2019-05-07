@@ -35,12 +35,14 @@ class AuthController extends AbstractActionController
     private $userManager;
 
     private $userSessionManager;
+    private $permisosManager;
+
 
     /**
      * Constructor.
      */
-    public function __construct($permisosManager, $authManager, $userManager, 
-                                        $userSessionManager, $empresasManager)
+    public function __construct($authManager, $userManager, 
+                                        $userSessionManager, $empresasManager, $permisosManager)
     {
         // parent::__construct($permisosManager, $userSessionManager);
         
@@ -48,6 +50,8 @@ class AuthController extends AbstractActionController
         $this->authManager = $authManager;
         $this->userManager = $userManager;
         $this->userSessionManager = $userSessionManager;
+        $this->permisosManager = $permisosManager;
+
     }
     
     private function procesarLoginAction()

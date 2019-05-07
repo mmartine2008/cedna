@@ -7,6 +7,7 @@ use Configuracion\Controller\ConfiguracionController;
 
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -20,7 +21,8 @@ class ConfiguracionControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
 
-        return new ConfiguracionController($catalogoManager, $userSessionManager, $translator);
+        return new ConfiguracionController($catalogoManager, $userSessionManager, $translator, $permisosManager);
     }
 }

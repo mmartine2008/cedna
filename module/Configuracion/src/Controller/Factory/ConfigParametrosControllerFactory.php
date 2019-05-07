@@ -8,6 +8,7 @@ use Configuracion\Controller\ConfigParametrosController;
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfiguracionManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -22,7 +23,8 @@ class ConfigParametrosControllerFactory implements FactoryInterface
         $configuracionManager = $container->get(ConfiguracionManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new ConfigParametrosController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
+        return new ConfigParametrosController($catalogoManager, $configuracionManager, $userSessionManager, $translator, $permisosManager);
     }
 }

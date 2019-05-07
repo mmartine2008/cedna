@@ -12,8 +12,8 @@ use Zend\View\Model\ViewModel;
 
 class FormularioController extends BaseFormularioController
 {
-    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer) {
-        parent::__construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer);
+    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer, $permisosManager) {
+        parent::__construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer, $permisosManager);
     }
 
     public function indexAction() {
@@ -185,7 +185,7 @@ class FormularioController extends BaseFormularioController
         $pdf->setLogo($logo);
         $pdf->setDescripcion($descripcion);
         
-        $pdf->AddPage('P', 'A4');
+        $pdf->AddPage('P', 'FOLIO');
         $pdf->writeHTML($html, true, false, true, false, '');
         
         $Tarea = $Planificacion->getTarea();
@@ -197,7 +197,9 @@ class FormularioController extends BaseFormularioController
         $pdf->SetFont('helvetica', 'I', 8);
         $pdf->Cell(0, 5, "Emitido por ".$nombreUsuario." - Cedna Software - ".$fecha_hoy, 0, 1, 'R');
 
-        $pdf->Output();
+        $nombre='Cedna_'.$nombreUsuario.'_'.date("d-m-Y_H-i-s").'.pdf';
+
+        $pdf->Output($nombre);
     }
 
     public function formulariosParaFirmarAction(){

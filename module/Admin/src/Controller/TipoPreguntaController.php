@@ -15,9 +15,9 @@ class TipoPreguntaController extends CednaController
 
     private $tipoPreguntaManager;
 
-    public function __construct($catalogoManager, $tipoPreguntaManager, $userSessionManager, $translator)
+    public function __construct($catalogoManager, $tipoPreguntaManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->tipoPreguntaManager = $tipoPreguntaManager;
     }

@@ -15,9 +15,9 @@ use Zend\I18n\Translator\Translator;
 class ConfiguracionController extends CednaController
 {
 
-    public function __construct($catalogoManager, $userSessionManager, $translator)
+    public function __construct($catalogoManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
     }
 
     public function indexAction()

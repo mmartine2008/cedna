@@ -8,6 +8,7 @@ use Admin\Controller\GeneradorABMController;
 use Admin\Service\GeneradorABMManager;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class GeneradorABMControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new GeneradorABMController($catalogoManager, $userSessionManager, $translator, $generadorABMManager);
+        return new GeneradorABMController($catalogoManager, $userSessionManager, $translator, $generadorABMManager, $permisosManager);
     }
 }

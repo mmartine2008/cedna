@@ -919,8 +919,8 @@
     function mostrarCartelErrorSubmit(secciones) {
         swal({
             type: 'error',
-            title: 'Faltan responder preguntas',
-            text: 'Responda las preguntas de las secciones : '+secciones.join(", "),
+            title: '<?= $this->translate('__faltan_responder_preguntas__') ?>',
+            text: '<?= $this->translate('__responda_preguntas_secciones__') ?> : '+secciones.join(", "),
         })
     }
 

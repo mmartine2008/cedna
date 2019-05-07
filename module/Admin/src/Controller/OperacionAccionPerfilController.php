@@ -14,9 +14,9 @@ class OperacionAccionPerfilController extends CednaController
 {
     private $operacionAccionPerfil;
 
-    public function __construct($operacionAccionPerfil, $catalogoManager, $userSessionManager, $translator)
+    public function __construct($operacionAccionPerfil, $catalogoManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
         
         $this->operacionAccionPerfil = $operacionAccionPerfil;
     }

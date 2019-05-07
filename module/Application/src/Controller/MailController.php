@@ -14,9 +14,9 @@ class MailController extends CednaController
 {
     private $mailManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $mailManager, $translator)
+    public function __construct($catalogoManager, $userSessionManager, $mailManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->mailManager = $mailManager;
     }

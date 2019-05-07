@@ -201,6 +201,7 @@ return [
             Service\OrdenesDeCompraManager::class => Service\Factory\OrdenesDeCompraManagerFactory::class,
             Service\MailManager::class => Service\Factory\MailManagerFactory::class,
             Service\InduccionesManager::class => Service\Factory\InduccionesManagerFactory::class,
+            Service\PermisosManager::class => Service\Factory\PermisosManagerFactory::class,
         ],
     ],
     'view_manager' => [

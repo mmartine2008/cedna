@@ -14,9 +14,9 @@ class AccionController extends CednaController
 {
     private $accionManager;
 
-    public function __construct($accionManager, $catalogoManager, $userSessionManager, $translator)
+    public function __construct($accionManager, $catalogoManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
         
         $this->accionManager = $accionManager;
     }

@@ -8,6 +8,7 @@ use Configuracion\Controller\ConfigNotifXPerfilController;
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfiguracionManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -22,7 +23,8 @@ class ConfigNotifXPerfilControllerFactory implements FactoryInterface
         $configuracionManager = $container->get(ConfiguracionManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new ConfigNotifXPerfilController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
+        return new ConfigNotifXPerfilController($catalogoManager, $configuracionManager, $userSessionManager, $translator, $permisosManager);
     }
 }

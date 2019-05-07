@@ -14,9 +14,9 @@ class TareasController extends CednaController
 {
     private $tareasManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $tareasManager, $translator)
+    public function __construct($catalogoManager, $userSessionManager, $tareasManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->tareasManager = $tareasManager;
     }

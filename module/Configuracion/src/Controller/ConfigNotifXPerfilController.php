@@ -15,9 +15,9 @@ class ConfigNotifXPerfilController extends ConfiguracionController
 
     private $configuracionManager;
 
-    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator)
+    public function __construct($catalogoManager, $configuracionManager, $userSessionManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->configuracionManager = $configuracionManager;
     }

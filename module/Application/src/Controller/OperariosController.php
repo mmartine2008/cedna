@@ -14,9 +14,9 @@ class OperariosController extends CednaController
 {
     private $operariosManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $operariosManager, $translator)
+    public function __construct($catalogoManager, $userSessionManager, $operariosManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->operariosManager = $operariosManager;
     }

@@ -14,9 +14,9 @@ class OrdenesDeCompraController extends CednaController
 {
     private $ordenesDeCompraManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $ordenesDeCompraManager, $translator)
+    public function __construct($catalogoManager, $userSessionManager, $ordenesDeCompraManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->ordenesDeCompraManager = $ordenesDeCompraManager;
     }

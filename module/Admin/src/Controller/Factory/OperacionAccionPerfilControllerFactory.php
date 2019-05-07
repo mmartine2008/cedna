@@ -8,6 +8,7 @@ use Admin\Controller\OperacionAccionPerfilController;
 use Admin\Service\OperacionAccionPerfilManager;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +22,8 @@ class OperacionAccionPerfilControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new OperacionAccionPerfilController($operacionManager, $catalogoManager, $userSessionManager, $translator);
+        return new OperacionAccionPerfilController($operacionManager, $catalogoManager, $userSessionManager, $translator, $permisosManager);
     }
 }

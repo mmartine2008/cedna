@@ -8,6 +8,7 @@ use Configuracion\Controller\ConfigFormularioController;
 use DBAL\Service\CatalogoManager;
 use Configuracion\Service\ConfigFormularioManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -22,7 +23,8 @@ class ConfigFormularioControllerFactory implements FactoryInterface
         $configuracionManager = $container->get(ConfigFormularioManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new ConfigFormularioController($catalogoManager, $configuracionManager, $userSessionManager, $translator);
+        return new ConfigFormularioController($catalogoManager, $configuracionManager, $userSessionManager, $translator, $permisosManager);
     }
 }

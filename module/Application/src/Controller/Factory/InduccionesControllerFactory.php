@@ -8,6 +8,8 @@ use Application\Controller\InduccionesController;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
 use Application\Service\InduccionesManager;
+use Application\Service\PermisosManager;
+
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -21,7 +23,8 @@ class InduccionesControllerFactory implements FactoryInterface
         $userSessionManager = $container->get(UserSessionManager::class);
         $induccionesManager = $container->get(InduccionesManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
         
-        return new InduccionesController($catalogoManager, $userSessionManager, $induccionesManager, $translator);
+        return new InduccionesController($catalogoManager, $userSessionManager, $induccionesManager, $translator, $permisosManager);
     }
 }

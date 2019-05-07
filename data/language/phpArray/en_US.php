@@ -183,5 +183,14 @@ return [
     '__mensaje_eliminar_formulario__' => 'Are you sure you want to delete the form',
     '__Requerida__' => 'Required',
     '__Secciones__' => 'Sections',
+    '__falta_responder_pregunta_secciones__' => 'Missing answer the question Sections',
+    '__envio_formulario_no_modificable__' => 'Once the form has been sent, it can not be modified',
+    '__Usted_esta_seguro__' => 'Are you sure?',
+    '__Si__' => 'Yes',
+    '__faltan_responder_preguntas__' => 'Missing answers questions',
+    '__responda_preguntas_secciones__' => 'Answer the questions in the sections',
+    '__Emitido_por__' => 'Issued by',
+    '__Permiso_integral_trabajos_seguros__' => 'COMPREHENSIVE PERMIT FOR SAFE WORK',
+
 
 ];

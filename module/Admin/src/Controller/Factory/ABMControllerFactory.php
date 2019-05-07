@@ -10,6 +10,7 @@ use Admin\Service\OperacionManager;
 use Admin\Service\OperacionAccionPerfilManager;
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 /**
  * This is the factory for AuthController. Its purpose is to instantiate the controller
@@ -25,8 +26,10 @@ class ABMControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
+
         
         return new ABMController($accionManager, $operacionManager, $operacionAccionPerfilManager, 
-                                $catalogoManager, $userSessionManager, $translator);
+                                $catalogoManager, $userSessionManager, $translator, $permisosManager);
     }
 }

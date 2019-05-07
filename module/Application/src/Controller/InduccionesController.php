@@ -14,9 +14,10 @@ class InduccionesController extends CednaController
 {
     private $induccionesManager;
 
-    public function __construct($catalogoManager, $userSessionManager, $induccionesManager, $translator)
+
+    public function __construct($catalogoManager, $userSessionManager, $induccionesManager, $translator, $permisosManager)
     {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->induccionesManager = $induccionesManager;
     }

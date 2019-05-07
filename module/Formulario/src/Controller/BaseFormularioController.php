@@ -25,8 +25,8 @@ class BaseFormularioController extends CednaController
     protected $FormularioManager;
 
 
-    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer) {
-        parent::__construct($catalogoManager, $userSessionManager, $translator);
+    public function __construct($FormularioManager, $catalogoManager, $userSessionManager, $translator, $tcpdf, $renderer, $permisosManager) {
+        parent::__construct($catalogoManager, $userSessionManager, $translator, $permisosManager);
 
         $this->FormularioManager = $FormularioManager;
         $this->tcpdf = $tcpdf;
@@ -99,7 +99,7 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    protected function imprimirPreguntas($respuestas, $pdf, $seccion, $color){
+    protected function imprimirPreguntas($respuestas, $pdf, $seccion){
         $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
         $pdf->Ln(8);
@@ -120,7 +120,6 @@ class BaseFormularioController extends CednaController
                 }
             }
         }
-        return $color;
     }
 
     private function imprimirTresFirmas($pdf, $list, $i) {
@@ -203,27 +202,23 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    protected function imprimirSecciones($pdf, $seccion, $color){
-        $pdf->SetTextColor(0, 0, 0, 100);
+    protected function imprimirSecciones($pdf, $seccion){
         $respuestas = $seccion['respuestas'];
         $pdf->Ln(5);
 
         if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
             $this->imprimirFirmas($respuestas, $pdf, $seccion);
         } else {
-            $color = $this->imprimirPreguntas($respuestas, $pdf, $seccion, $color);
+            $this->imprimirPreguntas($respuestas, $pdf, $seccion);
         }
-        return $color;
     }
 
     protected function imprimirFormulario($pdf, $data) {
-        $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 200), 'strokeColor'=>array(255, 128, 128)));
+        $pdf->setFormDefaultProp(array('lineWidth'=>1, 'borderStyle'=>'solid', 'fillColor'=>array(255, 255, 255), 'strokeColor'=>array(255, 128, 128)));
         $pdf->SetFont('helvetica', 'B', 14);
-        $pdf->Cell(0, 5, $data['descripcionFormulario'], 0, 1, 'C');
 
-        $color = true;
         foreach ($data['secciones'] as $seccion) {
-            $color = $this->imprimirSecciones($pdf, $seccion, $color);
+            $this->imprimirSecciones($pdf, $seccion);
         }
     }
 

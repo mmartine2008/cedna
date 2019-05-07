@@ -7,6 +7,7 @@ use Application\Controller\CednaController;
 
 use DBAL\Service\CatalogoManager;
 use Autenticacion\Service\UserSessionManager;
+use Application\Service\PermisosManager;
 
 
 /**
@@ -20,7 +21,9 @@ class CednaControllerFactory implements FactoryInterface
         $catalogoManager = $container->get(CatalogoManager::class);
         $userSessionManager = $container->get(UserSessionManager::class);
         $translator = $container->get('translator');
+        $permisosManager = $container->get(PermisosManager::class);
 
-        return new CednaController($catalogoManager, $userSessionManager, $translator);
+
+        return new CednaController($catalogoManager, $userSessionManager, $translator, $permisosManager);
     }
 }
