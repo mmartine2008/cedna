@@ -11,6 +11,7 @@ namespace Application\Service;
 
 
 use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole as Role;
 
 
 /**
@@ -27,39 +28,39 @@ class PermisosManager {
     private $perfilesManager;
 
     protected $controlesComunes = [
-        'Autenticacion\Controller\AuthController', 
-        'Formulario\Controller\BaseFormularioController',
-        'Formulario\Controller\FormularioController', 
-        //no se donde van: 
-        'Application\Controller\CednaController', 
-        'Application\Controller\MailController',
+        ['Autenticacion\Controller\AuthController', ''], 
+        ['Formulario\Controller\BaseFormularioController', ''],
+        ['Formulario\Controller\FormularioController', 'formulariosParaFirmarAction,firmarFormularioAction,delegarFirmaAction,puedeDelegarAction'], 
+        ['Application\Controller\CednaController', ''], 
+        ['Application\Controller\MailController', ''],
     ];
     
 
 
     protected $controlersAdmin = [
-                'Application\Controller\InduccionesController', 
-                'Application\Controller\OperariosController', 
-                'Application\Controller\OrganigramaController', 
-                'Configuracion\Controller\ConfigFormularioController', 
-                'Configuracion\Controller\ConfigNotifXPerfilController', 
-                'Configuracion\Controller\ConfigParametrosController', 
-                'Configuracion\Controller\ConfigPerfilesController', 
-                'Configuracion\Controller\ConfigPreguntaController', 
-                'Configuracion\Controller\ConfiguracionController', 
-                'Configuracion\Controller\ConfigUsuariosController', 
-                'Admin\Controller\ABMController', 
-                'Admin\Controller\AccionController', 
-                'Admin\Controller\GeneradorABMController', 
-                'Admin\Controller\OperacionAccionPerfilController', 
-                'Admin\Controller\OperacionController', 
-                'Admin\Controller\TipoPreguntaController', 
+                ['Application\Controller\InduccionesController', ''], 
+                ['Application\Controller\OperariosController', ''], 
+                ['Application\Controller\OrganigramaController', ''], 
+                ['Configuracion\Controller\ConfigFormularioController', ''], 
+                ['Configuracion\Controller\ConfigNotifXPerfilController', ''], 
+                ['Configuracion\Controller\ConfigParametrosController', ''], 
+                ['Configuracion\Controller\ConfigPerfilesController', ''], 
+                ['Configuracion\Controller\ConfigPreguntaController', ''], 
+                ['Configuracion\Controller\ConfiguracionController', ''], 
+                ['Configuracion\Controller\ConfigUsuariosController', ''], 
+                ['Admin\Controller\ABMController', ''], 
+                ['Admin\Controller\AccionController', ''], 
+                ['Admin\Controller\GeneradorABMController', ''], 
+                ['Admin\Controller\OperacionAccionPerfilController', ''], 
+                ['Admin\Controller\OperacionController', ''], 
+                ['Admin\Controller\TipoPreguntaController', ''], 
             ];
     
     protected $controlersExterno = [
-        'Application\Controller\OrdenesDeCompraController',
-        'Application\Controller\PlanificacionController',
-        'Application\Controller\TareasController',
+        ['Application\Controller\OrdenesDeCompraController', ''],
+        ['Application\Controller\PlanificacionController', ''],
+        ['Application\Controller\TareasController', ''],
+        ['Formulario\Controller\FormularioController', 'indexAction,paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction'], 
             ];
       
     private $acl;
@@ -131,15 +132,27 @@ class PermisosManager {
     {
         $perfilesInternos = $this->getPerfilesInternos();
         
-        foreach ($this->controlersAdmin as $controller)
+        foreach ($this->controlesComunes as $rolAndRecurse)
         {
+            $controller = $rolAndRecurse[0];
+            $methods = explode(',', $rolAndRecurse[1]); 
             if (!$this->acl->hasResource($controller))
             {
                 $this->acl->addResource($controller);
             }
             foreach ($perfilesInternos as $perfil)
             {
-                $this->acl->allow($perfil->getNombre(), $controller);
+                $nombrePerfil = $perfil->getNombre();
+                if($methods[0] != ''){
+                    foreach($methods as $method) {
+                        if(!$this->acl->hasRole($method)){
+                            $this->acl->addRole($method);
+                            $this->acl->allow($nombrePerfil, $controller, $method);
+                        }
+                    }  
+                } else {
+                    $this->acl->allow($nombrePerfil, $controller);
+                }
             }
         }
     }
@@ -150,14 +163,26 @@ class PermisosManager {
      */
     private function addPermisoRecursoPerfilExterno($nombrePerfil)
     {
-        foreach ($this->controlersExterno as $controller)
+        foreach ($this->controlesComunes as $rolAndRecurse)
         {
+            $controller = $rolAndRecurse[0];
+            $methods = explode(',', $rolAndRecurse[1]);
             if (!$this->acl->hasResource($controller))
             {
                 $this->acl->addResource($controller);
             }
-            $this->acl->allow($nombrePerfil, $controller);
-        }                                
+            if($methods){
+                foreach($methods as $method) {
+                    if(!$this->acl->hasRole($method)){
+                        $this->acl->addRole($method);
+                        $this->acl->allow($nombrePerfil, $controller, $method);
+                    }
+                }  
+            } else {
+                $this->acl->allow($nombrePerfil, $controller);
+            }
+            
+        }                                         
     }
  
     /**
@@ -172,13 +197,24 @@ class PermisosManager {
         foreach ($perfiles as $perfil)
         {
             $nombrePerfil = $perfil->getNombre();
-            foreach ($this->controlesComunes as $controller)
+            foreach ($this->controlesComunes as $rolAndRecurse)
             {
+                $controller = $rolAndRecurse[0];
+                $methods = explode(',', $rolAndRecurse[1]);
                 if (!$this->acl->hasResource($controller))
                 {
                     $this->acl->addResource($controller);
                 }                
-                $this->acl->allow($nombrePerfil, $controller);
+                if($methods){
+                    foreach($methods as $method) {
+                        if(!$this->acl->hasRole($method)){
+                            $this->acl->addRole($method);
+                            $this->acl->allow($nombrePerfil, $controller, $method);
+                        }
+                    }  
+                } else {
+                    $this->acl->allow($nombrePerfil, $controller);
+                }
             }            
         }
     }
@@ -212,36 +248,36 @@ class PermisosManager {
         $this->addRecursosExterno();
     }
     
-//     public function verificar($perfil, $recurso, $method = null)
-//     {
-//         $resultado = $this->acl->isAllowed($perfil, $recurso);
+    public function verificar($perfil, $recurso, $method = null)
+    {
+        $resultado = $this->acl->isAllowed($perfil, $recurso, $method);
 
-//         return $resultado;
-//     }
+        return $resultado;
+    }
        
-// /**
-//      * El metodo login es el principal metodo que es valido cuando no se esta logueado,
-//      * pero tambien hay otros
-//      * 
-//      * @param type $controller
-//      * @param type $action
-//      * @param type $method
-//      */
-//     public function validarLogin($controller, $action, $method)
-//     {
-//        if  ($controller == 'Usuarios\Controller\AuthController')
-//         {
-//             if (($action == 'login') || 
-//                 ($action == 'cambiarperfilactivoAction') || 
-//                 ($action == 'registro') || 
-//                 ($action == 'logout') 
-//                 || ($action == 'sendmail') 
-//                 )
-//             {
-//                 return true;
-//             }
-//         } 
+/**
+     * El metodo login es el principal metodo que es valido cuando no se esta logueado,
+     * pero tambien hay otros
+     * 
+     * @param type $controller
+     * @param type $action
+     * @param type $method
+     */
+    public function validarLogin($controller, $action, $method)
+    {
+       if  ($controller == 'Autenticacion\Controller\AuthController')
+        {
+            if (($action == 'login') || 
+                ($action == 'cambiarperfilactivoAction') || 
+                ($action == 'registro') || 
+                ($action == 'logout') ||
+                ($action == 'sendmail') 
+                )
+            {
+                return true;
+            }
+        } 
         
-//         return false;
-//     }
+        return false;
+    }
 }
