@@ -50,7 +50,7 @@ class TareasController extends CednaController
         }
         
         $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
-        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+        $arrFormularioJSON = $this->catalogoManager->getArrEntidadJSON('Secciones');
 
         $view = new ViewModel();
         

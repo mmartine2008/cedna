@@ -30,7 +30,7 @@ class PermisosManager {
     protected $controlesComunes = [
         ['Autenticacion\Controller\AuthController', ''], 
         ['Formulario\Controller\BaseFormularioController', ''],
-        ['Formulario\Controller\FormularioController', 'formulariosParaFirmarAction,firmarFormularioAction,delegarFirmaAction,puedeDelegarAction'], 
+        ['Formulario\Controller\FormularioController', 'indexAction,formulariosParaFirmarAction,firmarFormularioAction,delegarFirmaAction,puedeDelegarAction'], 
         ['Application\Controller\CednaController', ''], 
         ['Application\Controller\MailController', ''],
     ];
@@ -60,7 +60,7 @@ class PermisosManager {
         ['Application\Controller\OrdenesDeCompraController', ''],
         ['Application\Controller\PlanificacionController', ''],
         ['Application\Controller\TareasController', ''],
-        ['Formulario\Controller\FormularioController', 'indexAction,paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction'], 
+        ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction'], 
             ];
       
     private $acl;
@@ -115,7 +115,6 @@ class PermisosManager {
         $perfiles = $this->perfilesManager->getListado();
         foreach ($perfiles as $perfil)
         {
-            // if ($perfil->esInterno())
            if ($perfil->getNombre() == 'Administrador')
             {
                 $output[] = $perfil;
@@ -123,7 +122,23 @@ class PermisosManager {
         }
         
         return $output;
-    }    
+    } 
+    
+    private function getMetodosCargados($method){
+        if($method) {
+            return explode(',', $method); 
+        }
+        return null;
+    }
+
+    private function addRole($methods, $nombrePerfil, $controller){
+        foreach($methods as $method) {
+            if(!$this->acl->hasRole($method)){
+                $this->acl->addRole($method);
+            }
+            $this->acl->allow($nombrePerfil, $controller, $method);
+        }  
+    }
 
     /**
      * Agrego todos los controladores posibles para internos, Admin y otros
@@ -131,11 +146,11 @@ class PermisosManager {
     private function addRecursosInternos()
     {
         $perfilesInternos = $this->getPerfilesInternos();
-        
-        foreach ($this->controlesComunes as $rolAndRecurse)
+
+        foreach ($this->controlersAdmin as $rolAndRecurse)
         {
             $controller = $rolAndRecurse[0];
-            $methods = explode(',', $rolAndRecurse[1]); 
+            $methods = $this->getMetodosCargados($rolAndRecurse[1]);
             if (!$this->acl->hasResource($controller))
             {
                 $this->acl->addResource($controller);
@@ -143,16 +158,12 @@ class PermisosManager {
             foreach ($perfilesInternos as $perfil)
             {
                 $nombrePerfil = $perfil->getNombre();
-                if($methods[0] != ''){
-                    foreach($methods as $method) {
-                        if(!$this->acl->hasRole($method)){
-                            $this->acl->addRole($method);
-                            $this->acl->allow($nombrePerfil, $controller, $method);
-                        }
-                    }  
+                if($methods) {
+                    $this->addRole($methods, $nombrePerfil, $controller);
                 } else {
                     $this->acl->allow($nombrePerfil, $controller);
                 }
+               
             }
         }
     }
@@ -162,27 +173,22 @@ class PermisosManager {
      * @param type $nombrePerfil
      */
     private function addPermisoRecursoPerfilExterno($nombrePerfil)
-    {
-        foreach ($this->controlesComunes as $rolAndRecurse)
+    { 
+        
+        foreach ($this->controlersExterno as $rolAndRecurse)
         {
             $controller = $rolAndRecurse[0];
-            $methods = explode(',', $rolAndRecurse[1]);
+            $methods = $this->getMetodosCargados($rolAndRecurse[1]);
             if (!$this->acl->hasResource($controller))
             {
                 $this->acl->addResource($controller);
             }
             if($methods){
-                foreach($methods as $method) {
-                    if(!$this->acl->hasRole($method)){
-                        $this->acl->addRole($method);
-                        $this->acl->allow($nombrePerfil, $controller, $method);
-                    }
-                }  
+                $this->addRole($methods, $nombrePerfil, $controller);
             } else {
                 $this->acl->allow($nombrePerfil, $controller);
             }
-            
-        }                                         
+        } 
     }
  
     /**
@@ -197,21 +203,17 @@ class PermisosManager {
         foreach ($perfiles as $perfil)
         {
             $nombrePerfil = $perfil->getNombre();
+            
             foreach ($this->controlesComunes as $rolAndRecurse)
             {
                 $controller = $rolAndRecurse[0];
-                $methods = explode(',', $rolAndRecurse[1]);
+                $methods = $this->getMetodosCargados($rolAndRecurse[1]);
                 if (!$this->acl->hasResource($controller))
                 {
                     $this->acl->addResource($controller);
-                }                
+                } 
                 if($methods){
-                    foreach($methods as $method) {
-                        if(!$this->acl->hasRole($method)){
-                            $this->acl->addRole($method);
-                            $this->acl->allow($nombrePerfil, $controller, $method);
-                        }
-                    }  
+                    $this->addRole($methods, $nombrePerfil, $controller);
                 } else {
                     $this->acl->allow($nombrePerfil, $controller);
                 }

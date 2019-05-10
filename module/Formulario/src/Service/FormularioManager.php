@@ -63,24 +63,6 @@ class FormularioManager {
         return $output;
     }
 
-    public function getPregunta($id) {
-        $pregunta = $this->entityManager->getRepository(Pregunta::class)
-                                            ->findOneBy(['id' => $id]); 
-        return $pregunta;
-    }
-
-    public function getSeccion($id) {
-        $seccion = $this->entityManager->getRepository(Seccion::class)
-                                            ->findOneBy(['id' => $id]); 
-        return $seccion;
-    }
-
-    public function getFormulario($id) {
-        $formulario = $this->entityManager->getRepository(Formulario::class)
-                                            ->findOneBy(['id' => $id]); 
-        return $formulario;
-    }
-
     public function getOpcion($id) {
         $Opcion = $this->entityManager->getRepository(Opcion::class)
                                             ->findOneBy(['id' => $id]); 
@@ -109,9 +91,29 @@ class FormularioManager {
     }
 
     public function getRespuesta($id = null) {
-        $Entidad = $this->entityManager->getRepository(Respuesta::class)
+        if($id) {
+            $Entidad = $this->entityManager->getRepository(Respuesta::class)
                                             ->findOneBy(['id' => $id]); 
+        } else {
+            $Entidad = $this->entityManager->getRepository(Respuesta::class)
+                        ->findAll(); 
+        }
+        
         return $Entidad;
+    }
+
+    private function getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $idPregunta) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findBy(['pregunta' => $idPregunta, 'relevamientoxSeccion' => $relevamientoxSeccion]); 
+        
+        return $respuesta;
+    }
+
+    private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamientoxSeccion, $pregunta, $destino) {
+        $respuesta = $this->entityManager->getRepository(Respuesta::class)
+                    ->findOneBy(['pregunta' => $pregunta, 'relevamientoxSeccion' => $relevamientoxSeccion, 'destino' => $destino]); 
+        
+        return $respuesta;
     }
 
     /**
@@ -411,27 +413,6 @@ class FormularioManager {
         return $relev;
     }
 
-    private function getRespuestaPreguntaPorRelevamientoSeccion($relevamientoxSeccion, $idPregunta) {
-        $respuesta = $this->entityManager->getRepository(Respuesta::class)
-                    ->findBy(['pregunta' => $idPregunta, 'relevamientoxSeccion' => $relevamientoxSeccion]); 
-        
-        return $respuesta;
-    }
-
-    private function getRespuestaPorRelevamiento($idRelevamiento) {
-        $respuesta = $this->entityManager->getRepository(Respuesta::class)
-                    ->findBy(['relevamiento' => $idRelevamiento]); 
-        
-        return $respuesta;
-    }
-
-    private function getRespuestaPreguntaPorRelevamientoSeccionDestino($relevamientoxSeccion, $pregunta, $destino) {
-        $respuesta = $this->entityManager->getRepository(Respuesta::class)
-                    ->findOneBy(['pregunta' => $pregunta, 'relevamientoxSeccion' => $relevamientoxSeccion, 'destino' => $destino]); 
-        
-        return $respuesta;
-    }
-
     private function getDescripcionOpcion($opciones, $idOpcion) {
         foreach($opciones->opcion as $opcion) {
             if($opcion['id'] == $idOpcion) {
@@ -586,8 +567,7 @@ class FormularioManager {
     }
 
     public function getRespuestasSegunRelevamiento($Relevamiento){
-        $Respuestas = $this->entityManager->getRepository(Respuesta::class)
-                            ->findAll(); 
+        $Respuestas = $this->getRespuesta();
         $output = [];
         foreach($Respuestas as $Respuesta) {
             if ($Respuesta->getRelevamientoxSeccion()->getRelevamiento()->getId() == $Relevamiento->getId()) {
@@ -944,11 +924,11 @@ class FormularioManager {
         $respuesta = $pregunta->respuesta;
         if ($this->tieneRespuesta($respuesta)){
             $idPregunta = $pregunta->idPregunta;
-            $preguntaEntidad = $this->getPregunta($idPregunta);
+            $preguntaEntidad = $this->catalogoManager->getPreguntas($idPregunta);
             $this->altaRespuestaSegunTipoRespuesta($preguntaEntidad, $relevamientoxSeccion, $respuesta);
         } else {
             $idPregunta = $pregunta->idPregunta;
-            $preguntaEntidad = $this->getPregunta($idPregunta);
+            $preguntaEntidad = $this->catalogoManager->getPreguntas($idPregunta);
             $this->eliminarRespuestasSinResponder($preguntaEntidad, $relevamientoxSeccion);
         }
     }
@@ -964,7 +944,7 @@ class FormularioManager {
 
     public function altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento){
         $idSeccion = $seccion->id;
-        $seccionEnt = $this->getSeccion($idSeccion);
+        $seccionEnt = $this->catalogoManager->getSecciones($idSeccion);
         $relevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $seccionEnt);
         $seccionPreguntas = $seccion->preguntas;
         foreach ($seccionPreguntas as $seccionPregunta) {

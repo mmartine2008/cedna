@@ -115,7 +115,6 @@ class CednaController extends AbstractActionController
 
         $perfil = $this->userSessionManager->getPerfilActivo()->getNombre();
         $valido = $this->permisosManager->verificar($perfil, $controller, $method);
-        var_dump($method);
 
         if (!$valido)
         {
