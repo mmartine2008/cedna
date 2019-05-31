@@ -129,7 +129,7 @@ class FormularioManager {
         return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
     }
 
-    private function crearRelevamientosxSecciones($Relevamiento, $Secciones) {
+    private function altaRelevamientosxSecciones($Relevamiento, $Secciones) {
         foreach ($Secciones as $Seccion){
             $RelevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $Seccion);
             if(!$RelevamientoxSeccion) {
@@ -152,6 +152,9 @@ class FormularioManager {
         }
     }
 
+    /**
+     * Esta funcion retorna un arreglo de secciones dado un Json con id de secciones
+     */
     public function getArraySecciones($JsonSecciones) {
         $output = Array();
         if($JsonSecciones) {
@@ -160,6 +163,14 @@ class FormularioManager {
             }
         }
         return $output;
+    }
+
+    private function altaRelevamiento($EstadoParaEditar) {
+        $Relevamiento = new Relevamientos();
+        $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
+        
+        $this->entityManager->persist($Relevamiento);
+        $this->entityManager->flush();
     }
 
     /**
@@ -176,21 +187,16 @@ class FormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
-            
-            $Relevamiento = new Relevamientos();
-            $Relevamiento->setEstadoRelevamiento($EstadoParaEditar);
-            
-            $this->entityManager->persist($Relevamiento);
-            $this->entityManager->flush();
+            $this-> altaRelevamiento($EstadoParaEditar);
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
 
-            $this->crearRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
         }
 
         $this->entityManager->flush();
@@ -358,6 +364,9 @@ class FormularioManager {
         return false;
     }
 
+    /**
+     * Esta funcion retorna todas las preguntas que tiene un relevamiento
+     */
     public function getPreguntasxRelevamiento($relevamiento) {
         $secciones = $this->getSeccionesxRelevamientoxSecciones($relevamiento);
         $arregloPreg = [];
@@ -370,12 +379,18 @@ class FormularioManager {
         return $arregloPreg;
     }
 
+    /**
+     * Esta funcion retorna las opciones que tiene una pregunta, dada una funcion
+     */
     public function getOpcionesFuncion($pregunta) {
         $strinfFuncion = $pregunta->getFuncion();
         $opciones = $this->catalogoManager->{$strinfFuncion}();
         return $opciones;
     }
 
+    /**
+     * Esta funcion modifica el json insertandole las opciones a una pregunta select simple
+     */
     public function getJSONModificadoSelectSimple($pregunta, $relev) {
         $secc = $relev->secciones;
         foreach($secc as $seccion) {
@@ -391,6 +406,9 @@ class FormularioManager {
         return $relev;
     }
 
+    /**
+     *  Esta funcion modifica el json insertandole las opciones a una pregunta select multiple
+     */
     public function getJSONModificadoSelectMultiple($pregunta, $relev) {
         $secciones = $relev->secciones;
         foreach($secciones as $seccion) {
@@ -421,7 +439,10 @@ class FormularioManager {
         }
     }
 
-    private function getListaValoresPorDesino($respuestas, $opciones, $idSeccion, $idPregunta){
+    /**
+     * retorna una lista de destinos con sus respectivas opciones compuestas por un id y una descripcion
+     */
+    private function getListaValoresPorDestino($respuestas, $opciones){
         $destinoAcum = '';
         $ArrayAcum = [];
         $output = [];
@@ -449,6 +470,9 @@ class FormularioManager {
         return $resp;
     }
 
+    /**
+     * elimina las opciones encontradas en una respuesta
+     */
     private function vaciarRespuestas($respuestasJSON) {
         foreach ($respuestasJSON as $respuesta) {
             $opciones = $respuesta->opcion;
@@ -473,9 +497,12 @@ class FormularioManager {
         }
     }
 
+    /**
+     * retorna un json de una pregunta con su respectiva respuesta
+     */
     private function getPreguntaJSONConRespuesta($tipoPregunta, $respuesta, $preguntaJSON, $seccion){
         if($tipoPregunta->descripcion == 'multiple'){
-            $listaDestinos = $this->getListaValoresPorDesino($respuesta, $preguntaJSON->respuesta[0], $seccion->id, $preguntaJSON->idPregunta);
+            $listaDestinos = $this->getListaValoresPorDestino($respuesta, $preguntaJSON->respuesta[0]);
             $preguntaJSON->respuesta = $this->vaciarRespuestas($preguntaJSON->respuesta);
             foreach($listaDestinos as $destino) {
                 foreach($preguntaJSON->respuesta as $resp) {
