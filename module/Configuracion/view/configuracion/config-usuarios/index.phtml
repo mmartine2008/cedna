@@ -55,7 +55,12 @@
             apellido.innerHTML = usuario.apellido;
             email.innerHTML = usuario.email;
             //los usuarios tendran solo un perfil
-            perfil.innerHTML = usuario.perfiles[0].nombre;
+            if (usuario.perfiles.length > 0){
+                perfil.innerHTML = usuario.perfiles[0].nombre;
+            }else{
+                perfil.innerHTML = '';
+            }
+            
         }
     }
 

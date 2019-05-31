@@ -37,7 +37,7 @@ class ConfiguracionManager {
             $Perfiles = new Perfiles();
         }
 
-        $Perfiles->setParametro($jsonData->nombre);
+        $Perfiles->setNombre($jsonData->nombre);
         $Perfiles->setDescripcion($jsonData->descripcion);
 
         $this->entityManager->persist($Perfiles);
