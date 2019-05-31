@@ -2,10 +2,10 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><?= $this->translate('__Listado_de_Formularios__') ?></h3>
+                <h3 class="panel-title"><?= $this->translate('__Listado_de_Secciones__') ?></h3>
             </div>
             <div class="panel-body mt-5">
-                <table id="tablaFormularios" class="table table-hover">
+                <table id="tablaSecciones" class="table table-hover">
                     <thead>
                         <tr>
                             <th class="text-center"><?= $this->translate('__Numero__') ?></th>
@@ -13,7 +13,7 @@
                             <th class="text-center"><?= $this->translate('__Descripcion__') ?></th>
                         </tr>
                     </thead>
-                    <tbody id="bodyConfFormularios">
+                    <tbody id="bodyConfSecciones">
                     
                     </tbody>
                 </table>
@@ -24,20 +24,20 @@
 
 <script>
     var filaSeleccionada = -1;
-    var arrFormulariosJSON = <?= $arrFormulariosJSON; ?>;
+    var arrSeccionesJSON = <?= $arrSeccionesJSON; ?>;
 
     $( document ).ready(function() {
-        dibujarTablaFormularios();
+        dibujarTablaSecciones();
     });
 
-    function dibujarTablaFormularios(){
-        $('#bodyConfFormularios').find('tr').remove();
+    function dibujarTablaSecciones(){
+        $('#bodyConfSecciones').find('tr').remove();
     
-        for (var i = 0; i < arrFormulariosJSON.length; i++)
+        for (var i = 0; i < arrSeccionesJSON.length; i++)
         {
-            var formulario = arrFormulariosJSON[i];
+            var seccion = arrSeccionesJSON[i];
 
-            var body = document.getElementById("bodyConfFormularios");
+            var body = document.getElementById("bodyConfSecciones");
             var row = body.insertRow();
             row.id = i;
 
@@ -45,14 +45,14 @@
             var nombre = row.insertCell(1);
             var descripcion = row.insertCell(2);
 
-            id.innerHTML = formulario.idFormulario;
-            nombre.innerHTML = formulario.nombre;
-            descripcion.innerHTML = formulario.descripcion;
+            id.innerHTML = seccion.id;
+            nombre.innerHTML = seccion.nombre;
+            descripcion.innerHTML = seccion.descripcion;
         }
     }
 
     $(function() {
-        $('#tablaFormularios').on('click', 'tbody tr', function(event) {
+        $('#tablaSecciones').on('click', 'tbody tr', function(event) {
             if (!$(this).hasClass('highlight')){
                 $('.highlight').removeClass('highlight');
 
@@ -68,12 +68,12 @@
         });
     });
 
-    function borrarFormulario() {
+    function borrarSecciones() {
         var result = null;
-        var formulario = arrFormulariosJSON[filaSeleccionada];
+        var seccion = arrSeccionesJSON[filaSeleccionada];
 
         $.ajax({
-            url: url + '/configuracion/formularios/borrar-formulario/' + formulario.idFormulario,
+            url: url + '/configuracion/secciones/borrar-seccion/' + seccion.id,
             type: 'post',
             dataType: 'json',
             async: false,
@@ -87,12 +87,12 @@
 
     function preBorrar(){
         if (filaSeleccionada >= 0){
-            var formulario = arrFormulariosJSON[filaSeleccionada];
+            var seccion = arrSeccionesJSON[filaSeleccionada];
             
             swal({
-                title: '<?= $this->translate('__Eliminar_Formulario__') ?>',
+                title: '<?= $this->translate('__Eliminar_Secciones__') ?>',
                 width: 600,
-                text: "<?= $this->translate('__mensaje_eliminar_formulario__') ?>: "+ formulario.idFormulario +"?",
+                text: "<?= $this->translate('__mensaje_eliminar_Secciones__') ?>: "+ seccion.id +"?",
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -101,8 +101,8 @@
                 confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
             }).then((result) => {
                 if (result.value) {
-                    borrarFormulario();
-                    window.location.replace(url + "/configuracion/formularios");
+                    borrarSecciones();
+                    window.location.replace(url + "/configuracion/Secciones");
                 }
             });
         }
@@ -110,18 +110,18 @@
 
     function preEditar(){
         if (filaSeleccionada >= 0){
-            var formulario = arrFormulariosJSON[filaSeleccionada];
+            var seccion = arrSeccionesJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/formularios/editar-formulario/" + formulario.idFormulario);
+            window.location.replace(url + "/configuracion/secciones/editar-seccion/" + seccion.id);
         }
     }
 
 
     function preClonar(){
         if (filaSeleccionada >= 0){
-            var formulario = arrFormulariosJSON[filaSeleccionada];
+            var seccion = arrSeccionesJSON[filaSeleccionada];
 
-            window.location.replace(url + "/configuracion/formularios/clonar-formulario/" + formulario.idFormulario);
+            window.location.replace(url + "/configuracion/secciones/clonar-seccion/" + seccion.id);
         }
     }
 

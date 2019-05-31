@@ -84,10 +84,10 @@ return [
                         ],
                         'may_terminate' => true,
                     ],
-                    'formularios' => [
+                    'secciones' => [
                         'type' => Segment::class,
                         'options' => [
-                            'route' => '/formularios[/:action[/:id]]',
+                            'route' => '/secciones[/:action[/:id]]',
                             'defaults' => [
                                 'controller' => Controller\ConfigFormularioController::class,
                                 'action'     => 'index',

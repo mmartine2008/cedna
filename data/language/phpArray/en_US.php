@@ -191,6 +191,6 @@ return [
     '__responda_preguntas_secciones__' => 'Answer the questions in the sections',
     '__Emitido_por__' => 'Issued by',
     '__Permiso_integral_trabajos_seguros__' => 'COMPREHENSIVE PERMIT FOR SAFE WORK',
-
+    '__Nro_Orden_de_compra__' => 'No. Purchase Order',
 
 ];

@@ -84,7 +84,7 @@ class ConfigFormularioManager{
 
     public function altaEdicionFormularios($jsonData, $idFormulario = null){
         if ($idFormulario){
-            $Formulario = $this->catalogoManager->getFormulario($idFormulario);
+            $Formulario = $this->catalogoManager->getSeccion($idFormulario);
         }else{
             $Formulario = new Formulario();
         }
@@ -122,7 +122,6 @@ class ConfigFormularioManager{
 
         return $mensaje;
     }
-    // foreach ($this->getSeccionPreguntas() as $seccionPregunta) {
 
     private function enlazarPreguntas($SeccionesPreguntas, $SeccionClon) {
         foreach($SeccionesPreguntas as $SeccionPregunta) {

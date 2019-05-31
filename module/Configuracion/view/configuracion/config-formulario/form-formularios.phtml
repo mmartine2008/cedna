@@ -1,40 +1,8 @@
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= $this->translate('__Nuevo_Formulario__') ?></h3>
-            </div>
-            <div class="panel-body mt-5">
-                <form method="post" name="formFormulario" id="formFormulario">
-                    <div class="form-row">
-                        <div class="col-md-2">
-                            <label for="formularioNombre"><span class="obligatorio">(*) </span><?= $this->translate('__Nombre__') ?>:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="formularioNombre" name="formularioNombre" class="form-control" required="true">
-                        </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <div class="col-md-2">
-                            <label for="formularioDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" id="formularioDescripcion" name="formularioDescripcion" class="form-control" required="true">
-                        </div>
-                    </div>
-                    <div class="flex">
-                        <input type="hidden" name="JsonData" id="JsonData">                 
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="form-row" id="divSeccionesFormulario">
     <div class="col-md-12">
         <div class="panel panel-default mt-5">
             <div class="panel-heading">
-                <h5 class="panel-title"><?= $this->translate('__Listado_de_Secciones_del_Formulario__') ?></h5>
+                <h5 class="panel-title"><?= $this->translate('__Listado_de_Secciones__') ?></h5>
             </div>
             <div class="panel-body mt-5">
                 <table id="tablaSecciones" class="table table-hover">
@@ -54,7 +22,7 @@
 </div>
 
 <script>
-var formulariosJson = <?= $FormulariosJson ?>;
+var SeccionesJson = <?= $SeccionesJson ?>;
 var filaSeleccionada = -1;
 
 function FormFormulariosToJson(){
@@ -102,10 +70,10 @@ function verificarMostrarBotonNueva(){
 }
 
 $( document ).ready(function() {
-    if (formulariosJson !== ''){
-        $('#formularioNombre').val(formulariosJson.nombre);
-        $('#formularioDescripcion').val(formulariosJson.descripcion);
-        arrSeccionesJSON = formulariosJson.secciones;
+    if (SeccionesJson !== ''){
+        $('#formularioNombre').val(SeccionesJson.nombre);
+        $('#formularioDescripcion').val(SeccionesJson.descripcion);
+        arrSeccionesJSON = SeccionesJson.secciones;
         document.getElementById('divSeccionesFormulario').style.display = 'block';
         dibujarTablaFormularios();
     } else {

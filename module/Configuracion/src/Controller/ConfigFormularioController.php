@@ -25,78 +25,78 @@ class ConfigFormularioController extends ConfiguracionController
     {
         $this->cargarAccionesDisponibles('formulario');
         
-        $arrFormulariosJSON = $this->catalogoManager->getArrEntidadJSON('Formulario');
+        $arrSeccionesJSON = $this->catalogoManager->getArrEntidadJSON('Seccion');
 
         return new ViewModel([
-            'arrFormulariosJSON' => $arrFormulariosJSON
+            'arrSeccionesJSON' => $arrSeccionesJSON
         ]);
     }
 
-    public function altaFormularioAction(){
-        $this->cargarAccionesDisponibles('formularios - alta');
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
+    // public function altaFormularioAction(){
+    //     $this->cargarAccionesDisponibles('formularios - alta');
+    //     if ($this->getRequest()->isPost()) {
+    //         $data = $this->params()->fromPost();
             
-            $JsonData = json_decode($data['JsonData']);
-            $this->configuracionManager->altaEdicionFormularios($JsonData);
+    //         $JsonData = json_decode($data['JsonData']);
+    //         $this->configuracionManager->altaEdicionFormularios($JsonData);
 
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-        }
+    //         $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+    //     }
 
-        $view = new ViewModel();
+    //     $view = new ViewModel();
         
-        $view->setVariable('FormulariosJson', '""');
-        $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
+    //     $view->setVariable('FormulariosJson', '""');
+    //     $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
         
-        return $view;
-    }
+    //     return $view;
+    // }
 
-    public function editarFormularioAction(){
-        $this->cargarAccionesDisponibles('formularios - edicion');
-        $formularios = $this->params()->fromRoute();
+    // public function editarFormularioAction(){
+    //     $this->cargarAccionesDisponibles('formularios - edicion');
+    //     $formularios = $this->params()->fromRoute();
 
-        $idFormularios = $formularios['id'];
+    //     $idFormularios = $formularios['id'];
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->params()->fromPost();
-            $JsonData = json_decode($data['JsonData']);
+    //     if ($this->getRequest()->isPost()) {
+    //         $data = $this->params()->fromPost();
+    //         $JsonData = json_decode($data['JsonData']);
 
-            $this->configuracionManager->altaEdicionFormularios($JsonData, $idFormularios);
+    //         $this->configuracionManager->altaEdicionFormularios($JsonData, $idFormularios);
 
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-        }
+    //         $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+    //     }
 
-        $view = new ViewModel();
+    //     $view = new ViewModel();
         
-        $Formularios = $this->catalogoManager->getFormularios($idFormularios);
+    //     $Formularios = $this->catalogoManager->getFormularios($idFormularios);
 
-        $view->setVariable('FormulariosJson', $Formularios->getJSON());
-        $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
+    //     $view->setVariable('FormulariosJson', $Formularios->getJSON());
+    //     $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
         
-        return $view;
-    }
+    //     return $view;
+    // }
     
-    public function borrarFormularioAction(){
-        $formularios = $this->params()->fromRoute();
+    // public function borrarFormularioAction(){
+    //     $formularios = $this->params()->fromRoute();
 
-        $idFormularios = $formularios['id'];
+    //     $idFormularios = $formularios['id'];
 
-        $mensaje = $this->configuracionManager->borrarFormularios($idFormularios);
+    //     $mensaje = $this->configuracionManager->borrarFormularios($idFormularios);
 
-        //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-    } 
+    //     //Todavia no hay para mostrar mensajes
+    //     return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+    // } 
 
-    public function clonarFormularioAction(){
-        $formularios = $this->params()->fromRoute();
+    // public function clonarFormularioAction(){
+    //     $formularios = $this->params()->fromRoute();
 
-        $idFormulario = $formularios['id'];
+    //     $idFormulario = $formularios['id'];
 
-        $this->configuracionManager->clonarFormulario($idFormulario);
+    //     $this->configuracionManager->clonarFormulario($idFormulario);
 
-        return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
+    //     return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
 
-    } 
+    // } 
 
     public function altaSeccionAction(){
         $this->cargarAccionesDisponibles('secciones - alta');
