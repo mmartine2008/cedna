@@ -85,8 +85,27 @@
             return true;
         }else{
             $("#formPregunta")[0].reportValidity(); 
-            return false;
         }
+        return false;
+    }
+
+    function createDivAlert(div){
+        var divElement = document.createElement("Div");
+        divElement.id = "div_alert";
+        divElement.classList = "alert alert-warning alert-dismissible"
+        // divElement.style.display = "none";
+        document.getElementById(div).appendChild(divElement);
+
+        return divElement;
+    }
+
+    function createWarningAlert(div) {
+        var divElement = createDivAlert(div);
+        var strong = document.createElement("strong");
+        var t = document.createTextNode("Debe seleccionar algun elemento");
+        strong.appendChild(t);
+        console.log(divElement);
+        divElement.appendChild(strong);
     }
 
     function validarSelect() {
@@ -94,8 +113,7 @@
         if (valor != '-1'){
             return true;
         }else{
-            //cartel
-            console.log('sfdf');
+            createWarningAlert('div_TipoPregunta');
             return false;
         }
     }
@@ -103,7 +121,7 @@
     function preSubmit(){
         var JsonData = FormPreguntasToJson();
         $('#JsonData').val(JsonData);
-        if((validarSelect())&&(validarInput())) {
+        if((validarInput())&&(validarSelect())) {
             $("#formPregunta").submit()
         }
     }
