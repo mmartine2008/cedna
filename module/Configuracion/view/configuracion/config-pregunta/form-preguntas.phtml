@@ -80,14 +80,31 @@
         return JsonData;
     }
 
+    function validarInput() {
+        if (($("#formPregunta")[0].checkValidity())){
+            return true;
+        }else{
+            $("#formPregunta")[0].reportValidity(); 
+            return false;
+        }
+    }
+
+    function validarSelect() {
+        valor = $('#select_tipo_pregunta').val();
+        if (valor != '-1'){
+            return true;
+        }else{
+            //cartel
+            console.log('sfdf');
+            return false;
+        }
+    }
+
     function preSubmit(){
         var JsonData = FormPreguntasToJson();
         $('#JsonData').val(JsonData);
-
-        if ($("#formPregunta")[0].checkValidity()){
-            $("#formPregunta").submit();
-        }else{
-            $("#formPregunta")[0].reportValidity();
+        if((validarSelect())&&(validarInput())) {
+            $("#formPregunta").submit()
         }
     }
 
@@ -105,7 +122,6 @@
     function verificarMostrarBotonVolver(){
         for (var i = 0; i < arrAccionesDisponibles.length; i++){
             var boton = arrAccionesDisponibles[i];
-
             if (boton.jsFunction === 'preVolver()'){
                 $('#'+boton.idHTMLElement).prop('disabled', false);
                 $('#'+boton.idHTMLElement).show();
@@ -115,7 +131,7 @@
 
     function createListFromJSONLista(selector) {
         var option = document.createElement("option");
-        option.value =  -1;
+        option.value = -1;
         option.text = 'Seleccione';
         selector.appendChild(option);
     
@@ -154,9 +170,10 @@
         selector.id = "select_tipo_pregunta";
         selector.classList= "form-control";
         var selectorModificado = createListFromJSONLista(selector);
-        selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();
-                                               };
-        selector.value = preguntasJson.tipoPregunta.id;
+        selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();};
+        if(preguntasJson !== ''){
+            selector.value = preguntasJson.tipoPregunta.id;
+        }
         document.getElementById('div_TipoPregunta').appendChild(selectorModificado);
     }
 
@@ -169,5 +186,8 @@
         verificarMostrarBotonVolver();
     });
 
+    function preVolver(){
+        window.location.replace(url + "/configuracion/pregunta");
+    }
    
 </script>

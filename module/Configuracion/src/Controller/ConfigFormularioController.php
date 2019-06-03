@@ -25,93 +25,26 @@ class ConfigFormularioController extends ConfiguracionController
     {
         $this->cargarAccionesDisponibles('formulario');
         
-        $arrSeccionesJSON = $this->catalogoManager->getArrEntidadJSON('Seccion');
+        $arrSeccionesJSON = $this->catalogoManager->getArrEntidadJSON('Secciones');
 
         return new ViewModel([
             'arrSeccionesJSON' => $arrSeccionesJSON
         ]);
     }
 
-    // public function altaFormularioAction(){
-    //     $this->cargarAccionesDisponibles('formularios - alta');
-    //     if ($this->getRequest()->isPost()) {
-    //         $data = $this->params()->fromPost();
-            
-    //         $JsonData = json_decode($data['JsonData']);
-    //         $this->configuracionManager->altaEdicionFormularios($JsonData);
-
-    //         $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-    //     }
-
-    //     $view = new ViewModel();
-        
-    //     $view->setVariable('FormulariosJson', '""');
-    //     $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
-        
-    //     return $view;
-    // }
-
-    // public function editarFormularioAction(){
-    //     $this->cargarAccionesDisponibles('formularios - edicion');
-    //     $formularios = $this->params()->fromRoute();
-
-    //     $idFormularios = $formularios['id'];
-
-    //     if ($this->getRequest()->isPost()) {
-    //         $data = $this->params()->fromPost();
-    //         $JsonData = json_decode($data['JsonData']);
-
-    //         $this->configuracionManager->altaEdicionFormularios($JsonData, $idFormularios);
-
-    //         $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-    //     }
-
-    //     $view = new ViewModel();
-        
-    //     $Formularios = $this->catalogoManager->getFormularios($idFormularios);
-
-    //     $view->setVariable('FormulariosJson', $Formularios->getJSON());
-    //     $view->setTemplate('configuracion/config-formulario/form-formularios.phtml');
-        
-    //     return $view;
-    // }
-    
-    // public function borrarFormularioAction(){
-    //     $formularios = $this->params()->fromRoute();
-
-    //     $idFormularios = $formularios['id'];
-
-    //     $mensaje = $this->configuracionManager->borrarFormularios($idFormularios);
-
-    //     //Todavia no hay para mostrar mensajes
-    //     return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-    // } 
-
-    // public function clonarFormularioAction(){
-    //     $formularios = $this->params()->fromRoute();
-
-    //     $idFormulario = $formularios['id'];
-
-    //     $this->configuracionManager->clonarFormulario($idFormulario);
-
-    //     return $this->redirect()->toRoute("configuracion/formularios",["action" => "index"]);
-
-    // } 
-
     public function altaSeccionAction(){
         $this->cargarAccionesDisponibles('secciones - alta');
 
         $parametros = $this->params()->fromRoute();
-        $idFormulario = $parametros['id'];
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
             var_dump($JsonData);
-            $this->configuracionManager->altaSecciones($JsonData, $idFormulario);
+            $this->configuracionManager->altaSecciones($JsonData);
 
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario", "id" => $idFormulario]);
+            $this->redirect()->toRoute("configuracion/secciones");
         }
 
         $view = new ViewModel();
@@ -119,7 +52,6 @@ class ConfigFormularioController extends ConfiguracionController
         $arrPreguntasJSON = $this->catalogoManager->getArrEntidadJSON('Preguntas');
         
         $view->setVariable('estados', "");
-        $view->setVariable('idFormulario', $idFormulario);
         $view->setVariable('SeccionJson', '""');
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
         $view->setTemplate('configuracion/config-formulario/form-secciones.phtml');
@@ -139,9 +71,9 @@ class ConfigFormularioController extends ConfiguracionController
             $preguntasEnlazadas = json_decode($data['seleccionados']);
             $preguntasRequeridas = json_decode($data['required']);
 
-            $idFormulario = $this->configuracionManager->edicionSecciones($JsonData, $idSeccion, $preguntasEnlazadas, $preguntasRequeridas);
+            $this->configuracionManager->edicionSecciones($JsonData, $idSeccion, $preguntasEnlazadas, $preguntasRequeridas);
 
-            $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario", "id" => $idFormulario]);
+            $this->redirect()->toRoute("configuracion/secciones");
         }
 
         $view = new ViewModel();
@@ -152,10 +84,8 @@ class ConfigFormularioController extends ConfiguracionController
         $arrayRequired = $this->configuracionManager->getEstadoRequiredPreguntasSeccion($idSeccion);
 
 
-
         $view->setVariable('estados', $estados);
         $view->setVariable('arrayRequired', $arrayRequired);
-        $view->setVariable('idFormulario', $Secciones->getFormulario()->getId());
         $view->setVariable('SeccionJson', $Secciones->getJSON());
         $view->setVariable('arrPreguntasJson', $arrPreguntasJSON);
         
@@ -172,18 +102,18 @@ class ConfigFormularioController extends ConfiguracionController
         $mensaje = $this->configuracionManager->borrarSecciones($idSecciones);
 
         //Todavia no hay para mostrar mensajes
-        return $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
+        return $this->redirect()->toRoute("configuracion/secciones");
     } 
 
     public function clonarSeccionAction(){
-        // $secciones = $this->params()->fromRoute();
+        $secciones = $this->params()->fromRoute();
 
-        // $idSecciones = $secciones['id'];
+        $idSecciones = $secciones['id'];
 
-        // $mensaje = $this->configuracionManager->clonaridSecciones($idSecciones);
+        $mensaje = $this->configuracionManager->clonarSeccion($idSecciones);
 
-        // //Todavia no hay para mostrar mensajes
-        // return $this->redirect()->toRoute("configuracion/formularios",["action" => "editarFormulario"]);
+        //Todavia no hay para mostrar mensajes
+        return $this->redirect()->toRoute("configuracion/secciones");
     } 
 
 }

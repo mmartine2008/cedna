@@ -162,9 +162,8 @@ return [
     '__Nuevo_Parametro__' => 'New Parameter',
     '__Eliminar_Parametro__' => 'Delete parameter',
     '__mensaje_eliminar_parametro__' => 'Are you sure you want to delete the parameter',
-    '__Listado_de_Formularios__' => 'List of Forms',
     '__Numero__' => 'Number',
-    '__Listado_de_Secciones_del_Formulario__' => 'List of sections of the form',
+    '__Listado_de_Secciones__' => 'List of sections',
     '__Nuevo_Formulario__' => 'New Form',
     '__Nueva_Seccion__' => 'New Section',
     '__Listado_de_todas_las_Preguntas__' => 'List of all Questions',
@@ -179,7 +178,6 @@ return [
     '__Inserte_opciones__' => 'Insert the options separated by a hyphen (-)',
     '__Eliminar_Seccion__' => 'Delete Section',
     '__mensaje_eliminar_seccion__' => 'Are you sure you want to delete the section',
-    '__Eliminar_Formulario__' => 'Delete Form',
     '__mensaje_eliminar_formulario__' => 'Are you sure you want to delete the form',
     '__Requerida__' => 'Required',
     '__Secciones__' => 'Sections',
@@ -192,5 +190,6 @@ return [
     '__Emitido_por__' => 'Issued by',
     '__Permiso_integral_trabajos_seguros__' => 'COMPREHENSIVE PERMIT FOR SAFE WORK',
     '__Nro_Orden_de_compra__' => 'No. Purchase Order',
-
+    '__Eliminar_Pregunta__' => 'Delete Question',
+    '__mensaje_eliminar_pregunta__' => 'Are you sure you want to delete the question',
 ];

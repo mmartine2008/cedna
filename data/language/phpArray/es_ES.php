@@ -161,9 +161,8 @@ return [
     '__Nuevo_Parametro__' => 'Nuevo Parámetro',
     '__Eliminar_Parametro__' => 'Eliminar parámetro',
     '__mensaje_eliminar_parametro__' => '¿ Está seguro que desea eliminar el parámetro ?',
-    '__Listado_de_Formularios__' => 'Listado de Formularios',
     '__Numero__' => 'Número',
-    '__Listado_de_Secciones_del_Formulario__' => 'Listado de Secciones del Formularios',
+    '__Listado_de_Secciones__' => 'Listado de Secciones',
     '__Nuevo_Formulario__' => 'Nuevo Formulario',
     '__Nueva_Seccion__' => 'Nueva Seccion',
     '__Listado_de_todas_las_Preguntas__' => 'Listado de todas las Preguntas',
@@ -178,7 +177,6 @@ return [
     '__Inserte_opciones__' => 'Inserte las opciones separadas por un guión ( - )',
     '__Eliminar_Seccion__' => 'Eliminar Sección',
     '__mensaje_eliminar_seccion__' => 'Está seguro que desea eliminar la sección',
-    '__Eliminar_Formulario__' => 'Eliminar Formulario',
     '__mensaje_eliminar_formulario__' => 'Está seguro que desea eliminar el formulario',
     '__Requerida__' => 'Requerida',
     '__Secciones__' => 'Secciones',
@@ -192,5 +190,7 @@ return [
     '__Emitido_por__' => 'Emitido por',
     '__Permiso_integral_trabajos_seguros__' => 'PERMISO INTEGRAL PARA TRABAJOS SEGUROS',
     '__Nro_Orden_de_compra__' => 'Nro Orden de Compra',
+    '__Eliminar_Pregunta__' => 'Eliminar pregunta',
+    '__mensaje_eliminar_pregunta__' => 'Está seguro que desea eliminar la pregunta',
 
 ];

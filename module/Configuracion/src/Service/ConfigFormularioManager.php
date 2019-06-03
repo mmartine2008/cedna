@@ -130,38 +130,20 @@ class ConfigFormularioManager{
             $this->enlazarPregunta($Pregunta, $SeccionClon, $requerido);
         }
     }
-    public function clonarSecciones($Secciones, $Formulario){
-        foreach ($Secciones as $Seccion) {
-            $SeccionClon = new Seccion();
-            $SeccionClon->setFormulario($Formulario);
-            $SeccionClon->setNombre($Seccion->getNombre());
-            $SeccionClon->setDescripcion($Seccion->getDescripcion());
+    public function clonarSeccion($idSeccion){
+        $Seccion = $this->catalogoManager->getSecciones($idSeccion);
+        $SeccionClon = new Seccion();
+        $SeccionClon->setNombre($Seccion->getNombre());
+        $SeccionClon->setDescripcion($Seccion->getDescripcion());
 
-            $this->entityManager->persist($SeccionClon);
-            $this->entityManager->flush();
-
-            $this->enlazarPreguntas($Seccion->getSeccionPreguntas(), $SeccionClon);
-        }
-    }
-
-    public function clonarFormulario($idFormulario) {
-        $Formulario = $this->catalogoManager->getFormulario($idFormulario);
-        
-        $FormClon = new Formulario();
-
-        $FormClon->setNombre($Formulario->getNombre());
-        $FormClon->setDescripcion($Formulario->getDescripcion());
-
-        $this->entityManager->persist($FormClon);
+        $this->entityManager->persist($SeccionClon);
         $this->entityManager->flush();
 
-        $this->clonarSecciones($Formulario->getSecciones(), $FormClon);
+        $this->enlazarPreguntas($Seccion->getSeccionPreguntas(), $SeccionClon);
     }
     
-    public function altaSecciones($jsonData, $idFormulario){
+    public function altaSecciones($jsonData){
         $Seccion = new Seccion();
-        $Formulario = $this->catalogoManager->getFormularios($idFormulario);
-        $Seccion->setFormulario($Formulario);
         $Seccion->setNombre($jsonData->nombre);
         $Seccion->setDescripcion($jsonData->descripcion);
 
@@ -207,8 +189,6 @@ class ConfigFormularioManager{
 
         $this->entityManager->persist($Seccion);
         $this->entityManager->flush();
-
-        return $Seccion->getFormulario()->getId();
     }
 
     

@@ -61,7 +61,6 @@
 var seccionJson = <?= $SeccionJson ?>;
 var filaSeleccionada = -1;
 var arrPreguntasJSON = <?= $arrPreguntasJson ?>;
-var idFormulario = <?= $idFormulario ?>;
 var eventos = [];
 var estados = <?php echo json_encode($estados); ?>;
 var arrayRequired = <?php echo json_encode($arrayRequired); ?>;
@@ -131,7 +130,9 @@ $( document ).ready(function() {
     } else {
         document.getElementById('divPreguntas').style.display = 'none';
     }
-    dibujarTablaPreguntas();
+    if(arrayRequired != null) {
+        dibujarTablaPreguntas();
+    }
     verificarMostrarBotonGuardar();
     verificarMostrarBotonVolver();
     verificarMostrarBotonAlta();
@@ -254,12 +255,8 @@ $( document ).ready(function() {
         });
     });
 
-    function preAltaPregunta(){
-        // window.location.replace(url + "/configuracion/formularios/alta-pregunta/" + seccionJson.id);
-    }
-
     function preVolver(){
-        window.location.replace(url + "/configuracion/formularios/editar-formulario/" + idFormulario);
+        window.location.replace(url + "/configuracion");
     }
 
 </script>
