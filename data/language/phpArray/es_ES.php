@@ -189,8 +189,8 @@ return [
     '__responda_preguntas_secciones__' => 'Responda las preguntas de las secciones',
     '__Emitido_por__' => 'Emitido por',
     '__Permiso_integral_trabajos_seguros__' => 'PERMISO INTEGRAL PARA TRABAJOS SEGUROS',
-    '__Nro_Orden_de_compra__' => 'Nro Orden de Compra',
     '__Eliminar_Pregunta__' => 'Eliminar pregunta',
     '__mensaje_eliminar_pregunta__' => 'Está seguro que desea eliminar la pregunta',
-
+    '__Nro_etapa_dia__' => 'Nro Etapa / Día',
+    '__Nro_Orden_de_compra__' => 'Nro orden de compra',
 ];

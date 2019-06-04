@@ -114,7 +114,8 @@ class TareasManager {
             $Planificaciones->setHoraFin($planificacionJSON->horaFin);
             $Planificaciones->setTitulo($planificacionJSON->titulo);
             $Planificaciones->setObservaciones($planificacionJSON->observaciones);
-
+            $Planificaciones->setNroEtapaDia($planificacionJSON->diaEtapa);
+            
             $this->entityManager->persist($Planificaciones);
         }
 

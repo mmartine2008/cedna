@@ -189,7 +189,8 @@ return [
     '__responda_preguntas_secciones__' => 'Answer the questions in the sections',
     '__Emitido_por__' => 'Issued by',
     '__Permiso_integral_trabajos_seguros__' => 'COMPREHENSIVE PERMIT FOR SAFE WORK',
-    '__Nro_Orden_de_compra__' => 'No. Purchase Order',
     '__Eliminar_Pregunta__' => 'Delete Question',
     '__mensaje_eliminar_pregunta__' => 'Are you sure you want to delete the question',
+    '__Nro_etapa_dia__' => 'No. Phase / Day'
+    '__Nro_Orden_de_compra__' => 'No purchase order',
 ];

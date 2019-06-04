@@ -58,11 +58,15 @@ class Planificaciones
      */
     protected $Titulo;
 
-
     /**
      * @ORM\Column(name="Observaciones")
      */
     protected $Observaciones;
+
+    /**
+     * @ORM\Column(name="NroEtapaDia")
+     */
+    protected $NroEtapaDia;
 
     public function setTarea($Tarea)
     {
@@ -159,6 +163,16 @@ class Planificaciones
         return $this->Observaciones;
     }
 
+    public function setNroEtapaDia($NroEtapaDia)
+    {
+        $this->NroEtapaDia = $NroEtapaDia;
+    }
+
+     public function getNroEtapaDia()
+    {
+        return $this->NroEtapaDia;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -175,6 +189,7 @@ class Planificaciones
         $output .= '"horaInicio": "' . $this->getHoraInicio() .'", ';
         $output .= '"horaFin": "' . $this->getHoraFin() .'", ';
         $output .= '"titulo": "' . $this->getTitulo() .'", ';
+        $output .= '"diaEtapa": "' . $this->getNroEtapaDia() .'", ';
         $output .= '"observaciones": "' . $this->getObservaciones() .'"';
         
         return '{' . $output . '}';

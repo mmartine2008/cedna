@@ -61,3 +61,5 @@ WHERE Id=1066;
 UPDATE cedna.app.OperacionAccionPerfil
 SET ordenUbicacion=11,idHTMLElement=''
 WHERE Id=1245;
+
+

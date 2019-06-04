@@ -18,8 +18,9 @@
                         <div class="col-md-3">
                             <label for="select_tipo_pregunta"><span class="obligatorio">(*) </span><?= $this->translate('__Tipo_Pregunta__') ?>:</label>
                         </div>
-                        <div class="col-md-4" id="div_TipoPregunta">
-                            
+                        <div class="col-md-4 ">
+                            <div id="div_TipoPregunta"></div>
+                            <div class=" alert alert-warning alert-dismissible mt-2" style='display:none;' id="div_alert"></div>
                         </div>
                     </div>
                     <div class="form-row mt-3 col-md-12" style='display:none' id="div_preguntaOpciones">
@@ -89,23 +90,11 @@
         return false;
     }
 
-    function createDivAlert(div){
-        var divElement = document.createElement("Div");
-        divElement.id = "div_alert";
-        divElement.classList = "alert alert-warning alert-dismissible"
-        // divElement.style.display = "none";
-        document.getElementById(div).appendChild(divElement);
-
-        return divElement;
-    }
-
     function createWarningAlert(div) {
-        var divElement = createDivAlert(div);
         var strong = document.createElement("strong");
         var t = document.createTextNode("Debe seleccionar algun elemento");
         strong.appendChild(t);
-        console.log(divElement);
-        divElement.appendChild(strong);
+        document.getElementById("div_alert").appendChild(strong);
     }
 
     function validarSelect() {
@@ -113,7 +102,7 @@
         if (valor != '-1'){
             return true;
         }else{
-            createWarningAlert('div_TipoPregunta');
+            document.getElementById("div_alert").style.display = "block";
             return false;
         }
     }
@@ -188,7 +177,8 @@
         selector.id = "select_tipo_pregunta";
         selector.classList= "form-control";
         var selectorModificado = createListFromJSONLista(selector);
-        selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();};
+        selectorModificado.onchange = function() {mostrarPreguntaOpcionFuncion();
+            document.getElementById("div_alert").style.display = "none";};
         if(preguntasJson !== ''){
             selector.value = preguntasJson.tipoPregunta.id;
         }
@@ -199,7 +189,9 @@
         if (preguntasJson !== ''){
             $('#preguntaDescripcion').val(preguntasJson.descripcion);
         }
+    
         createSimpleSelector();
+        createWarningAlert('div_TipoPregunta');
         verificarMostrarBotonGuardar();
         verificarMostrarBotonVolver();
     });
