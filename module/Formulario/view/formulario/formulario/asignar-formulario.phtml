@@ -123,13 +123,39 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row col-md-3">
-                                    <label for="formularioPlanificacion"><span class="obligatorio">(*)&nbsp;</span><?= $this->translate('__Secciones__') ?>:</label>
+                            <div id='div_secciones_globales' style="display: none">
+                                <div class="form-row col-md-5 mt-2">
+                                        <label for="formularioPlanificacion"><span class="obligatorio">(*)&nbsp;</span><?= $this->translate('__Secciones_globales__') ?>:</label>
+                                </div>
+                                <div class="form-row mt-2">
+                                    <div class="form-group col-md-1"> </div>
+                                    <div class="form-group col-md-5">
+                                        <select name="formularioPlanificacion_global_1" id="formularioPlanificacion_global_1" class="form-control" required="true" multiple></select>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <button id="button_in_global" 
+                                        onclick='insertarElementInSelect("formularioPlanificacion_global_1", "formularioPlanificacion_global_2")' 
+                                        class="form-control" title="Añadir seleccionados">></button>
+                                        <br>
+                                        <button id="button_out_global" 
+                                        onclick='insertarElementInSelect("formularioPlanificacion_global_2", "formularioPlanificacion_global_1")'
+                                        class="form-control" title="Quitar seleccionados"><</button>
+                                    </div>
+                                    <div class="form-group col-md-5">
+                                        <select name="formularioPlanificacion_global_2" id="formularioPlanificacion_global_2" class="form-control" required="true" multiple></select>                                
+                                    </div>
+                                </div>
+                                <div class="alert alert-warning form-group col-md-10" role="alert">
+                                     Las secciones globales solo se pueden asignar una vez.
+                                </div>
                             </div>
-                            <div class="form-row mt-3">
+                            <div class="form-row col-md-3 mt-2">
+                                    <label for="formularioPlanificacion"><?= $this->translate('__Secciones__') ?>:</label>
+                            </div>
+                            <div class="form-row mt-2">
                                 <div class="form-group col-md-1"> </div>
                                 <div class="form-group col-md-5">
-                                    <select name="formularioPlanificacion_1" id="formularioPlanificacion_1" class="form-control" required="true" multiple></select>
+                                    <select name="formularioPlanificacion_1" id="formularioPlanificacion_1" class="form-control" multiple></select>
                                 </div>
                                 <div class="form-group col-md-1">
                                     <button id="button_in" 
@@ -141,7 +167,7 @@
                                     class="form-control" title="Quitar seleccionados"><</button>
                                 </div>
                                 <div class="form-group col-md-5">
-                                    <select name="formularioPlanificacion_2" id="formularioPlanificacion_2" class="form-control" required="true" multiple></select>                                
+                                    <select name="formularioPlanificacion_2" id="formularioPlanificacion_2" class="form-control" multiple></select>                                
                                 </div>
                             </div>
                         </div>
@@ -158,6 +184,7 @@
 var PlanificacionJSON = <?= $PlanificacionJSON ?>;
 var TareaJSON = <?= $TareaJSON ?>;
 var arrSeccionesJSON = <?= $arrSeccionesJSON ?>;
+
 
 function obtenerElementosSelector(idSelector){
     var select1 = document.getElementById(idSelector);
@@ -177,7 +204,8 @@ function FormPlanificacionToJson(){
 
     var formData = {
         seccionesSeleccionadas :  obtenerElementosSelector("formularioPlanificacion_2"),
-        seccioneNoSeleccionadas : obtenerElementosSelector("formularioPlanificacion_1")
+        seccionesNoSeleccionadas : obtenerElementosSelector("formularioPlanificacion_1"),
+        seccionesGlobales : obtenerElementosSelector("formularioPlanificacion_global_2"),
     };
     
     var JsonData = JSON.stringify(formData);
@@ -196,7 +224,7 @@ function preSubmit(){
     var JsonData = FormPlanificacionToJson();
     $('#JsonData').val(JsonData);
 
-    if($("#formularioPlanificacion_2 option").length == 0){
+    if(($("#formularioPlanificacion_global_2 option").length == 0) && (arrSeccionesJSON[0].length == 0)){
         mostrarCartelErrorSubmit();
     } else {
         swal({
@@ -217,12 +245,15 @@ function preSubmit(){
 }
 
 $( document ).ready(function() {
+    console.log(arrSeccionesJSON[0]);
     dibujarDatosOrdenDeCompra();
+    dibujarSelectFormularioGlobal();
     dibujarSelectFormulario();
     dibujarDetallePlanificacion();
     
     verificarMostrarBotonGuardar();
     manageButtons();
+    manageButtonsGlobales();
 
 });
 
@@ -236,6 +267,19 @@ function manageButtons(){
         $("#button_out").prop('disabled', true);
     } else {
         $("#button_out").prop('disabled', false);
+    }
+}
+
+function manageButtonsGlobales(){
+    if($("#formularioPlanificacion_global_1 option").length == 0){
+        $("#button_in_global").prop('disabled', true);
+    } else {
+        $("#button_in_global").prop('disabled', false);
+    }
+    if($("#formularioPlanificacion_global_2 option").length == 0){
+        $("#button_out_global").prop('disabled', true);
+    } else {
+        $("#button_out_global").prop('disabled', false);
     }
 }
 
@@ -295,6 +339,7 @@ function insertarElementInSelect(idSelectorOrigen, idSelectDestino){
     
     createListFromJSONLista(selectIn, options);
     manageButtons();
+    manageButtonsGlobales();
 }
 
 function verificarMostrarBotonGuardar(){
@@ -310,9 +355,12 @@ function verificarMostrarBotonGuardar(){
 
 function transformarFechaParaInput(fecha){
     var arrFecha = fecha.split('-');
-    //[0] => dia; [1] => mes; [2] => anio
 
-    return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+    if (arrFecha[2].length == 4){ //Es el anio
+        return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+    } else {
+        return arrFecha[0] + '-' + arrFecha[1] + '-' + arrFecha[2];
+    }
 }
 
 function dibujarDetallePlanificacion(){
@@ -336,12 +384,25 @@ function cargarSelectores(nombreSelector, arreglo) {
     }
 }
 
-function dibujarSelectFormulario(){
-    var seccionesNoRelacionadas =  arrSeccionesJSON[0];
-    cargarSelectores('formularioPlanificacion_1', seccionesNoRelacionadas) ;
-    var seccionesRelacionadas =  arrSeccionesJSON[1];
-    cargarSelectores('formularioPlanificacion_2', seccionesRelacionadas) ;
+function dibujarSelectFormularioGlobal(){
+    if(arrSeccionesJSON[0].length == 0) {
+        document.getElementById("div_secciones_globales").style.display = "block";
+
+        var seccionesGlobales =  arrSeccionesJSON[1];
+        cargarSelectores('formularioPlanificacion_global_1', seccionesGlobales) ;
+    } else {
+        document.getElementById("div_secciones_globales").style.display = "none";
+    }
 }
+
+function dibujarSelectFormulario(){
+    var seccionesNoRelacionadas =  arrSeccionesJSON[1];
+    cargarSelectores('formularioPlanificacion_1', seccionesNoRelacionadas) ;
+    var seccionesRelacionadas =  arrSeccionesJSON[2];
+    cargarSelectores('formularioPlanificacion_2', seccionesRelacionadas) ;
+   
+}
+
 function dibujarDatosOrdenDeCompra(){
     if (TareaJSON.ordenDeCompra.hasOwnProperty('id')){
         //Por el momento el numero de la orden de compra va a ser el ID

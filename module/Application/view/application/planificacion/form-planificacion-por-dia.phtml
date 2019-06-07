@@ -12,6 +12,7 @@
                                 <div class="col-md-5">
                                     <label for="nroOrdenDeCompra"><?= $this->translate('__Orden_de_Compra__') ?> Nº:</label>
                                 </div>
+                                
                                 <div class="col-md-6">
                                     <input type="text" id="nroOrdenDeCompra" name="nroOrdenDeCompra" class="form-control" readonly="true">
                                 </div>
@@ -65,7 +66,8 @@
                                     <div class="card-header">
                                         <?= $this->translate('__Tarea__') ?>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body"> 
+                                        <input type="hidden" id="idPlanificacion" name="idPlanificacion" > <!-- hidden -->
                                         <div class="form-row">
                                             <div class="col-lg-6">
                                                 <div class="form-row">
@@ -123,7 +125,7 @@
                                         <div class="form-row mt-3">
                                             <div class="col-md-12">
                                                 <textarea name="observacionTarea" id="observacionTarea" class="form-control" cols="45" rows="5"></textarea>
-                                                <input id='diaEtapa' name='diaEtapa' type="text">
+                                                <input id='diaEtapa' name='diaEtapa' type="hidden"> <!-- hidden -->
                                             </div>
                                         </div>
                                         <div class="form-row mt-3">
@@ -189,6 +191,7 @@ function preSubmit(){
     $('#JsonData').val(JsonData);
 
     if ($("#formPlanificacion")[0].checkValidity()){
+        console.log(JsonData);
         $("#formPlanificacion").submit();
     }else{
         $("#formPlanificacion")[0].reportValidity();
@@ -267,7 +270,6 @@ function planificacionEstaCompleta(fechaInicio, fechaFin, horaInicio, horaFin, o
 
 function transformarFechaParaMostrar(fecha){
     var arrFecha = fecha.split('-');
-    //[0] => anio; [1] => mes; [2] => dia
 
     if (arrFecha[0].length == 4){ //Es el anio
         return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
@@ -278,9 +280,12 @@ function transformarFechaParaMostrar(fecha){
 
 function transformarFechaParaInput(fecha){
     var arrFecha = fecha.split('-');
-    //[0] => dia; [1] => mes; [2] => anio
 
-    return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+    if (arrFecha[2].length == 4){ //Es el anio
+        return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+    } else {
+        return arrFecha[0] + '-' + arrFecha[1] + '-' + arrFecha[2];
+    }
 }
 
 function agregaPlanificacion(){
@@ -324,6 +329,7 @@ function mostrarMensajeInformacionIncompleta(){
 }
 
 function editaPlanificacion(){
+    var idPlanificacion = $('#idPlanificacion').val();
     var fechaInicio = $('#diaInicioTarea').val();
     var fechaFin = $('#diaFinTarea').val();
     var horaInicio = $('#horaInicioTarea').val();
@@ -339,6 +345,7 @@ function editaPlanificacion(){
     }
 
     var planificacion = {
+        id : idPlanificacion,
         fechaInicio : fechaInicio,
         fechaFin : fechaFin,
         horaInicio : horaInicio,
@@ -356,6 +363,7 @@ function editaPlanificacion(){
     $('#EditaPlanificacion').hide();
     $('#AgregaPlanificacion').show();
     $('#diaEtapa').val(diaEtapaActual);
+
 }
 
 function cargarPlanificacion(iPosPlanificacion){
@@ -364,6 +372,7 @@ function cargarPlanificacion(iPosPlanificacion){
     var planificacion = arrPlanificacion[iPosPlanificacion];
     diaEtapaActual = $('#diaEtapa').val();
 
+    $('#idPlanificacion').val(planificacion.id);
     $('#diaInicioTarea').val(transformarFechaParaInput(planificacion.fechaInicio));
     $('#diaFinTarea').val(transformarFechaParaInput(planificacion.fechaFin));    
     $('#horaInicioTarea').val(planificacion.horaInicio);
@@ -478,13 +487,12 @@ function dibujarTablaPlanificacion(){
         agregaBotonesEdicionBorradoPlanificacion(acciones, i);
         
         diaEtapaActual =  parseInt(planificacion.diaEtapa)+1;
+
         
     }
-    console.log(diaEtapaActual);
     $('#diaEtapa').val(diaEtapaActual);
 
     if (arrPlanificacion.length > 0){
-        console.log("ASdsadasd");
         $('#tablaPlanificacion').show();
     }else{
         $('#tablaPlanificacion').hide();

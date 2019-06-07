@@ -64,10 +64,10 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'secciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
+            return ['__isInitialized__', 'id', 'secciones', 'RelevamientosxSecciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
         }
 
-        return ['__isInitialized__', 'id', 'secciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
+        return ['__isInitialized__', 'id', 'secciones', 'RelevamientosxSecciones', 'EstadoRelevamiento', 'NodosFirmantesRelevamiento'];
     }
 
     /**
@@ -176,45 +176,12 @@ class Relevamientos extends \DBAL\Entity\Relevamientos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function addSecciones($secciones = NULL)
+    public function getRelevamientosxSecciones()
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addSecciones', [$secciones]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRelevamientosxSecciones', []);
 
-        return parent::addSecciones($secciones);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSecciones()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSecciones', []);
-
-        return parent::getSecciones();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeSecciones($secciones)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeSecciones', [$secciones]);
-
-        return parent::removeSecciones($secciones);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeAllSecciones()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeAllSecciones', []);
-
-        return parent::removeAllSecciones();
+        return parent::getRelevamientosxSecciones();
     }
 
     /**

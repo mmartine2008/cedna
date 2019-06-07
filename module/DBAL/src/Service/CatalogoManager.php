@@ -146,12 +146,6 @@ class CatalogoManager {
         return $SeccionPregunta;
     }
 
-    // public function getSeccionesPorFormulario($Formulario){
-    //     $Secciones = $this->entityManager->getRepository(Seccion::class)->findBy(['formulario' => $Formulario]);
-
-    //     return $Secciones;
-    // }
-
     public function getSeccionesxRelevamiento($Relevamiento) {
         $SeccionesxRelevamiento = $this->entityManager->getRepository(RelevamientosxSecciones::class)->findBy(['relevamiento' => $Relevamiento]);
 

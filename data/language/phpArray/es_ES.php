@@ -180,7 +180,7 @@ return [
     '__mensaje_eliminar_formulario__' => 'Está seguro que desea eliminar el formulario',
     '__Requerida__' => 'Requerida',
     '__Secciones__' => 'Secciones',
-    '__falta_responder_pregunta_secciones__' => 'Falta responder la pregunta Secciones',
+    '__falta_responder_pregunta_secciones__' => 'Falta responder la pregunta Secciones Globales',
     '__envio_formulario_no_modificable__' => 'Una vez enviado el formulario, no podrá modificarse',
     '__Usted_esta_seguro__' => 'Usted esta seguro?',
     '__Si__' => 'Si',
@@ -193,4 +193,6 @@ return [
     '__mensaje_eliminar_pregunta__' => 'Está seguro que desea eliminar la pregunta',
     '__Nro_etapa_dia__' => 'Nro Etapa / Día',
     '__Nro_Orden_de_compra__' => 'Nro orden de compra',
+    '__Secciones_globales__' => 'Secciones Globales'
+
 ];

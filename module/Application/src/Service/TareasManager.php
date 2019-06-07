@@ -93,21 +93,22 @@ class TareasManager {
      * @return void
      */
     function guardarPlanificacionTarea($jsonData, $Tarea){
+        // die();
         $arrPlanificaciones = $jsonData->planificaciones;
         $arrPlanificacionesEliminadas = $jsonData->planificacionesEliminadas;
 
         $TipoPlanificacion = $this->catalogoManager->getTipoPlanificacion($jsonData->tipoPlanificacion->id);
         $Tarea->setTipoPlanificacion($TipoPlanificacion);
         $this->entityManager->persist($Tarea);
-
         foreach($arrPlanificaciones as $planificacionJSON){
+            
+         
             if (property_exists($planificacionJSON, 'id')){
                 $Planificaciones = $this->catalogoManager->getPlanificaciones($planificacionJSON->id);
             }else{
                 $Planificaciones = new Planificaciones();
                 $Planificaciones->setTarea($Tarea);
             }
-
             $Planificaciones->setFechaInicio($planificacionJSON->fechaInicio);
             $Planificaciones->setFechaFin($planificacionJSON->fechaFin);
             $Planificaciones->setHoraInicio($planificacionJSON->horaInicio);

@@ -181,7 +181,7 @@ return [
     '__mensaje_eliminar_formulario__' => 'Are you sure you want to delete the form',
     '__Requerida__' => 'Required',
     '__Secciones__' => 'Sections',
-    '__falta_responder_pregunta_secciones__' => 'Missing answer the question Sections',
+    '__falta_responder_pregunta_secciones__' => 'Missing answer the question  Global Sections',
     '__envio_formulario_no_modificable__' => 'Once the form has been sent, it can not be modified',
     '__Usted_esta_seguro__' => 'Are you sure?',
     '__Si__' => 'Yes',
@@ -193,4 +193,5 @@ return [
     '__mensaje_eliminar_pregunta__' => 'Are you sure you want to delete the question',
     '__Nro_etapa_dia__' => 'No. Phase / Day'
     '__Nro_Orden_de_compra__' => 'No purchase order',
+    '__Secciones_globales__' => 'Global Sections'
 ];

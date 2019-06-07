@@ -29,6 +29,11 @@ class RelevamientosxSecciones
      */
     protected $seccion;
 
+      /**
+     * @ORM\Column(name="seccionGlobal",  nullable=true, type="integer")
+     */
+    protected $seccionGlobal;
+
     /**
      * Get the value of id
      */ 
@@ -88,5 +93,39 @@ class RelevamientosxSecciones
 
         return $this;
     }
-    
+
+    /**
+     * Get the value of seccionGlobal
+     */ 
+    public function getSeccionGlobal()
+    {
+        if($this->seccionGlobal) {
+            return $this->seccionGlobal;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set the value of seccionGlobal
+     *
+     * @return  self
+     */ 
+    public function setSeccionGlobal($seccionGlobal)
+    {
+        $this->seccionGlobal = $seccionGlobal;
+
+        return $this;
+    }
+
+    public function getJSON(){
+        $output = "";
+        $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"seccionGlobal": "' . $this->getSeccionGlobal() .'",';
+        if ($this->getSeccion()) {
+            $output .= '"seccion": ' . $this->getSeccion()->getJSON() .'';
+        }
+        
+        return '{' . $output . '}';
+    }
 }

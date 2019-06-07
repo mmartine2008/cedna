@@ -74,6 +74,16 @@
         }
     }
 
+    function transformarFechaParaMostrar(fecha){
+    var arrFecha = fecha.split('-');
+
+    if (arrFecha[0].length == 4){ //Es el anio
+        return arrFecha[2] + '-' + arrFecha[1] + '-' + arrFecha[0];
+    }
+
+    return fecha;
+}
+
     function dibujarTablaTareas(){
         $('#bodyTareas').find('tr').remove();
 
@@ -101,8 +111,8 @@
 
                     tareaID.innerHTML = tarea.id;
                     nodo.innerHTML = tarea.nodo.nombre;
-                    inicioPlanificacion.innerHTML = planificacion.fechaInicio;
-                    finPlanificacion.innerHTML = planificacion.fechaFin;
+                    inicioPlanificacion.innerHTML = transformarFechaParaMostrar(planificacion.fechaInicio) ;
+                    finPlanificacion.innerHTML = transformarFechaParaMostrar(planificacion.fechaFin);
                     formularioNombre.innerHTML = planificacion.relevamiento.formulario.nombre;
                     dibujarAccionesDePermiso(acciones, planificacion);
                 }

@@ -124,22 +124,22 @@ class Planificaciones
     }
 
     public function getFechaInicio()
-    {
+    { //no cambiar la forma de mostrar la fecha (mica)
         if (is_string($this->FechaInicio)){
-            $fecha = date("d-m-Y", strtotime($this->FechaInicio));
+            $fecha = date("Y-m-d", strtotime($this->FechaInicio));
             return $fecha;
         }else{
-            return $this->FechaInicio->format('d-m-Y');
+            return $this->FechaInicio->format('Y-m-d');
         }
     }
 
     public function getFechaFin()
-    {
+    {//no cambiar la forma de mostrar la fecha (mica)
         if (is_string($this->FechaFin)){
-            $fecha = date("d-m-Y", strtotime($this->FechaFin));
+            $fecha = date("Y-m-d", strtotime($this->FechaFin));
             return $fecha;
         }else{
-            return $this->FechaFin->format('d-m-Y');
+            return $this->FechaFin->format('Y-m-d');
         }
     }
 

@@ -82,7 +82,7 @@ class FormularioManager {
     }
 
     public function getSeccionesxRelevamientoxSecciones($relevamiento){
-        $RelevamientosxSecciones = $this->catalogoManager->getSeccionesxRelevamiento($relevamiento);
+        $RelevamientosxSecciones = $relevamiento->getRelevamientosxSecciones($relevamiento);
         $output = [];
         foreach($RelevamientosxSecciones as $relevamientoxSeccion) {
             $output[] = $relevamientoxSeccion->getSeccion();
@@ -129,7 +129,7 @@ class FormularioManager {
         return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
     }
 
-    private function altaRelevamientosxSecciones($Relevamiento, $Secciones) {
+    private function altaRelevamientosxSecciones($Relevamiento, $Secciones, $globales) {
         foreach ($Secciones as $Seccion){
             $RelevamientoxSeccion = $this->catalogoManager->getRelevamientosxSecciones($Relevamiento, $Seccion);
             if(!$RelevamientoxSeccion) {
@@ -137,8 +137,9 @@ class FormularioManager {
                 
                 $RelevamientoxSeccion->setRelevamiento($Relevamiento);
                 $RelevamientoxSeccion->setSeccion($Seccion);
+                $RelevamientoxSeccion->setSeccionGlobal($globales);
+                
                 $this->entityManager->persist($RelevamientoxSeccion);
-                $this->entityManager->flush();
             }
         }
     }
@@ -180,23 +181,33 @@ class FormularioManager {
      * @param [Planificaciones] $Planificacion
      * @return void
      */
-    public function asignarSeccionesAPlanificacion($JsonData, $Planificacion){
+    public function asignarSeccionesAPlanificacion($JsonData, $Planificacion, $Tarea){
+        
+        $SeccionesGlobales = $this->getArraySecciones($JsonData->seccionesGlobales);
+
         $SeccionesSeleccionadas = $this->getArraySecciones($JsonData->seccionesSeleccionadas);
-        $SeccionesNoSeleccionadas = $this->getArraySecciones($JsonData->seccioneNoSeleccionadas);
+        $SeccionesNoSeleccionadas = $this->getArraySecciones($JsonData->seccionesNoSeleccionadas);
 
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
+
+            if(!$SeccionesGlobales) {
+                $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
+            }
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
+           
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
             $this-> altaRelevamiento($EstadoParaEditar);
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
-
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas);
+            
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
         }
 
         $this->entityManager->flush();
@@ -615,7 +626,6 @@ class FormularioManager {
                 $Relevamiento = $Planificacion->getRelevamiento();
                 if ($Relevamiento){
                     $arrNodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
-
                     foreach ($arrNodosFirmantes as $NodoFirmante){
                         if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
                             $output[] = $Tarea->getJSON();
@@ -1013,40 +1023,68 @@ class FormularioManager {
         return true;
     }
 
-    private function getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones) {
+    private function getSeccionesGlobalesAlRelevamento($Tarea){
+        $output = [];
+        foreach ($Tarea->getPlanificaciones() as $Planificacion) {
+            $RelevxSecciones = $Planificacion->getRelevamiento()->getRelevamientosxSecciones();
+            foreach($RelevxSecciones as $RelevxSeccion) {
+                if($RelevxSeccion->getSeccionGlobal()) {
+                    $Seccion = $RelevxSeccion->getSeccion();
+                    $output[] =  $Seccion;
+                }
+            }
+        }
+        return $output;
+    }
+
+    private function seccionPerteneceAGlobales($seccionesGlobales, $Seccion) {
+        foreach($seccionesGlobales as $seccionGlobal) {
+            if($seccionGlobal->getId() == $Seccion->getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales) {
         $Secciones = $this->catalogoManager->getSecciones();
         $output = [];
         foreach($Secciones as $Seccion) {
-            if($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) {
+            if(($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) &&
+                (!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion))){
                 $output[] = $Seccion;
             }
         }
         return $output;
     }
 
-    private function getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones) {
+    private function getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales) {
         $output = [];
         foreach($RelevamientosxSecciones as $RelevxSeccion) {
             $Seccion = $RelevxSeccion->getSeccion();
-            $output[] =  $Seccion;
+            if(!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion)) {
+                $output[] =  $Seccion;
+            }
         }
         return $output;
     }
 
-    public function getSeccionesPorRelevamiento($Relevamiento) {
+    public function getSeccionesPorRelevamiento($Relevamiento, $Tarea) {
         $output = [];
-        $RelevamientosxSecciones = $this->catalogoManager->getSeccionesxRelevamiento($Relevamiento);
-        
-
-        $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones);
-        $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones);
-        
+        $seccionesGlobales = [];
+        $SeccionesRelacionada = [];
+        if($Relevamiento) {
+            $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
+            $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
+            $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);   
+        }
+        $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($seccionesGlobales);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesRelacionada);
         
         $output = implode(", ", $output);
 
         return '[' . $output . ']';
-        
     }
 }

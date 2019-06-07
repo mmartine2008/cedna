@@ -29,6 +29,11 @@ class Relevamientos
     protected $secciones;
 
     /**
+     * @ORM\OneToMany(targetEntity="RelevamientosxSecciones", mappedBy="relevamiento")
+     */
+    protected $RelevamientosxSecciones;
+
+    /**
      * @ORM\ManyToOne(targetEntity="EstadosRelevamiento")
      * @ORM\JoinColumn(name="IdEstadoRelevamiento", referencedColumnName="IdEstadoRelevamiento")
      */
@@ -41,48 +46,19 @@ class Relevamientos
 
     public function __construct() {
         $this->NodosFirmantesRelevamiento = new ArrayCollection();
-        $this->secciones = new ArrayCollection();
-    }
-
-    /**
-     * @param Seccion|null $secciones
-     */
-    public function addSecciones($secciones = null)
-    {
-        if (!$this->secciones->contains($secciones)) {
-            $this->secciones->add($secciones);
-        }
+        $this->RelevamientossxSecciones = new ArrayCollection();
     }
 
     /**
      * @return array
      */
-    public function getSecciones()
+    public function getRelevamientosxSecciones()
     {
-        if ($this->secciones){
-            return $this->secciones->toArray();
+        if ($this->RelevamientosxSecciones){
+            return $this->RelevamientosxSecciones->toArray();
         }else{
             return null;
         }
-    }
-    
-    /**
-     * @param Seccion $secciones
-     */
-    public function removeSecciones($secciones)
-    {
-        if (!$this->secciones->contains($secciones)) {
-            return;
-        }
-        $this->secciones->removeElement($secciones);
-    }
-
-    /**
-     * @desc Remove all tags for this article
-     */
-    public function removeAllSecciones()
-    {
-        $this->secciones->clear();
     }
 
     public function setEstadoRelevamiento($EstadoRelevamiento)
@@ -110,22 +86,23 @@ class Relevamientos
     }
 
     public function getJSON(){
-        $secciones = [];
-        foreach ($this->getSecciones() as $seccion) {
-            $secciones[] = $seccion->getJSON();
-        }
-        $secciones = implode(", ", $secciones);
-
         $nodosFirmantes = [];
         foreach ($this->getNodosFirmantesRelevamiento() as $nodoFirmante) {
             $nodosFirmantes[] = $nodoFirmante->getJSON();
         }
         $nodosFirmantes = implode(", ", $nodosFirmantes);
 
+        $RelevamientosxSecciones = [];
+        foreach ($this->getRelevamientosxSecciones() as $RelevamientoxSeccion) {
+            $RelevamientosxSecciones[] = $RelevamientoxSeccion->getJSON();
+        }
+        $RelevamientosxSecciones = implode(", ", $RelevamientosxSecciones);
+
+
         $output = "";
 
         $output .= '"id": "' . $this->getId() .'", ';
-        $output .= '"secciones": ['.$secciones.'],';
+        $output .= '"secciones": ['.$RelevamientosxSecciones.'],';
         $output .= '"nodosFirmantes": ['.$nodosFirmantes.'],';
         $output .= '"estadoRelevamiento": ' . $this->getEstadoRelevamiento()->getJSON() ;
         
