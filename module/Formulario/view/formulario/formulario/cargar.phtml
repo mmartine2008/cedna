@@ -45,8 +45,9 @@
         var childs = relevamiento.secciones
         var encontre = false;
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var seccionPregunta = childs[i].preguntas;
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                var seccionPregunta = seccion.preguntas;
                 updateAnswerOfJson(seccionPregunta, idPregunta, answer, encontre); 
             }
         }
@@ -72,10 +73,11 @@
     }
 
     function updateJsonOfPreguntaGenerada(idSeccion, idPregunta, question, info) {
-        childs = relevamiento.secciones
+        childs = relevamiento.secciones            
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                seccionPregunta = childs[i].preguntas;
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                seccionPregunta = seccion.preguntas;
                 updateJsonQuestionOfPreguntaGenerada(seccionPregunta, idPregunta, question, info);
             }
         }
@@ -103,8 +105,9 @@
     function getStatePreguntaGeneradaOfJSON(idSeccion, idPregunta, question) {
         childs = relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                preguntas = childs[i].preguntas;
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                preguntas = seccion.preguntas;
                 var state = getStateOfPreguntaGenerada(preguntas, idPregunta, question);
                 return state;
             }
@@ -130,8 +133,9 @@
         var output = [];
         var childs = relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var seccionPregunta = childs[i].preguntas;
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                var seccionPregunta = seccion.preguntas;
                 var opciones = getOptionOfMultiSelectQuestion(seccionPregunta, idPregunta, idSelector);
             }
         }
@@ -198,8 +202,9 @@
         var childs = relevamiento.secciones
         var encontre = false;
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                updateSelectAnswersOfSection(childs[i], idSelector, opciones, idSeccion, idPregunta, borrarAnteriores, encontre);
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                updateSelectAnswersOfSection(seccion, idSelector, opciones, idSeccion, idPregunta, borrarAnteriores, encontre);
             }
         }
     }
@@ -207,8 +212,9 @@
     function updateIdDestinoJsonSelectores(idSeccion, idPregunta) {
         var childs = relevamiento.secciones
         for (var i = 0; i < childs.length; i++){
-            if(childs[i].id == idSeccion){
-                var seccionPregunta = childs[i].preguntas;
+            seccion = childs[i].seccion;
+            if(seccion.id == idSeccion){
+                var seccionPregunta = seccion.preguntas;
                 for (var j = 0; j < seccionPregunta.length; j++){
                     var pregunta = seccionPregunta[j].pregunta;
                     if(pregunta.idPregunta == idPregunta){
@@ -824,10 +830,10 @@
         navPills.classList = "nav nav-tabs";
         contenedor.appendChild(navPills);
 
-        createLiNav(navPills, childs[0], true);
+        createLiNav(navPills, childs[0].seccion, true);
 
         for (var j = 1; j < childs.length; j++){
-            var item = childs[j];
+            var item = childs[j].seccion;
             createLiNav(navPills, item, false);  
         }
 
@@ -835,12 +841,12 @@
         divElement.classList="tab-content";
         contenedor.appendChild(divElement);
 
-        var item = childs[0];
+        var item = childs[0].seccion;
         var itemSeccion = crearItemSeccion(item, contenedor, true);
         divElement.appendChild(itemSeccion);
 
         for (var i = 1; i < childs.length; i++){
-            var item = childs[i];
+            var item = childs[i].seccion;
             var itemSeccion = crearItemSeccion(item, contenedor, false);
             divElement.appendChild(itemSeccion);
         }
@@ -849,7 +855,7 @@
     function getNombreSeccion(idSeccion) {
         secciones = relevamiento.secciones
         for (var i = 0; i < secciones.length; i++) {
-            var seccion = secciones[i];
+            var seccion = secciones[i].seccion;
             if(seccion.id == idSeccion) {
                 return seccion.nombre;
             }

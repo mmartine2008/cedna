@@ -403,8 +403,9 @@ class FormularioManager {
      * Esta funcion modifica el json insertandole las opciones a una pregunta select simple
      */
     public function getJSONModificadoSelectSimple($pregunta, $relev) {
-        $secc = $relev->secciones;
-        foreach($secc as $seccion) {
+        $seccionesxRelevamiento = $relev->secciones;
+        foreach($seccionesxRelevamiento as $seccionxRelevamiento) {
+            $seccion = $seccionxRelevamiento->seccion;
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
@@ -421,8 +422,9 @@ class FormularioManager {
      *  Esta funcion modifica el json insertandole las opciones a una pregunta select multiple
      */
     public function getJSONModificadoSelectMultiple($pregunta, $relev) {
-        $secciones = $relev->secciones;
-        foreach($secciones as $seccion) {
+        $seccionesxRelevamiento = $relev->secciones;
+        foreach($seccionesxRelevamiento as $seccionxRelevamiento) {
+            $seccion = $seccionxRelevamiento->seccion;
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
@@ -528,8 +530,9 @@ class FormularioManager {
 
     
     private function getJSONActualizadoPorRespuestasRelevamiento($relev) {
-        $secciones = $relev->secciones;
-        foreach($secciones as $seccion) {
+        $seccionesxRelevamiento = $relev->secciones;
+        foreach($seccionesxRelevamiento as $seccionxRelevamiento) {
+            $seccion = $seccionxRelevamiento->seccion;
             $seccionPreguntas = $seccion->preguntas;
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
@@ -994,10 +997,11 @@ class FormularioManager {
     }
 
     private function altaRespuestasFormulario($datos, $Relevamiento) {
-        $secciones = $datos->secciones;
+        $seccionesxRelevamiento = $datos->secciones;
 
         $this->vaciarNodosFirmantes($Relevamiento);
-        foreach ($secciones as $seccion) {
+        foreach ($seccionesxRelevamiento as $seccionxRelevamiento) {
+            $seccion = $seccionxRelevamiento->seccion;
             $this->altaRespuestaDePreguntaPorSeccion($seccion, $Relevamiento);
         }
 
