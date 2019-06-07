@@ -134,11 +134,11 @@
                                     </div>
                                     <div class="form-group col-md-1">
                                         <button id="button_in_global" 
-                                        onclick='insertarElementInSelect("formularioPlanificacion_global_1", "formularioPlanificacion_global_2")' 
+                                        onclick='InsertarYborrarElementos("formularioPlanificacion_global_1", "formularioPlanificacion_global_2", "formularioPlanificacion_1", "formularioPlanificacion_2")' 
                                         class="form-control" title="Añadir seleccionados">></button>
                                         <br>
                                         <button id="button_out_global" 
-                                        onclick='insertarElementInSelect("formularioPlanificacion_global_2", "formularioPlanificacion_global_1")'
+                                        onclick='InsertarYagregarElementos("formularioPlanificacion_global_2", "formularioPlanificacion_global_1", "formularioPlanificacion_1")'
                                         class="form-control" title="Quitar seleccionados"><</button>
                                     </div>
                                     <div class="form-group col-md-5">
@@ -192,8 +192,7 @@ function obtenerElementosSelector(idSelector){
     for (var i = 0; i < select1.length; i++) {
             var formData = {
                 id :  select1.options[i].value
-                }
-            ;
+                };
             options.push(formData);
     }
 
@@ -245,7 +244,6 @@ function preSubmit(){
 }
 
 $( document ).ready(function() {
-    console.log(arrSeccionesJSON[0]);
     dibujarDatosOrdenDeCompra();
     dibujarSelectFormularioGlobal();
     dibujarSelectFormulario();
@@ -254,7 +252,6 @@ $( document ).ready(function() {
     verificarMostrarBotonGuardar();
     manageButtons();
     manageButtonsGlobales();
-
 });
 
 function manageButtons(){
@@ -314,7 +311,6 @@ function deleteOptionsSelectorOrigen(origin) {
     }
     removeAllOptionSelector(origin);
     createListFromJSONLista(selectOrigen, notSelected);
-    return selectOrigen;
 }
 
 function obtenerElementosSeleccionados(idSelectorOrigen){
@@ -333,14 +329,76 @@ function obtenerElementosSeleccionados(idSelectorOrigen){
 
 function insertarElementInSelect(idSelectorOrigen, idSelectDestino){
     var options = obtenerElementosSeleccionados(idSelectorOrigen);
-    var optionOrigin = deleteOptionsSelectorOrigen(idSelectorOrigen);
+    deleteOptionsSelectorOrigen(idSelectorOrigen);
 
     var selectIn = document.getElementById(idSelectDestino);
     
     createListFromJSONLista(selectIn, options);
     manageButtons();
     manageButtonsGlobales();
+    return options;
 }
+
+function agregarElementosSelector(options, idSelectComun_1) {
+    var select = document.getElementById(idSelectComun_1);
+    createListFromJSONLista(select, options);
+}
+
+function deleteOptionsSelectorOrigen(origin) {
+    var selectOrigen = document.getElementById(origin);
+    var notSelected = [];
+    for (var i = 0; i < selectOrigen.length; i++) {
+        if (!selectOrigen.options[i].selected) {
+            var array = [];
+            array.push(selectOrigen.options[i].value);
+            array.push(selectOrigen.options[i].text);
+            notSelected.push(array);
+        }
+    }
+    removeAllOptionSelector(origin);
+    createListFromJSONLista(selectOrigen, notSelected);
+}
+
+function perteneceOpciones(opcionesBorrar, value) {
+    console.log(opcionesBorrar[0]);
+    for (var i = 0; i < opcionesBorrar.length; i++) {
+        
+        if (opcionesBorrar[i][0] == value) {
+            return true;
+        }
+    }
+    return false; 
+}
+
+function borrarElementosSelector(opcionesBorrar, idSelect) {
+    var select = document.getElementById(idSelect);
+    var optionsSelector = [];
+    for (var i = 0; i < select.length; i++) {
+        if (!perteneceOpciones(opcionesBorrar, select.options[i].value)) {
+            var array = [];
+            array.push(select.options[i].value);
+            array.push(select.options[i].text);
+            optionsSelector.push(array);
+        }
+    }
+    removeAllOptionSelector(idSelect);
+    createListFromJSONLista(select, optionsSelector);
+}
+
+
+function InsertarYborrarElementos(idSelectorOrigen, idSelectDestino, idSelectComun_1, idSelectComun_2) {
+    var options = insertarElementInSelect(idSelectorOrigen, idSelectDestino);
+    borrarElementosSelector(options, idSelectComun_1);
+    borrarElementosSelector(options, idSelectComun_2);
+    manageButtons()
+}
+
+function InsertarYagregarElementos(idSelectorOrigen, idSelectDestino, idSelectComun_1) {
+    var options = insertarElementInSelect(idSelectorOrigen, idSelectDestino);
+    agregarElementosSelector(options, idSelectComun_1);
+    manageButtons()
+}
+
 
 function verificarMostrarBotonGuardar(){
     for (var i = 0; i < arrAccionesDisponibles.length; i++){
