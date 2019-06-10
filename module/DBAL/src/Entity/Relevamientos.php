@@ -93,9 +93,12 @@ class Relevamientos
         $nodosFirmantes = implode(", ", $nodosFirmantes);
 
         $RelevamientosxSecciones = [];
-        foreach ($this->getRelevamientosxSecciones() as $RelevamientoxSeccion) {
-            $RelevamientosxSecciones[] = $RelevamientoxSeccion->getJSON();
+        if($this->getRelevamientosxSecciones()) {
+            foreach ($this->getRelevamientosxSecciones() as $RelevamientoxSeccion) {
+                $RelevamientosxSecciones[] = $RelevamientoxSeccion->getJSON();
+            }
         }
+        
         $RelevamientosxSecciones = implode(", ", $RelevamientosxSecciones);
 
 

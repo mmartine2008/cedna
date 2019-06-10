@@ -172,6 +172,8 @@ class FormularioManager {
         
         $this->entityManager->persist($Relevamiento);
         $this->entityManager->flush();
+
+        return $Relevamiento;
     }
 
     /**
@@ -201,7 +203,7 @@ class FormularioManager {
            
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
-            $this-> altaRelevamiento($EstadoParaEditar);
+            $Relevamiento = $this-> altaRelevamiento($EstadoParaEditar);
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
@@ -629,6 +631,7 @@ class FormularioManager {
                 $Relevamiento = $Planificacion->getRelevamiento();
                 if ($Relevamiento){
                     $arrNodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
+                    
                     foreach ($arrNodosFirmantes as $NodoFirmante){
                         if ($NodoFirmante->getUsuarioFirmante() == $UsuarioActivo){
                             $output[] = $Tarea->getJSON();
@@ -637,7 +640,7 @@ class FormularioManager {
                 }
             }
         }
-
+        die();
         return "[". implode(', ', $output) . "]";
     }
 
@@ -1019,9 +1022,12 @@ class FormularioManager {
     }
 
     private function seccionNoRelacionada($Seccion, $RelevamientosxSecciones){
-        foreach($RelevamientosxSecciones as $RelevxSeccion) {
-            if($RelevxSeccion->getSeccion()->getId() == $Seccion->getId()) {
-                return false;
+        if($RelevamientosxSecciones){
+            foreach($RelevamientosxSecciones as $RelevxSeccion) {
+                $seccionActual = $RelevxSeccion->getSeccion();
+                if($seccionActual->getId() == $Seccion->getId()) {
+                    return false;
+                }
             }
         }
         return true;
@@ -1031,10 +1037,12 @@ class FormularioManager {
         $output = [];
         foreach ($Tarea->getPlanificaciones() as $Planificacion) {
             $RelevxSecciones = $Planificacion->getRelevamiento()->getRelevamientosxSecciones();
-            foreach($RelevxSecciones as $RelevxSeccion) {
-                if($RelevxSeccion->getSeccionGlobal()) {
-                    $Seccion = $RelevxSeccion->getSeccion();
-                    $output[] =  $Seccion;
+            if($RelevxSecciones) {
+                foreach($RelevxSecciones as $RelevxSeccion) {
+                    if($RelevxSeccion->getSeccionGlobal()) {
+                        $Seccion = $RelevxSeccion->getSeccion();
+                        $output[] =  $Seccion;
+                    }
                 }
             }
         }
@@ -1064,10 +1072,12 @@ class FormularioManager {
 
     private function getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales) {
         $output = [];
-        foreach($RelevamientosxSecciones as $RelevxSeccion) {
-            $Seccion = $RelevxSeccion->getSeccion();
-            if(!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion)) {
-                $output[] =  $Seccion;
+        if($RelevamientosxSecciones) {
+            foreach($RelevamientosxSecciones as $RelevxSeccion) {
+                $Seccion = $RelevxSeccion->getSeccion();
+                if(!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion)) {
+                    $output[] =  $Seccion;
+                }
             }
         }
         return $output;

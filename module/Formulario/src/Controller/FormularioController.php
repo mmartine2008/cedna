@@ -142,7 +142,7 @@ class FormularioController extends BaseFormularioController
     public function paraFirmarAction(){
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
-
+        
         $this->FormularioManager->colocarRelevamientoParaFimar($idPlanificacion);
 
         $this->redirect()->toRoute("formulario", ["action" => "paraCargar"]);

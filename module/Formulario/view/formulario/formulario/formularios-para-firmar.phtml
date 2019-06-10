@@ -12,7 +12,7 @@
                             <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
                             <th class="text-center"><?= $this->translate('__Inicio_de_Planificacion__') ?></th>
                             <th class="text-center"><?= $this->translate('__Fin_de_Planificación__') ?></th>
-                            <th class="text-center"><?= $this->translate('__Formulario__') ?></th> 
+                            <th class="text-center"><?= $this->translate('__Planificacion__') ?></th> 
                             <th class="text-center"><?= $this->translate('__Acciones__') ?></th>
                         </tr>
                     </thead>
@@ -106,14 +106,14 @@
                     var nodo = row.insertCell(1);
                     var inicioPlanificacion = row.insertCell(2);
                     var finPlanificacion = row.insertCell(3);
-                    var formularioNombre = row.insertCell(4);
+                    var tituloPlanificacion = row.insertCell(4);
                     var acciones = row.insertCell(5);
 
                     tareaID.innerHTML = tarea.id;
                     nodo.innerHTML = tarea.nodo.nombre;
                     inicioPlanificacion.innerHTML = transformarFechaParaMostrar(planificacion.fechaInicio) ;
                     finPlanificacion.innerHTML = transformarFechaParaMostrar(planificacion.fechaFin);
-                    formularioNombre.innerHTML = planificacion.relevamiento.formulario.nombre;
+                    tituloPlanificacion.innerHTML = planificacion.titulo;
                     dibujarAccionesDePermiso(acciones, planificacion);
                 }
             }

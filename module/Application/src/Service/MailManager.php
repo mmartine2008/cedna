@@ -190,7 +190,7 @@ class MailManager {
 
             $smtp_options = $this->getSMTPOptions(false);
 
-            // $this->enviarMail($parametrosMail, $smtp_options);
+            $this->enviarMail($parametrosMail, $smtp_options);
         }
     }
 
