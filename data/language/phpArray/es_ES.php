@@ -193,6 +193,12 @@ return [
     '__mensaje_eliminar_pregunta__' => 'Está seguro que desea eliminar la pregunta',
     '__Nro_etapa_dia__' => 'Nro Etapa / Día',
     '__Nro_Orden_de_compra__' => 'Nro orden de compra',
-    '__Secciones_globales__' => 'Secciones Globales'
+    '__Secciones_globales__' => 'Secciones Globales',
+    '__Listado_de_Herramientas__' => 'Listado de las Herramientas',
+    '__Id_herramienta__' => 'Nro Herramienta',
+    '__Eliminar_herramienta__'  => 'Eliminar Herramienta', 
+    '__preg_confirmar_eliminar_herramienta__' => 'Está seguro que desea eliminar la herramienta',
+    '__Nueva_Herramienta__' => 'Nueva Herramienta',
+    '__Editar_Herramienta__' => 'Edición Herramienta',
 
 ];

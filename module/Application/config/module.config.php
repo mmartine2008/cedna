@@ -130,6 +130,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'herramientas' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/herramientas[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\HerramientasController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
             'planificacion' => [
                 'type' => Segment::class,
                 'options' => [
@@ -188,6 +203,7 @@ return [
             Controller\PlanificacionController::class => Controller\Factory\PlanificacionControllerFactory::class,
             Controller\MailController::class => Controller\Factory\MailControllerFactory::class,
             Controller\InduccionesController::class => Controller\Factory\InduccionesControllerFactory::class,
+            Controller\HerramientasController::class => Controller\Factory\HerramientasControllerFactory::class,        
         ],
     ],
     'service_manager' => [
@@ -202,6 +218,7 @@ return [
             Service\MailManager::class => Service\Factory\MailManagerFactory::class,
             Service\InduccionesManager::class => Service\Factory\InduccionesManagerFactory::class,
             Service\PermisosManager::class => Service\Factory\PermisosManagerFactory::class,
+            Service\HerramientasManager::class => Service\Factory\HerramientasManagerFactory::class,
         ],
     ],
     'view_manager' => [

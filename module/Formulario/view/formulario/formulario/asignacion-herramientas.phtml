@@ -1,0 +1,94 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Asignacion_de_Permisos_para_Planificaciones__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaTareas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Nro_Orden_de_compra__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nro_etapa_dia__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Solicitante__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Estado__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Fecha_de_Solicitud__') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTareas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrTareasJSON = <?= $arrTareasJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaTareas();
+    });
+
+    function dibujarTablaTareas(){
+        $('#bodyTareas').find('tr').remove();
+    
+        for (var i = 0; i < arrTareasJSON.length; i++)
+        {
+            var tarea = arrTareasJSON[i];
+
+            var body = document.getElementById("bodyTareas");
+
+
+            for(var j = 0; j < tarea.planificaciones.length; j++){
+                var planificacion = tarea.planificaciones[j];
+
+                var row = body.insertRow();
+                row.id = planificacion.id;
+
+                var tareaID = row.insertCell(0);
+                var nroEtapaDia = row.insertCell(1);
+                var solicitante = row.insertCell(2);
+                var nodo = row.insertCell(3);
+                var estado = row.insertCell(4);
+                var fecha = row.insertCell(5);
+
+                // tareaID.innerHTML = tarea.id;
+                tareaID.innerHTML = tarea.ordenDeCompra.id;
+                nroEtapaDia.innerHTML = planificacion.diaEtapa; 
+                solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
+                nodo.innerHTML = tarea.nodo.nombre;
+                estado.innerHTML = tarea.estadoTarea.descripcion;
+                fecha.innerHTML = tarea.fechaSolicitud;   
+            }
+        }
+    }
+
+    $(function() {
+        $('#tablaTareas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            //La fila seleccionada ya tiene el id de la planificacin
+            window.location.replace(url + "/formulario/asignar/" + filaSeleccionada);
+        }
+    }
+
+  </script>

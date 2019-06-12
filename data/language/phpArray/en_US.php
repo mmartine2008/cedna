@@ -191,7 +191,13 @@ return [
     '__Permiso_integral_trabajos_seguros__' => 'COMPREHENSIVE PERMIT FOR SAFE WORK',
     '__Eliminar_Pregunta__' => 'Delete Question',
     '__mensaje_eliminar_pregunta__' => 'Are you sure you want to delete the question',
-    '__Nro_etapa_dia__' => 'No. Phase / Day'
+    '__Nro_etapa_dia__' => 'No. Phase / Day',
     '__Nro_Orden_de_compra__' => 'No purchase order',
-    '__Secciones_globales__' => 'Global Sections'
+    '__Secciones_globales__' => 'Global Sections',
+    '__Listado_de_Herramientas__' => 'List of Tools',
+    '__Id_herramienta__' => 'No Tool',
+    '__Eliminar_herramienta__'  => 'Delete Tool', 
+    '__preg_confirmar_eliminar_herramienta__' => 'Está seguro que desea eliminar la herramienta',
+    '__Nueva_Herramienta__' => 'New Tool',
+    '__Editar_Herramienta__' => 'Edit Tool',
 ];

@@ -1,0 +1,93 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Nueva_Herramienta__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <form method="post" name="formHerramienta" id="formHerramienta">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <label for="herramientaDescripcion"><span class="obligatorio">(*) </span><?= $this->translate('__Descripcion__') ?>:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" id="herramientaDescripcion" name="herramientaDescripcion" class="form-control" required="true">
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">                 
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var HerramientaJson = <?= $HerramientaJson ?>;
+
+    function preSubmit(){
+        var JsonData = FormHerramientasToJson();
+        $('#JsonData').val(JsonData);
+        if(validarInput()) {
+            $("#formHerramienta").submit()
+        } else {
+            //alert
+        }
+    }
+
+    function FormHerramientasToJson(){
+        var formData = {
+            descripcion: $('#herramientaDescripcion').val(),
+        };
+        
+        var JsonData = JSON.stringify(formData);
+        
+        return JsonData;
+    }
+
+    function validarInput() {
+        if (($("#formHerramienta")[0].checkValidity())){
+            return true;
+        }else{
+            $("#formHerramienta")[0].reportValidity(); 
+        }
+        return false;
+    }
+
+    function verificarMostrarBotonGuardar(){
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var boton = arrAccionesDisponibles[i];
+
+            if (boton.jsFunction === 'preSubmit()'){
+                $('#'+boton.idHTMLElement).prop('disabled', false);
+                $('#'+boton.idHTMLElement).show();
+            }
+        }
+    }
+
+    function verificarMostrarBotonVolver(){
+        for (var i = 0; i < arrAccionesDisponibles.length; i++){
+            var boton = arrAccionesDisponibles[i];
+            if (boton.jsFunction === 'preVolver()'){
+                $('#'+boton.idHTMLElement).prop('disabled', false);
+                $('#'+boton.idHTMLElement).show();
+            }
+        }
+    }
+
+    $( document ).ready(function() {
+        if (HerramientaJson !== ''){
+            var valor = HerramientaJson.descripcion; 
+            $('#herramientaDescripcion').val(valor);
+        }
+        
+        verificarMostrarBotonGuardar();
+        verificarMostrarBotonVolver();
+    });
+
+    function preVolver(){
+        window.location.replace(url + "/herramientas");
+    }
+   
+</script>

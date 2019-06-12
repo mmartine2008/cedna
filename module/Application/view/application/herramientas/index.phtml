@@ -1,0 +1,116 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><?= $this->translate('__Listado_de_Herramientas__') ?></h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaHerramientas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><?= $this->translate('__Id_herramienta__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nombre__') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyHerramientas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrHerramientasJSON = <?= $arrHerramientasJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaHerramientas();
+    });
+
+    function dibujarTablaHerramientas(){
+        $('#bodyHerramientas').find('tr').remove();
+    
+        for (var i = 0; i < arrHerramientasJSON.length; i++)
+        {
+            var herramienta = arrHerramientasJSON[i];
+
+            var body = document.getElementById("bodyHerramientas");
+            var row = body.insertRow();
+            row.id = i;
+
+            var id = row.insertCell(0);
+            var descripcion = row.insertCell(1);
+
+            id.innerHTML = herramienta.id;
+            descripcion.innerHTML = herramienta.descripcion;
+        }
+    }
+
+    $(function() {
+        $('#tablaHerramientas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarHerramienta() {
+        var result = null;
+        var herramienta = arrHerramientasJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/herramientas/borrar/' + herramienta.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var herramienta = arrHerramientasJSON[filaSeleccionada];
+            
+            swal({
+                title: '<?= $this->translate('__Eliminar_herramienta__') ?>',
+                width: 600,
+                text: "<?= $this->translate('__preg_confirmar_eliminar_herramienta__') ?>: "+ herramienta.descripcion +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarHerramienta();
+                    window.location.replace(url + "/herramientas");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var herramienta = arrHerramientasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/herramientas/editar/" + herramienta.id);
+        }
+    }
+
+  </script>

@@ -61,7 +61,8 @@ class PermisosManager {
         ['Application\Controller\PlanificacionController', ''],
         ['Application\Controller\TareasController', ''],
         ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction'], 
-            ];
+        ['Application\Controller\HerramientasController', ''],    
+    ];
       
     private $acl;
    
