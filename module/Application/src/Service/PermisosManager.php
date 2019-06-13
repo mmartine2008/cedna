@@ -33,13 +33,13 @@ class PermisosManager {
         ['Formulario\Controller\FormularioController', 'indexAction,formulariosParaFirmarAction,firmarFormularioAction,delegarFirmaAction,puedeDelegarAction'], 
         ['Application\Controller\CednaController', ''], 
         ['Application\Controller\MailController', ''],
+        ['Application\Controller\OperariosController', ''],
     ];
     
 
 
     protected $controlersAdmin = [
                 ['Application\Controller\InduccionesController', ''], 
-                ['Application\Controller\OperariosController', ''], 
                 ['Application\Controller\OrganigramaController', ''], 
                 ['Configuracion\Controller\ConfigFormularioController', ''], 
                 ['Configuracion\Controller\ConfigNotifXPerfilController', ''], 
@@ -60,7 +60,7 @@ class PermisosManager {
         ['Application\Controller\OrdenesDeCompraController', ''],
         ['Application\Controller\PlanificacionController', ''],
         ['Application\Controller\TareasController', ''],
-        ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction'], 
+        ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction,asignarHerramientasAction,asignacionHerramientasAction,asignacionOperariosAction,asignarOperariosAction'], 
         ['Application\Controller\HerramientasController', ''],    
     ];
       

@@ -640,7 +640,6 @@ class FormularioManager {
                 }
             }
         }
-        die();
         return "[". implode(', ', $output) . "]";
     }
 
@@ -1103,10 +1102,53 @@ class FormularioManager {
     }
 
     public function asignarHerramientasAPlanificacion($JsonData, $Planificacion, $Tareas) {
-
+        //agarra el relevamiento y dado la lista de herramientas 
+        //( las seleccionadas y las no seleccionadas) y las agrego/borro a la tabla
     }
 
     public function getHerramientasPorRelevamiento($Relevamiento, $Tareas) {
+        //agarra lista de herramientas que estan ligadas al relevamiento y luego
+        //lista de herramientas que no estan ligadas
+        // (HerramientasDeTrabajo - HerramientasxRelevamiento)
+        //luego devuelve un arreglo con dos arreglos de herrameintas
+        $HerramientasxRelevamiento = $this->getHerramientasxRelevamiento($Relevamiento) ; //hacer funcion
+        $output = [];
+        $herramientasSeleccionadas = [];
+        $herramientasNoSeleccionadas = [];
+        foreach($HerramientasxRelevamiento as $HerramientaxRelevamiento) {
+            $herramientasSeleccionadas = $HerramientasxRelevamiento->getHerramienta()->getJSON();
+        }
+        return "[". implode(', ', $output) . "]";
+
+
+        $output = [];
+        $seccionesGlobales = [];
+        $SeccionesRelacionada = [];
+        if($Relevamiento) {
+            $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
+            // $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones);   
+        }
+        // $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesRelacionada);
+        
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
 
     }
+
+    public function asignarOperariosAPlanificacion($JsonData, $Planificacion, $Tareas) {
+        //agarra el relevamiento y dado la lista de herramientas 
+        //( las seleccionadas y las no seleccionadas) y las agrego/borro a la tabla
+    }
+
+    public function getOperariosPorRelevamiento($Relevamiento, $Tareas) {
+        //agarra lista de herramientas que estan ligadas al relevamiento y luego
+        //lista de herramientas que no estan ligadas
+        // (HerramientasDeTrabajo - HerramientasxRelevamiento)
+        //luego devuelve un arreglo con dos arreglos de herrameintas
+        
+    }
+
 }
