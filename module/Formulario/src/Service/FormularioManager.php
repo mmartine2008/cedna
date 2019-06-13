@@ -1101,4 +1101,12 @@ class FormularioManager {
 
         return '[' . $output . ']';
     }
+
+    public function asignarHerramientasAPlanificacion($JsonData, $Planificacion, $Tareas) {
+
+    }
+
+    public function getHerramientasPorRelevamiento($Relevamiento, $Tareas) {
+
+    }
 }

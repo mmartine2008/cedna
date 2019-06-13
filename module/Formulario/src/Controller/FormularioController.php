@@ -271,4 +271,51 @@ class FormularioController extends BaseFormularioController
         return $view;
     }
     
+    public function asignacionHerramientasAction(){
+        $this->cargarAccionesDisponibles('formulario - asignacionHerramientas');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formulario - asignacionHerramientas');
+
+        $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
+    
+        return new ViewModel([
+            "OperacionesJSON" => $OperacionesJSON,
+            "arrTareasJSON" => $arrTareasJSON
+        ]);
+
+    }
+
+    /**
+     * Accion para asignarle a la planificacion un formulario especifico.
+     *
+     * @return ViewModel
+     */
+    public function asignarHerramientasAction(){
+        $this->cargarAccionesDisponibles('formulario - asignarHerramientas');
+
+        $parametros = $this->params()->fromRoute();
+        $idPlanificacion = $parametros['id'];
+        $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
+        $Tareas = $Planificacion->getTarea();
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            
+            $JsonData = json_decode($data['JsonData']);
+
+            $this->FormularioManager->asignarHerramientasAPlanificacion($JsonData, $Planificacion, $Tareas);
+
+            $this->redirect()->toRoute("formulario", ["action" => "asignacionHerramientas"]);
+        }
+
+        $arrSeccionesJSON = $this->FormularioManager->getHerramientasPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
+        
+        $view = new ViewModel();
+        
+        $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
+        $view->setVariable('TareaJSON', $Tareas->getJSON());
+        $view->setVariable('arrSeccionesJSON', $arrSeccionesJSON);
+        $view->setTemplate('formulario/formulario/asignar-herramientas.phtml');
+        
+        return $view;
+    }
 }

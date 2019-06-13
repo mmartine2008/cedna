@@ -28,9 +28,10 @@
 <script>
     var filaSeleccionada = -1;
     var arrTareasJSON = <?= $arrTareasJSON; ?>;
-
+    
     $( document ).ready(function() {
         dibujarTablaTareas();
+        
     });
 
     function dibujarTablaTareas(){
@@ -87,7 +88,7 @@
     function preEditar(){
         if (filaSeleccionada >= 0){
             //La fila seleccionada ya tiene el id de la planificacin
-            window.location.replace(url + "/formulario/asignar/" + filaSeleccionada);
+            window.location.replace(url + "/formulario/asignar-herramientas/" + filaSeleccionada);
         }
     }
 
