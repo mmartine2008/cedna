@@ -40,6 +40,8 @@ use DBAL\Entity\Seccion;
 use DBAL\Entity\SeccionPregunta;
 use DBAL\Entity\NodosFirmantesRelevamiento;
 use DBAL\Entity\RelevamientosxSecciones;
+use DBAL\Entity\HerramientasxRelevamiento;
+use DBAL\Entity\OperariosxRelevamiento;
 
 
 class CatalogoManager {
@@ -681,6 +683,34 @@ class CatalogoManager {
                                                             ->findOneBy(['relevamiento' => $Relevamiento, 'seccion' => $Seccion]);
     
         return $NodosFirmantesRelevamiento;
+    }
+
+    public function getHerramientasxRelevamiento($Relevamiento) {
+        $HerramientasxRelevamiento = $this->entityManager->getRepository(HerramientasxRelevamiento::class)
+                                                            ->findBy(['relevamiento' => $Relevamiento]);
+    
+        return $HerramientasxRelevamiento;
+    }
+
+    public function getHerramientaxRelevamiento($Herramienta, $Relevamiento) {
+        $HerramientaxRelevamiento = $this->entityManager->getRepository(HerramientasxRelevamiento::class)
+                                                            ->findBy(['relevamiento' => $Relevamiento, 'herramienta' =>$Herramienta]);
+    
+        return $HerramientaxRelevamiento;
+    }
+    
+    public function getOperariosxRelevamiento($Relevamiento) {
+        $OperariosxRelevamiento = $this->entityManager->getRepository(OperariosxRelevamiento::class)
+                                                            ->findBy(['relevamiento' => $Relevamiento]);
+    
+        return $OperariosxRelevamiento;
+    }
+
+    public function getOperarioxRelevamiento($Operario, $Relevamiento) {
+        $OperarioxRelevamiento = $this->entityManager->getRepository(OperariosxRelevamiento::class)
+                                                            ->findBy(['relevamiento' => $Relevamiento, 'operario' =>$Operario]);
+    
+        return $OperarioxRelevamiento;
     }
     
 }

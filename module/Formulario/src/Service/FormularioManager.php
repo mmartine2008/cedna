@@ -14,6 +14,8 @@ use DBAL\Entity\EstadosRelevamiento;
 use DBAL\Entity\NodosFirmantesRelevamiento;
 use DBAL\Entity\RelevamientosxSecciones;
 use function GuzzleHttp\json_encode;
+use DBAL\Entity\HerramientasxRelevamiento;
+use DBAL\Entity\OperariosxRelevamiento;
 
 class FormularioManager {
     
@@ -1101,54 +1103,221 @@ class FormularioManager {
         return '[' . $output . ']';
     }
 
-    public function asignarHerramientasAPlanificacion($JsonData, $Planificacion, $Tareas) {
-        //agarra el relevamiento y dado la lista de herramientas 
-        //( las seleccionadas y las no seleccionadas) y las agrego/borro a la tabla
+    private function desenlazarHerramientasDeRelevamiento($Relevamiento, $Herramientas) {
+        foreach ($Herramientas as $Herramienta){
+            $HerramientaxRelevamiento = $this->catalogoManager->getHerramientaxRelevamiento($Herramienta, $Relevamiento);
+            
+            if($HerramientaxRelevamiento) {    
+                $this->eliminarEntidad($HerramientaxRelevamiento);
+            }
+        }
     }
 
-    public function getHerramientasPorRelevamiento($Relevamiento, $Tareas) {
-        //agarra lista de herramientas que estan ligadas al relevamiento y luego
-        //lista de herramientas que no estan ligadas
-        // (HerramientasDeTrabajo - HerramientasxRelevamiento)
-        //luego devuelve un arreglo con dos arreglos de herrameintas
-        $HerramientasxRelevamiento = $this->getHerramientasxRelevamiento($Relevamiento) ; //hacer funcion
-        $output = [];
-        $herramientasSeleccionadas = [];
-        $herramientasNoSeleccionadas = [];
-        foreach($HerramientasxRelevamiento as $HerramientaxRelevamiento) {
-            $herramientasSeleccionadas = $HerramientasxRelevamiento->getHerramienta()->getJSON();
+    private function altaHerramientasxRelevamiento($Relevamiento, $Herramientas) {
+        foreach ($Herramientas as $Herramienta){
+            $HerramientaxRelevamiento = $this->catalogoManager->getHerramientaxRelevamiento($Herramienta, $Relevamiento);
+            if(!$HerramientaxRelevamiento) {
+                $HerramientaxRelevamiento = new HerramientasxRelevamiento();
+                
+                $HerramientaxRelevamiento->setRelevamiento($Relevamiento);
+                $HerramientaxRelevamiento->setHerramienta($Herramienta);
+                
+                $this->entityManager->persist($HerramientaxRelevamiento);
+            }
         }
-        return "[". implode(', ', $output) . "]";
+    }
 
+    public function getArrayHerramientas($JsonHerramientas) {
+        $output = Array();
+        if($JsonHerramientas) {
+            foreach($JsonHerramientas as $JsonHerramienta) {
+                $output[] = $this->catalogoManager->getHerramientasDeTrabajo($JsonHerramienta->id);
+            }
+        }
+        return $output;
+    }
 
+    public function asignarHerramientasAPlanificacion($JsonData, $Planificacion) {
+        $HerramientasSeleccionadas = $this->getArrayHerramientas($JsonData->herramientasSeleccionadas);
+        $HerramientasNoSeleccionadas = $this->getArrayHerramientas($JsonData->herramientasNoSeleccionadas);
+
+        $Relevamiento = $Planificacion->getRelevamiento();
+
+        if ($Relevamiento){
+            $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
+
+            $this->desenlazarHerramientasDeRelevamiento($Relevamiento, $HerramientasNoSeleccionadas);
+            
+        }else{
+            $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
+            $Relevamiento = $this-> altaRelevamiento($EstadoParaEditar);
+
+            $Planificacion->setRelevamiento($Relevamiento);
+            $this->entityManager->persist($Planificacion);
+            
+            $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
+        }
+
+        $this->entityManager->flush();
+        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+    }
+
+    private function getHerramientasRelacionadasConRelevamiento($HerramientasxRelevamiento) {
         $output = [];
-        $seccionesGlobales = [];
-        $SeccionesRelacionada = [];
+        if($HerramientasxRelevamiento) {
+            foreach($HerramientasxRelevamiento as $herramientaxRelevamiento) {
+                $herramienta = $herramientaxRelevamiento->getHerramienta();
+                $output[] =  $herramienta;     
+            }
+        }
+        return $output;
+    }
+
+    private function herramientaNoRelacionada($Herramienta, $HerramientasxRelevamiento){
+        if($HerramientasxRelevamiento){
+            foreach($HerramientasxRelevamiento as $HerramientaxRelevamiento) {
+                $herramientaActual = $HerramientaxRelevamiento->getHerramienta();
+                if($herramientaActual->getId() == $Herramienta->getId()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private function getHerramientasNoRelacinadasConRelevamiento($HerramientasxRelevamiento) {
+        $Herramientas = $this->catalogoManager->getHerramientasDeTrabajo();
+        $output = [];
+        foreach($Herramientas as $Herramienta) {
+            if($this->herramientaNoRelacionada($Herramienta, $HerramientasxRelevamiento)) {
+                $output[] = $Herramienta;
+            }
+        }
+        return $output;
+    }
+
+    public function getHerramientasPorRelevamiento($Relevamiento) {
+        $output = [];
+        $HerramientaRelacionada = [];
         if($Relevamiento) {
-            $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
-            // $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones);   
+            $HerramientasxRelevamiento = $this->catalogoManager->getHerramientasxRelevamiento($Relevamiento) ;
+            $HerramientaRelacionada =  $this->getHerramientasRelacionadasConRelevamiento($HerramientasxRelevamiento);   
         }
-        // $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones);
-        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);
-        $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesRelacionada);
+        $HerramientaNoRelacionada = $this->getHerramientasNoRelacinadasConRelevamiento($HerramientasxRelevamiento);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($HerramientaNoRelacionada);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($HerramientaRelacionada);
         
         $output = implode(", ", $output);
 
         return '[' . $output . ']';
-
     }
 
-    public function asignarOperariosAPlanificacion($JsonData, $Planificacion, $Tareas) {
-        //agarra el relevamiento y dado la lista de herramientas 
-        //( las seleccionadas y las no seleccionadas) y las agrego/borro a la tabla
+  
+    private function desenlazarOperariosDeRelevamiento($Relevamiento, $Operarios) {
+        foreach ($Operarios as $Operario){
+            $OperarioxRelevamiento = $this->catalogoManager->getHerramientaxRelevamiento($Operario, $Relevamiento);
+            if($OperarioxRelevamiento) {               
+                $this->eliminarEntidad($OperarioxRelevamiento);
+            }
+        }
     }
 
-    public function getOperariosPorRelevamiento($Relevamiento, $Tareas) {
-        //agarra lista de herramientas que estan ligadas al relevamiento y luego
-        //lista de herramientas que no estan ligadas
-        // (HerramientasDeTrabajo - HerramientasxRelevamiento)
-        //luego devuelve un arreglo con dos arreglos de herrameintas
+    private function altaOperariosxRelevamiento($Relevamiento, $Operarios) {
+        foreach ($Operarios as $Operario){
+            $OperarioxRelevamiento = $this->catalogoManager->getOperarioxRelevamiento($Operario, $Relevamiento);
+            if(!$OperarioxRelevamiento) {
+                $OperarioxRelevamiento = new OperariosxRelevamiento();
+                
+                $OperarioxRelevamiento->setRelevamiento($Relevamiento);
+                $OperarioxRelevamiento->setHerramienta($Operario);
+                
+                $this->entityManager->persist($OperarioxRelevamiento);
+            }
+        }
+    }
+
+    public function getArrayOperarios($JsonOperares) {
+        $output = Array();
+        if($JsonOperares) {
+            foreach($JsonOperares as $JsonOperario) {
+                $output[] = $this->catalogoManager->getOperarios($JsonOperario->id);
+            }
+        }
+        return $output;
+    }
+
+    public function asignarOperariosAPlanificacion($JsonData, $Planificacion) {
+        $OperariosSeleccionadas = $this->getArrayOperarios($JsonData->operariosSeleccionadas);
+        $OperariosNoSeleccionadas = $this->getArrayOperarios($JsonData->operariosNoSeleccionadas);
+
+        $Relevamiento = $Planificacion->getRelevamiento();
+
+        if ($Relevamiento){
+            $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
+            $this->desenlazarOperariosDeRelevamiento($Relevamiento, $OperariosNoSeleccionadas);
+            
+        }else{
+            $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
+            $Relevamiento = $this-> altaRelevamiento($EstadoParaEditar);
+
+            $Planificacion->setRelevamiento($Relevamiento);
+            $this->entityManager->persist($Planificacion);
+            
+            $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
+        }
+
+        $this->entityManager->flush();
+        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+    }
+
+    private function getOperariosRelacionadosConRelevamiento($OperariosxRelevamiento) {
+        $output = [];
+        if($OperariosxRelevamiento) {
+            foreach($OperariosxRelevamiento as $OperarioxRelevamiento) {
+                $Operario = $OperarioxRelevamiento->getOperario();
+                $output[] =  $Operario;     
+            }
+        }
+        return $output;
+    }
+
+    private function operarioNoRelacionado($Operario, $OperariosxRelevamiento){
+        if($OperariosxRelevamiento){
+            foreach($OperariosxRelevamiento as $OperarioxRelevamiento) {
+                $OperarioActual = $OperarioxRelevamiento->getOperario();
+                if($OperarioActual->getId() == $Operario->getId()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private function getOperariosNoRelacinadosConRelevamiento($OperariosxRelevamiento) {
+        $Operarios = $this->catalogoManager->getOperarios();
+        $output = [];
+        foreach($Operarios as $Operario) {
+            if($this->operarioNoRelacionado($Operario, $OperariosxRelevamiento)) {
+                $output[] = $Operario;
+            }
+        }
+        return $output;
+    }
+
+    public function getOperariosPorRelevamiento($Relevamiento) {
+        $output = [];
+        $OperarioRelacionado = [];
+        if($Relevamiento) {
+            $OperariosxRelevamiento = $this->catalogoManager->getOperariosxRelevamiento($Relevamiento) ;
+            $OperarioRelacionado =  $this->getOperariosRelacionadosConRelevamiento($OperariosxRelevamiento);   
+        }
+        $OperarioNoRelacionado = $this->getOperariosNoRelacinadosConRelevamiento($OperariosxRelevamiento);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($OperarioNoRelacionado);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($OperarioRelacionado);
         
+        $output = implode(", ", $output);
+
+        return '[' . $output . ']';
     }
 
 }

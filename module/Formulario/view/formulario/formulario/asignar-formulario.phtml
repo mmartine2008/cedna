@@ -130,19 +130,21 @@
                                 <div class="form-row mt-2">
                                     <div class="form-group col-md-1"> </div>
                                     <div class="form-group col-md-5">
-                                        <select name="formularioPlanificacion_global_1" id="formularioPlanificacion_global_1" class="form-control" required="true" multiple></select>
+                                        <select name="formularioPlanificacion_global_1" id="formularioPlanificacion_global_1" class="form-control" multiple></select>
                                     </div>
                                     <div class="form-group col-md-1">
-                                        <button id="button_in_global" 
-                                        onclick='InsertarYborrarElementos("formularioPlanificacion_global_1", "formularioPlanificacion_global_2", "formularioPlanificacion_1", "formularioPlanificacion_2")' 
-                                        class="form-control" title="Añadir seleccionados">></button>
-                                        <br>
-                                        <button id="button_out_global" 
-                                        onclick='InsertarYagregarElementos("formularioPlanificacion_global_2", "formularioPlanificacion_global_1", "formularioPlanificacion_1")'
-                                        class="form-control" title="Quitar seleccionados"><</button>
+                                        <button type="button" id="button_in_global" class="btn btn-primary" 
+                                            title="Añadir seleccionados"
+                                            onclick='InsertarYborrarElementos("formularioPlanificacion_global_1", "formularioPlanificacion_global_2", "formularioPlanificacion_1", "formularioPlanificacion_2")'>>
+                                        </button>
+                                        
+                                        <button type="button" id="button_out_global" class="btn btn-primary mt-2" 
+                                            title="Quitar seleccionados"
+                                            onclick='InsertarYagregarElementos("formularioPlanificacion_global_2", "formularioPlanificacion_global_1", "formularioPlanificacion_1")'><
+                                        </button>
                                     </div>
                                     <div class="form-group col-md-5">
-                                        <select name="formularioPlanificacion_global_2" id="formularioPlanificacion_global_2" class="form-control" required="true" multiple></select>                                
+                                        <select name="formularioPlanificacion_global_2" id="formularioPlanificacion_global_2" class="form-control"  multiple></select>                                
                                     </div>
                                 </div>
                                 <div class="alert alert-warning form-group col-md-10" role="alert">
@@ -158,13 +160,15 @@
                                     <select name="formularioPlanificacion_1" id="formularioPlanificacion_1" class="form-control" multiple></select>
                                 </div>
                                 <div class="form-group col-md-1">
-                                    <button id="button_in" 
-                                    onclick='insertarElementInSelect("formularioPlanificacion_1", "formularioPlanificacion_2")' 
-                                    class="form-control" title="Añadir seleccionados">></button>
-                                    <br>
-                                    <button id="button_out" 
-                                    onclick='insertarElementInSelect("formularioPlanificacion_2", "formularioPlanificacion_1")'
-                                    class="form-control" title="Quitar seleccionados"><</button>
+                                    <button type="button" id="button_in" class="btn btn-primary" 
+                                        title="Añadir seleccionados"
+                                        onclick='insertarElementInSelect("formularioPlanificacion_1", "formularioPlanificacion_2")'>>
+                                    </button>
+                                    
+                                    <button type="button" id="button_out" class="btn btn-primary mt-2" 
+                                        title="Quitar seleccionados"
+                                        onclick='insertarElementInSelect("formularioPlanificacion_2", "formularioPlanificacion_1")'><
+                                    </button>
                                 </div>
                                 <div class="form-group col-md-5">
                                     <select name="formularioPlanificacion_2" id="formularioPlanificacion_2" class="form-control" multiple></select>                                
@@ -232,7 +236,6 @@ function preSubmit(){
     } else {
         swal({
         title: '<?= $this->translate('__Usted_esta_seguro__') ?>',
-        text:'<?= $this->translate('__envio_formulario_no_modificable__') ?>',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

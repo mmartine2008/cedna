@@ -60,7 +60,7 @@ class PermisosManager {
         ['Application\Controller\OrdenesDeCompraController', ''],
         ['Application\Controller\PlanificacionController', ''],
         ['Application\Controller\TareasController', ''],
-        ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction,asignarHerramientasAction,asignacionHerramientasAction,asignacionOperariosAction,asignarOperariosAction'], 
+        ['Formulario\Controller\FormularioController', 'paraCargarAction,asignacionAction,asignarAction,mostrarImagenAction,cargarAction,paraFirmarAction,imprimirAction,asignacionHerramientasAction,asignarHerramientasAction,asignacionOperariosAction,asignarOperariosAction'], 
         ['Application\Controller\HerramientasController', ''],    
     ];
       

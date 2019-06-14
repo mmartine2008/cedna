@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><?= $this->translate('__Asignar_Herramientas_a_la_Planificacion__') ?></h3>
+                <h3 class="panel-title"><?= $this->translate('__Asignar_herramientas_a_la_Planificacion__') ?></h3>
             </div>
             <div class="panel-body">
                 <form method="post" id="formPlanificacion" name="formPlanificacion">
@@ -124,24 +124,27 @@
                                 </div>
                             </div>
                             <div class="form-row col-md-3 mt-2">
-                                    <label for="formularioHeramientas"><?= $this->translate('__Herramientas__') ?>:</label>
+                                    <label for="formularioPlanificacion">
+                                        <?= $this->translate('__herramientas__') ?>:</label>
                             </div>
                             <div class="form-row mt-2">
                                 <div class="form-group col-md-1"> </div>
                                 <div class="form-group col-md-5">
-                                    <select name="formularioHeramientas_1" id="formularioHeramientas_1" class="form-control" multiple></select>
+                                    <select name="herramientasPlanificacion_1" id="herramientasPlanificacion_1" 
+                                    class="form-control" multiple></select>
                                 </div>
                                 <div class="form-group col-md-1">
-                                    <button id="button_in" 
-                                    onclick='insertarElementInSelect("formularioHeramientas_1", "formularioHerramienta_2")' 
-                                    class="form-control" title="Añadir seleccionados">></button>
-                                    <br>
-                                    <button id="button_out" 
-                                    onclick='insertarElementInSelect("formularioHerramienta_2", "formularioHeramientas_1")'
-                                    class="form-control" title="Quitar seleccionados"><</button>
+                                    <button type="button" id="boton_1" class="btn btn-primary" 
+                                    title="Añadir seleccionados"
+                                    onclick='insertarElementInSelect("herramientasPlanificacion_1", "herramientasPlanificacion_2")'>></button>
+                                    
+                                    <button type="button" id="boton_2" class="btn btn-primary mt-2" 
+                                    title="Quitar seleccionados"
+                                    onclick='insertarElementInSelect("herramientasPlanificacion_2", "herramientasPlanificacion_1")'><</button>
                                 </div>
                                 <div class="form-group col-md-5">
-                                    <select name="formularioHerramienta_2" id="formularioHerramienta_2" class="form-control" multiple></select>                                
+                                    <select name="herramientasPlanificacion_2" id="herramientasPlanificacion_2" 
+                                    class="form-control" multiple></select>                                
                                 </div>
                             </div>
                         </div>
@@ -164,20 +167,19 @@ function obtenerElementosSelector(idSelector){
     var select1 = document.getElementById(idSelector);
     var options = [];
     for (var i = 0; i < select1.length; i++) {
-        var formData = {
-            id :  select1.options[i].value
-            };
-        options.push(formData);
+            var formData = {
+                id :  select1.options[i].value
+                };
+            options.push(formData);
     }
 
     return options ;
 }
 
 function FormPlanificacionToJson(){
-
     var formData = {
-        seccionesSeleccionadas :  obtenerElementosSelector("formularioHerramienta_2"),
-        seccionesNoSeleccionadas : obtenerElementosSelector("formularioHerramienta_1"),
+        herramientasSeleccionadas :  obtenerElementosSelector("herramientasPlanificacion_2"),
+        herramientasNoSeleccionadas : obtenerElementosSelector("herramientasPlanificacion_1"),
     };
     
     var JsonData = JSON.stringify(formData);
@@ -188,7 +190,7 @@ function FormPlanificacionToJson(){
 function mostrarCartelErrorSubmit() { //ver que texto poner
         swal({
             type: 'error',
-            title: '<?= $this->translate('__falta_responder_pregunta_secciones__') ?>',
+            title: '<?= $this->translate('__falta_responder_pregunta_herramientas__') ?>',
         })
     }
 
@@ -196,12 +198,11 @@ function preSubmit(){
     var JsonData = FormPlanificacionToJson();
     $('#JsonData').val(JsonData);
 
-    if (arrHerramientasJSON[0].length == 0){
+    if($("#herramientasPlanificacion_2 option").length == 0) {
         mostrarCartelErrorSubmit();
     } else {
         swal({
         title: '<?= $this->translate('__Usted_esta_seguro__') ?>',
-        text:'<?= $this->translate('__envio_formulario_no_modificable__') ?>',
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -218,7 +219,6 @@ function preSubmit(){
 
 $( document ).ready(function() {
     dibujarDatosOrdenDeCompra();
-    mostrarDivAlertSecciones();
     dibujarSelectFormulario();
     dibujarDetallePlanificacion();
     
@@ -227,19 +227,19 @@ $( document ).ready(function() {
 });
 
 function manageButtons(){
-    if($("#formularioHerramienta_1 option").length == 0){
-        $("#button_in").prop('disabled', true);
+    if($("#herramientasPlanificacion_1 option").length == 0){
+        $("#boton_1").prop('disabled', true);
     } else {
-        $("#button_in").prop('disabled', false);
+        $("#boton_1").prop('disabled', false);
     }
-    if($("#formularioHerramienta_2 option").length == 0){
-        $("#button_out").prop('disabled', true);
+    if($("#herramientasPlanificacion_2 option").length == 0){
+        $("#boton_2").prop('disabled', true);
     } else {
-        $("#button_out").prop('disabled', false);
+        $("#boton_2").prop('disabled', false);
     }
 }
 
-function createListFromJSONLista(selector, lista) {      
+function createListFromJSONLista(selector, lista) {     
     for (var i=0; i < lista.length; i++) {
         var option = document.createElement("option");
         item = lista[i];
@@ -287,6 +287,7 @@ function obtenerElementosSeleccionados(idSelectorOrigen){
 }
 
 function insertarElementInSelect(idSelectorOrigen, idSelectDestino){
+
     var options = obtenerElementosSeleccionados(idSelectorOrigen);
     deleteOptionsSelectorOrigen(idSelectorOrigen);
 
@@ -294,9 +295,8 @@ function insertarElementInSelect(idSelectorOrigen, idSelectDestino){
     
     createListFromJSONLista(selectIn, options);
     manageButtons();
-    return options;
-}
 
+}
 
 function deleteOptionsSelectorOrigen(origin) {
     var selectOrigen = document.getElementById(origin);
@@ -311,16 +311,6 @@ function deleteOptionsSelectorOrigen(origin) {
     }
     removeAllOptionSelector(origin);
     createListFromJSONLista(selectOrigen, notSelected);
-}
-
-function perteneceOpciones(opcionesBorrar, value) {
-    for (var i = 0; i < opcionesBorrar.length; i++) {
-        
-        if (opcionesBorrar[i][0] == value) {
-            return true;
-        }
-    }
-    return false; 
 }
 
 function verificarMostrarBotonGuardar(){
@@ -364,11 +354,13 @@ function cargarSelectores(nombreSelector, arreglo) {
     }
 }
 
+
 function dibujarSelectFormulario(){
-    var seccionesNoRelacionadas =  arrHerramientasJSON[0];
-    cargarSelectores('formularioHerramienta_1', seccionesNoRelacionadas) ;
-    var seccionesRelacionadas =  arrHerramientasJSON[1];
-    cargarSelectores('formularioHerramienta_2', seccionesRelacionadas) ;
+    var herramientasNoRelacionadas =  arrHerramientasJSON[0];
+    cargarSelectores('herramientasPlanificacion_1', herramientasNoRelacionadas) ;
+    var herramientasRelacionadas =  arrHerramientasJSON[1];
+    cargarSelectores('herramientasPlanificacion_2', herramientasRelacionadas) ;
+   
 }
 
 function dibujarDatosOrdenDeCompra(){

@@ -285,7 +285,7 @@ class FormularioController extends BaseFormularioController
     }
 
     /**
-     * Accion para asignarle a la planificacion un formulario especifico.
+     * Accion para asignarle a la planificacion herramientas.
      *
      * @return ViewModel
      */
@@ -320,8 +320,8 @@ class FormularioController extends BaseFormularioController
     }
 
     public function asignacionOperariosAction(){
-        $this->cargarAccionesDisponibles('formulario - asignacionHerramientas');
-        $OperacionesJSON = $this->recuperarOperacionesIniciales('formulario - asignacionHerramientas');
+        $this->cargarAccionesDisponibles('formulario - asignacionOperarios');
+        $OperacionesJSON = $this->recuperarOperacionesIniciales('formulario - asignacionOperarios');
 
         $arrTareasJSON = $this->catalogoManager->getArrEntidadJSON('Tareas');
     
@@ -332,12 +332,12 @@ class FormularioController extends BaseFormularioController
     }
 
     /**
-     * Accion para asignarle a la planificacion un formulario especifico.
+     * Accion para asignarle a la planificacion operarios.
      *
      * @return ViewModel
      */
     public function asignarOperariosAction(){
-        $this->cargarAccionesDisponibles('formulario - asignarHerramientas');
+        $this->cargarAccionesDisponibles('formulario - asignarOperarios');
 
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
@@ -349,19 +349,19 @@ class FormularioController extends BaseFormularioController
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->FormularioManager->asignarHerramientasAPlanificacion($JsonData, $Planificacion, $Tareas);
+            $this->FormularioManager->asignarOperariosAPlanificacion($JsonData, $Planificacion, $Tareas);
 
-            $this->redirect()->toRoute("formulario", ["action" => "asignacionHerramientas"]);
+            $this->redirect()->toRoute("formulario", ["action" => "asignacionOperarios"]);
         }
 
-        $arrHerramientasJSON = $this->FormularioManager->getHerramientasPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
+        $arrOperariosJSON = $this->FormularioManager->getOperariosPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
         
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
         $view->setVariable('TareaJSON', $Tareas->getJSON());
-        $view->setVariable('arrHerramientasJSON', $arrHerramientasJSON);
-        $view->setTemplate('formulario/formulario/asignar-herramientas.phtml');
+        $view->setVariable('arrOperariosJSON', $arrOperariosJSON);
+        $view->setTemplate('formulario/formulario/asignar-operarios.phtml');
         
         return $view;
     }
