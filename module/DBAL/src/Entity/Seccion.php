@@ -31,6 +31,11 @@ class Seccion
      */
     protected $descripcion;
 
+    /**
+     * @ORM\Column(name="esObligatoria",  nullable=true, type="integer")
+     */
+    protected $esObligatoria;
+
    /**
      * @ORM\OneToMany(targetEntity="SeccionPregunta", mappedBy="seccion")
      */
@@ -120,6 +125,26 @@ class Seccion
         return (\in_array($this->id, SELF::ID_SECCION_FIRMAS));
     }
 
+     /**
+     * Get the value of esObligatoria
+     */ 
+    public function getEsObligatoria()
+    {
+        return $this->esObligatoria;
+    }
+
+    /**
+     * Set the value of esObligatoria
+     *
+     * @return  self
+     */ 
+    public function setEsObligatoria($esObligatoria)
+    {
+        $this->esObligatoria = $esObligatoria;
+
+        return $this;
+    }
+
     public function getJSON(){
         $output = "";
 
@@ -134,8 +159,11 @@ class Seccion
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"preguntas": ['.$seccionPreguntas.'], ';
         $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'"';
+        $output .= '"esObligatoria": "' . $this->getEsObligatoria() .'"';
 
         return '{' . $output . '}';
     }
 
+
+   
 }

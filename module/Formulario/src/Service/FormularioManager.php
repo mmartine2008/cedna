@@ -197,10 +197,14 @@ class FormularioManager {
         if ($Relevamiento){
 
             if(!$SeccionesGlobales) {
+                /** 
+                 * aca agarro las secciones globales al relevamiento y las doy de alta 
+                *(incluye secciones obligatorias)
+                */
                 $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
             }
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
+            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
            
         }else{
@@ -210,9 +214,14 @@ class FormularioManager {
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
             
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
-            $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
+            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
         }
+        $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, true);
+
 
         $this->entityManager->flush();
         $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
@@ -1064,7 +1073,9 @@ class FormularioManager {
         $output = [];
         foreach($Secciones as $Seccion) {
             if(($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) &&
-                (!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion))){
+                (!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion))
+                // &&($Seccion->getEsObligatoria() == 0) ver
+                ){
                 $output[] = $Seccion;
             }
         }
@@ -1108,7 +1119,7 @@ class FormularioManager {
             $HerramientaxRelevamiento = $this->catalogoManager->getHerramientaxRelevamiento($Herramienta, $Relevamiento);
             
             if($HerramientaxRelevamiento) {    
-                $this->eliminarEntidad($HerramientaxRelevamiento);
+                $this->eliminarEntidad($HerramientaxRelevamiento);  
             }
         }
     }
@@ -1123,6 +1134,7 @@ class FormularioManager {
                 $HerramientaxRelevamiento->setHerramienta($Herramienta);
                 
                 $this->entityManager->persist($HerramientaxRelevamiento);
+                $this->entityManager->flush();
             }
         }
     }
@@ -1144,10 +1156,8 @@ class FormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
-
+            // $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
             $this->desenlazarHerramientasDeRelevamiento($Relevamiento, $HerramientasNoSeleccionadas);
-            
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
             $Relevamiento = $this-> altaRelevamiento($EstadoParaEditar);
@@ -1155,9 +1165,9 @@ class FormularioManager {
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
             
-            $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
+            // $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         }
-
+        $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         $this->entityManager->flush();
         $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
@@ -1215,7 +1225,7 @@ class FormularioManager {
   
     private function desenlazarOperariosDeRelevamiento($Relevamiento, $Operarios) {
         foreach ($Operarios as $Operario){
-            $OperarioxRelevamiento = $this->catalogoManager->getHerramientaxRelevamiento($Operario, $Relevamiento);
+            $OperarioxRelevamiento = $this->catalogoManager->getOperarioxRelevamiento($Operario, $Relevamiento);
             if($OperarioxRelevamiento) {               
                 $this->eliminarEntidad($OperarioxRelevamiento);
             }
@@ -1229,7 +1239,7 @@ class FormularioManager {
                 $OperarioxRelevamiento = new OperariosxRelevamiento();
                 
                 $OperarioxRelevamiento->setRelevamiento($Relevamiento);
-                $OperarioxRelevamiento->setHerramienta($Operario);
+                $OperarioxRelevamiento->setOperario($Operario);
                 
                 $this->entityManager->persist($OperarioxRelevamiento);
             }
@@ -1253,7 +1263,7 @@ class FormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
+            // $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
             $this->desenlazarOperariosDeRelevamiento($Relevamiento, $OperariosNoSeleccionadas);
             
         }else{
@@ -1262,10 +1272,10 @@ class FormularioManager {
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
-            
-            $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
+            // $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
         }
 
+        $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
         $this->entityManager->flush();
         $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }

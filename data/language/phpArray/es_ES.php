@@ -82,7 +82,7 @@ return [
     '__Detalles_de_la_Planificacion__' => 'Detalles de la Planificación',
     '__Fecha_Inicio__' => 'Fecha Inicio',
     '__Fecha_Fin__' => 'Fecha Fin',
-    '__Asignacion_de_Permisos_para_Planificaciones__' => 'Asignacion de Permisos para Planificaciones',
+    '__Asignacion_de_Permisos_para_Planificaciones__' => 'Asignación de Permisos para Planificaciones',
     '__Firmas_de_Permisos_de_Trabajo__' => 'Firmas de Permisos de Trabajo',
     '__Inicio_de_Planificacion__' => 'Inicio de Planificación',
     '__Fin_de_Planificación__' => 'Fin de Planificación',
@@ -200,5 +200,10 @@ return [
     '__preg_confirmar_eliminar_herramienta__' => 'Está seguro que desea eliminar la herramienta',
     '__Nueva_Herramienta__' => 'Nueva Herramienta',
     '__Editar_Herramienta__' => 'Edición Herramienta',
-
+    '__Asignacion_de_Herramientas_para_Planificaciones__' => 'Asignación de Herramientas para Planificaciones',
+    '__Asignar_herramientas_a_la_Planificacion__' => 'Asignar Herramientas a la Planificación',
+    '__herramientas__' => 'Herramientas',
+    '__Asignacion_de_Operarios_para_Planificaciones__' => 'Asignación de Operarios para Planificaciones',
+    '__Asignar_operarios_a_la_Planificacion__' => 'Asignar Operarios a la Planificación',
+    '__operarios__' => 'Operarios',
 ];

@@ -345,10 +345,10 @@ function dibujarDetallePlanificacion(){
 
 function cargarSelectores(nombreSelector, arreglo) {
     for (var i = 0; i < arreglo.length; i++){
-        var seccion = arreglo[i];
+        var operario = arreglo[i];
         var option = $("<option></option>")
-                            .attr("value", seccion.id)
-                            .text(seccion.descripcion);
+                            .attr("value", operario.id)
+                            .text(operario.apellido +', '+operario.nombre);
 
         $('#'+nombreSelector).append(option);
     }
@@ -357,6 +357,7 @@ function cargarSelectores(nombreSelector, arreglo) {
 
 function dibujarSelectFormulario(){
     var operariosNoRelacionadas =  arrOperariosJSON[0];
+    console.log(operariosNoRelacionadas);
     cargarSelectores('operariosPlanificacion_1', operariosNoRelacionadas) ;
     var operariosRelacionadas =  arrOperariosJSON[1];
     cargarSelectores('operariosPlanificacion_2', operariosRelacionadas) ;

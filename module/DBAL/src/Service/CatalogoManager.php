@@ -694,7 +694,7 @@ class CatalogoManager {
 
     public function getHerramientaxRelevamiento($Herramienta, $Relevamiento) {
         $HerramientaxRelevamiento = $this->entityManager->getRepository(HerramientasxRelevamiento::class)
-                                                            ->findBy(['relevamiento' => $Relevamiento, 'herramienta' =>$Herramienta]);
+                                                            ->findOneBy(['relevamiento' => $Relevamiento, 'herramienta' =>$Herramienta]);
     
         return $HerramientaxRelevamiento;
     }
@@ -708,9 +708,16 @@ class CatalogoManager {
 
     public function getOperarioxRelevamiento($Operario, $Relevamiento) {
         $OperarioxRelevamiento = $this->entityManager->getRepository(OperariosxRelevamiento::class)
-                                                            ->findBy(['relevamiento' => $Relevamiento, 'operario' =>$Operario]);
+                                                            ->findOneBy(['relevamiento' => $Relevamiento, 'operario' =>$Operario]);
     
         return $OperarioxRelevamiento;
+    }
+
+    public function getSeccionesObligatorias() { //ver
+        $secciones = $this->entityManager->getRepository(Seccion::class)
+                                                            ->findBy(['esObligatoria' => 1]);
+    
+        return $secciones;
     }
     
 }
