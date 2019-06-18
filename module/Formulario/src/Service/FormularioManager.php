@@ -217,10 +217,10 @@ class FormularioManager {
             // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
             // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
         }
-        $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
+        // $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
-        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, true);
+        // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, true);
 
 
         $this->entityManager->flush();
