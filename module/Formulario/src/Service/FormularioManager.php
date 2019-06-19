@@ -118,6 +118,30 @@ class FormularioManager {
         return $respuesta;
     }
 
+    private function todasLasPlanificacionesListas($Planificaciones) {
+        foreach($Planificaciones as $Planificacion) {
+            $Relevamiento = $Planificacion->getRelevamiento();
+            if($Relevamiento) {
+                //si cumpple bien, sino retorna falso
+                    //tienen que tener secciones,. herramientas y operadores
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function getTareasListasParaPlanificar($arrTareas) {
+        $output = [] ;
+        foreach($arrTareas as $tarea) {
+            $Planificaciones = $tarea->getPlanificaciones();
+            if($this->todasLasPlanificacionesListas($Planificaciones)) {
+                $output[] = $tarea;
+            }
+        }
+        return $output;
+    }
+
     /**
      * Esta funcion recupera el listado de tareas para ejecutar del usuario conectado.
      * Lo retorna transformado en JSON.
@@ -128,7 +152,8 @@ class FormularioManager {
     public function getArrTareasParaEjecutar($nombreUsuario){
         $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
         $arrTareas = $this->catalogoManager->getTareasParaEjecutar($Usuario);
-        return $this->catalogoManager->arrEntidadesAJSON($arrTareas);
+        $arrTareasValidas = $this->getTareasListasParaPlanificar($arrTareas);
+        return $this->catalogoManager->arrEntidadesAJSON($arrTareasValidas);
     }
 
     private function altaRelevamientosxSecciones($Relevamiento, $Secciones, $globales) {
@@ -201,7 +226,7 @@ class FormularioManager {
                  * aca agarro las secciones globales al relevamiento y las doy de alta 
                 *(incluye secciones obligatorias)
                 */
-                $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
+                $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
             }
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
            
@@ -1055,12 +1080,16 @@ class FormularioManager {
     private function getSeccionesGlobalesAlRelevamento($Tarea){
         $output = [];
         foreach ($Tarea->getPlanificaciones() as $Planificacion) {
-            $RelevxSecciones = $Planificacion->getRelevamiento()->getRelevamientosxSecciones();
-            if($RelevxSecciones) {
-                foreach($RelevxSecciones as $RelevxSeccion) {
-                    if($RelevxSeccion->getSeccionGlobal()) {
-                        $Seccion = $RelevxSeccion->getSeccion();
-                        $output[] =  $Seccion;
+            
+            $Relevamiento = $Planificacion->getRelevamiento();
+            if($Relevamiento) {
+                $RelevxSecciones = $Relevamiento->getRelevamientosxSecciones();
+                if($RelevxSecciones) {
+                    foreach($RelevxSecciones as $RelevxSeccion) {
+                        if($RelevxSeccion->getSeccionGlobal()) {
+                            $Seccion = $RelevxSeccion->getSeccion();
+                            $output[] =  $Seccion;
+                        }
                     }
                 }
             }
@@ -1083,8 +1112,7 @@ class FormularioManager {
         foreach($Secciones as $Seccion) {
             if(($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) &&
                 (!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion))
-                &&($Seccion->getEsObligatoria() == 0) //ver
-                ){
+                &&($Seccion->getEsObligatoria() == 0) ){
                 $output[] = $Seccion;
             }
         }
@@ -1096,7 +1124,8 @@ class FormularioManager {
         if($RelevamientosxSecciones) {
             foreach($RelevamientosxSecciones as $RelevxSeccion) {
                 $Seccion = $RelevxSeccion->getSeccion();
-                if(!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion)) {
+                if(!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion)
+                &&($Seccion->getEsObligatoria() == 0)) {
                     $output[] =  $Seccion;
                 }
             }
@@ -1110,9 +1139,9 @@ class FormularioManager {
         $SeccionesRelacionada = [];
         if($Relevamiento) {
             $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
-            $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
             $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);   
         }
+        $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
         $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($seccionesGlobales);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);

@@ -66,24 +66,24 @@ class FormularioController extends BaseFormularioController
         $parametros = $this->params()->fromRoute();
         $idPlanificacion = $parametros['id'];
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificacion);
-        $Tareas = $Planificacion->getTarea();
+        $Tarea = $Planificacion->getTarea();
 
         if ($this->getRequest()->isPost()) {
             $data = $this->params()->fromPost();
             
             $JsonData = json_decode($data['JsonData']);
 
-            $this->FormularioManager->asignarSeccionesAPlanificacion($JsonData, $Planificacion, $Tareas);
+            $this->FormularioManager->asignarSeccionesAPlanificacion($JsonData, $Planificacion, $Tarea);
 
             $this->redirect()->toRoute("formulario", ["action" => "asignacion"]);
         }
 
-        $arrSeccionesJSON = $this->FormularioManager->getSeccionesPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
+        $arrSeccionesJSON = $this->FormularioManager->getSeccionesPorRelevamiento($Planificacion->getRelevamiento(), $Tarea);
         
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
-        $view->setVariable('TareaJSON', $Tareas->getJSON());
+        $view->setVariable('TareaJSON', $Tarea->getJSON());
         $view->setVariable('arrSeccionesJSON', $arrSeccionesJSON);
         $view->setTemplate('formulario/formulario/asignar-formulario.phtml');
         
