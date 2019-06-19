@@ -9,6 +9,7 @@
                     <thead>
                         <tr>
                             <th class="text-center"><?= $this->translate('__Tarea_ID__') ?></th>
+                            <th class="text-center"><?= $this->translate('__Nro_etapa_dia__') ?></th>
                             <th class="text-center"><?= $this->translate('__Solicitante__') ?></th>
                             <th class="text-center"><?= $this->translate('__Nodo__') ?></th>
                             <th class="text-center"><?= $this->translate('__Estado__') ?></th>
@@ -51,17 +52,18 @@
                     row.id = planificacion.id;
 
                     var tareaID = row.insertCell(0);
-                    var solicitante = row.insertCell(1);
-                    var nodo = row.insertCell(2);
-                    var estado = row.insertCell(3);
-                    var fecha = row.insertCell(4);
-                    var acciones = row.insertCell(5);
+                    var nroEtapaDia = row.insertCell(1);
+                    var solicitante = row.insertCell(2);
+                    var nodo = row.insertCell(3);
+                    var estado = row.insertCell(4);
+                    var fecha = row.insertCell(5);
+                    var acciones = row.insertCell(6);
 
                     tareaID.innerHTML = tarea.id;
+                    nroEtapaDia.innerHTML = planificacion.diaEtapa; 
                     solicitante.innerHTML = tarea.solicitante.nombre + ', ' + tarea.solicitante.apellido;
                     nodo.innerHTML = tarea.nodo.nombre;
                     estado.innerHTML = planificacion.relevamiento.estadoRelevamiento.descripcion;
-
                     fecha.innerHTML = tarea.fechaSolicitud;
                     dibujarAccionesDePlanificacion(acciones, planificacion);
                 }   

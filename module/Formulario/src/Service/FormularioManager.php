@@ -203,8 +203,6 @@ class FormularioManager {
                 */
                 $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea, $Relevamiento);
             }
-            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
-            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
             $this->desenlazarRelevamientosxSecciones($Relevamiento, $SeccionesNoSeleccionadas);
            
         }else{
@@ -213,18 +211,16 @@ class FormularioManager {
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
-            
-            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
-            // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
         }
-        // $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
-        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+        $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, false);
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
-        // $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, true);
-
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
+        
+        
 
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        // $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
 
     /**
@@ -305,7 +301,7 @@ class FormularioManager {
         
         if ($todosFirmaron){
             $this->finalizarRelevamiento($Relevamiento);
-            $this->mailManager->notificarPermisoFirmadoCompletamente($Planificacion);
+            // $this->mailManager->notificarPermisoFirmadoCompletamente($Planificacion);
         }
     }
 
@@ -332,7 +328,7 @@ class FormularioManager {
             }
         }
 
-        $this->mailManager->notificarFirmaDePermisoDelegada($Planificacion, $UsuarioActivo, $UsuarioDelegado);
+        // $this->mailManager->notificarFirmaDePermisoDelegada($Planificacion, $UsuarioActivo, $UsuarioDelegado);
 
         $mensaje = $this->translator->translate('__mensaje_delegacion_exitosa__').": ".$UsuarioDelegado->getNombre().', '.$UsuarioDelegado->getApellido();
         
@@ -406,9 +402,15 @@ class FormularioManager {
     /**
      * Esta funcion retorna las opciones que tiene una pregunta, dada una funcion
      */
-    public function getOpcionesFuncion($pregunta) {
+    public function getOpcionesFuncion($pregunta,  $seccionxRelevamiento) {
+        $seccion =  $seccionxRelevamiento->seccion;
         $strinfFuncion = $pregunta->getFuncion();
-        $opciones = $this->catalogoManager->{$strinfFuncion}();
+        if($seccion->esObligatoria == 1) { //necesita relevamiento
+            $relevamiento = $this->catalogoManager->getRelevamientos($seccionxRelevamiento->idRelevamiento);
+            $opciones = $this->catalogoManager->{$strinfFuncion}($relevamiento);
+        } else {
+            $opciones = $this->catalogoManager->{$strinfFuncion}();
+        }
         return $opciones;
     }
 
@@ -442,7 +444,7 @@ class FormularioManager {
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
                 if($preguntaJSON->idPregunta == $pregunta->getId()) {
-                    $opciones = $this->getOpcionesFuncion($pregunta);
+                    $opciones = $this->getOpcionesFuncion($pregunta,  $seccionxRelevamiento);
                     $respuestas = $preguntaJSON->respuesta;
                     $destino = 'destino_0_id_'.$pregunta->getId();
                     foreach($respuestas as $respuesta) {
@@ -654,10 +656,16 @@ class FormularioManager {
         return "[". implode(', ', $output) . "]";
     }
 
-    private function getValorFuncion($funcion, $opcion){
-        $opciones = $this->catalogoManager->{$funcion}();
+    private function getValorFuncion($funcion, $opcion, $idRelevamientoxSeccion){
+        $RelevamientoxSeccion = $this->catalogoManager->getRelevamientoxSeccion($idRelevamientoxSeccion);
+        $Seccion = $RelevamientoxSeccion->getSeccion();
+        if($Seccion->getEsObligatoria() == 1) {
+            $opciones = $this->catalogoManager->{$funcion}($RelevamientoxSeccion->getRelevamiento());
+        } else {
+            $opciones = $this->catalogoManager->{$funcion}();
+        }
+        
         $objOpciones = json_decode(json_encode($opciones));
-
         foreach($objOpciones as $opcionFuncion) {
             if($opcionFuncion->id == $opcion){
                 return $opcionFuncion->descripcion;
@@ -672,7 +680,7 @@ class FormularioManager {
         $pregunta = $respuestaDec->pregunta;
         if($pregunta->cerrada == 1) {
             if($pregunta->funcion) {
-                $valorOpcion = $this->getValorFuncion($pregunta->funcion, $respuestaDec->opcion);
+                $valorOpcion = $this->getValorFuncion($pregunta->funcion, $respuestaDec->opcion, $respuestaDec->idRelevamientoxSeccion);
             } else {
                 $valorOpcion = $this->getOpcion($respuestaDec->opcion)->getDescripcion();
             }
@@ -764,8 +772,9 @@ class FormularioManager {
 
     private function getSeccionesPorFormulario($Relevamiento){
         $RespuestasRelevamiento = $this->getRespuestasSegunRelevamiento($Relevamiento);
-        $secciones = $Relevamiento->getSecciones();
-        foreach($secciones as $seccion) {
+        $RelevamientoxSecciones = $Relevamiento->getRelevamientosxSecciones();
+        foreach($RelevamientoxSecciones as $RelevamientoxSeccion) {
+            $seccion = $RelevamientoxSeccion->getSeccion();
             $respuestas = $this->getRespuestaPorSeccion($RespuestasRelevamiento, $seccion->getId());
             if($respuestas) {
                 $output[] = ['idSeccion' => $seccion->getId(), 'descripcionSeccion' =>$seccion->getDescripcion(), 
@@ -1074,7 +1083,7 @@ class FormularioManager {
         foreach($Secciones as $Seccion) {
             if(($this->seccionNoRelacionada($Seccion, $RelevamientosxSecciones)) &&
                 (!$this->seccionPerteneceAGlobales($seccionesGlobales, $Seccion))
-                // &&($Seccion->getEsObligatoria() == 0) ver
+                &&($Seccion->getEsObligatoria() == 0) //ver
                 ){
                 $output[] = $Seccion;
             }
@@ -1169,7 +1178,7 @@ class FormularioManager {
         }
         $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        // $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
 
     private function getHerramientasRelacionadasConRelevamiento($HerramientasxRelevamiento) {
@@ -1277,7 +1286,7 @@ class FormularioManager {
 
         $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        // $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
 
     private function getOperariosRelacionadosConRelevamiento($OperariosxRelevamiento) {

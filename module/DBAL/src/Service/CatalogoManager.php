@@ -591,11 +591,23 @@ class CatalogoManager {
         return $resultado;
     }
 
-    public function getHerramientas(){
+    public function getHerramientas($Relevamiento){
         $resultado = [];
-        $elementos = $this->getHerramientasDeTrabajo();
-        foreach($elementos as $elemento){
-            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
+        $HerramientasxRelevamiento = $this->getHerramientasxRelevamiento($Relevamiento);
+        foreach($HerramientasxRelevamiento as $HerramientaxRelevamiento){
+            $Herramienta = $HerramientaxRelevamiento->getHerramienta();
+            $resultado[] = ['id' => $Herramienta->getId(), 'descripcion' =>$Herramienta->getDescripcion()];
+        }
+        return $resultado;
+    }
+
+    public function getOperariosParaTrabajo($Relevamiento){
+        $resultado = [];
+        $OperariosxRelevamiento = $this->getOperariosxRelevamiento($Relevamiento);
+        foreach($OperariosxRelevamiento as $OperarioxRelevamiento){
+            $Operario = $OperarioxRelevamiento->getOperario();
+            $nombre = $Operario->getApellido().', '.$Operario->getNombre();
+            $resultado[] = ['id' => $Operario->getId(), 'descripcion' =>$nombre];
         }
         return $resultado;
     }
@@ -679,10 +691,17 @@ class CatalogoManager {
 
 
     public function getRelevamientosxSecciones($Relevamiento, $Seccion){
-        $NodosFirmantesRelevamiento = $this->entityManager->getRepository(RelevamientosxSecciones::class)
+        $RelevamientosxSecciones = $this->entityManager->getRepository(RelevamientosxSecciones::class)
                                                             ->findOneBy(['relevamiento' => $Relevamiento, 'seccion' => $Seccion]);
     
-        return $NodosFirmantesRelevamiento;
+        return $RelevamientosxSecciones;
+    }
+
+    public function getRelevamientoxSeccion($id){
+        $RelevamientosxSecciones = $this->entityManager->getRepository(RelevamientosxSecciones::class)
+                                                            ->findOneBy(['id' => $id]);
+    
+        return $RelevamientosxSecciones;
     }
 
     public function getHerramientasxRelevamiento($Relevamiento) {

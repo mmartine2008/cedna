@@ -64,10 +64,10 @@ class RelevamientosxSecciones extends \DBAL\Entity\RelevamientosxSecciones imple
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'relevamiento', 'seccion'];
+            return ['__isInitialized__', 'id', 'relevamiento', 'seccion', 'seccionGlobal'];
         }
 
-        return ['__isInitialized__', 'id', 'relevamiento', 'seccion'];
+        return ['__isInitialized__', 'id', 'relevamiento', 'seccion', 'seccionGlobal'];
     }
 
     /**
@@ -241,6 +241,39 @@ class RelevamientosxSecciones extends \DBAL\Entity\RelevamientosxSecciones imple
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSeccion', [$seccion]);
 
         return parent::setSeccion($seccion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSeccionGlobal()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSeccionGlobal', []);
+
+        return parent::getSeccionGlobal();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSeccionGlobal($seccionGlobal)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSeccionGlobal', [$seccionGlobal]);
+
+        return parent::setSeccionGlobal($seccionGlobal);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getJSON()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getJSON', []);
+
+        return parent::getJSON();
     }
 
 }

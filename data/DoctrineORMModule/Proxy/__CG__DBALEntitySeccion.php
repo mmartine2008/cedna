@@ -64,10 +64,10 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'seccionPreguntas'];
+            return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'esObligatoria', 'seccionPreguntas'];
         }
 
-        return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'seccionPreguntas'];
+        return ['__isInitialized__', 'id', 'nombre', 'descripcion', 'esObligatoria', 'seccionPreguntas'];
     }
 
     /**
@@ -263,6 +263,28 @@ class Seccion extends \DBAL\Entity\Seccion implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'esSeccionFirmas', []);
 
         return parent::esSeccionFirmas();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEsObligatoria()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEsObligatoria', []);
+
+        return parent::getEsObligatoria();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setEsObligatoria($esObligatoria)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEsObligatoria', [$esObligatoria]);
+
+        return parent::setEsObligatoria($esObligatoria);
     }
 
     /**

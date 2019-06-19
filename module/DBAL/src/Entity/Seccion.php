@@ -31,10 +31,11 @@ class Seccion
      */
     protected $descripcion;
 
-    // /**
-    //  * @ORM\Column(name="esObligatoria",  nullable=true, type="integer")
-    //  */
-    // protected $esObligatoria; ver
+    /**
+     * @ORM\Column(name="esObligatoria",  nullable=true, type="integer")
+     */
+    protected $esObligatoria; 
+    //ver
 
    /**
      * @ORM\OneToMany(targetEntity="SeccionPregunta", mappedBy="seccion")
@@ -125,25 +126,25 @@ class Seccion
         return (\in_array($this->id, SELF::ID_SECCION_FIRMAS));
     }
 
-    //  /** ver
-    //  * Get the value of esObligatoria
-    //  */ 
-    // public function getEsObligatoria()
-    // {
-    //     return $this->esObligatoria;
-    // }
+     /** ver
+     * Get the value of esObligatoria
+     */ 
+    public function getEsObligatoria()
+    {
+        return $this->esObligatoria;
+    }
 
-    // /**
-    //  * Set the value of esObligatoria
-    //  *
-    //  * @return  self
-    //  */ 
-    // public function setEsObligatoria($esObligatoria)
-    // {
-    //     $this->esObligatoria = $esObligatoria;
+    /**
+     * Set the value of esObligatoria
+     *
+     * @return  self
+     */ 
+    public function setEsObligatoria($esObligatoria)
+    {
+        $this->esObligatoria = $esObligatoria;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     public function getJSON(){
         $output = "";
@@ -158,8 +159,9 @@ class Seccion
         $output .= '"nombre": "' . $this->getNombre() .'", ';
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"preguntas": ['.$seccionPreguntas.'], ';
-        $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'"';
-        // $output .= '"esObligatoria": "' . $this->getEsObligatoria() .'"'; ver
+        $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'", ';
+        $output .= '"esObligatoria": "' . $this->getEsObligatoria() .'"'; 
+        //ver
 
         return '{' . $output . '}';
     }

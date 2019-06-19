@@ -154,7 +154,6 @@ class Respuesta
         return $this;
     }
 
-
     /**
      * Get the value of opcion
      */ 
@@ -213,8 +212,8 @@ class Respuesta
                 $destino = $this->getDestino();
             } 
         }
-
         $output .= '"destino": "' .$destino.'", ';
+        $output .= '"idRelevamientoxSeccion": "' .$this->getRelevamientoxSeccion()->getId().'", ';        
         $output .= '"respuesta": "' . $this->getDescripcion() .'"';
         return '{' . $output . '}';
     }

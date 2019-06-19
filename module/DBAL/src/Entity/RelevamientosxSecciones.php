@@ -121,6 +121,7 @@ class RelevamientosxSecciones
     public function getJSON(){
         $output = "";
         $output .= '"id": "' . $this->getId() .'", ';
+        $output .= '"idRelevamiento": "' . $this->getRelevamiento()->getId() .'", ';
         $output .= '"seccionGlobal": "' . $this->getSeccionGlobal() .'",';
         if ($this->getSeccion()) {
             $output .= '"seccion": ' . $this->getSeccion()->getJSON() .'';
