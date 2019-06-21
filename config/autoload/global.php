@@ -70,15 +70,17 @@ return [
     ],
 
     'datos_empresa' => [
-        // 'name' => 'Coca-Cola',
-        // 'phone' => '+5492262772277',
-        // 'logo' => './public/img/Coca-Cola_Femsa_Logo.png',
-        'name' => 'ARCOR SAN PEDRO',
+        'name' => 'Coca-Cola',
         'phone' => '+5492262772277',
-        'logo' => 'img/logo_arcor.png',
+        'logo' => 'img/Coca-Cola_Femsa_Logo.png',
+        // 'name' => 'ARCOR SAN PEDRO',
+        // 'phone' => '+5492262772277',
+        // 'logo' => 'img/logo_arcor.png',
     ],
 
     'datos_archivos' => [
-        'path' => '/home/juano/Cedna/files',
+        // 'path' => '/home/juano/Cedna/files',
+        'path' => '/home/mica/files',
+
     ]
 ];

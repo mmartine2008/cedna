@@ -64,8 +64,9 @@ class BaseFormularioController extends CednaController
             $string = $this->getStringRespuestas($resp['respuestas']);
             $listaDestinos = $this->getDestinos();
             $pdf->SetFont('helvetica', '', 10);
-            $pdf->MultiCell(0, 10, $string."\n", 1, 'L', 0, 0, '' ,'', true);
-            $pdf->Ln(7);
+            $pdf->writeHTMLCell(0, 0, '', '', $string."\n", 1, 1, 0, true, 'L', true);
+
+            // $pdf->Ln(5);
         }
     }
 
@@ -82,8 +83,26 @@ class BaseFormularioController extends CednaController
     }
 
     protected function imprimirPregunta($respuesta, $pdf, $descripcion){
+           //     <table>
+    //     <tr>
+    //     <td style="width:10%"></td>
+    //     <td style="width:80%">
+    //         <table id="tablaDatos">
+    //           
+    //                     <td style="width: 25%; text-align: rigth"></td>
+    //                     <td style="width: 25%; text-align: center"></td>
+    //             </tr>   
+    //         </table>
+    //         </td>
+    //         <td style="width:10%"></td>
+    //     </tr>
+    // </table>
         if($respuesta['archivo'] == "") {
-            $pdf->Cell(50, 5,  $descripcion);
+            // $pdf->Cell(50, 5,  $descripcion);
+            // $pdf->writeHTMLCell(0, 0, '', '', $descripcion, '', 1, 0, true, 'L', true);
+
+            $y = $pdf->getY();
+            $pdf->writeHTMLCell(40, '', '', $y, $descripcion, 0, 0, 0, true, 'L', true);
             $pdf->SetFont('helvetica', '', 10);
             $resp = $respuesta['respuesta'];
             if($respuesta['tipoPregunta'] == 'date') {
@@ -92,8 +111,10 @@ class BaseFormularioController extends CednaController
             } else {
                 $resp = $resp['respuesta'];
             }
-            $pdf->Cell(45, 5, $resp);
-            $pdf->Ln(6);
+            // $pdf->Cell(45, 5, $resp);
+            // $pdf->writeHTMLCell(0, 0, '', '', $resp, '', 1, 0, true, 'L', true);
+            $pdf->writeHTMLCell(0, '', '', '', $resp, 0, 1, 0, true, 'L', true);
+            $pdf->Ln(10);
         } else {
             $this->mostrarImagen($respuesta['archivo'], $pdf, $descripcion, $respuesta);
         }
@@ -122,61 +143,61 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    private function imprimirTresFirmas($pdf, $list, $i) {
-        $pdf->Cell(13, 5,  "");
+    // private function imprimirTresFirmas($pdf, $list, $i) {
+    //     $pdf->Cell(13, 5,  "");
 
-        for($j = 0; $j< 3 ; $j++) {
-            $pdf->Cell(60, 5,  "____________________");
-        }
-        $pdf->Ln(5);
+    //     for($j = 0; $j< 3 ; $j++) {
+    //         $pdf->Cell(60, 5,  "____________________");
+    //     }
+    //     $pdf->Ln(5);
 
-        $pdf->Cell(20, 5,  "");
-        for($j = 0; $j< 3 ; $j++) {
-            $pdf->Cell(60, 5,  $list[$i+$j]);
-        }
-    }
+    //     $pdf->Cell(20, 5,  "");
+    //     for($j = 0; $j< 3 ; $j++) {
+    //         $pdf->Cell(60, 5,  $list[$i+$j]);
+    //     }
+    // }
 
-    protected function imprimirFirmasSeleccionadas($pdf, $list) {
-            $i = 0;
-            $cantFirmas = count($list);
-            $modulo = $cantFirmas%3;
-            $pdf->SetFont('helvetica', '', 10);
-            while($i < count($list)){
-                if($i+3 >= count($list)) {
-                    if($modulo == 2) {
-                        $pdf->Cell(30, 5,  "");
-                        $pdf->Cell(60, 5,  "____________________");
-                        $pdf->Cell(60, 5,  "____________________");
-                        $pdf->Ln(5);
+    // protected function imprimirFirmasSeleccionadas($pdf, $list) {
+    //         $i = 0;
+    //         $cantFirmas = count($list);
+    //         $modulo = $cantFirmas%3;
+    //         $pdf->SetFont('helvetica', '', 10);
+    //         while($i < count($list)){
+    //             if($i+3 >= count($list)) {
+    //                 if($modulo == 2) {
+    //                     $pdf->Cell(30, 5,  "");
+    //                     $pdf->Cell(60, 5,  "____________________");
+    //                     $pdf->Cell(60, 5,  "____________________");
+    //                     $pdf->Ln(5);
 
-                        $pdf->Cell(40, 5,  "");
-                        $pdf->Cell(60, 5,  $list[$i]);
-                        $pdf->Cell(60, 5,  $list[$i+1]);
-                    } else if($modulo == 1) {
-                        $pdf->Cell(70, 5,  "");
-                        $pdf->Cell(60, 5,  "____________________");
-                        $pdf->Ln(5);
+    //                     $pdf->Cell(40, 5,  "");
+    //                     $pdf->Cell(60, 5,  $list[$i]);
+    //                     $pdf->Cell(60, 5,  $list[$i+1]);
+    //                 } else if($modulo == 1) {
+    //                     $pdf->Cell(70, 5,  "");
+    //                     $pdf->Cell(60, 5,  "____________________");
+    //                     $pdf->Ln(5);
 
-                        $pdf->Cell(80, 5,  "");
-                        $pdf->Cell(60, 5,  $list[$i]);
-                    } else {
-                        $this->imprimirTresFirmas($pdf, $list, $i);
-                    }
-                } else {
-                    $this->imprimirTresFirmas($pdf, $list, $i);
-                }
-                $pdf->Ln(25);
-                $i = $i+3;
-            }    
-    }
+    //                     $pdf->Cell(80, 5,  "");
+    //                     $pdf->Cell(60, 5,  $list[$i]);
+    //                 } else {
+    //                     $this->imprimirTresFirmas($pdf, $list, $i);
+    //                 }
+    //             } else {
+    //                 $this->imprimirTresFirmas($pdf, $list, $i);
+    //             }
+    //             $pdf->Ln(25);
+    //             $i = $i+3;
+    //         }    
+    // }
 
-    protected function imprimirRespuestasFirmas($respuestas, $pdf){
-        foreach($respuestas as $resp) {
-            $pdf->SetFont('helvetica', 'B', 10);
-            $list = $this->getListaRespuestas($resp['respuestas']);
-            $this->imprimirFirmasSeleccionadas($pdf, $list);
-        }
-    }
+    // protected function imprimirRespuestasFirmas($respuestas, $pdf){
+    //     foreach($respuestas as $resp) {
+    //         $pdf->SetFont('helvetica', 'B', 10);
+    //         $list = $this->getListaRespuestas($resp['respuestas']);
+    //         $this->imprimirFirmasSeleccionadas($pdf, $list);
+    //     }
+    // }
 
     private function insertarSaltoPagina($pdf, $size){
         $posicionY = $pdf->GetY();
@@ -186,31 +207,31 @@ class BaseFormularioController extends CednaController
         }
     }
 
-    protected function imprimirFirmas($respuestas, $pdf, $seccion) {
-        $pdf->Ln(10);
-        $this->insertarSaltoPagina($pdf, 80);
-        $pdf->SetFont('helvetica', 'B', 12);
-        $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
-        $pdf->Ln(8);
+    // protected function imprimirFirmas($respuestas, $pdf, $seccion) {
+    //     $pdf->Ln(10);
+    //     $this->insertarSaltoPagina($pdf, 80);
+    //     $pdf->SetFont('helvetica', 'B', 12);
+    //     $pdf->Cell(35, 5, $seccion['descripcionSeccion']);
+    //     $pdf->Ln(8);
 
-        $pdf->Ln(20);
-        foreach ( $respuestas as $respuestaxRespuesta) { 
-            foreach ( $respuestaxRespuesta as $respuesta) { 
-                $respuestas = $respuesta['respuesta'];
-                $this->imprimirRespuestasFirmas($respuestas, $pdf);
-            }
-        }
-    }
+    //     $pdf->Ln(20);
+    //     foreach ( $respuestas as $respuestaxRespuesta) { 
+    //         foreach ( $respuestaxRespuesta as $respuesta) { 
+    //             $respuestas = $respuesta['respuesta'];
+    //             $this->imprimirRespuestasFirmas($respuestas, $pdf);
+    //         }
+    //     }
+    // }
 
     protected function imprimirSecciones($pdf, $seccion){
         $respuestas = $seccion['respuestas'];
         $pdf->Ln(5);
 
-        if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
-            $this->imprimirFirmas($respuestas, $pdf, $seccion);
-        } else {
+        // if($seccion['descripcionSeccion'] == "Firmas del Permiso") {
+        //     $this->imprimirFirmas($respuestas, $pdf, $seccion);
+        // } else {
             $this->imprimirPreguntas($respuestas, $pdf, $seccion);
-        }
+        // }
     }
 
     protected function imprimirFormulario($pdf, $data) {

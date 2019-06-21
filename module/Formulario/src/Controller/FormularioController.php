@@ -209,7 +209,7 @@ class FormularioController extends BaseFormularioController
         $UsuarioActivo = $this->catalogoManager->getUsuarioPorNombreUsuario($userName);
     
         $arrTareasJSON = $this->FormularioManager->getArrTareasJSONFormulariosAFirmar($UsuarioActivo);
-    
+
         return new ViewModel([
             'arrTareasJSON' => $arrTareasJSON,
             'UsuarioActivoJSON' => $UsuarioActivo->getJSON()
