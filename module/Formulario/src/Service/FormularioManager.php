@@ -160,6 +160,18 @@ class FormularioManager extends BaseFormularioManager {
         // $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
     }
 
+    private function crearNodoFirmante($Responsable, $Planificacion) {
+        $Tarea = $Planificacion->getTarea();
+
+        $Entidad = new NodosFirmantesRelevamiento();
+        $Entidad->setNodo($Tarea->getNodo()); 
+        $Entidad->setUsuarioFirmante($Responsable);
+        $Entidad->setRelevamiento($Planificacion->getRelevamiento());
+        
+        $this->entityManager->persist($Entidad);
+        $this->entityManager->flush();
+    }
+
     /**
      * Funcion que cambia el estado del relevamiento, y lo coloca disponible
      * para ser firmado por los responsables.
@@ -177,10 +189,10 @@ class FormularioManager extends BaseFormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
         $Relevamiento->setEstadoRelevamiento($EstadoCompleto);
 
-        // $this->crearNodoFirmante($Responsable, $Relevamiento); //hacer
-
         $this->entityManager->persist($Relevamiento);
         $this->entityManager->flush();
+
+        $this->crearNodoFirmante($Responsable,  $Planificacion); 
     }
 
     /**
