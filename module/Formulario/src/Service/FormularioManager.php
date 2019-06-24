@@ -325,7 +325,7 @@ class FormularioManager extends BaseFormularioManager {
             foreach($seccionPreguntas as $seccionPregunta) {
                 $preguntaJSON = $seccionPregunta->pregunta;
                 if($preguntaJSON->idPregunta == $pregunta->getId()) {
-                    $opciones = $this->getOpcionesFuncion($pregunta);
+                    $opciones = $this->getOpcionesFuncion($pregunta, $seccionxRelevamiento);
                     $preguntaJSON->opciones = $opciones;
                 }
             }
