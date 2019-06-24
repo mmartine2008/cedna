@@ -181,7 +181,7 @@ class MailManager {
      */
     private function procesarEnvioMailAUsuarios($arrUsuariosANotificar, $mensaje, $titulo){
         foreach($arrUsuariosANotificar as $Usuario){
-            $parametrosMail = [
+            /*$parametrosMail = [
                 'Body' => $mensaje, 
                 'From' => 'support@cedna.com.ar', 
                 'To' => $Usuario->getEmail(), 
@@ -191,7 +191,8 @@ class MailManager {
             $smtp_options = $this->getSMTPOptions(false);
 
             $this->enviarMail($parametrosMail, $smtp_options);
-        }
+        	*/
+	}
     }
 
     /**
