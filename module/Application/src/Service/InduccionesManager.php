@@ -38,11 +38,11 @@ class InduccionesManager {
         $this->entityManager->persist($Inducciones);
         $this->entityManager->flush();
 
-        // if ($idInducciones){
-        //     $this->mailManager->notificarEdicionDeInduccion($Inducciones);
-        // }else{
-        //     $this->mailManager->notificarAltaDeInduccion($Inducciones);
-        // }
+        if ($idInducciones){
+            $this->mailManager->notificarEdicionDeInduccion($Inducciones);
+        }else{
+            $this->mailManager->notificarAltaDeInduccion($Inducciones);
+        }
     }
     
     public function borrarInducciones($idInducciones){
