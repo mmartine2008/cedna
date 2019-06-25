@@ -161,7 +161,6 @@ class Seccion
         $output .= '"preguntas": ['.$seccionPreguntas.'], ';
         $output .= '"esSeccionFirmas": "' . $this->esSeccionFirmas() .'", ';
         $output .= '"esObligatoria": "' . $this->getEsObligatoria() .'"'; 
-        //ver
 
         return '{' . $output . '}';
     }

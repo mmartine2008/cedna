@@ -40,12 +40,9 @@
      */
     function usuarioNoFirmoTodavia(relevamiento){
         var nodosFirmantes = relevamiento.nodosFirmantes;
-        console.log(relevamiento.nodosFirmantes)
         for (var i = 0; i < nodosFirmantes.length; i++){
             var nodoFirmante = nodosFirmantes[i];
             var usuarioFirmante = nodoFirmante.usuarioFirmante;
-            console.log('nodo Firmante '+nodoFirmante.usuarioFirmante.id);
-            console.log('id usuario activo: '+UsuarioActivoJSON.id );
             if (usuarioFirmante.id == UsuarioActivoJSON.id 
                     && nodoFirmante.fechaFirma == ''){
                 return true;
@@ -94,17 +91,10 @@
             var tarea = arrTareasJSON[i];
             var body = document.getElementById("bodyTareas");
             for(var j = 0; j < tarea.planificaciones.length; j++){
-                var planificacion = tarea.planificaciones[j];
-                // console.log(planificacion);
-                var relevamiento = planificacion.relevamiento;
-                console.log('tarea '+tarea.id);
                 
-                console.log('planificacion '+planificacion.id);
-
-                console.log('completado? '+relevamiento.estadoRelevamiento.esCompleto);
-                // console.log(usuarioNoFirmoTodavia(relevamiento));
-               
-
+                var planificacion = tarea.planificaciones[j];
+                var relevamiento = planificacion.relevamiento;
+         
                 //Muestro la fila si su estado es Completo y si el usuario todavia no firmo el permiso
                 if (relevamiento.estadoRelevamiento.esCompleto
                     && usuarioNoFirmoTodavia(relevamiento)){
@@ -120,8 +110,6 @@
                     var tituloPlanificacion = row.insertCell(5);
                     var acciones = row.insertCell(6);
 
-                    // console.log('asd');
-                    // console.log(tarea.id);
                     tareaID.innerHTML = tarea.id;
                     nroEtapaDia.innerHTML = planificacion.diaEtapa; 
                     nodo.innerHTML = tarea.nodo.nombre;

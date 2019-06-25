@@ -79,24 +79,29 @@ class BaseFormularioManager {
         return true;
     }
 
-    protected function getTareasListasParaPlanificar($arrTareas) {
-        $output = [] ;
-        foreach($arrTareas as $tarea) {
-            $Planificaciones = $tarea->getPlanificaciones();
-            if($this->todasLasPlanificacionesListas($Planificaciones)) {
-                $output[] = $tarea;
+    private function getPlanificacionesListas($Planificaciones) {
+        $outputPlanificaciones = [];
+        if($Planificaciones) {
+            foreach($Planificaciones as $Planificacion) {
+                $idRelevamiento = $Planificacion->relevamiento->id;
+                $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
+                if(($Relevamiento) && ($this->puedePlanificarTarea($Relevamiento))){
+                    $outputPlanificaciones[] = $Planificacion; 
+                } 
             }
-            // $outputPlanificaciones = [];
-            // foreach($Planificaciones as $Planificacion) {
-            //     $Relevamiento = $Planificacion->getRelevamiento();
-            //     if(($Relevamiento) &&($this->puedePlanificarTarea($Relevamiento))){
-            //         $outputPlanificaciones[] = $Planificacion; 
-            //     } 
-            // }
-            
+        }  
 
-        }
-        return $output;
+        return $outputPlanificaciones;
+    }
+
+    protected function getTareasListasParaPlanificar($JsonArrTareas) {
+        $arrTareas = json_decode($JsonArrTareas);
+       
+        foreach($arrTareas as $tarea) {
+            $Planificaciones = $tarea->planificaciones;
+            $tarea->planificaciones = $this->getPlanificacionesListas($Planificaciones);
+        } 
+        return json_encode($arrTareas);
     }
 
     protected function altaRelevamientosxSecciones($Relevamiento, $Secciones, $globales) {
@@ -299,6 +304,33 @@ class BaseFormularioManager {
         } 
         return $relev;
     }
+
+    /**
+     *  Esta funcion modifica el json insertandole las opciones a una pregunta select multiple
+     */
+    public function getJSONModificadoSelectMultiple($pregunta, $relev) {
+        $seccionesxRelevamiento = $relev->secciones;
+        foreach($seccionesxRelevamiento as $seccionxRelevamiento) {
+            $seccion = $seccionxRelevamiento->seccion;
+            $seccionPreguntas = $seccion->preguntas;
+            foreach($seccionPreguntas as $seccionPregunta) {
+                $preguntaJSON = $seccionPregunta->pregunta;
+                if($preguntaJSON->idPregunta == $pregunta->getId()) {
+                    $opciones = $this->getOpcionesFuncion($pregunta,  $seccionxRelevamiento);
+                    $respuestas = $preguntaJSON->respuesta;
+                    $destino = 'destino_0_id_'.$pregunta->getId();
+                    foreach($respuestas as $respuesta) {
+                        if($respuesta->destino == $destino){
+                            $opcionesJSON = $opciones;
+                            $respuesta->opcion = $opcionesJSON;
+                        }
+                    }
+                }
+            }
+        }
+        return $relev;
+    }
+
 
     protected function getJSONActualizadoPorFuncion($pregunta, $formJSON) {
         $output = $formJSON;

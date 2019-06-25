@@ -47,7 +47,7 @@ class OrdenesDeCompraController extends CednaController
         
         $arrNodosJSON = $this->catalogoManager->getArrEntidadJSON('Nodos');
         $arrUsuariosJSON = $this->catalogoManager->getArrEntidadJSON('Usuarios');
-
+        
         $view = new ViewModel();
         
         $view->setVariable('TareaJson', '""');

@@ -97,9 +97,11 @@ class FormularioManager extends BaseFormularioManager {
      */
     public function getArrTareasParaEjecutar($nombreUsuario){
         $Usuario = $this->catalogoManager->getUsuarioPorNombreUsuario($nombreUsuario);
+        
         $arrTareas = $this->catalogoManager->getTareasParaEjecutar($Usuario);
-        $arrTareasValidas = $this->getTareasListasParaPlanificar($arrTareas);
-        return $this->catalogoManager->arrEntidadesAJSON($arrTareasValidas);
+        $JsonArrTareas = $this->catalogoManager->arrEntidadesAJSON($arrTareas);
+        $JsonArrTareasValidas = $this->getTareasListasParaPlanificar($JsonArrTareas);
+        return $JsonArrTareasValidas;
     }
 
     /**
@@ -136,7 +138,6 @@ class FormularioManager extends BaseFormularioManager {
             if(!$SeccionesGlobales) {
                 /** 
                  * aca agarro las secciones globales al relevamiento y las doy de alta 
-                *(incluye secciones obligatorias)
                 */
                 $SeccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
             }
@@ -149,12 +150,10 @@ class FormularioManager extends BaseFormularioManager {
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
         }
-        $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); //ver
-        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, false);
+        $SeccionesObligatorias = $this->catalogoManager->getSeccionesObligatorias(); 
+        $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesObligatorias, false);        
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesGlobales, true);
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
-        
-        
 
         $this->entityManager->flush();
         $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
@@ -333,32 +332,7 @@ class FormularioManager extends BaseFormularioManager {
         return $relev;
     }
 
-    /**
-     *  Esta funcion modifica el json insertandole las opciones a una pregunta select multiple
-     */
-    public function getJSONModificadoSelectMultiple($pregunta, $relev) {
-        $seccionesxRelevamiento = $relev->secciones;
-        foreach($seccionesxRelevamiento as $seccionxRelevamiento) {
-            $seccion = $seccionxRelevamiento->seccion;
-            $seccionPreguntas = $seccion->preguntas;
-            foreach($seccionPreguntas as $seccionPregunta) {
-                $preguntaJSON = $seccionPregunta->pregunta;
-                if($preguntaJSON->idPregunta == $pregunta->getId()) {
-                    $opciones = $this->getOpcionesFuncion($pregunta,  $seccionxRelevamiento);
-                    $respuestas = $preguntaJSON->respuesta;
-                    $destino = 'destino_0_id_'.$pregunta->getId();
-                    foreach($respuestas as $respuesta) {
-                        if($respuesta->destino == $destino){
-                            $opcionesJSON = $opciones;
-                            $respuesta->opcion = $opcionesJSON;
-                        }
-                    }
-                }
-            }
-        }
-        return $relev;
-    }
-
+    
     public function getJSONActualizado($Relevamiento){
         $preguntas = $this->getPreguntasxRelevamiento($Relevamiento);
         $JSON = $Relevamiento->getJSON();
@@ -389,26 +363,12 @@ class FormularioManager extends BaseFormularioManager {
     public function getArrTareasJSONFormulariosAFirmar($UsuarioActivo){
         $arrTareas = $this->catalogoManager->getTareas();
         $output = [];
-        // var_dump($UsuarioActivo->getId());
         foreach ($arrTareas as $Tarea){
-            $arrPlanificaciones = $Tarea->getPlanificaciones();
-
-            foreach ($arrPlanificaciones as $Planificacion){
-                $Relevamiento = $Planificacion->getRelevamiento();
-                if ($Relevamiento){
-                    $arrNodosFirmantes = $Relevamiento->getNodosFirmantesRelevamiento();
-                    
-                    foreach ($arrNodosFirmantes as $NodoFirmante){
-                        // var_dump($NodoFirmante->getUsuarioFirmante()->getId());
-
-                        if ($NodoFirmante->getUsuarioFirmante()->getId() == $UsuarioActivo->getId()){
-                            $output[] = $Tarea->getJSON();
-                        }
-                    }
-                }
+            $planificador = $Tarea->getPlanificaTarea();
+            if ($planificador->getId() == $UsuarioActivo->getId()){
+                $output[] = $Tarea->getJSON();
             }
         }
-        // var_dump("[". implode(', ', $output) . "]");
         return "[". implode(', ', $output) . "]";
     }
 
@@ -614,7 +574,6 @@ class FormularioManager extends BaseFormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            // $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
             $this->desenlazarHerramientasDeRelevamiento($Relevamiento, $HerramientasNoSeleccionadas);
         }else{
             $EstadoParaEditar = $this->catalogoManager->getEstadosRelevamiento(EstadosRelevamiento::ID_PARA_EDITAR);
@@ -623,7 +582,6 @@ class FormularioManager extends BaseFormularioManager {
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
             
-            // $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         }
         $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         $this->entityManager->flush();
@@ -663,7 +621,6 @@ class FormularioManager extends BaseFormularioManager {
         $Relevamiento = $Planificacion->getRelevamiento();
 
         if ($Relevamiento){
-            // $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
             $this->desenlazarOperariosDeRelevamiento($Relevamiento, $OperariosNoSeleccionadas);
             
         }else{
@@ -672,7 +629,6 @@ class FormularioManager extends BaseFormularioManager {
 
             $Planificacion->setRelevamiento($Relevamiento);
             $this->entityManager->persist($Planificacion);
-            // $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
         }
 
         $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);

@@ -171,7 +171,7 @@ class CatalogoManager {
         if ($idUsuarios){
             $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findOneBy(['id' => $idUsuarios]);
         }else{
-            $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findAll();
+            $Usuarios = $this->entityManager->getRepository(Usuarios::class)->findBy([],['Nombre' => 'ASC']);
         }
 
         return $Usuarios;
@@ -278,7 +278,7 @@ class CatalogoManager {
         if ($idNodos){
             $Nodos = $this->entityManager->getRepository(Nodos::class)->findOneBy(['id' => $idNodos]);
         }else{
-            $Nodos = $this->entityManager->getRepository(Nodos::class)->findAll();
+            $Nodos = $this->entityManager->getRepository(Nodos::class)->findBy([],['Nombre' => 'ASC']);;
         }
         return $Nodos;
     }
