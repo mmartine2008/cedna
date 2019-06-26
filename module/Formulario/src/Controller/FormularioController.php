@@ -131,6 +131,7 @@ class FormularioController extends BaseFormularioController
             "destinos" => $this->getDestinos(),
             "idRelevamiento" => $Relevamiento->getId(),
             "enEdicion" => $enEdicion,
+            "TareaJSON" => $Planificacion->getTarea()->getJSON()
         ]);
     }
 
