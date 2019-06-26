@@ -156,7 +156,10 @@ class FormularioManager extends BaseFormularioManager {
         $this->altaRelevamientosxSecciones($Relevamiento, $SeccionesSeleccionadas, false);
 
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+
+        if($this->puedePlanificarTarea($Relevamiento)) {
+            $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        }
     }
 
     private function crearNodoFirmante($Responsable, $Planificacion) {
@@ -585,7 +588,10 @@ class FormularioManager extends BaseFormularioManager {
         }
         $this->altaHerramientasxRelevamiento($Relevamiento, $HerramientasSeleccionadas);
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+
+        if($this->puedePlanificarTarea($Relevamiento)) {
+            $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        }
     }
 
     public function getHerramientasPorRelevamiento($Relevamiento) {
@@ -633,7 +639,10 @@ class FormularioManager extends BaseFormularioManager {
 
         $this->altaOperariosxRelevamiento($Relevamiento, $OperariosSeleccionadas);
         $this->entityManager->flush();
-        $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        
+        if($this->puedePlanificarTarea($Relevamiento)) {
+            $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
+        }
     }
 
     public function getOperariosPorRelevamiento($Relevamiento) {

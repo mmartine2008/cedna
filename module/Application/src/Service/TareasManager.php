@@ -93,7 +93,6 @@ class TareasManager {
      * @return void
      */
     function guardarPlanificacionTarea($jsonData, $Tarea){
-        // die();
         $arrPlanificaciones = $jsonData->planificaciones;
         $arrPlanificacionesEliminadas = $jsonData->planificacionesEliminadas;
 

@@ -309,6 +309,8 @@ class MailManager {
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
 
+
+    
     /**
      * Funcion que notifica a los usuarios correspondiente que un usuario del sistema
      * ha delegado su firma en un permiso de trabajo.
