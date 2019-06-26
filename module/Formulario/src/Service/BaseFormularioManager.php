@@ -597,10 +597,18 @@ class BaseFormularioManager {
         return true;
     }
 
+    private function noPerteneceSeccionAlArreglo($array, $Seccion) {
+        foreach($array as $valor){
+            if($valor->getId() == $Seccion->getId()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected function getSeccionesGlobalesAlRelevamento($Tarea){
         $output = [];
         foreach ($Tarea->getPlanificaciones() as $Planificacion) {
-            
             $Relevamiento = $Planificacion->getRelevamiento();
             if($Relevamiento) {
                 $RelevxSecciones = $Relevamiento->getRelevamientosxSecciones();
@@ -608,7 +616,9 @@ class BaseFormularioManager {
                     foreach($RelevxSecciones as $RelevxSeccion) {
                         if($RelevxSeccion->getSeccionGlobal()) {
                             $Seccion = $RelevxSeccion->getSeccion();
-                            $output[] =  $Seccion;
+                            if($this->noPerteneceSeccionAlArreglo($output, $Seccion)) {
+                                $output[] =  $Seccion;
+                            }
                         }
                     }
                 }
@@ -618,12 +628,14 @@ class BaseFormularioManager {
     }
 
     protected function seccionPerteneceAGlobales($seccionesGlobales, $Seccion) {
-        foreach($seccionesGlobales as $seccionGlobal) {
+            foreach($seccionesGlobales as $seccionGlobal) {
             if($seccionGlobal->getId() == $Seccion->getId()) {
                 return true;
             }
         }
+       
         return false;
+        
     }
 
     protected function getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales) {

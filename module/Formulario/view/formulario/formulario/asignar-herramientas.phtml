@@ -161,6 +161,7 @@
 var PlanificacionJSON = <?= $PlanificacionJSON ?>;
 var TareaJSON = <?= $TareaJSON ?>;
 var arrHerramientasJSON = <?= $arrHerramientasJSON ?>;
+var puedeModificar = <?= $puedeModificar ?>;
 
 
 function obtenerElementosSelector(idSelector){
@@ -223,7 +224,6 @@ $( document ).ready(function() {
     dibujarDetallePlanificacion();
     
     verificarMostrarBotonGuardar();
-    manageButtons();
 });
 
 function manageButtons(){
@@ -360,7 +360,14 @@ function dibujarSelectFormulario(){
     cargarSelectores('herramientasPlanificacion_1', herramientasNoRelacionadas) ;
     var herramientasRelacionadas =  arrHerramientasJSON[1];
     cargarSelectores('herramientasPlanificacion_2', herramientasRelacionadas) ;
-   
+    manageButtons() ;
+
+   if(puedeModificar == 0) {
+        $("#herramientasPlanificacion_1").prop('disabled', 'disabled');
+        $("#herramientasPlanificacion_2").prop('disabled', 'disabled');
+        $("#boton_1").prop('disabled', true);
+        $("#boton_2").prop('disabled', true);
+   }
 }
 
 function dibujarDatosOrdenDeCompra(){

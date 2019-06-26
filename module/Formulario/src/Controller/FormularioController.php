@@ -77,14 +77,17 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario", ["action" => "asignacion"]);
         }
+        $Relevamiento = $Planificacion->getRelevamiento();
 
-        $arrSeccionesJSON = $this->FormularioManager->getSeccionesPorRelevamiento($Planificacion->getRelevamiento(), $Tarea);
-        
+        $arrSeccionesJSON = $this->FormularioManager->getSeccionesPorRelevamiento($Relevamiento, $Tarea);
+        $puedeModificar = $this->FormularioManager->puedeModificarRelevamiento($Relevamiento);
+
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
         $view->setVariable('TareaJSON', $Tarea->getJSON());
         $view->setVariable('arrSeccionesJSON', $arrSeccionesJSON);
+        $view->setVariable('puedeModificar', $puedeModificar);
         $view->setTemplate('formulario/formulario/asignar-formulario.phtml');
         
         return $view;
@@ -307,13 +310,15 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario", ["action" => "asignacionHerramientas"]);
         }
-
-        $arrHerramientasJSON = $this->FormularioManager->getHerramientasPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $arrHerramientasJSON = $this->FormularioManager->getHerramientasPorRelevamiento($Relevamiento, $Tareas);
+        $puedeModificar = $this->FormularioManager->puedeModificarRelevamiento($Relevamiento);
         
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
         $view->setVariable('TareaJSON', $Tareas->getJSON());
+        $view->setVariable('puedeModificar', $puedeModificar);
         $view->setVariable('arrHerramientasJSON', $arrHerramientasJSON);
         $view->setTemplate('formulario/formulario/asignar-herramientas.phtml');
         
@@ -354,14 +359,16 @@ class FormularioController extends BaseFormularioController
 
             $this->redirect()->toRoute("formulario", ["action" => "asignacionOperarios"]);
         }
-
-        $arrOperariosJSON = $this->FormularioManager->getOperariosPorRelevamiento($Planificacion->getRelevamiento(), $Tareas);
+        $Relevamiento = $Planificacion->getRelevamiento();
+        $arrOperariosJSON = $this->FormularioManager->getOperariosPorRelevamiento($Relevamiento, $Tareas);
+        $puedeModificar = $this->FormularioManager->puedeModificarRelevamiento($Relevamiento);
         
         $view = new ViewModel();
         
         $view->setVariable('PlanificacionJSON', $Planificacion->getJSON());
         $view->setVariable('TareaJSON', $Tareas->getJSON());
         $view->setVariable('arrOperariosJSON', $arrOperariosJSON);
+        $view->setVariable('puedeModificar', $puedeModificar);
         $view->setTemplate('formulario/formulario/asignar-operarios.phtml');
         
         return $view;

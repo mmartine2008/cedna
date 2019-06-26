@@ -42,7 +42,7 @@ use DBAL\Entity\NodosFirmantesRelevamiento;
 use DBAL\Entity\RelevamientosxSecciones;
 use DBAL\Entity\HerramientasxRelevamiento;
 use DBAL\Entity\OperariosxRelevamiento;
-
+use DBAL\Entity\Respuesta;
 
 class CatalogoManager {
     
@@ -153,6 +153,13 @@ class CatalogoManager {
 
         return $SeccionesxRelevamiento;
     }
+
+    public function getRespuestaxSeccionxRelevamiento($SeccionxRelevamiento) {
+        $Respuesta = $this->entityManager->getRepository(Respuesta::class)->findBy(['relevamientoxSeccion' => $SeccionxRelevamiento]);
+
+        return $Respuesta;
+    }
+
 
     public function getAccionesPorPerfil($OperacionNombre, $Perfil){
         $Operacion = $this->entityManager->getRepository(Operacion::class)->findOneBy(['nombre' => $OperacionNombre]);

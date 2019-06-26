@@ -117,6 +117,17 @@ class FormularioManager extends BaseFormularioManager {
         return $output;
     }
 
+    public function puedeModificarRelevamiento($Relevamiento) {
+        $seccionesxRelevamiento = $this->catalogoManager->getSeccionesxRelevamiento($Relevamiento);
+        foreach($seccionesxRelevamiento as $seccionxRelev) {
+            $Respuesta = $this->catalogoManager->getRespuestaxSeccionxRelevamiento($seccionxRelev);
+            if($Respuesta) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+
     /**
      * Funcion que asignar un formulario a una planificacion.
      *
@@ -157,7 +168,8 @@ class FormularioManager extends BaseFormularioManager {
 
         $this->entityManager->flush();
 
-        if($this->puedePlanificarTarea($Relevamiento)) {
+        if(($this->puedePlanificarTarea($Relevamiento)) &&
+         ($this->puedeModificarRelevamiento($Relevamiento) == 1)) {
             $this->mailManager->notificarPermisoDisponibleParaEditar($Planificacion);
         }
     }
@@ -545,11 +557,11 @@ class FormularioManager extends BaseFormularioManager {
         $output = [];
         $seccionesGlobales = [];
         $SeccionesRelacionada = [];
+        $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
         if($Relevamiento) {
             $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
             $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);   
         }
-        $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
         $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($seccionesGlobales);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);

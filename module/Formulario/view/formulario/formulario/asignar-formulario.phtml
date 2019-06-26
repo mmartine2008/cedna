@@ -123,7 +123,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id='div_secciones_globales' style="display: none">
+                            <!-- <div id='div_secciones_globales' style="display: none"> -->
+                            <div id='div_secciones_globales' >
                                 <div class="form-row col-md-5 mt-2">
                                         <label for="formularioPlanificacion"><span class="obligatorio">(*)&nbsp;</span><?= $this->translate('__Secciones_globales__') ?>:</label>
                                 </div>
@@ -147,7 +148,7 @@
                                         <select name="formularioPlanificacion_global_2" id="formularioPlanificacion_global_2" class="form-control"  multiple></select>                                
                                     </div>
                                 </div>
-                                <div class="alert alert-warning form-group col-md-10" role="alert">
+                                <div id='div_alert' class="alert alert-warning form-group col-md-10" role="alert">
                                      Las secciones globales solo se pueden asignar una vez.
                                 </div>
                             </div>
@@ -192,7 +193,7 @@
 var PlanificacionJSON = <?= $PlanificacionJSON ?>;
 var TareaJSON = <?= $TareaJSON ?>;
 var arrSeccionesJSON = <?= $arrSeccionesJSON ?>;
-
+var puedeModificar = <?= $puedeModificar ?>;
 
 function obtenerElementosSelector(idSelector){
     var select1 = document.getElementById(idSelector);
@@ -256,10 +257,7 @@ $( document ).ready(function() {
     mostrarDivAlertSecciones();
     dibujarSelectFormulario();
     dibujarDetallePlanificacion();
-    
     verificarMostrarBotonGuardar();
-    manageButtons();
-    manageButtonsGlobales();
 });
 
 function manageButtons(){
@@ -276,15 +274,17 @@ function manageButtons(){
 }
 
 function manageButtonsGlobales(){
-    if($("#formularioPlanificacion_global_1 option").length == 0){
-        $("#button_in_global").prop('disabled', true);
-    } else {
-        $("#button_in_global").prop('disabled', false);
-    }
-    if($("#formularioPlanificacion_global_2 option").length == 0){
-        $("#button_out_global").prop('disabled', true);
-    } else {
-        $("#button_out_global").prop('disabled', false);
+    if(arrSeccionesJSON[0].length == 0) {
+        if($("#formularioPlanificacion_global_1 option").length == 0){
+            $("#button_in_global").prop('disabled', true);
+        } else {
+            $("#button_in_global").prop('disabled', false);
+        }
+        if($("#formularioPlanificacion_global_2 option").length == 0){
+            $("#button_out_global").prop('disabled', true);
+        } else {
+            $("#button_out_global").prop('disabled', false);
+        }
     }
 }
 
@@ -456,8 +456,16 @@ function dibujarSelectFormularioGlobal(){
 
         var seccionesGlobales =  arrSeccionesJSON[1];
         cargarSelectores('formularioPlanificacion_global_1', seccionesGlobales) ;
+        manageButtonsGlobales();
     } else {
-        document.getElementById("div_secciones_globales").style.display = "none";
+        // document.getElementById("div_secciones_globales").style.display = "none";   
+        $("#formularioPlanificacion_global_1").prop('disabled', 'disabled');
+        $("#formularioPlanificacion_global_2").prop('disabled', 'disabled');
+        $("#button_in_global").prop('disabled', true);
+        $("#button_out_global").prop('disabled', true);
+        cargarSelectores('formularioPlanificacion_global_2', arrSeccionesJSON[0]) ;
+        document.getElementById("div_alert").style.display = "none";   
+
     }
 }
 
@@ -475,7 +483,14 @@ function dibujarSelectFormulario(){
     cargarSelectores('formularioPlanificacion_1', seccionesNoRelacionadas) ;
     var seccionesRelacionadas =  arrSeccionesJSON[2];
     cargarSelectores('formularioPlanificacion_2', seccionesRelacionadas) ;
-   
+    manageButtons();
+
+    if(puedeModificar == 0) {
+        $("#formularioPlanificacion_1").prop('disabled', 'disabled');
+        $("#formularioPlanificacion_2").prop('disabled', 'disabled');
+        $("#button_in").prop('disabled', true);
+        $("#button_out").prop('disabled', true);
+    } 
 }
 
 function dibujarDatosOrdenDeCompra(){
