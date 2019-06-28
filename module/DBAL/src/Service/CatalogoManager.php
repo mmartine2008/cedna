@@ -246,7 +246,7 @@ class CatalogoManager {
         return $RiesgosAmbientales;
     }
 
-    public function getRiesgosAdicionalesEnFrio($idRiesgosAdicionalesFrio = null){
+    public function getRiesgosAdicionalesEntidades($idRiesgosAdicionalesFrio = null){
         if ($idRiesgosAdicionalesFrio){
             $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesFrio::class)->findOneBy(['id' => $idRiesgosAdicionalesFrio]);
         }else{
@@ -262,23 +262,6 @@ class CatalogoManager {
             $Gases = $this->entityManager->getRepository(PruebasDeGases::class)->findAll();
         }
         return $Gases;
-    }
-
-    public function getRiesgosAdicionalesEnCalor($idRiesgosAdicionalesCalor = null){
-        if ($idRiesgosAdicionalesCalor){
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesCalor::class)->findOneBy(['id' => $idRiesgosAdicionalesCalor]);
-        }else{
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesCalor::class)->findAll();
-        }
-        return $Riesgos;
-    }
-    public function getRiesgosAdicionalesEnAltura($idRiesgosAdicionalesAltura = null){
-        if ($idRiesgosAdicionalesAltura){
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesAltura::class)->findOneBy(['id' => $idRiesgosAdicionalesAltura]);
-        }else{
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesAltura::class)->findAll();
-        }
-        return $Riesgos;
     }
 
     public function getNodos($idNodos = null){
@@ -637,27 +620,9 @@ class CatalogoManager {
         return $resultado;
     }
 
-    public function getRiesgosAdicionalesFrio() {
+    public function getRiesgosAdicionales() {
         $resultado = [];
-        $elementos = $this->getRiesgosAdicionalesEnFrio();
-        foreach($elementos as $elemento){
-            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
-        }
-        return $resultado;
-    }
-
-    public function getRiesgosAdicionalesCalor() {
-        $resultado = [];
-        $elementos = $this->getRiesgosAdicionalesEnCalor();
-        foreach($elementos as $elemento){
-            $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
-        }
-        return $resultado;
-    }
-
-    public function getRiesgosAdicionalesAltura() {
-        $resultado = [];
-        $elementos = $this->getRiesgosAdicionalesEnAltura();
+        $elementos = $this->getRiesgosAdicionalesEntidades();
         foreach($elementos as $elemento){
             $resultado[] = ['id' => $elemento->getId(), 'descripcion' =>$elemento->getDescripcion()];
         }

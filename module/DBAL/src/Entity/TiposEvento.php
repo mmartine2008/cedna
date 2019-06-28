@@ -20,6 +20,7 @@ class TiposEvento
     const EDITAR_TAREAS = 'Editar Tarea';
     const ALTA_OPERARIOS = 'Alta de Operarios';
     const EDITAR_OPERARIOS = 'Editar Operario';
+    const ASIGNAR_PLANIFICACION = 'Asignar Planificación de Tarea';
 
     /**
      * @ORM\Id

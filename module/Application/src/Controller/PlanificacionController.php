@@ -46,8 +46,9 @@ class PlanificacionController extends CednaController
             $JsonData = json_decode($data['JsonData']);
 
             $userName = $this->userSessionManager->getUserName();
-            $this->tareasManager->guardarPlanificacionTarea($JsonData, $Tareas);
+            $planificacionesBorradas = $this->tareasManager->guardarPlanificacionTarea($JsonData, $Tareas);
 
+            //si $planificacionesBorradas = false, se indica que algunas no se pudieron borrar, sino s eindica que hubo exito
             $this->redirect()->toRoute("planificacion", ["action" => "index"]);
         }
 

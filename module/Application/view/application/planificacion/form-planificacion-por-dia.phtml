@@ -444,11 +444,11 @@ function confirmarBorrarPlanificacion(iPosPlanificacion){
     }).then((result) => {
         if (result.value) {
             eliminarPlanificacion(iPosPlanificacion);
-            swal(
+            /*swal( no deberia dar el mensaje porque no se sabe si se elimino
                 '<?= $this->translate('__Eliminada__') ?>!',
                 '<?= $this->translate('__mensaje_planificacion_eliminada__') ?>',
                 'success'
-            )
+            )*/
         }
     })  
 }

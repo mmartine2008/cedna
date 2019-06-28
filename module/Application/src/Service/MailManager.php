@@ -361,6 +361,23 @@ class MailManager {
         $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
     }
 
+
+    /**
+     * Funcion que notifica a los usuarios correspondiente que se ha generado 
+     * una planificacion en el sistema.
+     *
+     * @param [Planificaciones] $Planificaciones
+     * @return void
+     */
+    public function notificarPlanificacionCreada($Planificaciones) {
+        $TipoEvento = $this->catalogoManager->getTiposEventoPorDescripcion(TiposEvento::ASIGNAR_PLANIFICACION);
+
+        $mensaje = $this->translator->translate('__cuerpo_mail_planificacion_creada__') .": ".$Planificaciones->getId();
+        $titulo = $this->translator->translate('__titulo_mail_planificacion_creada__');
+
+        $this->procesarEnviarNotificaciones($TipoEvento, $mensaje, $titulo);
+    }
+
     /**
      * Funcion que notifica a los usuarios correspondiente que se ha creado 
      * un nuevo operario en el sistema.

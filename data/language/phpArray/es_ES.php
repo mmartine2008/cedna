@@ -145,6 +145,8 @@ return [
     '__titulo_mail_nueva_tarea__' => 'Nueva Obra creada',
     '__cuerpo_mail_tarea_editada__' => 'Se ha modificado los datos de la obra con ID',
     '__titulo_mail_tarea_editada__' => 'Obra Editada',
+    '__cuerpo_mail_planificacion_creada__' => 'Se ha creado la planificacion con ID',
+    '__titulo_mail_planificacion_creada__' => 'Planificación Creada',
     '__cuerpo_mail_nuevo_operario__' => 'Se ha registrado el alta de un nuevo Operario en el sistema. Operario',
     '__cuerpo_mail_edicion_operario__' => 'Se han editado los datos del Operario',
     '__titulo_mail_edicion_operario__' => 'Edición de Operario',

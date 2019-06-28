@@ -6,6 +6,7 @@ use DBAL\Entity\Tareas;
 use DBAL\Entity\EstadoTarea;
 use DBAL\Entity\Relevamientos;
 use DBAL\Entity\Planificaciones;
+use Matrix\Exception;
 
 class TareasManager {
     
@@ -80,6 +81,31 @@ class TareasManager {
         $this->entityManager->flush();
     }
 
+    public function puedeModificarRelevamiento($Relevamiento) {
+        if($Relevamiento) {
+            $seccionesxRelevamiento = $this->catalogoManager->getSeccionesxRelevamiento($Relevamiento);
+            foreach($seccionesxRelevamiento as $seccionxRelev) {
+                $Respuesta = $this->catalogoManager->getRespuestaxSeccionxRelevamiento($seccionxRelev);
+                if($Respuesta) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    private function setearDatosPlanificacion($Planificaciones, $planificacionJSON) {
+        $Planificaciones->setFechaInicio($planificacionJSON->fechaInicio);
+        $Planificaciones->setFechaFin($planificacionJSON->fechaFin);
+        $Planificaciones->setHoraInicio($planificacionJSON->horaInicio);
+        $Planificaciones->setHoraFin($planificacionJSON->horaFin);
+        $Planificaciones->setTitulo($planificacionJSON->titulo);
+        $Planificaciones->setObservaciones($planificacionJSON->observaciones);
+        $Planificaciones->setNroEtapaDia($planificacionJSON->diaEtapa);
+       
+        $this->entityManager->persist($Planificaciones);
+    }
+   
+
     /**
      * Esta funcion guarda las planificaciones de una tarea especifica.
      * Recibe un JSON con las planificaciones a guardar y otro con las que se deben
@@ -100,30 +126,29 @@ class TareasManager {
         $Tarea->setTipoPlanificacion($TipoPlanificacion);
         $this->entityManager->persist($Tarea);
         foreach($arrPlanificaciones as $planificacionJSON){
-            
-         
             if (property_exists($planificacionJSON, 'id')){
                 $Planificaciones = $this->catalogoManager->getPlanificaciones($planificacionJSON->id);
+                $Relevamiento = $Planificaciones->getRelevamiento();
+                if($this->puedeModificarRelevamiento($Relevamiento)) {
+                    $this->setearDatosPlanificacion($Planificaciones, $planificacionJSON);
+                }
             }else{
                 $Planificaciones = new Planificaciones();
                 $Planificaciones->setTarea($Tarea);
+                $this->setearDatosPlanificacion($Planificaciones, $planificacionJSON);
             }
-            $Planificaciones->setFechaInicio($planificacionJSON->fechaInicio);
-            $Planificaciones->setFechaFin($planificacionJSON->fechaFin);
-            $Planificaciones->setHoraInicio($planificacionJSON->horaInicio);
-            $Planificaciones->setHoraFin($planificacionJSON->horaFin);
-            $Planificaciones->setTitulo($planificacionJSON->titulo);
-            $Planificaciones->setObservaciones($planificacionJSON->observaciones);
-            $Planificaciones->setNroEtapaDia($planificacionJSON->diaEtapa);
-            
-            $this->entityManager->persist($Planificaciones);
         }
 
         $this->entityManager->flush();
 
+        $planificacionesBorradas = true;
         foreach($arrPlanificacionesEliminadas as $planificacionEliminada){
-            $this->borrarPlanificacion($planificacionEliminada->id);
+            $borro = $this->borrarPlanificacion($planificacionEliminada->id);
+            if(!$borro) {
+                $planificacionesBorradas = false;
+            }
         }
+        return $planificacionesBorradas;
     }
     
     public function borrarTareas($idTareas){
@@ -149,15 +174,23 @@ class TareasManager {
     public function borrarPlanificacion($idPlanificaciones){
         $Planificacion = $this->catalogoManager->getPlanificaciones($idPlanificaciones);
 
-        $this->entityManager->beginTransaction();         
-        try {
-            $this->entityManager->remove($Planificacion);
-            $this->entityManager->flush();
-
-            $this->entityManager->commit();
-        } catch (Exception $e) {
-            $this->entityManager->rollBack();
+        if($Planificacion->getRelevamiento()) {
+            return false;
+        } else {
+            $this->entityManager->beginTransaction();         
+            try {
+                $this->entityManager->remove($Planificacion);
+                $this->entityManager->flush();
+    
+                $this->entityManager->commit();
+    
+                return true;
+            } catch (Exception $e) {
+                $this->entityManager->rollBack();
+                return false;
+            }
         }
+        
     }
 
     /**
