@@ -41,6 +41,7 @@ class PermisosManager {
     protected $controlersAdmin = [
                 ['Application\Controller\InduccionesController', ''], 
                 ['Application\Controller\OrganigramaController', ''], 
+                ['Application\Controller\EmpresaContratistaController', ''], 
                 ['Configuracion\Controller\ConfigFormularioController', ''], 
                 ['Configuracion\Controller\ConfigNotifXPerfilController', ''], 
                 ['Configuracion\Controller\ConfigParametrosController', ''], 

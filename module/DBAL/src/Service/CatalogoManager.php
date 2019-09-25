@@ -43,6 +43,7 @@ use DBAL\Entity\RelevamientosxSecciones;
 use DBAL\Entity\HerramientasxRelevamiento;
 use DBAL\Entity\OperariosxRelevamiento;
 use DBAL\Entity\Respuesta;
+use DBAL\Entity\EmpresasContratistas;
 
 class CatalogoManager {
     
@@ -399,6 +400,16 @@ class CatalogoManager {
         }
 
         return $Inducciones;
+    }
+
+    public function getEmpresasContratistas($idEmpresaContratista = null){
+        if ($idEmpresaContratista){
+            $EmpresasContratistas = $this->entityManager->getRepository(EmpresasContratistas::class)->findOneBy(['id' => $idEmpresaContratista]);
+        }else{
+            $EmpresasContratistas = $this->entityManager->getRepository(EmpresasContratistas::class)->findAll();
+        }
+
+        return $EmpresasContratistas;
     }
 
     public function getTareaPorOrdenDeCompra($OrdenDeCompra){

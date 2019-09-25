@@ -1,0 +1,119 @@
+<div class="form-row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Listado de empresas contratistas</h3>
+            </div>
+            <div class="panel-body mt-5">
+                <table id="tablaEmpresasContratistas" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Nombre</th>
+                            <th class="text-center">Dirección</th>
+                            <th class="text-center">Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyEmpresasContratistas">
+                    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var filaSeleccionada = -1;
+    var arrEmpresasJSON = <?= $arrEmpresasJSON; ?>;
+
+    $( document ).ready(function() {
+        dibujarTablaEmpresasContratistas();
+    });
+
+    function dibujarTablaEmpresasContratistas(){
+        $('#bodyEmpresasContratistas').find('tr').remove();
+    
+        for (var i = 0; i < arrEmpresasJSON.length; i++)
+        {
+            var empresa = arrEmpresasJSON[i];
+
+            var body = document.getElementById("bodyEmpresasContratistas");
+            var row = body.insertRow();
+            row.id = i;
+
+            var razonSocial = row.insertCell(0);
+            var direccion = row.insertCell(1);
+            var telefono = row.insertCell(2);
+
+            razonSocial.innerHTML = empresa.razonSocial;
+            direccion.innerHTML = empresa.direccion;
+            telefono.innerHTML = empresa.telefono;
+        }
+    }
+
+    $(function() {
+        $('#tablaEmpresasContratistas').on('click', 'tbody tr', function(event) {
+            if (!$(this).hasClass('highlight')){
+                $('.highlight').removeClass('highlight');
+
+                $(this).addClass('highlight').siblings();
+                filaSeleccionada = $(this)[0].id;
+
+                cambiarVisibilidadBotones(true);
+            }else{
+                $(this).removeClass('highlight');
+                filaSeleccionada = -1;
+                cambiarVisibilidadBotones(false);
+            }
+        });
+    });
+
+    function borrarEmpresa() {
+        var result = null;
+        var empresa = arrEmpresasJSON[filaSeleccionada];
+
+        $.ajax({
+            url: url + '/empresa-contratista/borrar/' + empresa.id,
+            type: 'post',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                
+            }
+        });
+        
+        return result;
+    }
+
+    function preBorrar(){
+        if (filaSeleccionada >= 0){
+            var tarea = arrEmpresasJSON[filaSeleccionada];
+            
+            swal({
+                title: 'Eliminar Empresa Contratista',
+                width: 600,
+                text: "Esta seguro que desea eliminar la Empresa Contratista: "+ empresa.razonSocial +"?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: '<?= $this->translate('__Cancelar__') ?>',
+                confirmButtonText: '<?= $this->translate('__Confirmar__') ?>'
+            }).then((result) => {
+                if (result.value) {
+                    borrarEmpresa();
+                    window.location.replace(url + "/empresa-contratista");
+                }
+            });
+        }
+    }
+
+    function preEditar(){
+        if (filaSeleccionada >= 0){
+            var empresa = arrEmpresasJSON[filaSeleccionada];
+
+            window.location.replace(url + "/empresa-contratista/editar/" + empresa.id);
+        }
+    }
+
+  </script>

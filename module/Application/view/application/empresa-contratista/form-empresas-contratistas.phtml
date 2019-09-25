@@ -1,0 +1,102 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nueva Empresa Contratista</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" id="formEmpresa" name="formEmpresa">
+                    <div class="form-row mt-5">
+                        <div class="col-lg-8 offset-2">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="nombreEmpresa"><span class="obligatorio">(*) </span>Nombre:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="nombreEmpresa" name="nombreEmpresa" class="form-control" required="true" maxlenght="190">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="col-lg-8 offset-2">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="direccionEmpresa"> Dirección:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="direccionEmpresa" name="direccionEmpresa" class="form-control" required="false" maxlenght="190">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="col-lg-8 offset-2">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <label for="telefonoEmpresa"> Teléfono:</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input type="text" id="telefonoEmpresa" name="telefonoEmpresa" class="form-control" required="false" maxlenght="20">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex">
+                        <input type="hidden" name="JsonData" id="JsonData">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+var empresaJson = <?= $EmpresaJson ?>;
+
+function FormTareaToJson(){
+    var formData = {
+        razonSocial: $('#nombreEmpresa').val(), 
+        direccion: $('#direccionEmpresa').val(),
+        telefono: $('#telefonoEmpresa').val()
+    };
+    
+    var JsonData = JSON.stringify(formData);
+    
+    return JsonData;
+}
+
+function preSubmit(){
+    var JsonData = FormTareaToJson();
+    $('#JsonData').val(JsonData);
+
+    if ($("#formEmpresa")[0].checkValidity()){
+        $("#formEmpresa").submit();
+    }else{
+        $("#formEmpresa")[0].reportValidity();
+    }
+}
+
+$( document ).ready(function() {
+
+    if (empresaJson !== ''){
+        $('#nombreEmpresa').val(empresaJson.razonSocial);
+        $('#direccionEmpresa').val(empresaJson.direccion);
+        $('#telefonoEmpresa').val(empresaJson.telefono);
+    }
+    
+    verificarMostrarBotonGuardar();
+});
+
+function verificarMostrarBotonGuardar(){
+    for (var i = 0; i < arrAccionesDisponibles.length; i++){
+        var boton = arrAccionesDisponibles[i];
+
+        if (boton.jsFunction === 'preSubmit()'){
+            $('#'+boton.idHTMLElement).prop('disabled', false);
+            $('#'+boton.idHTMLElement).show();
+        }
+    }
+}
+
+</script>

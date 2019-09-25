@@ -57,9 +57,10 @@
      }
      
 process([
-    'IdNotificacionXPerfil', 
-'IdTipoEvento', 
-'IdPerfil', 
+    'IdEmpresaContratista', 
+    'RazonSocial', 
+    'Direccion', 
+    'Telefono',  
 ]);
      
      /*

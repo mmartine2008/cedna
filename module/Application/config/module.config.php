@@ -130,6 +130,21 @@ return [
                 ],
                 'may_terminate' => true,
             ],
+            'empresa-contratista' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/empresa-contratista[/:action[/:id]]',
+                    'defaults' => [
+                        'controller' => Controller\EmpresaContratistaController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+                'constraints' => [
+                    'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'id' => '[a-zA-Z0-9_-]*',
+                ],
+                'may_terminate' => true,
+            ],
             'herramientas' => [
                 'type' => Segment::class,
                 'options' => [
@@ -199,6 +214,7 @@ return [
             Controller\OperariosController::class => Controller\Factory\OperariosControllerFactory::class,
             Controller\OrganigramaController::class => Controller\Factory\OrganigramaControllerFactory::class,
             Controller\TareasController::class => Controller\Factory\TareasControllerFactory::class,
+            Controller\EmpresaContratistaController::class => Controller\Factory\EmpresaContratistaControllerFactory::class,
             Controller\OrdenesDeCompraController::class => Controller\Factory\OrdenesDeCompraControllerFactory::class,
             Controller\PlanificacionController::class => Controller\Factory\PlanificacionControllerFactory::class,
             Controller\MailController::class => Controller\Factory\MailControllerFactory::class,
@@ -214,6 +230,7 @@ return [
             Service\OperariosManager::class => Service\Factory\OperariosManagerFactory::class,
             Service\OrganigramaManager::class => Service\Factory\OrganigramaManagerFactory::class,
             Service\TareasManager::class => Service\Factory\TareasManagerFactory::class,
+            Service\EmpresaContratistaManager::class => Service\Factory\EmpresaContratistaManagerFactory::class,
             Service\OrdenesDeCompraManager::class => Service\Factory\OrdenesDeCompraManagerFactory::class,
             Service\MailManager::class => Service\Factory\MailManagerFactory::class,
             Service\InduccionesManager::class => Service\Factory\InduccionesManagerFactory::class,
