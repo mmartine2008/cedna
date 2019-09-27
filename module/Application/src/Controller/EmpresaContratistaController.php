@@ -66,7 +66,7 @@ class EmpresaContratistaController extends CednaController
             $data = $this->params()->fromPost();
             $JsonData = json_decode($data['JsonData']);
 
-            $this->empresasManager->altaEdicionEmpresaContratista($JsonData);
+            $this->empresasManager->altaEdicionEmpresaContratista($JsonData, $idEmpresaContratista);
 
             $this->redirect()->toRoute("empresa-contratista",["action" => "index"]);
         }
@@ -86,7 +86,7 @@ class EmpresaContratistaController extends CednaController
 
         $idEmpresaContratista = $parametros['id'];
 
-        // $mensaje = $this->tareasManager->borrarTareas($idTareas);
+        $mensaje = $this->empresasManager->borrarEmpresaContratista($idEmpresaContratista);
 
         //Todavia no hay para mostrar mensajes
         return $this->redirect()->toRoute("empresa-contratista",["action" => "index"]);

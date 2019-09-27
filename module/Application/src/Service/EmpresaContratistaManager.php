@@ -41,23 +41,23 @@ class EmpresaContratistaManager {
         $this->entityManager->flush();
     }
     
-    // public function borrarTareas($idTareas){
-    //     $Tareas = $this->catalogoManager->getTareas($idTareas);
+    public function borrarEmpresaContratista($idEmpresaContratista){
+        $EmpresaContratista = $this->catalogoManager->getEmpresasContratistas($idEmpresaContratista);
 
-    //     $this->entityManager->beginTransaction();         
-    //     try {
-    //         $this->entityManager->remove($Tareas);
-    //         $this->entityManager->flush();
+        $this->entityManager->beginTransaction();         
+        try {
+            $this->entityManager->remove($EmpresaContratista);
+            $this->entityManager->flush();
 
-    //         $this->entityManager->commit();
-    //         $mensaje = 'Se ha eliminado la tarea correctamente';
+            $this->entityManager->commit();
+            $mensaje = 'Se ha eliminado la empresa contratista correctamente';
 
-    //     } catch (Exception $e) {
-    //         $this->entityManager->rollBack();
+        } catch (Exception $e) {
+            $this->entityManager->rollBack();
 
-    //         $mensaje = 'La tarea no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
-    //     }
+            $mensaje = 'La empresa contratista no se ha podido eliminar, posiblemente este siendo referenciado por otra entidad';
+        }
 
-    //     return $mensaje;
-    // }
+        return $mensaje;
+    }
 }
