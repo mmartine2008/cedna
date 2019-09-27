@@ -19,6 +19,7 @@ function dibujarOperacionesIniciales(){
     divFila.setAttribute('class','form-row');
 
     for (var i = 0; i < operacionesJSON.length; i++){
+        var crearNuevaFila = (i+1) % 6;
         var operacion = operacionesJSON[i];
 
         var icon = document.createElement('i');
@@ -36,6 +37,11 @@ function dibujarOperacionesIniciales(){
         divCol.appendChild(a);
 
         divFila.appendChild(divCol);
+        if (crearNuevaFila == 0){
+            divIndex.appendChild(divFila);
+            divFila = document.createElement('div');
+            divFila.setAttribute('class','form-row');
+        }
     }
     divIndex.appendChild(divFila);
 }
