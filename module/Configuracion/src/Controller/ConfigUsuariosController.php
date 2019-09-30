@@ -45,11 +45,13 @@ class ConfigUsuariosController extends ConfiguracionController
         }
 
         $arrPerfiles = $this->catalogoManager->getPerfiles();
+        $arrEmpresasContratistas = $this->catalogoManager->getEmpresasContratistas();
 
         $view = new ViewModel();
         
         $view->setVariable('UsuariosJson', '""');
         $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setVariable('arrEmpresasContratistas', $arrEmpresasContratistas);
         $view->setVariable('nombreUsuarioValido', false);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         
@@ -72,6 +74,7 @@ class ConfigUsuariosController extends ConfiguracionController
         }
 
         $arrPerfiles = $this->catalogoManager->getPerfiles();
+        $arrEmpresasContratistas = $this->catalogoManager->getEmpresasContratistas();
 
         $view = new ViewModel();
         
@@ -79,6 +82,7 @@ class ConfigUsuariosController extends ConfiguracionController
 
         $view->setVariable('UsuariosJson', $Usuarios->getJSON());
         $view->setVariable('arrPerfiles', $arrPerfiles);
+        $view->setVariable('arrEmpresasContratistas', $arrEmpresasContratistas);
         $view->setVariable('nombreUsuarioValido', true);
         $view->setTemplate('configuracion/config-usuarios/form-usuarios.phtml');
         

@@ -7,4 +7,11 @@ CREATE TABLE EmpresasContratistas (
 	CONSTRAINT UQ_EmpresasContratistas UNIQUE (RazonSocial)
 );
 
+ALTER TABLE Usuarios
+ADD IdEmpresaContratista integer NULL;
+
+ALTER TABLE Usuarios
+ADD CONSTRAINT FK_Usuarios_EmpresasContratistas FOREIGN KEY (IdEmpresaContratista)
+	REFERENCES EmpresasContratistas (IdEmpresaContratista);
+
 INSERT INTO ajustes(script, diahora, spring, fix) VALUES ('01.sql', GETDATE ( ), 2, 1);

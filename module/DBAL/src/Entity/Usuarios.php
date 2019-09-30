@@ -68,6 +68,12 @@ class Usuarios
      */
     protected $Perfiles;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="EmpresasContratistas")
+     * @ORM\JoinColumn(name="IdEmpresaContratista", referencedColumnName="IdEmpresaContratista")
+     */
+    protected $EmpresaContratista;
+
     public function __construct() {
         $this->Perfiles = new ArrayCollection();
     }
@@ -115,6 +121,11 @@ class Usuarios
     public function setAceptaTerminosUso($AceptaTerminosUso)
     {
         $this->AceptaTerminosUso = $AceptaTerminosUso;
+    }
+
+    public function setEmpresaContratista($EmpresaContratista)
+    {
+        $this->EmpresaContratista = $EmpresaContratista;
     }
 
     public function getId()
@@ -167,6 +178,11 @@ class Usuarios
         return $this->AceptaTerminosUso;
     }
 
+    public function getEmpresaContratista()
+    {
+        return $this->EmpresaContratista;
+    }
+
     public function getJSON(){
         $perfiles = [];
         foreach ($this->getPerfiles() as $perfil) {
@@ -181,6 +197,10 @@ class Usuarios
         $output .= '"apellido": "' . $this->getApellido() .'", ';
         $output .= '"email": "' . $this->getEmail() .'", ';
         //$output .= '"clave": "' . $this->getClave() .'", ';
+
+        if (isset($this->EmpresaContratista)){
+            $output .= '"empresaContratista": ' . $this->EmpresaContratista->getJSON() .', ';
+        }
         $output .= '"perfiles": ['.$perfiles.']';
         return '{' . $output . '}';
     }

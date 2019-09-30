@@ -37,6 +37,19 @@
                                     <input type="text" id="nombreUsuario" name="nombreUsuario" class="form-control" required="true">
                                 </div>
                             </div>
+                            <div class="form-row mt-3">
+                                <div class="col-md-3">
+                                    <label for="idEmpresaContratista">Empresa Contratista:</label>
+                                </div>  
+                                <div class="col-md-7">
+                                    <select id="idEmpresaContratista" name="idEmpresaContratista" class="form-control">
+                                        <option value="-1">-- <?= $this->translate('__Seleccione__') ?> --</option>
+                                        <?php foreach($arrEmpresasContratistas as $Empresa) :?>
+                                            <option value="<?= $Empresa->getId() ?>"><?= $Empresa->getRazonSocial() ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-row">
@@ -115,6 +128,7 @@ function FormUsuarioToJson(){
         nombre: $('#nombreUsuario').val(),
         apellido: $('#apellidoUsuario').val(),
         email: $('#emailUsuario').val(),
+        idEmpresaContratista: $('#idEmpresaContratista').val(),
         perfiles: arrPerfiles
     };
     
@@ -156,6 +170,10 @@ $( document ).ready(function() {
         $('#nombreUsuario').val(usuariosJson.nombre);
         $('#apellidoUsuario').val(usuariosJson.apellido);
         $('#emailUsuario').val(usuariosJson.email);
+        
+        if (usuariosJson.hasOwnProperty('empresaContratista')){
+            $('#idEmpresaContratista').val(usuariosJson.empresaContratista.id);
+        }
 
         arrPerfiles = usuariosJson.perfiles;
         actualizarPerfiles();

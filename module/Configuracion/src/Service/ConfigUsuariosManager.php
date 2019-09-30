@@ -44,6 +44,13 @@ class ConfigUsuariosManager {
 
         $Usuarios->setFechaAlta(new \DateTime('now'));
 
+        if ($jsonData->idEmpresaContratista != '-1'){
+            $EmpresaContratista = $this->catalogoManager->getEmpresasContratistas($jsonData->idEmpresaContratista);
+            $Usuarios->setEmpresaContratista($EmpresaContratista);
+        }else{
+            $Usuarios->setEmpresaContratista(null);
+        }
+
         $this->actualizarPerfiles($Usuarios, $jsonData->perfiles);
 
         $this->entityManager->persist($Usuarios);
