@@ -64,10 +64,10 @@ class Usuarios extends \DBAL\Entity\Usuarios implements \Doctrine\ORM\Proxy\Prox
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'id', 'NombreUsuario', 'Clave', 'Bloqueado', 'FechaAlta', 'Email', 'Nombre', 'Apellido', 'AceptaTerminosUso', 'Perfiles'];
+            return ['__isInitialized__', 'id', 'NombreUsuario', 'Clave', 'Bloqueado', 'FechaAlta', 'Email', 'Nombre', 'Apellido', 'AceptaTerminosUso', 'Perfiles', 'EmpresaContratista'];
         }
 
-        return ['__isInitialized__', 'id', 'NombreUsuario', 'Clave', 'Bloqueado', 'FechaAlta', 'Email', 'Nombre', 'Apellido', 'AceptaTerminosUso', 'Perfiles'];
+        return ['__isInitialized__', 'id', 'NombreUsuario', 'Clave', 'Bloqueado', 'FechaAlta', 'Email', 'Nombre', 'Apellido', 'AceptaTerminosUso', 'Perfiles', 'EmpresaContratista'];
     }
 
     /**
@@ -275,6 +275,17 @@ class Usuarios extends \DBAL\Entity\Usuarios implements \Doctrine\ORM\Proxy\Prox
     /**
      * {@inheritDoc}
      */
+    public function setEmpresaContratista($EmpresaContratista)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setEmpresaContratista', [$EmpresaContratista]);
+
+        return parent::setEmpresaContratista($EmpresaContratista);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -384,6 +395,17 @@ class Usuarios extends \DBAL\Entity\Usuarios implements \Doctrine\ORM\Proxy\Prox
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAceptaTerminosUso', []);
 
         return parent::getAceptaTerminosUso();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEmpresaContratista()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEmpresaContratista', []);
+
+        return parent::getEmpresaContratista();
     }
 
     /**

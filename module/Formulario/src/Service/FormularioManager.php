@@ -380,7 +380,7 @@ class FormularioManager extends BaseFormularioManager {
         $output = [];
         foreach ($arrTareas as $Tarea){
             $planificador = $Tarea->getPlanificaTarea();
-            if ($planificador->getId() == $UsuarioActivo->getId()){
+            if ($planificador && $planificador->getId() == $UsuarioActivo->getId()){
                 $output[] = $Tarea->getJSON();
             }
         }
