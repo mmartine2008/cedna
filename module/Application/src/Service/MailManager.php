@@ -180,19 +180,26 @@ class MailManager {
      * @return void
      */
     private function procesarEnvioMailAUsuarios($arrUsuariosANotificar, $mensaje, $titulo){
+        $arrMails = [];
         foreach($arrUsuariosANotificar as $Usuario){
+            if (!in_array($Usuario->getEmail(), $arrMails)){
+                $arrMails[] = $Usuario->getEmail();
+            }
+        }
+        
+        if (count($arrMails) > 0){
+            $stringMails = implode(', ', $arrMails);
             $parametrosMail = [
                 'Body' => $mensaje, 
                 'From' => 'support@cedna.com.ar', 
-                'To' => $Usuario->getEmail(), 
+                'To' => $stringMails, 
                 'Subject' => $titulo
             ];
-
+    
             $smtp_options = $this->getSMTPOptions(false);
-
+    
             $this->enviarMail($parametrosMail, $smtp_options);
-
-	    }
+        }
     }
 
     /**
