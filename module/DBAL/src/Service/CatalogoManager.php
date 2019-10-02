@@ -30,10 +30,8 @@ use DBAL\Entity\LugaresDeObra;
 use DBAL\Entity\ElementosProteccionPersonal;
 use DBAL\Entity\HerramientasDeTrabajo;
 use DBAL\Entity\RiesgosAmbientales;
-use DBAL\Entity\RiesgosAdicionalesFrio;
+use DBAL\Entity\RiesgosAdicionales;
 use DBAL\Entity\PruebasDeGases;
-use DBAL\Entity\RiesgosAdicionalesCalor;
-use DBAL\Entity\RiesgosAdicionalesAltura;
 use DBAL\Entity\Parametros;
 use DBAL\Entity\Pregunta;
 use DBAL\Entity\Seccion;
@@ -247,11 +245,11 @@ class CatalogoManager {
         return $RiesgosAmbientales;
     }
 
-    public function getRiesgosAdicionalesEntidades($idRiesgosAdicionalesFrio = null){
-        if ($idRiesgosAdicionalesFrio){
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesFrio::class)->findOneBy(['id' => $idRiesgosAdicionalesFrio]);
+    public function getRiesgosAdicionalesEntidades($idRiesgosAdicionales = null){
+        if ($idRiesgosAdicionales){
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionales::class)->findOneBy(['id' => $idRiesgosAdicionales]);
         }else{
-            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionalesFrio::class)->findAll();
+            $Riesgos = $this->entityManager->getRepository(RiesgosAdicionales::class)->findAll();
         }
         return $Riesgos;
     }

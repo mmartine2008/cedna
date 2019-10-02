@@ -2,6 +2,7 @@
 namespace DBAL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * This class represents a registered user.

@@ -31,6 +31,7 @@ class FormularioController extends BaseFormularioController
 
         $nombreUsuario = $this->userSessionManager->getUserName();
         $arrTareasJSON = $this->FormularioManager->getArrTareasParaEjecutar($nombreUsuario);
+        
         return new ViewModel([
             "OperacionesJSON" => $OperacionesJSON,
             'arrTareasJSON' => $arrTareasJSON

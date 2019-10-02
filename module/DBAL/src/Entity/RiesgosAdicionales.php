@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * This class represents a registered user.
  * @ORM\Entity()
- * @ORM\Table(name="RiesgosAdicionalesAltura")
+ * @ORM\Table(name="RiesgosAdicionales")
  */
-class RiesgosAdicionalesAltura
+class RiesgosAdicionales
 {
     /**
      * @ORM\Id

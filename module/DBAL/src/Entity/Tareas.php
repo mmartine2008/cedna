@@ -287,7 +287,7 @@ class Tareas
         $output .= '"descripcion": "' . $this->getDescripcion() .'", ';
         $output .= '"resumen": "' . $this->getResumen() .'", ';
         $output .= '"planificaciones": ['.$planificaciones.']';
-        
+
         return '{' . $output . '}';
     }
 }
