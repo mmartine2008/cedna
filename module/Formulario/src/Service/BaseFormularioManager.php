@@ -83,11 +83,13 @@ class BaseFormularioManager {
         $outputPlanificaciones = [];
         if($Planificaciones) {
             foreach($Planificaciones as $Planificacion) {
-                $idRelevamiento = $Planificacion->relevamiento->id;
-                $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
-                if(($Relevamiento) && ($this->puedePlanificarTarea($Relevamiento))){
-                    $outputPlanificaciones[] = $Planificacion; 
-                } 
+                if (property_exists($Planificacion->relevamiento, 'id')){
+                    $idRelevamiento = $Planificacion->relevamiento->id;
+                    $Relevamiento = $this->catalogoManager->getRelevamientos($idRelevamiento);
+                    if(($Relevamiento) && ($this->puedePlanificarTarea($Relevamiento))){
+                        $outputPlanificaciones[] = $Planificacion; 
+                    } 
+                }
             }
         }  
 

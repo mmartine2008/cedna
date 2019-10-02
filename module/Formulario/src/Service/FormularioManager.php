@@ -557,13 +557,18 @@ class FormularioManager extends BaseFormularioManager {
         $output = [];
         $seccionesGlobales = [];
         $SeccionesRelacionada = [];
+        
         $seccionesGlobales = $this->getSeccionesGlobalesAlRelevamento($Tarea);
+        $output[] = $this->catalogoManager->arrEntidadesAJSON($seccionesGlobales);
+        
         if($Relevamiento) {
             $RelevamientosxSecciones = $Relevamiento->getRelevamientosxSecciones();
             $SeccionesRelacionada =  $this->getSeccionesRelacionadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);   
+            $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);
+        }else{
+            $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento(null, $seccionesGlobales);
         }
-        $SeccionesNoRelacinadas = $this->getSeccionesNoRelacinadasConRelevamiento($RelevamientosxSecciones, $seccionesGlobales);
-        $output[] = $this->catalogoManager->arrEntidadesAJSON($seccionesGlobales);
+
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesNoRelacinadas);
         $output[] = $this->catalogoManager->arrEntidadesAJSON($SeccionesRelacionada);
         

@@ -454,7 +454,12 @@ function dibujarSelectFormularioGlobal(){
     if(arrSeccionesJSON[0].length == 0) {
         document.getElementById("div_secciones_globales").style.display = "block";
 
-        var seccionesGlobales =  arrSeccionesJSON[1];
+        if (arrSeccionesJSON.length > 1){
+            var seccionesGlobales =  arrSeccionesJSON[1];
+        }else{
+            var seccionesGlobales =  [];
+        }
+        
         cargarSelectores('formularioPlanificacion_global_1', seccionesGlobales) ;
         manageButtonsGlobales();
     } else {
@@ -470,7 +475,7 @@ function dibujarSelectFormularioGlobal(){
 }
 
 function mostrarDivAlertSecciones(){
-    if((arrSeccionesJSON[1].length == 0) && (arrSeccionesJSON[2].length == 0)) {
+    if(arrSeccionesJSON.length > 2 && (arrSeccionesJSON[1].length == 0) && (arrSeccionesJSON[2].length == 0)) {
         document.getElementById("div_alert_secciones").style.display = "block";
     } else {
         document.getElementById("div_alert_secciones").style.display = "none";
@@ -479,10 +484,16 @@ function mostrarDivAlertSecciones(){
 
 
 function dibujarSelectFormulario(){
-    var seccionesNoRelacionadas =  arrSeccionesJSON[1];
-    cargarSelectores('formularioPlanificacion_1', seccionesNoRelacionadas) ;
-    var seccionesRelacionadas =  arrSeccionesJSON[2];
-    cargarSelectores('formularioPlanificacion_2', seccionesRelacionadas) ;
+    if (arrSeccionesJSON.length > 1){
+        var seccionesNoRelacionadas =  arrSeccionesJSON[1];
+        cargarSelectores('formularioPlanificacion_1', seccionesNoRelacionadas) ;
+    }
+    
+    if (arrSeccionesJSON.length > 2){
+        var seccionesRelacionadas =  arrSeccionesJSON[2];
+        cargarSelectores('formularioPlanificacion_2', seccionesRelacionadas) ;
+    }
+    
     manageButtons();
 
     if(puedeModificar == 0) {
