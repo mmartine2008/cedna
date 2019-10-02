@@ -49,10 +49,8 @@ INSERT INTO cedna.dbo.OperacionAccionPerfil (IdOperacion,IdAccion,IdPerfil,jsFun
 ,(3,2,1,'preSubmit()','',9,'botonGuardar')
 ;
 
-INSERT INTO cedna.dbo.Usuarios (NombreUsuario,Clave,FechaAlta,Email,Nombre,Apellido,AceptaTerminosUso,Bloqueado) VALUES 
-('admin','$2y$10$VuNdI4sPa8liiovK3JUPJuK3D4HO2Pc/tdmDpZ6xu4Fb6oxECFOJa','2019-02-19','juanom.07@gmail.com','Juan Ignacio','Martel',NULL,NULL)
-;
+INSERT INTO cedna.dbo.Usuarios (NombreUsuario,Clave,FechaAlta,Email,Nombre,Apellido,AceptaTerminosUso,Bloqueado) 
+VALUES ('admin','$2y$10$VuNdI4sPa8liiovK3JUPJuK3D4HO2Pc/tdmDpZ6xu4Fb6oxECFOJa','2019-02-19','juanom.07@gmail.com','Juan Ignacio','Martel',NULL,NULL);
 
-INSERT INTO cedna.dbo.UsuariosxPerfiles (IdUsuario,IdPerfil) VALUES 
-(1,1)
-;
+INSERT INTO cedna.dbo.UsuariosxPerfiles (IdUsuario,IdPerfil) 
+VALUES (1,1);
