@@ -7,6 +7,8 @@ DELETE FROM Planificaciones;
 DBCC CHECKIDENT ('Planificaciones', RESEED, 0);
 DELETE FROM Respuesta;
 DBCC CHECKIDENT ('Respuesta', RESEED, 0);
+DELETE FROM RelevamientosxSecciones;
+DBCC CHECKIDENT ('RelevamientosxSecciones', RESEED, 0);
 DELETE FROM Relevamientos;
 DBCC CHECKIDENT ('Relevamientos', RESEED, 0);
 DELETE FROM Tareas;
